@@ -1,0 +1,271 @@
+[
+{
+    "id": 1,
+    "name_en_eon": "Friendship Bonus",
+    "desc_en_eon": "Increases stats gained from friendship (rainbow) training",
+    "symbol": "percent",
+    "calc": "mult",
+    "name_en": "Friendship Bonus",
+    "desc_en": "Increases the effectiveness of Friendship Training"
+},
+{
+    "id": 2,
+    "name_en_eon": "Mood Bonus",
+    "desc_en_eon": "Increases mood stat bonus when training together",
+    "symbol": "percent",
+    "name_en": "Mood Effect",
+    "desc_en": "Amplifies the effect of mood when training together"
+},
+{
+    "id": 3,
+    "name_en_eon": "Speed Bonus",
+    "desc_en_eon": "Increases the amount of speed gain when training together",
+    "symbol": "none",
+    "name_en": "Speed Bonus",
+    "desc_en": "Increases Speed gain when training together"
+},
+{
+    "id": 4,
+    "name_en_eon": "Stamina Bonus",
+    "desc_en_eon": "Increases the amount of stamina gain when training together",
+    "symbol": "none",
+    "name_en": "Stamina Bonus",
+    "desc_en": "Increases Stamina gain when training together"
+},
+{
+    "id": 5,
+    "name_en_eon": "Power Bonus",
+    "desc_en_eon": "Increases the amount of power gain when training together",
+    "symbol": "none",
+    "name_en": "Power Bonus",
+    "desc_en": "Increases Power gain when training together"
+},
+{
+    "id": 6,
+    "name_en_eon": "Guts Bonus",
+    "desc_en_eon": "Increases the amount of guts gain when training together",
+    "symbol": "none",
+    "name_en": "Guts Bonus",
+    "desc_en": "Increases Guts gain when training together"
+},
+{
+    "id": 7,
+    "name_en_eon": "Wisdom Bonus",
+    "desc_en_eon": "Increases the amount of wisdom gain when training together",
+    "symbol": "none",
+    "name_en": "Wit Bonus",
+    "desc_en": "Increases Wit gain when training together"
+},
+{
+    "id": 8,
+    "name_en_eon": "Increased Training",
+    "desc_en_eon": "Increases stat gains when training together",
+    "symbol": "percent",
+    "name_en": "Training Effectiveness",
+    "desc_en": "Increases the effectiveness of training performed together"
+},
+{
+    "id": 9,
+    "name_en_eon": "Initial Speed Up",
+    "desc_en_eon": "Initial speed at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Speed",
+    "desc_en": "Increases initial Speed when beginning a Career playthrough"
+},
+{
+    "id": 10,
+    "name_en_eon": "Initial Stamina Up",
+    "desc_en_eon": "Initial stamina at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Stamina",
+    "desc_en": "Increases initial Stamina when beginning a Career playthrough"
+},
+{
+    "id": 11,
+    "name_en_eon": "Initial Power Up",
+    "desc_en_eon": "Initial power at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Power",
+    "desc_en": "Increases initial Power when beginning a Career playthrough"
+},
+{
+    "id": 12,
+    "name_en_eon": "Initial Guts Up",
+    "desc_en_eon": "Initial guts at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Guts",
+    "desc_en": "Increases initial Guts when beginning a Career playthrough"
+},
+{
+    "id": 13,
+    "name_en_eon": "Initial Wisdom Up",
+    "desc_en_eon": "Initial wisdom at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Wit",
+    "desc_en": "Increases initial Wit when beginning a Career playthrough"
+},
+{
+    "id": 14,
+    "name_en_eon": "Starting Bond Up",
+    "desc_en_eon": "Initial bond gauge at the start of training is increased",
+    "symbol": "none",
+    "name_en": "Initial Friendship Gauge",
+    "desc_en": "Increases initial Friendship Gauge when beginning a Career playthrough"
+},
+{
+    "id": 15,
+    "name_en_eon": "Race Bonus",
+    "desc_en_eon": "Increases stat and skill point gains after finishing a race",
+    "symbol": "percent",
+    "name_en": "Race Bonus",
+    "desc_en": "Increases stat gain from races"
+},
+{
+    "id": 16,
+    "name_en_eon": "Fan Count Bonus",
+    "desc_en_eon": "Increases fan count increase after finishing a race",
+    "symbol": "percent",
+    "name_en": "Fan Bonus",
+    "desc_en": "Increases fan gain from races"
+},
+{
+    "id": 17,
+    "name_en_eon": "Hint Lv. Bonus",
+    "desc_en_eon": "Increases hint level from events of this card",
+    "symbol": "level",
+    "name_en": "Hint Levels",
+    "desc_en": "Increases the level of hints gained through events"
+},
+{
+    "id": 18,
+    "name_en_eon": "Hint Rate Up",
+    "desc_en_eon": "Increases probability of getting hints",
+    "symbol": "percent",
+    "name_en": "Hint Frequency",
+    "desc_en": "Increases the frequency at which hint events occur"
+},
+{
+    "id": 19,
+    "name_en_eon": "Specialty Rate Up",
+    "desc_en_eon": "Increases probability of getting assigned to specialty training category",
+    "symbol": "none",
+    "calc": "add",
+    "name_en": "Specialty Priority",
+    "desc_en": "Increases the frequency at which the character participates in their preferred training type"
+},
+{
+    "id": 20,
+    "name_en_eon": "Speed Limit Up",
+    "desc_en_eon": "Increases upper limit of speed at the start of the training",
+    "symbol": "none",
+    "inactive": true,
+    "name_en": "Max Speed",
+    "desc_en": "Increases max Speed value when beginning a Career playthrough"
+},
+{
+    "id": 21,
+    "name_en_eon": "Stamina Limit Up",
+    "desc_en_eon": "Increases upper limit of stamina at the start of the training",
+    "symbol": "none",
+    "inactive": true,
+    "name_en": "Max Stamina",
+    "desc_en": "Increases max Stamina value when beginning a Career playthrough"
+},
+{
+    "id": 22,
+    "name_en_eon": "Power Limit Up",
+    "desc_en_eon": "Increases upper limit of power at the start of the training",
+    "symbol": "none",
+    "inactive": true,
+    "name_en": "Max Power",
+    "desc_en": "Increases max Power value when beginning a Career playthrough"
+},
+{
+    "id": 23,
+    "name_en_eon": "Guts Limit Up",
+    "desc_en_eon": "Increases upper limit of guts at the start of the training",
+    "symbol": "none",
+    "inactive": true,
+    "name_en": "Max Guts",
+    "desc_en": "Increases max Guts value when beginning a Career playthrough"
+},
+{
+    "id": 24,
+    "name_en_eon": "Intelligence Limit Up",
+    "desc_en_eon": "Increases upper limit of intelligence at the start of the training",
+    "symbol": "none",
+    "inactive": true,
+    "name_en": "Max Wit",
+    "desc_en": "Increases max Wit value when beginning a Career playthrough"
+},
+{
+    "id": 25,
+    "name_en_eon": "Event Recovery Amount Up",
+    "desc_en_eon": "Increases amount of energy recovery from events of this card",
+    "symbol": "percent",
+    "name_en": "Event Recovery",
+    "desc_en":"Increases Energy recovery from this Support Card's events"
+},
+{
+    "id": 26,
+    "name_en_eon": "Event Effect Up",
+    "desc_en_eon":"Increases 'effect size' from events of this card",
+    "symbol": "percent",
+    "name_en": "Event Effectiveness",
+    "desc_en":"Increases stat gain from this Support Card's events"
+},
+{
+    "id": 27,
+    "name_en_eon": "Failure Rate Down",
+    "desc_en_eon": "Decreases failure rate when training together",
+    "symbol": "percent",
+    "calc": "mult",
+    "name_en": "Failure Protection",
+    "desc_en": "Decreases the probability of failure when training together"
+},
+{
+    "id": 28,
+    "name_en_eon": "Energy Discount",
+    "desc_en_eon": "Decreases energy consumption when training together",
+    "symbol": "percent",
+    "calc": "mult",
+    "name_en": "Energy Cost Reduction",
+    "desc_en": "Decreases Energy consumed when training together"
+},
+{
+    "id": 29,
+    "name_en_eon": "Mini Game Effect Up",
+    "desc_en_eon":"Increases 'effect size' in mini games",
+    "symbol": "percent",
+    "inactive": true,
+    "name_en": "Minigame Effectiveness",
+    "desc_en": "Increases stat gain from minigames"
+},
+{
+    "id": 30,
+    "name_en_eon": "Skill Point Bonus",
+    "desc_en_eon": "Increases skill point gain when training together",
+    "symbol": "none",
+    "name_en": "Skill Point Bonus",
+    "desc_en": "Increases skill point gain when training together"
+},
+{
+    "id": 31,
+    "name_en_eon": "Wisdom Training Recovery Up",
+    "desc_en_eon": "Increases energy recovery (wisdom training only)",
+    "symbol": "none",
+    "name_en": "Wit Friendship Recovery",
+    "desc_en": "Increases Energy recovery from Wit Friendship Training"
+},
+{
+    "id": 32,
+    "name_en_eon": "Initial Skill Points Up",
+    "desc_en_eon": "Initial skill points at the start of training are increased",
+    "symbol": "none",
+    "desc_tw": "提升開始培育時的初期技能Pt"
+},
+{
+    "id": 41,
+    "name_en_eon": "All Stats Bonus"
+}
+]
