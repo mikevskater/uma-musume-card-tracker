@@ -256,6 +256,31 @@ function initializeAdvancedFilters() {
     });
 }
 
+// Calculate min/max values for effects across current filtered cards
+function calculateEffectMinMax(cards, effectId) {
+    const values = [];
+    
+    cards.forEach(card => {
+        const effectArray = card.effects?.find(effect => effect[0] == effectId);
+        if (effectArray) {
+            const level = getEffectiveLevel(card);
+            const value = calculateEffectValue(effectArray, level);
+            if (value > 0) { // Exclude -1 values (treated as 0)
+                values.push(value);
+            }
+        }
+    });
+    
+    if (values.length === 0) {
+        return { min: 0, max: 0 };
+    }
+    
+    return {
+        min: Math.min(...values),
+        max: Math.max(...values)
+    };
+}
+
 // Build effect filters dynamically
 function buildEffectFilters() {
     const effectFiltersContainer = document.getElementById('effectFilters');
@@ -265,20 +290,35 @@ function buildEffectFilters() {
         .filter(effect => effect.name_en) // Only include effects with English names
         .sort((a, b) => a.name_en.localeCompare(b.name_en));
     
-    effectFiltersContainer.innerHTML = allEffects.map(effect => {
+    // Get current filtered cards for min/max calculation
+    const currentFilteredCards = getCurrentFilteredCards();
+    
+    const effectItems = allEffects.map(effect => {
         const symbol = effect.symbol === 'percent' ? '%' : '';
+        const { min, max } = calculateEffectMinMax(currentFilteredCards, effect.id);
+        
+        let placeholder = 'Min';
+        if (max > 0) {
+            placeholder = min === max ? `${min}${symbol}` : `${min}-${max}${symbol}`;
+        }
         
         return `
             <div class="effect-filter-item">
-                <label>${effect.name_en}:</label>
+                <label title="${effect.name_en}">${effect.name_en}:</label>
                 <input type="number" 
                        class="effect-filter-input" 
                        data-effect-id="${effect.id}"
-                       placeholder="Min${symbol}" 
+                       placeholder="${placeholder}" 
                        min="0">
             </div>
         `;
     }).join('');
+    
+    effectFiltersContainer.innerHTML = `
+        <div class="effect-filters-grid">
+            ${effectItems}
+        </div>
+    `;
     
     // Add event listeners for effect filters
     document.querySelectorAll('.effect-filter-input').forEach(input => {
@@ -294,6 +334,36 @@ function buildEffectFilters() {
             
             debouncedFilterAndSort();
         });
+    });
+}
+
+// Get currently filtered cards (for min/max calculation)
+function getCurrentFilteredCards() {
+    const selectedRarities = getSelectedValues('rarityFilter');
+    const selectedTypes = getSelectedValues('typeFilter');
+    const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+    const showUnreleased = document.getElementById('releasedFilter').checked;
+    const ownedFilter = document.getElementById('ownedFilter').value;
+
+    return cardData.filter(card => {
+        // Filter by release status (default: only show released cards)
+        if (!showUnreleased && !card.release_en) return false;
+        
+        // Filter by rarity
+        if (selectedRarities.length > 0 && !selectedRarities.includes(card.rarity.toString())) return false;
+        
+        // Filter by type
+        if (selectedTypes.length > 0 && !selectedTypes.includes(card.type)) return false;
+        
+        // Filter by name
+        if (nameFilter && !(card.char_name || '').toLowerCase().includes(nameFilter) && 
+            !(card.name_en || '').toLowerCase().includes(nameFilter)) return false;
+        
+        // Filter by ownership status
+        if (ownedFilter === 'owned' && !isCardOwned(card.support_id)) return false;
+        if (ownedFilter === 'unowned' && isCardOwned(card.support_id)) return false;
+        
+        return true;
     });
 }
 
@@ -660,16 +730,17 @@ function calculateEffectValue(effectArray, level) {
     }
     
     // If we're at exact level, return that value
-    if (level === prevLevel) return prevValue;
-    if (level === nextLevel) return nextValue;
+    if (level === prevLevel) return Math.max(0, prevValue); // Treat -1 as 0
+    if (level === nextLevel) return Math.max(0, nextValue); // Treat -1 as 0
     
     // Interpolate between values
     if (nextLevel > prevLevel) {
         const ratio = (level - prevLevel) / (nextLevel - prevLevel);
-        return Math.round(prevValue + (nextValue - prevValue) * ratio);
+        const interpolatedValue = Math.round(prevValue + (nextValue - prevValue) * ratio);
+        return Math.max(0, interpolatedValue); // Treat -1 as 0
     }
     
-    return prevValue;
+    return Math.max(0, prevValue); // Treat -1 as 0
 }
 
 // Check if effect is locked at current level
@@ -926,16 +997,30 @@ function renderCards(cards = cardData) {
         const effectiveLevel = getEffectiveLevel(card);
         const limitBreakLevel = getLimitBreakLevel(effectiveLevel, card.rarity);
         
-        // Calculate main effects
-        const mainEffects = card.effects.slice(0, 3).map(effect => {
+        // Calculate and sort main effects
+        const effectsWithValues = card.effects.map(effect => {
             if (effect[0] && effectsData[effect[0]]) {
                 const value = calculateEffectValue(effect, effectiveLevel);
-                const effectName = getEffectName(effect[0]);
-                const symbol = effectsData[effect[0]].symbol;
-                return `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`;
+                if (value > 0) { // Only include effects with positive values
+                    const effectName = getEffectName(effect[0]);
+                    const symbol = effectsData[effect[0]].symbol;
+                    return {
+                        name: effectName,
+                        value: value,
+                        symbol: symbol,
+                        display: `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`
+                    };
+                }
             }
-            return '';
-        }).filter(e => e).join('<br>');
+            return null;
+        }).filter(effect => effect !== null);
+        
+        // Sort by value (highest first) and take top 3
+        const mainEffects = effectsWithValues
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 3)
+            .map(effect => effect.display)
+            .join('<br>') || 'No effects';
 
         // Get hint skills
         const hintSkills = card.hints?.hint_skills?.slice(0, 3).map(skill => 
@@ -1027,16 +1112,30 @@ function updateCardDisplay(input) {
     // Update limit break display
     row.children[6].textContent = limitBreakLevel;
     
-    // Recalculate and update main effects
-    const mainEffects = card.effects.slice(0, 3).map(effect => {
+    // Recalculate and update main effects with sorting
+    const effectsWithValues = card.effects.map(effect => {
         if (effect[0] && effectsData[effect[0]]) {
             const value = calculateEffectValue(effect, level);
-            const effectName = getEffectName(effect[0]);
-            const symbol = effectsData[effect[0]].symbol;
-            return `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`;
+            if (value > 0) { // Only include effects with positive values
+                const effectName = getEffectName(effect[0]);
+                const symbol = effectsData[effect[0]].symbol;
+                return {
+                    name: effectName,
+                    value: value,
+                    symbol: symbol,
+                    display: `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`
+                };
+            }
         }
-        return '';
-    }).filter(e => e).join('<br>');
+        return null;
+    }).filter(effect => effect !== null);
+    
+    // Sort by value (highest first) and take top 3
+    const mainEffects = effectsWithValues
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 3)
+        .map(effect => effect.display)
+        .join('<br>') || 'No effects';
     
     row.children[7].innerHTML = mainEffects;
     
@@ -1517,6 +1616,28 @@ function filterAndSortCards() {
 
     renderCards(filtered);
     renderActiveFilters(filtered.length, cardData.length);
+    
+    // Update effect filter placeholders with new min/max values
+    updateEffectFilterPlaceholders(filtered);
+}
+
+// Update effect filter placeholders with current card data
+function updateEffectFilterPlaceholders(cards) {
+    document.querySelectorAll('.effect-filter-input').forEach(input => {
+        const effectId = parseInt(input.dataset.effectId);
+        const effect = effectsData[effectId];
+        if (effect) {
+            const symbol = effect.symbol === 'percent' ? '%' : '';
+            const { min, max } = calculateEffectMinMax(cards, effectId);
+            
+            let placeholder = 'Min';
+            if (max > 0) {
+                placeholder = min === max ? `${min}${symbol}` : `${min}-${max}${symbol}`;
+            }
+            
+            input.placeholder = placeholder;
+        }
+    });
 }
 
 // Initialize interface
