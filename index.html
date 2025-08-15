@@ -67,6 +67,14 @@
                 </div>
 
                 <div class="filter-group">
+                    <label for="effectSort">Sort by Effect:</label>
+                    <select id="effectSort">
+                        <option value="">No Effect Sort</option>
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="filter-group">
                     <label for="globalLimitBreak">Set All LB:</label>
                     <select id="globalLimitBreak">
                         <option value="">Default</option>
@@ -146,7 +154,7 @@
             <!-- Data Management -->
             <div class="data-management">
                 <div class="filter-group">
-                    <button id="exportBtn" class="btn btn-secondary">📁 Export Collection</button>
+                    <button id="exportBtn" class="btn btn-secondary">📄 Export Collection</button>
                 </div>
                 <div class="filter-group">
                     <input type="file" id="importFile" accept=".json" style="display: none;">

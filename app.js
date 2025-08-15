@@ -259,12 +259,13 @@ function initializeAdvancedFilters() {
 // Build effect filters dynamically
 function buildEffectFilters() {
     const effectFiltersContainer = document.getElementById('effectFilters');
-    const mainEffects = [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 27, 28, 30]; // Key effect IDs
     
-    effectFiltersContainer.innerHTML = mainEffects.map(effectId => {
-        const effect = effectsData[effectId];
-        if (!effect) return '';
-        
+    // Get all available effects and sort them by name
+    const allEffects = Object.values(effectsData)
+        .filter(effect => effect.name_en) // Only include effects with English names
+        .sort((a, b) => a.name_en.localeCompare(b.name_en));
+    
+    effectFiltersContainer.innerHTML = allEffects.map(effect => {
         const symbol = effect.symbol === 'percent' ? '%' : '';
         
         return `
@@ -272,12 +273,12 @@ function buildEffectFilters() {
                 <label>${effect.name_en}:</label>
                 <input type="number" 
                        class="effect-filter-input" 
-                       data-effect-id="${effectId}"
+                       data-effect-id="${effect.id}"
                        placeholder="Min${symbol}" 
                        min="0">
             </div>
         `;
-    }).filter(html => html).join('');
+    }).join('');
     
     // Add event listeners for effect filters
     document.querySelectorAll('.effect-filter-input').forEach(input => {
@@ -388,8 +389,12 @@ function renderActiveFilters(filteredCount, totalCount) {
     const resultsCount = document.getElementById('resultsCount');
     const filterChips = document.getElementById('filterChips');
     
+    // Calculate correct total count based on release filter
+    const showUnreleased = document.getElementById('releasedFilter').checked;
+    const actualTotal = showUnreleased ? cardData.length : cardData.filter(card => card.release_en).length;
+    
     // Update results count
-    resultsCount.textContent = `Showing ${filteredCount} of ${totalCount} cards`;
+    resultsCount.textContent = `Showing ${filteredCount} of ${actualTotal} cards`;
     
     // Build filter chips
     const chips = [];
@@ -431,12 +436,25 @@ function renderActiveFilters(filteredCount, totalCount) {
         });
     }
     
-    const showUnreleased = document.getElementById('releasedFilter').checked;
-    if (showUnreleased) {
+    const showUnreleasedChip = document.getElementById('releasedFilter').checked;
+    if (showUnreleasedChip) {
         chips.push({
             type: 'released',
             label: 'Show Unreleased',
             remove: () => { document.getElementById('releasedFilter').checked = false; }
+        });
+    }
+    
+    const effectSort = document.getElementById('effectSort').value;
+    if (effectSort) {
+        const effectName = getEffectName(parseInt(effectSort));
+        chips.push({
+            type: 'effectSort',
+            label: `Sorted by: ${effectName}`,
+            remove: () => { 
+                document.getElementById('effectSort').value = '';
+                currentSort = { column: '', direction: '' };
+            }
         });
     }
     
@@ -812,6 +830,48 @@ function passesAdvancedFilters(card) {
     }
     
     return true;
+}
+
+// Initialize effect sort dropdown
+function initializeEffectSortDropdown() {
+    const effectSortSelect = document.getElementById('effectSort');
+    
+    // Get all available effects and sort them by name
+    const sortableEffects = Object.values(effectsData)
+        .filter(effect => effect.name_en) // Only include effects with English names
+        .sort((a, b) => a.name_en.localeCompare(b.name_en));
+    
+    // Build options
+    const options = ['<option value="">No Effect Sort</option>'];
+    sortableEffects.forEach(effect => {
+        const symbol = effect.symbol === 'percent' ? '%' : '';
+        options.push(`<option value="${effect.id}">${effect.name_en}${symbol ? ' (%)' : ''}</option>`);
+    });
+    
+    effectSortSelect.innerHTML = options.join('');
+}
+
+// Handle effect sort dropdown change
+function handleEffectSort(e) {
+    const effectId = e.target.value;
+    
+    if (effectId) {
+        // Set effect-based sort
+        currentSort = {
+            column: `effect_${effectId}`,
+            direction: 'desc' // Default to descending for effects (highest first)
+        };
+    } else {
+        // Clear sort
+        currentSort = { column: '', direction: '' };
+    }
+    
+    // Update sort arrows (clear all since this is dropdown-based)
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    filterAndSortCards();
 }
 
 // Create fallback icon element
@@ -1370,7 +1430,20 @@ function sortCards(cards, column, direction) {
                 valueB = new Date(b.release_en || b.release || '2099-12-31');
                 break;
             default:
-                return 0;
+                // Check if it's an effect-based sort
+                if (column.startsWith('effect_')) {
+                    const effectId = parseInt(column.replace('effect_', ''));
+                    const levelA = getEffectiveLevel(a);
+                    const levelB = getEffectiveLevel(b);
+                    
+                    const effectArrayA = a.effects?.find(effect => effect[0] == effectId);
+                    const effectArrayB = b.effects?.find(effect => effect[0] == effectId);
+                    
+                    valueA = effectArrayA ? calculateEffectValue(effectArrayA, levelA) : -1;
+                    valueB = effectArrayB ? calculateEffectValue(effectArrayB, levelB) : -1;
+                } else {
+                    return 0;
+                }
         }
         
         if (direction === 'asc') {
@@ -1457,6 +1530,9 @@ function initializeInterface() {
     
     // Initialize advanced filters
     initializeAdvancedFilters();
+    
+    // Initialize effect sort dropdown
+    initializeEffectSortDropdown();
 
     // Add event listeners for filters
     document.getElementById('nameFilter').addEventListener('input', debouncedFilterAndSort);
@@ -1468,6 +1544,7 @@ function initializeInterface() {
     document.getElementById('globalOverrideOwned').addEventListener('change', (e) => {
         setGlobalLimitBreakOverride(e.target.checked);
     });
+    document.getElementById('effectSort').addEventListener('change', handleEffectSort);
 
     // Add event listeners for data management buttons
     document.getElementById('exportBtn').addEventListener('click', exportOwnedCards);
