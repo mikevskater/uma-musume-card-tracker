@@ -38,42 +38,106 @@ h1 {
     margin: 2rem 0;
 }
 
-.controls {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* Main Layout Structure */
+.main-layout {
+    display: flex;
+    gap: 1.5rem;
+    min-height: calc(100vh - 200px); /* Account for header */
 }
 
-/* Basic Filters Layout */
+.sidebar {
+    width: 320px;
+    min-width: 320px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0; /* Allows flex item to shrink below content size */
+}
+
+.controls {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: none;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+/* Basic Filters Layout - Now Vertical */
 .basic-filters {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid #eee;
+}
+
+.basic-filters h3 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .filter-group {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 0.5rem;
 }
 
+.filter-group label {
+    font-weight: 600;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #2c3e50;
+}
+
+.filter-group select,
+.filter-group input[type="text"],
+.filter-group input[type="number"] {
+    width: 100%;
+}
+
+.filter-group .multi-select {
+    width: 100%;
+    min-width: auto;
+}
+
+/* Data Management Section */
 .data-management {
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
     border-top: 1px solid #eee;
+}
+
+.data-management h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.data-management-buttons {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 0.5rem;
 }
 
-/* Advanced Filters */
+.data-management-buttons .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Advanced Filters in Sidebar */
 .advanced-filters {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .advanced-toggle {
@@ -135,52 +199,34 @@ h1 {
 .effect-filters {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 0.75rem;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    background-color: #fafafa;
-}
-
-.effect-filters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .effect-filter-item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem;
+    gap: 0.5rem;
+    padding: 0.75rem;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 0.85rem;
-    min-width: 0; /* Allow shrinking */
 }
 
 .effect-filter-item label {
     font-weight: 500;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .effect-filter-item input {
     width: 100%;
-    padding: 0.3rem;
-    font-size: 0.8rem;
-    box-sizing: border-box;
+    padding: 0.5rem;
+    font-size: 0.85rem;
 }
 
 .skill-filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
 }
 
@@ -190,7 +236,7 @@ h1 {
     border-top: 1px solid #ddd;
 }
 
-/* Active Filters Display */
+/* Active Filters in Main Content */
 .active-filters {
     background-color: white;
     border-radius: 8px;
@@ -253,8 +299,7 @@ h1 {
     color: #dc3545;
 }
 
-label {
-    font-weight: 600;
+input[type="checkbox"] {
     margin-right: 0.5rem;
 }
 
@@ -263,23 +308,12 @@ select, input[type="text"], input[type="number"] {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 0.9rem;
-    min-width: 120px;
-}
-
-#effectSort {
-    min-width: 200px;
-    max-width: 250px;
-}
-
-input[type="checkbox"] {
-    margin-right: 0.5rem;
 }
 
 .filter-group label {
     display: flex;
     align-items: center;
     font-weight: 600;
-    margin-right: 0.5rem;
     margin-bottom: 0;
 }
 
@@ -402,6 +436,23 @@ input[type="checkbox"] {
     margin-right: 0.5rem;
 }
 
+/* Multi-select dropdowns positioning fix for sidebar */
+.sidebar .multi-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+/* Card Table in Main Content */
 .card-table {
     background-color: white;
     border-radius: 8px;
@@ -418,7 +469,6 @@ th, td {
     padding: 0.75rem;
     text-align: left;
     border-bottom: 1px solid #eee;
-    vertical-align: middle;
 }
 
 th {
@@ -492,15 +542,11 @@ th.sort-desc .sort-arrow::after {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    padding: 0.75rem 0;
 }
 
 .ownership-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    transform: scale(1.2);
     cursor: pointer;
-    margin: 0;
 }
 
 .ownership-checkbox input[type="checkbox"]:checked {
@@ -772,7 +818,7 @@ tbody tr.unowned .card-name {
 .card-image.rarity-3 {
     border: 3px solid transparent;
     background: linear-gradient(#fff, #fff) padding-box,
-                linear-gradient(0deg, 
+                linear-gradient(45deg, 
                     #ff0000, #ff7f00, #ffff00, #00ff00, 
                     #0000ff, #4b0082, #9400d3, #ff0000
                 ) border-box;
@@ -781,20 +827,41 @@ tbody tr.unowned .card-name {
         inset 0 -2px 0 rgba(0,0,0,0.5),
         0 2px 15px rgba(0,0,0,0.2),
         0 0 30px rgba(255,255,255,0.5);
-    animation: rainbow-border 4s linear infinite;
+    animation: rainbow-border 3s linear infinite;
 }
 
 @keyframes rainbow-border {
     0% {
         background: linear-gradient(#fff, #fff) padding-box,
-                    linear-gradient(0deg, 
+                    linear-gradient(45deg, 
                         #ff0000, #ff7f00, #ffff00, #00ff00, 
                         #0000ff, #4b0082, #9400d3, #ff0000
                     ) border-box;
     }
+    25% {
+        background: linear-gradient(#fff, #fff) padding-box,
+                    linear-gradient(135deg, 
+                        #ff7f00, #ffff00, #00ff00, #0000ff, 
+                        #4b0082, #9400d3, #ff0000, #ff7f00
+                    ) border-box;
+    }
+    50% {
+        background: linear-gradient(#fff, #fff) padding-box,
+                    linear-gradient(225deg, 
+                        #ffff00, #00ff00, #0000ff, #4b0082, 
+                        #9400d3, #ff0000, #ff7f00, #ffff00
+                    ) border-box;
+    }
+    75% {
+        background: linear-gradient(#fff, #fff) padding-box,
+                    linear-gradient(315deg, 
+                        #00ff00, #0000ff, #4b0082, #9400d3, 
+                        #ff0000, #ff7f00, #ffff00, #00ff00
+                    ) border-box;
+    }
     100% {
         background: linear-gradient(#fff, #fff) padding-box,
-                    linear-gradient(360deg, 
+                    linear-gradient(45deg, 
                         #ff0000, #ff7f00, #ffff00, #00ff00, 
                         #0000ff, #4b0082, #9400d3, #ff0000
                     ) border-box;
@@ -1073,28 +1140,79 @@ tbody tr.unowned .card-name {
     background-color: #f39c12;
 }
 
-/* Responsive Design */
+/* Responsive Design for Sidebar Layout */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 280px;
+        min-width: 280px;
+    }
+    
+    .main-layout {
+        gap: 1rem;
+    }
+}
+
 @media (max-width: 968px) {
-    .basic-filters {
+    .main-layout {
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 1rem;
     }
     
-    .filter-group {
+    .sidebar {
         width: 100%;
-        justify-content: space-between;
+        min-width: auto;
+        position: static;
+        order: 2; /* Put sidebar below content on mobile */
     }
     
-    .effect-filters-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    .main-content {
+        order: 1; /* Put content above sidebar on mobile */
     }
     
-    .skill-filters {
-        grid-template-columns: 1fr;
+    .controls {
+        padding: 1rem;
+    }
+    
+    .basic-filters {
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .data-management {
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+    
+    .data-management-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .data-management-buttons .btn {
+        flex: 1;
+        min-width: 120px;
     }
 }
 
 @media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        order: 2; /* Put sidebar below content on mobile */
+    }
+    
+    .main-content {
+        order: 1; /* Put content above sidebar on mobile */
+    }
+    
     .modal-content {
         width: 95%;
         margin: 1vh auto;
@@ -1133,7 +1251,8 @@ tbody tr.unowned .card-name {
         min-width: 120px;
     }
     
-    .multi-select-dropdown {
+    .multi-select-dropdown,
+    .sidebar .multi-select-dropdown {
         position: fixed;
         left: 10px;
         right: 10px;
@@ -1141,8 +1260,12 @@ tbody tr.unowned .card-name {
         max-height: 150px;
     }
     
-    .data-management {
+    .data-management-buttons {
         flex-direction: column;
+    }
+    
+    .data-management-buttons .btn {
+        width: 100%;
     }
     
     .confirm-buttons {
@@ -1177,7 +1300,6 @@ tbody tr.unowned .card-name {
     }
     
     .filter-group {
-        display: block;
         margin-bottom: 0.5rem;
         width: 100%;
     }
@@ -1189,15 +1311,6 @@ tbody tr.unowned .card-name {
     th, td {
         padding: 0.5rem;
         font-size: 0.85rem;
-    }
-    
-    .ownership-checkbox {
-        padding: 0.5rem 0;
-    }
-    
-    .ownership-checkbox input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
     }
     
     .card-icon,
@@ -1218,23 +1331,23 @@ tbody tr.unowned .card-name {
         font-size: 0.8rem;
     }
     
-    .effect-filters-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .effect-filter-item {
-        flex-direction: row;
-        align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
     
     .effect-filter-item label {
-        min-width: 120px;
-        white-space: normal;
+        min-width: auto;
     }
     
-    .effect-filter-item input {
-        width: 80px;
-        flex-shrink: 0;
+    .sidebar {
+        padding: 0.5rem;
+    }
+    
+    .basic-filters h3 {
+        font-size: 1rem;
+    }
+    
+    .data-management h4 {
+        font-size: 0.9rem;
     }
 }

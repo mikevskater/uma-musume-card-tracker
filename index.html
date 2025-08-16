@@ -16,186 +16,185 @@
         <div id="loading" class="loading">Loading card data...</div>
         <div id="error" class="error" style="display: none;"></div>
 
-        <div id="controls" class="controls" style="display: none;">
-            <!-- Basic Filters -->
-            <div class="basic-filters">
-                <div class="filter-group">
-                    <label>Rarity:</label>
-                    <div class="multi-select" id="rarityFilter">
-                        <div class="multi-select-trigger">
-                            <span class="multi-select-text">All Rarities</span>
-                            <span class="multi-select-arrow">▼</span>
+        <div class="main-layout" style="display: none;">
+            <!-- Sidebar with filters -->
+            <div class="sidebar">
+                <div id="controls" class="controls">
+                    <!-- Basic Filters -->
+                    <div class="basic-filters">
+                        <h3>Filters</h3>
+                        
+                        <div class="filter-group">
+                            <label>Rarity:</label>
+                            <div class="multi-select" id="rarityFilter">
+                                <div class="multi-select-trigger">
+                                    <span class="multi-select-text">All Rarities</span>
+                                    <span class="multi-select-arrow">▼</span>
+                                </div>
+                                <div class="multi-select-dropdown">
+                                    <label><input type="checkbox" value="1"> R</label>
+                                    <label><input type="checkbox" value="2"> SR</label>
+                                    <label><input type="checkbox" value="3"> SSR</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="multi-select-dropdown">
-                            <label><input type="checkbox" value="1"> R</label>
-                            <label><input type="checkbox" value="2"> SR</label>
-                            <label><input type="checkbox" value="3"> SSR</label>
+
+                        <div class="filter-group">
+                            <label>Type:</label>
+                            <div class="multi-select" id="typeFilter">
+                                <div class="multi-select-trigger">
+                                    <span class="multi-select-text">All Types</span>
+                                    <span class="multi-select-arrow">▼</span>
+                                </div>
+                                <div class="multi-select-dropdown">
+                                    <label><input type="checkbox" value="speed"> Speed</label>
+                                    <label><input type="checkbox" value="stamina"> Stamina</label>
+                                    <label><input type="checkbox" value="power"> Power</label>
+                                    <label><input type="checkbox" value="guts"> Guts</label>
+                                    <label><input type="checkbox" value="wisdom"> Wisdom</label>
+                                    <label><input type="checkbox" value="friend"> Friend</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="filter-group">
-                    <label>Type:</label>
-                    <div class="multi-select" id="typeFilter">
-                        <div class="multi-select-trigger">
-                            <span class="multi-select-text">All Types</span>
-                            <span class="multi-select-arrow">▼</span>
+                        <div class="filter-group">
+                            <label>Owned:</label>
+                            <select id="ownedFilter">
+                                <option value="">All Cards</option>
+                                <option value="owned">Owned Only</option>
+                                <option value="unowned">Unowned Only</option>
+                            </select>
                         </div>
-                        <div class="multi-select-dropdown">
-                            <label><input type="checkbox" value="speed"> Speed</label>
-                            <label><input type="checkbox" value="stamina"> Stamina</label>
-                            <label><input type="checkbox" value="power"> Power</label>
-                            <label><input type="checkbox" value="guts"> Guts</label>
-                            <label><input type="checkbox" value="wisdom"> Wisdom</label>
-                            <label><input type="checkbox" value="friend"> Friend</label>
+
+                        <div class="filter-group">
+                            <label for="nameFilter">Search:</label>
+                            <input type="text" id="nameFilter" placeholder="Search by character name...">
                         </div>
-                    </div>
-                </div>
 
-                <div class="filter-group">
-                    <label>Owned:</label>
-                    <select id="ownedFilter">
-                        <option value="">All Cards</option>
-                        <option value="owned">Owned Only</option>
-                        <option value="unowned">Unowned Only</option>
-                    </select>
-                </div>
+                        <div class="filter-group">
+                            <label for="globalLimitBreak">Set All LB:</label>
+                            <select id="globalLimitBreak">
+                                <option value="">Default</option>
+                                <option value="0">LB 0</option>
+                                <option value="1">LB 1</option>
+                                <option value="2">LB 2</option>
+                                <option value="3">LB 3</option>
+                                <option value="4">LB 4</option>
+                            </select>
+                        </div>
 
-                <div class="filter-group">
-                    <label for="nameFilter">Search:</label>
-                    <input type="text" id="nameFilter" placeholder="Search by character name...">
-                </div>
+                        <div class="filter-group">
+                            <label for="globalOverrideOwned">
+                                <input type="checkbox" id="globalOverrideOwned" checked> Apply to owned cards
+                            </label>
+                        </div>
 
-                <div class="filter-group">
-                    <label for="effectSort">Sort by Effect:</label>
-                    <select id="effectSort">
-                        <option value="">No Effect Sort</option>
-                        <!-- Options populated by JavaScript -->
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="globalLimitBreak">Set All LB:</label>
-                    <select id="globalLimitBreak">
-                        <option value="">Default</option>
-                        <option value="0">LB 0</option>
-                        <option value="1">LB 1</option>
-                        <option value="2">LB 2</option>
-                        <option value="3">LB 3</option>
-                        <option value="4">LB 4</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="globalOverrideOwned">
-                        <input type="checkbox" id="globalOverrideOwned" checked> Apply to owned cards
-                    </label>
-                </div>
-
-                <div class="filter-group">
-                    <label for="releasedFilter">
-                        <input type="checkbox" id="releasedFilter"> Show Unreleased Cards
-                    </label>
-                </div>
-            </div>
-
-            <!-- Advanced Filters (Collapsible) -->
-            <div class="advanced-filters">
-                <button type="button" class="advanced-toggle" id="advancedToggle">
-                    <span class="toggle-icon">▼</span>
-                    Advanced Filters
-                </button>
-                
-                <div class="advanced-content" id="advancedContent" style="display: none;">
-                    <div class="advanced-section">
-                        <h4>Effect Filters</h4>
-                        <div class="effect-filters" id="effectFilters">
-                            <!-- Dynamically populated -->
+                        <div class="filter-group">
+                            <label for="releasedFilter">
+                                <input type="checkbox" id="releasedFilter"> Show Unreleased Cards
+                            </label>
                         </div>
                     </div>
 
-                    <div class="advanced-section">
-                        <h4>Skill Filters</h4>
-                        <div class="skill-filters">
-                            <div class="filter-group">
-                                <label>Hint Skills:</label>
-                                <div class="multi-select" id="hintSkillFilter">
-                                    <div class="multi-select-trigger">
-                                        <span class="multi-select-text">Any Hint Skills</span>
-                                        <span class="multi-select-arrow">▼</span>
+                    <!-- Advanced Filters (Collapsible) -->
+                    <div class="advanced-filters">
+                        <button type="button" class="advanced-toggle" id="advancedToggle">
+                            <span class="toggle-icon">▼</span>
+                            Advanced Filters
+                        </button>
+                        
+                        <div class="advanced-content" id="advancedContent" style="display: none;">
+                            <div class="advanced-section">
+                                <h4>Effect Filters</h4>
+                                <div class="effect-filters" id="effectFilters">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
+
+                            <div class="advanced-section">
+                                <h4>Skill Filters</h4>
+                                <div class="skill-filters">
+                                    <div class="filter-group">
+                                        <label>Hint Skills:</label>
+                                        <div class="multi-select" id="hintSkillFilter">
+                                            <div class="multi-select-trigger">
+                                                <span class="multi-select-text">Any Hint Skills</span>
+                                                <span class="multi-select-arrow">▼</span>
+                                            </div>
+                                            <div class="multi-select-dropdown" id="hintSkillDropdown">
+                                                <!-- Dynamically populated -->
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="multi-select-dropdown" id="hintSkillDropdown">
-                                        <!-- Dynamically populated -->
+
+                                    <div class="filter-group">
+                                        <label>Event Skills:</label>
+                                        <div class="multi-select" id="eventSkillFilter">
+                                            <div class="multi-select-trigger">
+                                                <span class="multi-select-text">Any Event Skills</span>
+                                                <span class="multi-select-arrow">▼</span>
+                                            </div>
+                                            <div class="multi-select-dropdown" id="eventSkillDropdown">
+                                                <!-- Dynamically populated -->
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="filter-group">
-                                <label>Event Skills:</label>
-                                <div class="multi-select" id="eventSkillFilter">
-                                    <div class="multi-select-trigger">
-                                        <span class="multi-select-text">Any Event Skills</span>
-                                        <span class="multi-select-arrow">▼</span>
-                                    </div>
-                                    <div class="multi-select-dropdown" id="eventSkillDropdown">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
+                            <div class="advanced-actions">
+                                <button type="button" class="btn btn-secondary" id="clearAdvancedBtn">Clear Advanced Filters</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="advanced-actions">
-                        <button type="button" class="btn btn-secondary" id="clearAdvancedBtn">Clear Advanced Filters</button>
+                    <!-- Data Management -->
+                    <div class="data-management">
+                        <h4>Data Management</h4>
+                        <div class="data-management-buttons">
+                            <button id="exportBtn" class="btn btn-secondary">📄 Export</button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                            <button id="importBtn" class="btn btn-secondary">📂 Import</button>
+                            <button id="clearBtn" class="btn btn-danger">🗑️ Clear</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Data Management -->
-            <div class="data-management">
-                <div class="filter-group">
-                    <button id="exportBtn" class="btn btn-secondary">📄 Export Collection</button>
+            <!-- Main content area -->
+            <div class="main-content">
+                <!-- Active Filters Display -->
+                <div id="activeFilters" class="active-filters" style="display: none;">
+                    <div class="active-filters-header">
+                        <span class="results-count" id="resultsCount">Showing all cards</span>
+                        <button class="btn btn-sm btn-secondary" id="clearAllFilters">Clear All Filters</button>
+                    </div>
+                    <div class="filter-chips" id="filterChips">
+                        <!-- Dynamically populated filter chips -->
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <input type="file" id="importFile" accept=".json" style="display: none;">
-                    <button id="importBtn" class="btn btn-secondary">📂 Import Collection</button>
-                </div>
-                <div class="filter-group">
-                    <button id="clearBtn" class="btn btn-danger">🗑️ Clear All Data</button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Active Filters Display -->
-        <div id="activeFilters" class="active-filters" style="display: none;">
-            <div class="active-filters-header">
-                <span class="results-count" id="resultsCount">Showing all cards</span>
-                <button class="btn btn-sm btn-secondary" id="clearAllFilters">Clear All Filters</button>
+                <div id="cardTable" class="card-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Owned</th>
+                                <th class="sortable" data-sort="icon">Icon <span class="sort-arrow"></span></th>
+                                <th class="sortable" data-sort="name">Card <span class="sort-arrow"></span></th>
+                                <th class="sortable" data-sort="rarity">Rarity <span class="sort-arrow"></span></th>
+                                <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
+                                <th>Level</th>
+                                <th>Limit Break</th>
+                                <th>Main Effects</th>
+                                <th>Hints</th>
+                                <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cardTableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="filter-chips" id="filterChips">
-                <!-- Dynamically populated filter chips -->
-            </div>
-        </div>
-
-        <div id="cardTable" class="card-table" style="display: none;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Owned</th>
-                        <th class="sortable" data-sort="icon">Icon <span class="sort-arrow"></span></th>
-                        <th class="sortable" data-sort="name">Card <span class="sort-arrow"></span></th>
-                        <th class="sortable" data-sort="rarity">Rarity <span class="sort-arrow"></span></th>
-                        <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
-                        <th>Level</th>
-                        <th>Limit Break</th>
-                        <th>Main Effects</th>
-                        <th>Hints</th>
-                        <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="cardTableBody">
-                </tbody>
-            </table>
         </div>
     </div>
 
