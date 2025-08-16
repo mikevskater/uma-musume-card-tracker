@@ -52,8 +52,29 @@ h1 {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     height: fit-content;
+    max-height: calc(100vh - 40px); /* Account for top margin */
+    overflow-y: auto;
     position: sticky;
     top: 20px;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 .main-content {
@@ -1145,6 +1166,7 @@ tbody tr.unowned .card-name {
     .sidebar {
         width: 280px;
         min-width: 280px;
+        max-height: calc(100vh - 40px); /* Maintain scrolling on medium screens */
     }
     
     .main-layout {
@@ -1163,6 +1185,8 @@ tbody tr.unowned .card-name {
         min-width: auto;
         position: static;
         order: 2; /* Put sidebar below content on mobile */
+        max-height: none; /* Remove height restriction on mobile */
+        overflow-y: visible; /* Allow natural flow on mobile */
     }
     
     .main-content {
