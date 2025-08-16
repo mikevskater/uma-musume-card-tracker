@@ -191,6 +191,21 @@
                             <button id="importBtn" class="btn btn-secondary">📂 Import</button>
                             <button id="clearBtn" class="btn btn-danger">🗑️ Clear</button>
                         </div>
+                        
+                        <!-- NEW: Screenshot Recognition Section -->
+                        <div class="recognition-section">
+                            <h5>Screenshot Recognition</h5>
+                            <div class="recognition-buttons">
+                                <input type="file" id="screenshotFile" accept="image/*" style="display: none;">
+                                <button id="scanScreenshotBtn" class="btn btn-primary">📷 Scan Screenshot</button>
+                                <div id="recognitionProgress" class="recognition-progress" style="display: none;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progressFill"></div>
+                                    </div>
+                                    <div class="progress-text" id="progressText">Processing...</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -264,6 +279,44 @@
         </div>
     </div>
 
+    <!-- NEW: Recognition Results Modal -->
+    <div id="recognitionModal" class="modal" style="display: none;">
+        <div class="modal-overlay" id="recognitionOverlay"></div>
+        <div class="modal-content recognition-modal">
+            <div class="modal-header">
+                <h2 id="recognitionTitle">Recognition Results</h2>
+                <button class="modal-close" id="recognitionClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="recognitionResults">
+                    <div class="recognition-stats">
+                        <span id="recognitionCount">0 cards detected</span>
+                        <span id="recognitionConfidence">Average confidence: 0%</span>
+                    </div>
+                    <div id="detectedCardsList" class="detected-cards-list">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+                <div class="recognition-actions">
+                    <button id="recognitionCancel" class="btn btn-secondary">Cancel</button>
+                    <button id="recognitionImport" class="btn btn-primary">Import Selected Cards</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden canvas for image processing -->
+    <canvas id="processingCanvas" style="display: none;"></canvas>
+
+    <!-- Computer Vision Libraries -->
+    <script async src="https://docs.opencv.org/4.8.0/opencv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+
+    <!-- Application Scripts (Modularized) -->
+    <script src="cardManager.js"></script>
+    <script src="uiRenderer.js"></script>
+    <script src="filterSort.js"></script>
+    <script src="cardRecognition.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
