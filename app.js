@@ -455,6 +455,16 @@ function renderActiveFilters(filteredCount, totalCount) {
         });
     }
     
+    const effectSortFilter = document.getElementById('effectSortFilter').value;
+    if (effectSortFilter) {
+        const effectName = effectsData[effectSortFilter]?.name_en || 'Unknown Effect';
+        chips.push({
+            type: 'effectSort',
+            label: `Sorted by: ${effectName}`,
+            remove: () => { document.getElementById('effectSortFilter').value = ''; }
+        });
+    }
+    
     // Advanced filters
     Object.entries(advancedFilters.effects).forEach(([effectId, filter]) => {
         const effect = effectsData[effectId];
@@ -541,6 +551,7 @@ function clearAllFilters() {
     document.getElementById('ownedFilter').value = '';
     document.getElementById('nameFilter').value = '';
     document.getElementById('releasedFilter').checked = false;
+    document.getElementById('effectSortFilter').value = '';
     
     // Clear advanced filters
     clearAdvancedFilters();
@@ -1355,6 +1366,22 @@ function formatEventEffects(effects) {
     }).join(', ');
 }
 
+// Initialize effect sort dropdown
+function initializeEffectSortDropdown() {
+    const effectSortDropdown = document.getElementById('effectSortFilter');
+    
+    // Get all effects and sort them by name
+    const sortedEffects = Object.values(effectsData)
+        .filter(effect => effect.name_en) // Only include effects with English names
+        .sort((a, b) => a.name_en.localeCompare(b.name_en));
+    
+    // Populate dropdown
+    effectSortDropdown.innerHTML = '<option value="">Default Sort</option>' +
+        sortedEffects.map(effect => `
+            <option value="${effect.id}">${effect.name_en}</option>
+        `).join('');
+}
+
 // Get selected values from multi-select dropdown
 function getSelectedValues(multiSelectId) {
     const checkboxes = document.querySelectorAll(`#${multiSelectId} input[type="checkbox"]:checked`);
@@ -1414,8 +1441,33 @@ function sortCards(cards, column, direction) {
     });
 }
 
+// Sort cards by effect values
+function sortCardsByEffect(cards, effectId, direction = 'desc') {
+    return cards.sort((a, b) => {
+        const levelA = getEffectiveLevel(a);
+        const levelB = getEffectiveLevel(b);
+        
+        // Find effect arrays for both cards
+        const effectArrayA = a.effects?.find(effect => effect[0] == effectId);
+        const effectArrayB = b.effects?.find(effect => effect[0] == effectId);
+        
+        // Calculate effect values (0 if card doesn't have the effect)
+        const valueA = effectArrayA ? calculateEffectValue(effectArrayA, levelA) : 0;
+        const valueB = effectArrayB ? calculateEffectValue(effectArrayB, levelB) : 0;
+        
+        if (direction === 'asc') {
+            return valueA - valueB;
+        } else {
+            return valueB - valueA; // Default to descending for effects (highest first)
+        }
+    });
+}
+
 // Handle column header clicks for sorting
 function handleSort(column) {
+    // Clear effect sort when using column sorting
+    document.getElementById('effectSortFilter').value = '';
+    
     if (currentSort.column === column) {
         // Toggle direction
         currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
@@ -1445,6 +1497,7 @@ function filterAndSortCards() {
     const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
     const showUnreleased = document.getElementById('releasedFilter').checked;
     const ownedFilter = document.getElementById('ownedFilter').value;
+    const effectSortFilter = document.getElementById('effectSortFilter').value;
 
     let filtered = cardData.filter(card => {
         // Filter by release status (default: only show released cards)
@@ -1470,8 +1523,12 @@ function filterAndSortCards() {
         return true;
     });
 
-    // Apply sorting if set
-    if (currentSort.column) {
+    // Apply sorting
+    if (effectSortFilter) {
+        // Sort by selected effect
+        filtered = sortCardsByEffect(filtered, parseInt(effectSortFilter));
+    } else if (currentSort.column) {
+        // Sort by column header
         filtered = sortCards(filtered, currentSort.column, currentSort.direction);
     }
 
@@ -1492,11 +1549,25 @@ function initializeInterface() {
     
     // Initialize advanced filters
     initializeAdvancedFilters();
+    
+    // Initialize effect sort dropdown
+    initializeEffectSortDropdown();
 
     // Add event listeners for filters
     document.getElementById('nameFilter').addEventListener('input', debouncedFilterAndSort);
     document.getElementById('releasedFilter').addEventListener('change', debouncedFilterAndSort);
     document.getElementById('ownedFilter').addEventListener('change', debouncedFilterAndSort);
+    document.getElementById('effectSortFilter').addEventListener('change', (e) => {
+        // Clear column sorting when using effect sorting
+        if (e.target.value) {
+            currentSort.column = '';
+            currentSort.direction = '';
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+        }
+        debouncedFilterAndSort();
+    });
     document.getElementById('globalLimitBreak').addEventListener('change', (e) => {
         setGlobalLimitBreak(e.target.value);
     });
