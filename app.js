@@ -602,9 +602,13 @@ function rebindSkillFilterEvents() {
 // Calculate min/max effect values for currently filtered cards (excluding advanced filters)
 function calculateEffectRanges(cards) {
     const ranges = {};
-    const mainEffects = [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 27, 28, 30];
     
-    mainEffects.forEach(effectId => {
+    // Use the same effects as sort options - all effects with English names
+    const availableEffects = Object.values(effectsData)
+        .filter(effect => effect.name_en)
+        .map(effect => effect.id);
+    
+    availableEffects.forEach(effectId => {
         const values = [];
         
         cards.forEach(card => {
@@ -634,14 +638,15 @@ function calculateEffectRanges(cards) {
 // Build effect filters dynamically
 function buildEffectFilters(effectRanges = {}) {
     const effectFiltersContainer = document.getElementById('effectFilters');
-    const mainEffects = [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 27, 28, 30]; // Key effect IDs
     
-    effectFiltersContainer.innerHTML = mainEffects.map(effectId => {
-        const effect = effectsData[effectId];
-        if (!effect) return '';
-        
+    // Use the same effects as sort options - all effects with English names
+    const availableEffects = Object.values(effectsData)
+        .filter(effect => effect.name_en)
+        .sort((a, b) => a.name_en.localeCompare(b.name_en));
+    
+    effectFiltersContainer.innerHTML = availableEffects.map(effect => {
         const symbol = effect.symbol === 'percent' ? '%' : '';
-        const range = effectRanges[effectId];
+        const range = effectRanges[effect.id];
         
         // Create placeholder text with range info
         let placeholderText = `Min${symbol}`;
@@ -654,12 +659,12 @@ function buildEffectFilters(effectRanges = {}) {
                 <label>${effect.name_en}:</label>
                 <input type="number" 
                        class="effect-filter-input" 
-                       data-effect-id="${effectId}"
+                       data-effect-id="${effect.id}"
                        placeholder="${placeholderText}" 
                        min="0">
             </div>
         `;
-    }).filter(html => html).join('');
+    }).join('');
     
     // Add event listeners for effect filters
     document.querySelectorAll('.effect-filter-input').forEach(input => {
@@ -1143,6 +1148,9 @@ function setGlobalLimitBreak(lbLevel) {
             updateModalDisplay(effectiveLevel);
         }
     }
+    
+    // Trigger filter refresh to update effect ranges with new levels
+    debouncedFilterAndSort();
 }
 
 // Set global limit break override setting
@@ -1152,6 +1160,9 @@ function setGlobalLimitBreakOverride(override) {
     // Refresh level inputs if global LB is set
     if (globalLimitBreakLevel !== null) {
         setGlobalLimitBreak(globalLimitBreakLevel);
+    } else {
+        // Even if no global LB, still refresh to update effect ranges
+        debouncedFilterAndSort();
     }
 }
 

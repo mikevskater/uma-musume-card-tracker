@@ -46,8 +46,8 @@ h1 {
 }
 
 .sidebar {
-    width: 320px;
-    min-width: 320px;
+    width: 380px;
+    min-width: 380px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
