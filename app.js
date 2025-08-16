@@ -9,6 +9,7 @@ let currentModalCard = null;
 let currentSort = { column: '', direction: '' };
 let globalLimitBreakLevel = null;
 let globalLimitBreakOverrideOwned = true; // New: toggle for applying global LB to owned cards
+let showMaxPotentialLevels = false; // New: toggle for showing max potential vs current levels
 
 // Multi-layer sorting state
 let multiSort = []; // Array of { category, option, direction } objects
@@ -127,12 +128,22 @@ function setCardOwnership(cardId, owned) {
             if (card) {
                 ownedCards[cardId] = {
                     owned: true,
-                    level: limitBreaks[card.rarity][2], // Default to LB 2
+                    level: limitBreaks[card.rarity][2], // Default to LB 2 level
+                    limitBreak: 2, // Default to LB 2
                     dateObtained: Date.now()
                 };
             }
         } else {
             ownedCards[cardId].owned = true;
+            // Ensure limitBreak exists for backwards compatibility
+            if (ownedCards[cardId].limitBreak === undefined) {
+                const card = cardData.find(c => c.support_id === cardId);
+                if (card) {
+                    // Guess limit break level from current level
+                    const currentLevel = ownedCards[cardId].level;
+                    ownedCards[cardId].limitBreak = getLimitBreakLevel(currentLevel, card.rarity);
+                }
+            }
         }
     } else {
         if (ownedCards[cardId]) {
@@ -150,6 +161,22 @@ function setOwnedCardLevel(cardId, level) {
     }
 }
 
+// Set limit break level for owned card
+function setOwnedCardLimitBreak(cardId, limitBreakLevel) {
+    if (ownedCards[cardId] && ownedCards[cardId].owned) {
+        const card = cardData.find(c => c.support_id === cardId);
+        if (card) {
+            ownedCards[cardId].limitBreak = limitBreakLevel;
+            // Ensure level doesn't exceed new limit break maximum
+            const maxLevel = limitBreaks[card.rarity][limitBreakLevel];
+            if (ownedCards[cardId].level > maxLevel) {
+                ownedCards[cardId].level = maxLevel;
+            }
+            saveOwnedCards();
+        }
+    }
+}
+
 // Check if card is owned
 function isCardOwned(cardId) {
     return ownedCards[cardId] && ownedCards[cardId].owned;
@@ -159,6 +186,14 @@ function isCardOwned(cardId) {
 function getOwnedCardLevel(cardId) {
     if (ownedCards[cardId] && ownedCards[cardId].owned) {
         return ownedCards[cardId].level;
+    }
+    return null;
+}
+
+// Get owned card limit break level
+function getOwnedCardLimitBreak(cardId) {
+    if (ownedCards[cardId] && ownedCards[cardId].owned) {
+        return ownedCards[cardId].limitBreak !== undefined ? ownedCards[cardId].limitBreak : 2;
     }
     return null;
 }
@@ -1109,7 +1144,7 @@ function getSkillTypeDescription(typeId) {
     return skillTypesData[typeId] || typeId; // Fallback to original ID if not found
 }
 
-// Get effective level for a card (considering ownership, global LB, and individual settings)
+// Get effective level for a card (considering ownership, global LB, and display mode)
 function getEffectiveLevel(card) {
     const cardId = card.support_id;
     
@@ -1117,17 +1152,29 @@ function getEffectiveLevel(card) {
     if (globalLimitBreakLevel !== null) {
         // Check if we should override owned cards
         if (globalLimitBreakOverrideOwned || !isCardOwned(cardId)) {
-            return limitBreaks[card.rarity][globalLimitBreakLevel];
+            const globalLevel = limitBreaks[card.rarity][globalLimitBreakLevel];
+            return showMaxPotentialLevels ? globalLevel : globalLevel;
         }
     }
     
-    // If card is owned, use owned card level
+    // If card is owned, use owned card level/limit break
     if (isCardOwned(cardId)) {
-        return getOwnedCardLevel(cardId);
+        const currentLevel = getOwnedCardLevel(cardId);
+        const currentLimitBreak = getOwnedCardLimitBreak(cardId);
+        
+        if (showMaxPotentialLevels) {
+            // Show maximum level for current limit break
+            return limitBreaks[card.rarity][currentLimitBreak];
+        } else {
+            // Show current level
+            return currentLevel;
+        }
     }
     
     // Default to LB 2 for unowned cards in display
-    return limitBreaks[card.rarity][2];
+    const defaultLB = 2;
+    const defaultLevel = limitBreaks[card.rarity][defaultLB];
+    return showMaxPotentialLevels ? defaultLevel : defaultLevel;
 }
 
 // Set global limit break level for all cards
@@ -1182,6 +1229,36 @@ function setGlobalLimitBreakOverride(override) {
         // Even if no global LB, still refresh to update effect ranges
         debouncedFilterAndSort();
     }
+}
+
+// Set show max potential levels setting
+function setShowMaxPotentialLevels(showMax) {
+    showMaxPotentialLevels = showMax;
+    
+    // Update all level inputs and displays
+    document.querySelectorAll('.level-input').forEach(input => {
+        const cardId = parseInt(input.dataset.cardId);
+        const card = cardData.find(c => c.support_id === cardId);
+        
+        if (card) {
+            const effectiveLevel = getEffectiveLevel(card);
+            input.value = effectiveLevel;
+            updateCardDisplay(input);
+        }
+    });
+    
+    // Update modal if open
+    if (currentModalCard) {
+        const modalLevelInput = document.getElementById('modalLevelInput');
+        if (modalLevelInput) {
+            const effectiveLevel = getEffectiveLevel(currentModalCard);
+            modalLevelInput.value = effectiveLevel;
+            updateModalDisplay(effectiveLevel);
+        }
+    }
+    
+    // Trigger filter refresh to update effect ranges with new levels
+    debouncedFilterAndSort();
 }
 
 // Debounced filter and sort function
@@ -1339,7 +1416,13 @@ function renderCards(cards = cardData) {
         
         // Get effective level for display
         const effectiveLevel = getEffectiveLevel(card);
+        const currentLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
         const limitBreakLevel = getLimitBreakLevel(effectiveLevel, card.rarity);
+        
+        // Create level display with potential indicator
+        const levelDisplay = showMaxPotentialLevels && isOwned ? 
+            `${effectiveLevel} <span class="max-potential-indicator">MAX</span>` : 
+            effectiveLevel;
         
         // Get priority effects based on sort configuration
         const priorityEffects = getPriorityEffects(card, 4);
@@ -1369,8 +1452,8 @@ function renderCards(cards = cardData) {
             <td class="card-name">${card.char_name || 'Unknown Card'}</td>
             <td><span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span></td>
             <td><span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span></td>
-            <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][4]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
-            <td>${limitBreakLevel}</td>
+            <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][currentLimitBreak]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
+            <td>${currentLimitBreak}</td>
             <td class="effects-summary">${mainEffectsDisplay}</td>
             <td class="effects-summary">${hintSkills}</td>
             <td>${card.release_en || 'Unreleased'}</td>
@@ -1430,10 +1513,11 @@ function updateCardDisplay(input) {
     if (!card) return;
     
     const row = input.closest('tr');
-    const limitBreakLevel = getLimitBreakLevel(level, card.rarity);
+    const isOwned = isCardOwned(cardId);
+    const currentLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
     
-    // Update limit break display
-    row.children[6].textContent = limitBreakLevel;
+    // Update limit break display (show current LB, not calculated from level)
+    row.children[6].textContent = currentLimitBreak;
     
     // Recalculate and update priority effects
     const priorityEffects = getPriorityEffects(card, 4);
@@ -1715,12 +1799,29 @@ function renderCardDetails(card, level) {
                     </span>
                 </div>
                 <div class="level-controls">
-                    <label for="modalLevelInput">Level:</label>
-                    <input type="number" id="modalLevelInput" class="modal-level-input" 
-                           value="${level}" min="1" max="${limitBreaks[card.rarity][4]}" 
-                           ${!isOwned && globalLimitBreakLevel === null ? 'disabled' : ''} 
-                           ${globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned) ? 'disabled' : ''}>
-                    <span class="lb-indicator">LB ${limitBreakLevel}</span>
+                    <div class="level-control-row">
+                        <label for="modalLevelInput">Current Level:</label>
+                        <input type="number" id="modalLevelInput" class="modal-level-input" 
+                               value="${level}" min="1" max="${limitBreaks[card.rarity][getOwnedCardLimitBreak(cardId) || 2]}" 
+                               ${!isOwned && globalLimitBreakLevel === null ? 'disabled' : ''} 
+                               ${globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned) ? 'disabled' : ''}>
+                    </div>
+                    <div class="level-control-row">
+                        <label for="modalLimitBreakSelect">Limit Break:</label>
+                        <select id="modalLimitBreakSelect" class="modal-lb-select"
+                                ${!isOwned && globalLimitBreakLevel === null ? 'disabled' : ''} 
+                                ${globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned) ? 'disabled' : ''}>
+                            ${Array.from({length: 5}, (_, i) => `
+                                <option value="${i}" ${(getOwnedCardLimitBreak(cardId) || 2) === i ? 'selected' : ''}>
+                                    LB ${i} (Max: ${limitBreaks[card.rarity][i]})
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="level-status">
+                        <span class="lb-indicator">Current: LB ${limitBreakLevel} Level ${level}</span>
+                        ${showMaxPotentialLevels ? `<span class="potential-indicator">Showing Max Potential</span>` : ''}
+                    </div>
                 </div>
             </div>
         </div>
@@ -1804,16 +1905,50 @@ function renderCardDetails(card, level) {
             }
         }
     });
+    
+    // Add event listener for modal limit break select
+    const modalLimitBreakSelect = document.getElementById('modalLimitBreakSelect');
+    modalLimitBreakSelect.addEventListener('change', (e) => {
+        const newLimitBreak = parseInt(e.target.value);
+        
+        if (isOwned && 
+            (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
+            setOwnedCardLimitBreak(cardId, newLimitBreak);
+            
+            // Update level input max value
+            const card = cardData.find(c => c.support_id === cardId);
+            const maxLevel = limitBreaks[card.rarity][newLimitBreak];
+            modalLevelInput.max = maxLevel;
+            
+            // Update current level if it exceeds new max
+            if (parseInt(modalLevelInput.value) > maxLevel) {
+                modalLevelInput.value = maxLevel;
+                setOwnedCardLevel(cardId, maxLevel);
+            }
+            
+            updateModalDisplay(parseInt(modalLevelInput.value));
+            
+            // Update table display
+            const tableInput = document.querySelector(`input[data-card-id="${cardId}"]`);
+            if (tableInput) {
+                tableInput.value = parseInt(modalLevelInput.value);
+                updateCardDisplay(tableInput);
+            }
+        }
+    });
 }
 
 // Update modal display when level changes
 function updateModalDisplay(level) {
     if (!currentModalCard) return;
     
+    const cardId = currentModalCard.support_id;
+    const currentLimitBreak = getOwnedCardLimitBreak(cardId) || 2;
     const limitBreakLevel = getLimitBreakLevel(level, currentModalCard.rarity);
+    
     const lbIndicator = document.querySelector('.lb-indicator');
     if (lbIndicator) {
-        lbIndicator.textContent = `LB ${limitBreakLevel}`;
+        lbIndicator.textContent = `Current: LB ${currentLimitBreak} Level ${level}`;
     }
     
     const effectsGrid = document.getElementById('effectsGrid');
@@ -1996,10 +2131,10 @@ function formatEventEffects(effects) {
             case 'me': return `Maximum Energy ${value}`;            
             case 'sk': return `Skill: ${getSkillName(skillId)}`;
             case '5s': return `All Stats ${value}`;
-            case 'rs': return `Random Stats (${statAmount}): ${value}`;
+            case 'rs': return `Random Stats (${value})`;
             case 'sg': return `Obtain Skill: ${getSkillName(skillId)}`;
             case 'sre': return `Lose Skill: ${getSkillName(skillId)}`;
-            case 'srh': return `Strategy Related Hint (${count || 1})`;
+            case 'srh': return `Strategy Related Hint (${value || 1})`;
             case 'sr': return `Skill Hint: ${getSkillName(skillId)} hint ${value}`;
             case 'bo_l': return `Bond Low ${value}`;
             case 'fa': return `Fans ${value}`;
@@ -2079,6 +2214,9 @@ function initializeInterface() {
     });
     document.getElementById('globalOverrideOwned').addEventListener('change', (e) => {
         setGlobalLimitBreakOverride(e.target.checked);
+    });
+    document.getElementById('showMaxPotential').addEventListener('change', (e) => {
+        setShowMaxPotentialLevels(e.target.checked);
     });
 
     // Add event listeners for data management buttons

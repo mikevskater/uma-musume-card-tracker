@@ -305,7 +305,121 @@ h1 {
     font-size: 0.85rem;
 }
 
-/* Data Management Section */
+/* Level Display Options Section */
+.level-display-section {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.level-display-section .section-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.level-option {
+    margin-bottom: 0.75rem;
+}
+
+.level-option:last-child {
+    margin-bottom: 0;
+}
+
+.level-option label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.level-option select {
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: help;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+}
+
+.tooltip:hover {
+    background-color: #495057;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: normal;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 200px;
+    white-space: normal;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Mobile tooltip adjustments */
+@media (max-width: 768px) {
+    .tooltip::before {
+        max-width: 150px;
+        font-size: 0.7rem;
+        padding: 0.4rem 0.6rem;
+    }
+}
 .data-management {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
@@ -896,11 +1010,22 @@ tbody tr.unowned .card-name {
 }
 
 .level-input:disabled,
-.modal-level-input:disabled {
+.modal-level-input:disabled,
+.modal-lb-select:disabled {
     background-color: #f8f9fa;
     color: #6c757d;
     cursor: not-allowed;
     opacity: 0.7;
+}
+
+.max-potential-indicator {
+    background-color: #28a745;
+    color: white;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    margin-left: 0.25rem;
 }
 
 .error {
@@ -1143,21 +1268,49 @@ tbody tr.unowned .card-name {
 
 .level-controls {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-bottom: 0.5rem;
 }
 
-.level-controls label {
-    font-weight: 600;
+.level-control-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.modal-level-input {
-    width: 80px;
-    text-align: center;
+.level-control-row label {
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.modal-level-input,
+.modal-lb-select {
+    flex: 1;
     padding: 0.4rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.level-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.potential-indicator {
+    background-color: #28a745;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .lb-indicator {
@@ -1498,6 +1651,30 @@ tbody tr.unowned .card-name {
         flex-direction: column;
         align-items: start;
         gap: 0.5rem;
+    }
+    
+    .level-control-row {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.25rem;
+        width: 100%;
+    }
+    
+    .level-control-row label {
+        min-width: auto;
+    }
+    
+    .modal-level-input,
+    .modal-lb-select {
+        width: 100%;
+    }
+    
+    .level-display-section {
+        padding: 0.75rem;
+    }
+    
+    .level-option {
+        margin-bottom: 0.5rem;
     }
     
     .multi-select {

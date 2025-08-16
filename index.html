@@ -82,27 +82,50 @@
                             <input type="text" id="nameFilter" placeholder="Search by character name...">
                         </div>
 
-                        <div class="filter-group">
-                            <label for="globalLimitBreak">Set All LB:</label>
-                            <select id="globalLimitBreak">
-                                <option value="">Default</option>
-                                <option value="0">LB 0</option>
-                                <option value="1">LB 1</option>
-                                <option value="2">LB 2</option>
-                                <option value="3">LB 3</option>
-                                <option value="4">LB 4</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label for="globalOverrideOwned">
-                                <input type="checkbox" id="globalOverrideOwned" checked> Apply to owned cards
+                        <!-- Level Display Options Section -->
+                        <div class="filter-group level-display-section">
+                            <label class="section-label">
+                                Level Display Options
+                                <span class="tooltip" data-tooltip="Control how card levels are displayed and calculated for effect values">ℹ️</span>
                             </label>
+                            
+                            <div class="level-option">
+                                <label for="globalLimitBreak">
+                                    Set All LB:
+                                    <span class="tooltip" data-tooltip="Override all cards to use the same limit break level for comparison purposes">ℹ️</span>
+                                </label>
+                                <select id="globalLimitBreak">
+                                    <option value="">Default</option>
+                                    <option value="0">LB 0</option>
+                                    <option value="1">LB 1</option>
+                                    <option value="2">LB 2</option>
+                                    <option value="3">LB 3</option>
+                                    <option value="4">LB 4</option>
+                                </select>
+                            </div>
+
+                            <div class="level-option">
+                                <label for="globalOverrideOwned">
+                                    <input type="checkbox" id="globalOverrideOwned" checked> 
+                                    Apply to owned cards
+                                    <span class="tooltip" data-tooltip="Whether the global limit break setting affects your owned cards or uses their individual levels">ℹ️</span>
+                                </label>
+                            </div>
+
+                            <div class="level-option">
+                                <label for="showMaxPotential">
+                                    <input type="checkbox" id="showMaxPotential"> 
+                                    Show Max Potential Levels
+                                    <span class="tooltip" data-tooltip="Display effect values at maximum level for each card's current limit break instead of current level">ℹ️</span>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="filter-group">
                             <label for="releasedFilter">
-                                <input type="checkbox" id="releasedFilter"> Show Unreleased Cards
+                                <input type="checkbox" id="releasedFilter"> 
+                                Show Unreleased Cards
+                                <span class="tooltip" data-tooltip="Include cards not yet released in English">ℹ️</span>
                             </label>
                         </div>
                     </div>
@@ -195,7 +218,7 @@
                                 <th class="sortable" data-sort="rarity">Rarity <span class="sort-arrow"></span></th>
                                 <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
                                 <th>Level</th>
-                                <th>Limit Break</th>
+                                <th>Current LB</th>
                                 <th>Primary Effects</th>
                                 <th>Hints</th>
                                 <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
