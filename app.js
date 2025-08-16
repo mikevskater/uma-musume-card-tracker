@@ -29,6 +29,20 @@ const limitBreaks = {
 // Storage key for localStorage
 const STORAGE_KEY = 'uma_owned_cards';
 
+// Type display mapping
+function getTypeDisplayName(type) {
+    const typeMap = {
+        'speed': 'Speed',
+        'stamina': 'Stamina',
+        'power': 'Power',
+        'guts': 'Guts',
+        'wisdom': 'Wit',
+        'intelligence': 'Wit',
+        'friend': 'Friend'
+    };
+    return typeMap[type] || type;
+}
+
 // Load owned cards from localStorage
 function loadOwnedCards() {
     try {
@@ -406,9 +420,10 @@ function renderActiveFilters(filteredCount, totalCount) {
     
     const selectedTypes = getSelectedValues('typeFilter');
     if (selectedTypes.length > 0) {
+        const typeLabels = selectedTypes.map(type => getTypeDisplayName(type));
         chips.push({
             type: 'type',
-            label: `Type: ${selectedTypes.join(', ')}`,
+            label: `Type: ${typeLabels.join(', ')}`,
             remove: () => clearMultiSelect('typeFilter')
         });
     }
@@ -818,7 +833,7 @@ function passesAdvancedFilters(card) {
 function createCardIconFallback() {
     const fallback = document.createElement('div');
     fallback.className = 'card-icon-fallback';
-    fallback.textContent = '🖷';
+    fallback.textContent = '🖼';
     return fallback;
 }
 
@@ -900,7 +915,7 @@ function renderCards(cards = cardData) {
             </td>
             <td class="card-name">${card.char_name || 'Unknown Card'}</td>
             <td><span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span></td>
-            <td><span class="type type-${card.type}">${card.type}</span></td>
+            <td><span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span></td>
             <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][4]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
             <td>${limitBreakLevel}</td>
             <td class="effects-summary">${mainEffects}</td>
@@ -1038,7 +1053,7 @@ function renderCardDetails(card, level) {
                 <div class="character-name">Card Name: ${card.name_en || 'Not Available'}</div>
                 <div class="card-badges">
                     <span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>
-                    <span class="type type-${card.type}">${card.type}</span>
+                    <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
                 </div>
                 <div class="release-info">
                     English Release: ${card.release_en || 'Not Released'}<br>
@@ -1330,7 +1345,7 @@ function formatEventEffects(effects) {
             case 'st': return `Stamina ${value}`;
             case 'pt': return `Power ${value}`;
             case 'gu': return `Guts ${value}`;
-            case 'in': return `Wisdom ${value}`;
+            case 'in': return `Wit ${value}`;
             case 'en': return `Energy ${value}`;
             case 'mo': return `Mood ${value}`;
             case 'bo': return `Bond ${value}`;
@@ -1355,7 +1370,11 @@ function updateMultiSelectText(multiSelectId, defaultText) {
     if (selectedValues.length === 0) {
         textElement.textContent = defaultText;
     } else if (selectedValues.length === 1) {
-        textElement.textContent = selectedValues[0].toUpperCase();
+        if (multiSelectId === 'typeFilter') {
+            textElement.textContent = getTypeDisplayName(selectedValues[0]);
+        } else {
+            textElement.textContent = selectedValues[0].toUpperCase();
+        }
     } else {
         textElement.textContent = `${selectedValues.length} selected`;
     }
@@ -1456,8 +1475,11 @@ function filterAndSortCards() {
         filtered = sortCards(filtered, currentSort.column, currentSort.direction);
     }
 
+    // Calculate total available cards based on release filter
+    const totalAvailable = showUnreleased ? cardData.length : cardData.filter(card => card.release_en).length;
+
     renderCards(filtered);
-    renderActiveFilters(filtered.length, cardData.length);
+    renderActiveFilters(filtered.length, totalAvailable);
 }
 
 // Initialize interface

@@ -661,7 +661,8 @@ tbody tr.unowned .card-name {
     color: #17a2b8; 
 }
 
-.type-wisdom { 
+.type-wisdom,
+.type-intelligence { 
     background-color: #e2e3e5; 
     color: #6c757d; 
 }
