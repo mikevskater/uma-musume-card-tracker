@@ -669,10 +669,18 @@ table {
     border-collapse: collapse;
 }
 
+/* Set consistent row height for all table rows */
+tbody tr {
+    height: 60px;
+    transition: all 0.2s ease;
+}
+
+/* General table cell styling */
 th, td {
     padding: 0.75rem;
     text-align: left;
     border-bottom: 1px solid #eee;
+    vertical-align: middle;
 }
 
 th {
@@ -710,6 +718,38 @@ th.sort-desc .sort-arrow::after {
     opacity: 1;
 }
 
+/* FIXED: Ownership Checkbox Cell Styling */
+td.ownership-checkbox {
+    padding: 0; /* Override general td padding */
+    width: 60px; /* Fixed width for consistency */
+    height: 60px; /* Match row height */
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+
+/* Flexbox container for perfect centering */
+td.ownership-checkbox::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+/* Checkbox styling with proper centering */
+td.ownership-checkbox input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+}
+
+td.ownership-checkbox input[type="checkbox"]:checked {
+    accent-color: #27ae60;
+}
+
 /* Card Icon Styles */
 .card-icon {
     width: 40px;
@@ -741,30 +781,7 @@ th.sort-desc .sort-arrow::after {
     margin: 0 auto;
 }
 
-/* Ownership Checkbox Styles */
-.ownership-checkbox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 0.75rem;
-}
-
-.ownership-checkbox input[type="checkbox"] {
-    transform: scale(1.2);
-    cursor: pointer;
-    margin: 0; /* Remove any default margin */
-}
-
-.ownership-checkbox input[type="checkbox"]:checked {
-    accent-color: #27ae60;
-}
-
 /* Card Row States */
-tbody tr {
-    transition: all 0.2s ease;
-}
-
 tbody tr:hover {
     background-color: #f8f9fa;
     cursor: pointer;
@@ -1524,6 +1541,16 @@ tbody tr.unowned .card-name {
         height: 30px;
         font-size: 0.6rem;
     }
+
+    /* Mobile table row height adjustments */
+    tbody tr {
+        height: 50px;
+    }
+
+    td.ownership-checkbox {
+        height: 50px;
+        width: 50px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1547,6 +1574,13 @@ tbody tr.unowned .card-name {
     th, td {
         padding: 0.5rem;
         font-size: 0.85rem;
+    }
+
+    /* Override checkbox cell padding on small screens */
+    td.ownership-checkbox {
+        padding: 0;
+        height: 45px;
+        width: 45px;
     }
     
     .card-icon,
@@ -1620,5 +1654,10 @@ tbody tr.unowned .card-name {
         font-size: 0.7rem;
         padding: 0.25rem 0.4rem;
         min-width: 40px;
+    }
+
+    /* Mobile table row height adjustments */
+    tbody tr {
+        height: 45px;
     }
 }
