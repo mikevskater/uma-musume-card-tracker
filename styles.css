@@ -453,6 +453,15 @@ select, input[type="text"], input[type="number"] {
     background-color: #f8f9fa;
 }
 
+.multi-select-dropdown label[style*="opacity: 0.5"] {
+    color: #999;
+    background-color: #f9f9f9;
+}
+
+.multi-select-dropdown label[style*="opacity: 0.5"]:hover {
+    background-color: #f0f0f0;
+}
+
 .multi-select-dropdown input[type="checkbox"] {
     margin-right: 0.5rem;
 }

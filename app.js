@@ -247,7 +247,7 @@ function showToast(message, type = 'success') {
 
 // Initialize advanced filters UI
 function initializeAdvancedFilters() {
-    // Build effect filters
+    // Build effect filters (will be updated dynamically)
     buildEffectFilters();
     
     // Build skill filters
@@ -270,8 +270,159 @@ function initializeAdvancedFilters() {
     });
 }
 
+// Update effect filter placeholders with current ranges
+function updateEffectFilterPlaceholders(effectRanges) {
+    document.querySelectorAll('.effect-filter-input').forEach(input => {
+        const effectId = parseInt(input.dataset.effectId);
+        const effect = effectsData[effectId];
+        
+        if (effect) {
+            const symbol = effect.symbol === 'percent' ? '%' : '';
+            const range = effectRanges[effectId];
+            
+            // Create placeholder text with range info
+            let placeholderText = `Min${symbol}`;
+            if (range && range.max > 0) {
+                placeholderText = `Min (${range.min} - ${range.max})${symbol}`;
+            }
+            
+            input.placeholder = placeholderText;
+        }
+    });
+}
+
+// Calculate skill counts for currently filtered cards
+function calculateSkillCounts(cards) {
+    const hintSkillCounts = {};
+    const eventSkillCounts = {};
+    
+    cards.forEach(card => {
+        // Count hint skills
+        if (card.hints?.hint_skills) {
+            card.hints.hint_skills.forEach(skill => {
+                hintSkillCounts[skill.id] = (hintSkillCounts[skill.id] || 0) + 1;
+            });
+        }
+        
+        // Count event skills
+        if (card.event_skills) {
+            card.event_skills.forEach(skill => {
+                eventSkillCounts[skill.id] = (eventSkillCounts[skill.id] || 0) + 1;
+            });
+        }
+    });
+    
+    return { hintSkillCounts, eventSkillCounts };
+}
+
+// Update skill filter labels with current counts
+function updateSkillFilterLabels(skillCounts) {
+    const { hintSkillCounts, eventSkillCounts } = skillCounts;
+    
+    // Update hint skill labels
+    document.querySelectorAll('#hintSkillDropdown label').forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            const skillId = parseInt(checkbox.value);
+            const skillName = getSkillName(skillId);
+            const count = hintSkillCounts[skillId] || 0;
+            const isChecked = checkbox.checked;
+            
+            if (count > 0) {
+                label.innerHTML = `<input type="checkbox" value="${skillId}" ${isChecked ? 'checked' : ''}> ${skillName} (${count})`;
+                label.style.opacity = '1';
+            } else {
+                label.innerHTML = `<input type="checkbox" value="${skillId}" ${isChecked ? 'checked' : ''}> ${skillName} (0)`;
+                label.style.opacity = '0.5';
+            }
+        }
+    });
+    
+    // Update event skill labels
+    document.querySelectorAll('#eventSkillDropdown label').forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            const skillId = parseInt(checkbox.value);
+            const skillName = getSkillName(skillId);
+            const count = eventSkillCounts[skillId] || 0;
+            const isChecked = checkbox.checked;
+            
+            if (count > 0) {
+                label.innerHTML = `<input type="checkbox" value="${skillId}" ${isChecked ? 'checked' : ''}> ${skillName} (${count})`;
+                label.style.opacity = '1';
+            } else {
+                label.innerHTML = `<input type="checkbox" value="${skillId}" ${isChecked ? 'checked' : ''}> ${skillName} (0)`;
+                label.style.opacity = '0.5';
+            }
+        }
+    });
+    
+    // Re-add event listeners after updating innerHTML
+    rebindSkillFilterEvents();
+}
+
+// Re-bind skill filter event listeners after updating labels
+function rebindSkillFilterEvents() {
+    const hintSkillDropdown = document.getElementById('hintSkillDropdown');
+    const eventSkillDropdown = document.getElementById('eventSkillDropdown');
+    
+    // Remove old event listeners by cloning and replacing
+    const newHintDropdown = hintSkillDropdown.cloneNode(true);
+    const newEventDropdown = eventSkillDropdown.cloneNode(true);
+    
+    hintSkillDropdown.parentNode.replaceChild(newHintDropdown, hintSkillDropdown);
+    eventSkillDropdown.parentNode.replaceChild(newEventDropdown, eventSkillDropdown);
+    
+    // Add new event listeners
+    newHintDropdown.addEventListener('change', () => {
+        advancedFilters.hintSkills = Array.from(newHintDropdown.querySelectorAll('input:checked'))
+            .map(input => parseInt(input.value));
+        updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
+        debouncedFilterAndSort();
+    });
+    
+    newEventDropdown.addEventListener('change', () => {
+        advancedFilters.eventSkills = Array.from(newEventDropdown.querySelectorAll('input:checked'))
+            .map(input => parseInt(input.value));
+        updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
+        debouncedFilterAndSort();
+    });
+}
+
+// Calculate min/max effect values for currently filtered cards (excluding advanced filters)
+function calculateEffectRanges(cards) {
+    const ranges = {};
+    const mainEffects = [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 27, 28, 30];
+    
+    mainEffects.forEach(effectId => {
+        const values = [];
+        
+        cards.forEach(card => {
+            const effectArray = card.effects?.find(effect => effect[0] == effectId);
+            if (effectArray) {
+                const level = getEffectiveLevel(card);
+                const value = calculateEffectValue(effectArray, level);
+                if (value > 0) { // Only include values > 0
+                    values.push(value);
+                }
+            }
+        });
+        
+        if (values.length > 0) {
+            ranges[effectId] = {
+                min: Math.min(...values),
+                max: Math.max(...values)
+            };
+        } else {
+            ranges[effectId] = { min: 0, max: 0 };
+        }
+    });
+    
+    return ranges;
+}
+
 // Build effect filters dynamically
-function buildEffectFilters() {
+function buildEffectFilters(effectRanges = {}) {
     const effectFiltersContainer = document.getElementById('effectFilters');
     const mainEffects = [1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 27, 28, 30]; // Key effect IDs
     
@@ -280,6 +431,13 @@ function buildEffectFilters() {
         if (!effect) return '';
         
         const symbol = effect.symbol === 'percent' ? '%' : '';
+        const range = effectRanges[effectId];
+        
+        // Create placeholder text with range info
+        let placeholderText = `Min${symbol}`;
+        if (range && range.max > 0) {
+            placeholderText = `Min (${range.min} - ${range.max})${symbol}`;
+        }
         
         return `
             <div class="effect-filter-item">
@@ -287,7 +445,7 @@ function buildEffectFilters() {
                 <input type="number" 
                        class="effect-filter-input" 
                        data-effect-id="${effectId}"
-                       placeholder="Min${symbol}" 
+                       placeholder="${placeholderText}" 
                        min="0">
             </div>
         `;
@@ -354,20 +512,8 @@ function buildSkillFilters() {
             </label>
         `).join('');
     
-    // Add event listeners for skill filters
-    hintSkillDropdown.addEventListener('change', () => {
-        advancedFilters.hintSkills = Array.from(hintSkillDropdown.querySelectorAll('input:checked'))
-            .map(input => parseInt(input.value));
-        updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
-        debouncedFilterAndSort();
-    });
-    
-    eventSkillDropdown.addEventListener('change', () => {
-        advancedFilters.eventSkills = Array.from(eventSkillDropdown.querySelectorAll('input:checked'))
-            .map(input => parseInt(input.value));
-        updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
-        debouncedFilterAndSort();
-    });
+    // Initial event listeners (will be rebound by rebindSkillFilterEvents)
+    rebindSkillFilterEvents();
 }
 
 // Clear advanced filters
@@ -392,6 +538,9 @@ function clearAdvancedFilters() {
     
     updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
     updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
+    
+    // Reset skill filter labels to original state (rebuild without counts)
+    buildSkillFilters();
     
     debouncedFilterAndSort();
 }
@@ -553,7 +702,7 @@ function clearAllFilters() {
     document.getElementById('releasedFilter').checked = false;
     document.getElementById('effectSortFilter').value = '';
     
-    // Clear advanced filters
+    // Clear advanced filters (this will rebuild skill filters)
     clearAdvancedFilters();
 }
 
@@ -1499,6 +1648,7 @@ function filterAndSortCards() {
     const ownedFilter = document.getElementById('ownedFilter').value;
     const effectSortFilter = document.getElementById('effectSortFilter').value;
 
+    // Apply all filters including advanced filters
     let filtered = cardData.filter(card => {
         // Filter by release status (default: only show released cards)
         if (!showUnreleased && !card.release_en) return false;
@@ -1522,6 +1672,14 @@ function filterAndSortCards() {
         
         return true;
     });
+
+    // Calculate effect ranges from the fully filtered set and update placeholders
+    const effectRanges = calculateEffectRanges(filtered);
+    updateEffectFilterPlaceholders(effectRanges);
+    
+    // Calculate skill counts from the fully filtered set and update labels
+    const skillCounts = calculateSkillCounts(filtered);
+    updateSkillFilterLabels(skillCounts);
 
     // Apply sorting
     if (effectSortFilter) {
