@@ -24,12 +24,15 @@
                     <div class="basic-filters">
                         <h3>Filters</h3>
                         
+                        <!-- Multi-Layer Sort Section -->
                         <div class="filter-group">
-                            <label for="effectSortFilter">Sort by Effect:</label>
-                            <select id="effectSortFilter">
-                                <option value="">Default Sort</option>
-                                <!-- Dynamically populated -->
-                            </select>
+                            <label>Sort Priority:</label>
+                            <div class="multi-sort-container" id="multiSortContainer">
+                                <!-- Sort layers will be dynamically added here -->
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm add-sort-btn" id="addSortBtn">
+                                <span class="sort-icon">+</span> Add Sort Layer
+                            </button>
                         </div>
 
                         <div class="filter-group">
@@ -193,7 +196,7 @@
                                 <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
                                 <th>Level</th>
                                 <th>Limit Break</th>
-                                <th>Main Effects</th>
+                                <th>Primary Effects</th>
                                 <th>Hints</th>
                                 <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
                             </tr>

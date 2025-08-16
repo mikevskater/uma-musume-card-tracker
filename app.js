@@ -9,6 +9,9 @@ let currentSort = { column: '', direction: '' };
 let globalLimitBreakLevel = null;
 let globalLimitBreakOverrideOwned = true; // New: toggle for applying global LB to owned cards
 
+// Multi-layer sorting state
+let multiSort = []; // Array of { category, option, direction } objects
+
 // Advanced filtering state
 let advancedFilters = {
     effects: {}, // effectId: { min: value, max: value }
@@ -28,6 +31,46 @@ const limitBreaks = {
 
 // Storage key for localStorage
 const STORAGE_KEY = 'uma_owned_cards';
+
+// Sort categories configuration
+const sortCategories = {
+    effect: { 
+        name: 'Effect', 
+        hasOptions: true,
+        getOptions: () => Object.values(effectsData)
+            .filter(effect => effect.name_en)
+            .sort((a, b) => a.name_en.localeCompare(b.name_en))
+            .map(effect => ({ value: effect.id, label: effect.name_en }))
+    },
+    level: { 
+        name: 'Level', 
+        hasOptions: false 
+    },
+    ownership: { 
+        name: 'Ownership', 
+        hasOptions: false 
+    },
+    rarity: { 
+        name: 'Rarity', 
+        hasOptions: false 
+    },
+    type: { 
+        name: 'Type', 
+        hasOptions: false 
+    },
+    hintSkillCount: { 
+        name: 'Hint Skills', 
+        hasOptions: false 
+    },
+    eventSkillCount: { 
+        name: 'Event Skills', 
+        hasOptions: false 
+    },
+    releaseDate: { 
+        name: 'Release Date', 
+        hasOptions: false 
+    }
+};
 
 // Type display mapping
 function getTypeDisplayName(type) {
@@ -268,6 +311,172 @@ function initializeAdvancedFilters() {
             advancedToggle.classList.add('expanded');
         }
     });
+}
+
+// Multi-Sort Functions
+function initializeMultiSort() {
+    renderMultiSort();
+    
+    // Add event listener for add sort button
+    const addSortBtn = document.getElementById('addSortBtn');
+    addSortBtn.addEventListener('click', addSortLayer);
+}
+
+function renderMultiSort() {
+    const container = document.getElementById('multiSortContainer');
+    
+    if (multiSort.length === 0) {
+        container.innerHTML = `
+            <div class="no-sorts-message">
+                Click "Add Sort Layer" to start sorting cards by different criteria.
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = multiSort.map((sort, index) => {
+        const category = sortCategories[sort.category];
+        const categoryName = category ? category.name : 'Unknown';
+        
+        let optionSelect = '';
+        if (category && category.hasOptions) {
+            const options = category.getOptions();
+            optionSelect = `
+                <select class="sort-option-select" data-index="${index}">
+                    <option value="">Select ${categoryName}</option>
+                    ${options.map(opt => `
+                        <option value="${opt.value}" ${opt.value == sort.option ? 'selected' : ''}>
+                            ${opt.label}
+                        </option>
+                    `).join('')}
+                </select>
+            `;
+        }
+        
+        return `
+            <div class="sort-layer" data-index="${index}">
+                <div class="sort-layer-header">
+                    <div class="sort-layer-title">
+                        <span class="sort-priority-badge">${index + 1}</span>
+                        ${categoryName}${sort.option ? `: ${getSortOptionLabel(sort.category, sort.option)}` : ''}
+                    </div>
+                    <div class="sort-controls">
+                        <button class="sort-btn" data-action="move-up" data-index="${index}" 
+                                ${index === 0 ? 'disabled' : ''} title="Move Up">↑</button>
+                        <button class="sort-btn" data-action="move-down" data-index="${index}" 
+                                ${index === multiSort.length - 1 ? 'disabled' : ''} title="Move Down">↓</button>
+                        <button class="sort-btn danger" data-action="remove" data-index="${index}" title="Remove">✕</button>
+                    </div>
+                </div>
+                <div class="sort-dropdowns">
+                    <select class="sort-category-select" data-index="${index}">
+                        ${Object.entries(sortCategories).map(([key, cat]) => `
+                            <option value="${key}" ${key === sort.category ? 'selected' : ''}>${cat.name}</option>
+                        `).join('')}
+                    </select>
+                    ${optionSelect}
+                    <button class="sort-direction-toggle ${sort.direction}" data-index="${index}">
+                        ${sort.direction === 'asc' ? '↑' : '↓'}
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Add event listeners
+    container.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            const index = parseInt(e.target.dataset.index);
+            
+            switch (action) {
+                case 'move-up':
+                    moveSortLayer(index, index - 1);
+                    break;
+                case 'move-down':
+                    moveSortLayer(index, index + 1);
+                    break;
+                case 'remove':
+                    removeSortLayer(index);
+                    break;
+            }
+        });
+    });
+    
+    container.querySelectorAll('.sort-category-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const index = parseInt(e.target.dataset.index);
+            const category = e.target.value;
+            updateSortLayer(index, { category, option: null });
+        });
+    });
+    
+    container.querySelectorAll('.sort-option-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const index = parseInt(e.target.dataset.index);
+            const option = e.target.value;
+            updateSortLayer(index, { option: option || null });
+        });
+    });
+    
+    container.querySelectorAll('.sort-direction-toggle').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.dataset.index);
+            const currentDirection = multiSort[index].direction;
+            const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            updateSortLayer(index, { direction: newDirection });
+        });
+    });
+}
+
+function addSortLayer() {
+    multiSort.push({
+        category: 'effect',
+        option: null,
+        direction: 'desc'
+    });
+    renderMultiSort();
+    debouncedFilterAndSort();
+}
+
+function removeSortLayer(index) {
+    multiSort.splice(index, 1);
+    renderMultiSort();
+    debouncedFilterAndSort();
+}
+
+function moveSortLayer(fromIndex, toIndex) {
+    if (toIndex < 0 || toIndex >= multiSort.length) return;
+    
+    const item = multiSort.splice(fromIndex, 1)[0];
+    multiSort.splice(toIndex, 0, item);
+    renderMultiSort();
+    debouncedFilterAndSort();
+}
+
+function updateSortLayer(index, updates) {
+    if (index < 0 || index >= multiSort.length) return;
+    
+    multiSort[index] = { ...multiSort[index], ...updates };
+    renderMultiSort();
+    debouncedFilterAndSort();
+}
+
+function getSortOptionLabel(category, option) {
+    if (!option) return '';
+    
+    switch (category) {
+        case 'effect':
+            return effectsData[option]?.name_en || `Effect ${option}`;
+        default:
+            return option;
+    }
+}
+
+function clearAllSorts() {
+    multiSort = [];
+    renderMultiSort();
+    debouncedFilterAndSort();
 }
 
 // Update effect filter placeholders with current ranges
@@ -557,6 +766,24 @@ function renderActiveFilters(filteredCount, totalCount) {
     // Build filter chips
     const chips = [];
     
+    // Sort layer chips
+    multiSort.forEach((sort, index) => {
+        const category = sortCategories[sort.category];
+        const categoryName = category ? category.name : 'Unknown';
+        let label = `Sort ${index + 1}: ${categoryName}`;
+        
+        if (sort.option) {
+            label += ` (${getSortOptionLabel(sort.category, sort.option)})`;
+        }
+        label += ` ${sort.direction === 'asc' ? '↑' : '↓'}`;
+        
+        chips.push({
+            type: `sort-${index}`,
+            label: label,
+            remove: () => removeSortLayer(index)
+        });
+    });
+    
     // Basic filters
     const selectedRarities = getSelectedValues('rarityFilter');
     if (selectedRarities.length > 0) {
@@ -601,16 +828,6 @@ function renderActiveFilters(filteredCount, totalCount) {
             type: 'released',
             label: 'Show Unreleased',
             remove: () => { document.getElementById('releasedFilter').checked = false; }
-        });
-    }
-    
-    const effectSortFilter = document.getElementById('effectSortFilter').value;
-    if (effectSortFilter) {
-        const effectName = effectsData[effectSortFilter]?.name_en || 'Unknown Effect';
-        chips.push({
-            type: 'effectSort',
-            label: `Sorted by: ${effectName}`,
-            remove: () => { document.getElementById('effectSortFilter').value = ''; }
         });
     }
     
@@ -700,7 +917,9 @@ function clearAllFilters() {
     document.getElementById('ownedFilter').value = '';
     document.getElementById('nameFilter').value = '';
     document.getElementById('releasedFilter').checked = false;
-    document.getElementById('effectSortFilter').value = '';
+    
+    // Clear sorts
+    clearAllSorts();
     
     // Clear advanced filters (this will rebuild skill filters)
     clearAdvancedFilters();
@@ -1017,6 +1236,50 @@ function handleCardImageError(img) {
     img.parentNode.replaceChild(fallback, img);
 }
 
+// Get priority effects for display based on sort configuration
+function getPriorityEffects(card, targetCount = 4) {
+    const cardLevel = getEffectiveLevel(card);
+    const priorityEffects = [];
+    const usedEffectIds = new Set();
+    
+    // Add effects from sort configuration first
+    multiSort.forEach(sort => {
+        if (sort.category === 'effect' && sort.option && !usedEffectIds.has(sort.option)) {
+            const effectArray = card.effects?.find(effect => effect[0] == sort.option);
+            if (effectArray) {
+                const value = calculateEffectValue(effectArray, cardLevel);
+                const effectName = getEffectName(sort.option);
+                const symbol = effectsData[sort.option]?.symbol === 'percent' ? '%' : '';
+                priorityEffects.push(`${effectName}: ${value}${symbol}`);
+                usedEffectIds.add(sort.option);
+            }
+        }
+    });
+    
+    // Fill remaining slots with highest value effects not already included
+    if (priorityEffects.length < targetCount && card.effects) {
+        const remainingEffects = card.effects
+            .filter(effect => effect[0] && effectsData[effect[0]] && !usedEffectIds.has(effect[0]))
+            .map(effect => {
+                const value = calculateEffectValue(effect, cardLevel);
+                const effectName = getEffectName(effect[0]);
+                const symbol = effectsData[effect[0]].symbol === 'percent' ? '%' : '';
+                return {
+                    display: `${effectName}: ${value}${symbol}`,
+                    value: value
+                };
+            })
+            .sort((a, b) => b.value - a.value) // Sort by value descending
+            .slice(0, targetCount - priorityEffects.length);
+        
+        remainingEffects.forEach(effect => {
+            priorityEffects.push(effect.display);
+        });
+    }
+    
+    return priorityEffects;
+}
+
 // Render card table
 function renderCards(cards = cardData) {
     const tbody = document.getElementById('cardTableBody');
@@ -1041,16 +1304,9 @@ function renderCards(cards = cardData) {
         const effectiveLevel = getEffectiveLevel(card);
         const limitBreakLevel = getLimitBreakLevel(effectiveLevel, card.rarity);
         
-        // Calculate main effects
-        const mainEffects = card.effects.slice(0, 3).map(effect => {
-            if (effect[0] && effectsData[effect[0]]) {
-                const value = calculateEffectValue(effect, effectiveLevel);
-                const effectName = getEffectName(effect[0]);
-                const symbol = effectsData[effect[0]].symbol;
-                return `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`;
-            }
-            return '';
-        }).filter(e => e).join('<br>');
+        // Get priority effects based on sort configuration
+        const priorityEffects = getPriorityEffects(card, 4);
+        const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
 
         // Get hint skills
         const hintSkills = card.hints?.hint_skills?.slice(0, 3).map(skill => 
@@ -1078,7 +1334,7 @@ function renderCards(cards = cardData) {
             <td><span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span></td>
             <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][4]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
             <td>${limitBreakLevel}</td>
-            <td class="effects-summary">${mainEffects}</td>
+            <td class="effects-summary">${mainEffectsDisplay}</td>
             <td class="effects-summary">${hintSkills}</td>
             <td>${card.release_en || 'Unreleased'}</td>
         `;
@@ -1142,18 +1398,10 @@ function updateCardDisplay(input) {
     // Update limit break display
     row.children[6].textContent = limitBreakLevel;
     
-    // Recalculate and update main effects
-    const mainEffects = card.effects.slice(0, 3).map(effect => {
-        if (effect[0] && effectsData[effect[0]]) {
-            const value = calculateEffectValue(effect, level);
-            const effectName = getEffectName(effect[0]);
-            const symbol = effectsData[effect[0]].symbol;
-            return `${effectName}: ${value}${symbol === 'percent' ? '%' : ''}`;
-        }
-        return '';
-    }).filter(e => e).join('<br>');
-    
-    row.children[7].innerHTML = mainEffects;
+    // Recalculate and update priority effects
+    const priorityEffects = getPriorityEffects(card, 4);
+    const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
+    row.children[7].innerHTML = mainEffectsDisplay;
     
     // Update modal if it's open for this card
     if (currentModalCard && currentModalCard.support_id === cardId) {
@@ -1163,6 +1411,204 @@ function updateCardDisplay(input) {
             updateModalDisplay(level);
         }
     }
+}
+
+// Multi-layer sort cards by multiple criteria
+function sortCardsByMultipleCriteria(cards) {
+    return cards.sort((a, b) => {
+        for (const sort of multiSort) {
+            let valueA, valueB;
+            
+            switch (sort.category) {
+                case 'effect':
+                    if (!sort.option) continue;
+                    const levelA = getEffectiveLevel(a);
+                    const levelB = getEffectiveLevel(b);
+                    const effectArrayA = a.effects?.find(effect => effect[0] == sort.option);
+                    const effectArrayB = b.effects?.find(effect => effect[0] == sort.option);
+                    valueA = effectArrayA ? calculateEffectValue(effectArrayA, levelA) : 0;
+                    valueB = effectArrayB ? calculateEffectValue(effectArrayB, levelB) : 0;
+                    break;
+                    
+                case 'level':
+                    valueA = getEffectiveLevel(a);
+                    valueB = getEffectiveLevel(b);
+                    break;
+                    
+                case 'ownership':
+                    valueA = isCardOwned(a.support_id) ? 1 : 0;
+                    valueB = isCardOwned(b.support_id) ? 1 : 0;
+                    break;
+                    
+                case 'rarity':
+                    valueA = a.rarity;
+                    valueB = b.rarity;
+                    break;
+                    
+                case 'type':
+                    valueA = a.type.toLowerCase();
+                    valueB = b.type.toLowerCase();
+                    break;
+                    
+                case 'hintSkillCount':
+                    valueA = a.hints?.hint_skills?.length || 0;
+                    valueB = b.hints?.hint_skills?.length || 0;
+                    break;
+                    
+                case 'eventSkillCount':
+                    valueA = a.event_skills?.length || 0;
+                    valueB = b.event_skills?.length || 0;
+                    break;
+                    
+                case 'releaseDate':
+                    valueA = new Date(a.release_en || a.release || '2099-12-31');
+                    valueB = new Date(b.release_en || b.release || '2099-12-31');
+                    break;
+                    
+                default:
+                    continue;
+            }
+            
+            // Compare values
+            let comparison = 0;
+            if (valueA < valueB) comparison = -1;
+            else if (valueA > valueB) comparison = 1;
+            
+            // Apply direction
+            if (sort.direction === 'desc') comparison = -comparison;
+            
+            // If values are different, return the comparison
+            if (comparison !== 0) return comparison;
+        }
+        
+        // If all sort criteria are equal, maintain original order
+        return 0;
+    });
+}
+
+// Sort table data (legacy column sorting)
+function sortCards(cards, column, direction) {
+    return cards.sort((a, b) => {
+        let valueA, valueB;
+        
+        switch (column) {
+            case 'name':
+                valueA = (a.char_name || 'Unknown Card').toLowerCase();
+                valueB = (b.char_name || 'Unknown Card').toLowerCase();
+                break;
+            case 'rarity':
+                valueA = a.rarity;
+                valueB = b.rarity;
+                break;
+            case 'type':
+                valueA = a.type.toLowerCase();
+                valueB = b.type.toLowerCase();
+                break;
+            case 'release':
+                valueA = new Date(a.release_en || a.release || '2099-12-31');
+                valueB = new Date(b.release_en || b.release || '2099-12-31');
+                break;
+            default:
+                return 0;
+        }
+        
+        if (direction === 'asc') {
+            return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+        } else {
+            return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
+        }
+    });
+}
+
+// Handle column header clicks for sorting
+function handleSort(column) {
+    // Clear multi sort when using column sorting
+    clearAllSorts();
+    
+    if (currentSort.column === column) {
+        // Toggle direction
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        // New column
+        currentSort.column = column;
+        currentSort.direction = 'asc';
+    }
+    
+    // Update sort arrows
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    const currentHeader = document.querySelector(`th[data-sort="${column}"]`);
+    if (currentHeader) {
+        currentHeader.classList.add(`sort-${currentSort.direction}`);
+    }
+    
+    filterAndSortCards();
+}
+
+// Filter and sort cards
+function filterAndSortCards() {
+    const selectedRarities = getSelectedValues('rarityFilter');
+    const selectedTypes = getSelectedValues('typeFilter');
+    const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+    const showUnreleased = document.getElementById('releasedFilter').checked;
+    const ownedFilter = document.getElementById('ownedFilter').value;
+
+    // Apply all filters including advanced filters
+    let filtered = cardData.filter(card => {
+        // Filter by release status (default: only show released cards)
+        if (!showUnreleased && !card.release_en) return false;
+        
+        // Filter by rarity
+        if (selectedRarities.length > 0 && !selectedRarities.includes(card.rarity.toString())) return false;
+        
+        // Filter by type
+        if (selectedTypes.length > 0 && !selectedTypes.includes(card.type)) return false;
+        
+        // Filter by name
+        if (nameFilter && !(card.char_name || '').toLowerCase().includes(nameFilter) && 
+            !(card.name_en || '').toLowerCase().includes(nameFilter)) return false;
+        
+        // Filter by ownership status
+        if (ownedFilter === 'owned' && !isCardOwned(card.support_id)) return false;
+        if (ownedFilter === 'unowned' && isCardOwned(card.support_id)) return false;
+        
+        // Apply advanced filters
+        if (!passesAdvancedFilters(card)) return false;
+        
+        return true;
+    });
+
+    // Calculate effect ranges from the fully filtered set and update placeholders
+    const effectRanges = calculateEffectRanges(filtered);
+    updateEffectFilterPlaceholders(effectRanges);
+    
+    // Calculate skill counts from the fully filtered set and update labels
+    const skillCounts = calculateSkillCounts(filtered);
+    updateSkillFilterLabels(skillCounts);
+
+    // Apply sorting
+    if (multiSort.length > 0) {
+        // Use multi-layer sorting
+        filtered = sortCardsByMultipleCriteria(filtered);
+        
+        // Clear column sorting indicators when using multi-sort
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+        });
+        currentSort.column = '';
+        currentSort.direction = '';
+    } else if (currentSort.column) {
+        // Sort by column header
+        filtered = sortCards(filtered, currentSort.column, currentSort.direction);
+    }
+
+    // Calculate total available cards based on release filter
+    const totalAvailable = showUnreleased ? cardData.length : cardData.filter(card => card.release_en).length;
+
+    renderCards(filtered);
+    renderActiveFilters(filtered.length, totalAvailable);
 }
 
 // Open card details modal
@@ -1515,22 +1961,6 @@ function formatEventEffects(effects) {
     }).join(', ');
 }
 
-// Initialize effect sort dropdown
-function initializeEffectSortDropdown() {
-    const effectSortDropdown = document.getElementById('effectSortFilter');
-    
-    // Get all effects and sort them by name
-    const sortedEffects = Object.values(effectsData)
-        .filter(effect => effect.name_en) // Only include effects with English names
-        .sort((a, b) => a.name_en.localeCompare(b.name_en));
-    
-    // Populate dropdown
-    effectSortDropdown.innerHTML = '<option value="">Default Sort</option>' +
-        sortedEffects.map(effect => `
-            <option value="${effect.id}">${effect.name_en}</option>
-        `).join('');
-}
-
 // Get selected values from multi-select dropdown
 function getSelectedValues(multiSelectId) {
     const checkboxes = document.querySelectorAll(`#${multiSelectId} input[type="checkbox"]:checked`);
@@ -1556,147 +1986,6 @@ function updateMultiSelectText(multiSelectId, defaultText) {
     }
 }
 
-// Sort table data
-function sortCards(cards, column, direction) {
-    return cards.sort((a, b) => {
-        let valueA, valueB;
-        
-        switch (column) {
-            case 'name':
-                valueA = (a.char_name || 'Unknown Card').toLowerCase();
-                valueB = (b.char_name || 'Unknown Card').toLowerCase();
-                break;
-            case 'rarity':
-                valueA = a.rarity;
-                valueB = b.rarity;
-                break;
-            case 'type':
-                valueA = a.type.toLowerCase();
-                valueB = b.type.toLowerCase();
-                break;
-            case 'release':
-                valueA = new Date(a.release_en || a.release || '2099-12-31');
-                valueB = new Date(b.release_en || b.release || '2099-12-31');
-                break;
-            default:
-                return 0;
-        }
-        
-        if (direction === 'asc') {
-            return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-        } else {
-            return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
-        }
-    });
-}
-
-// Sort cards by effect values
-function sortCardsByEffect(cards, effectId, direction = 'desc') {
-    return cards.sort((a, b) => {
-        const levelA = getEffectiveLevel(a);
-        const levelB = getEffectiveLevel(b);
-        
-        // Find effect arrays for both cards
-        const effectArrayA = a.effects?.find(effect => effect[0] == effectId);
-        const effectArrayB = b.effects?.find(effect => effect[0] == effectId);
-        
-        // Calculate effect values (0 if card doesn't have the effect)
-        const valueA = effectArrayA ? calculateEffectValue(effectArrayA, levelA) : 0;
-        const valueB = effectArrayB ? calculateEffectValue(effectArrayB, levelB) : 0;
-        
-        if (direction === 'asc') {
-            return valueA - valueB;
-        } else {
-            return valueB - valueA; // Default to descending for effects (highest first)
-        }
-    });
-}
-
-// Handle column header clicks for sorting
-function handleSort(column) {
-    // Clear effect sort when using column sorting
-    document.getElementById('effectSortFilter').value = '';
-    
-    if (currentSort.column === column) {
-        // Toggle direction
-        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-    } else {
-        // New column
-        currentSort.column = column;
-        currentSort.direction = 'asc';
-    }
-    
-    // Update sort arrows
-    document.querySelectorAll('th.sortable').forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-    });
-    
-    const currentHeader = document.querySelector(`th[data-sort="${column}"]`);
-    if (currentHeader) {
-        currentHeader.classList.add(`sort-${currentSort.direction}`);
-    }
-    
-    filterAndSortCards();
-}
-
-// Filter and sort cards
-function filterAndSortCards() {
-    const selectedRarities = getSelectedValues('rarityFilter');
-    const selectedTypes = getSelectedValues('typeFilter');
-    const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
-    const showUnreleased = document.getElementById('releasedFilter').checked;
-    const ownedFilter = document.getElementById('ownedFilter').value;
-    const effectSortFilter = document.getElementById('effectSortFilter').value;
-
-    // Apply all filters including advanced filters
-    let filtered = cardData.filter(card => {
-        // Filter by release status (default: only show released cards)
-        if (!showUnreleased && !card.release_en) return false;
-        
-        // Filter by rarity
-        if (selectedRarities.length > 0 && !selectedRarities.includes(card.rarity.toString())) return false;
-        
-        // Filter by type
-        if (selectedTypes.length > 0 && !selectedTypes.includes(card.type)) return false;
-        
-        // Filter by name
-        if (nameFilter && !(card.char_name || '').toLowerCase().includes(nameFilter) && 
-            !(card.name_en || '').toLowerCase().includes(nameFilter)) return false;
-        
-        // Filter by ownership status
-        if (ownedFilter === 'owned' && !isCardOwned(card.support_id)) return false;
-        if (ownedFilter === 'unowned' && isCardOwned(card.support_id)) return false;
-        
-        // Apply advanced filters
-        if (!passesAdvancedFilters(card)) return false;
-        
-        return true;
-    });
-
-    // Calculate effect ranges from the fully filtered set and update placeholders
-    const effectRanges = calculateEffectRanges(filtered);
-    updateEffectFilterPlaceholders(effectRanges);
-    
-    // Calculate skill counts from the fully filtered set and update labels
-    const skillCounts = calculateSkillCounts(filtered);
-    updateSkillFilterLabels(skillCounts);
-
-    // Apply sorting
-    if (effectSortFilter) {
-        // Sort by selected effect
-        filtered = sortCardsByEffect(filtered, parseInt(effectSortFilter));
-    } else if (currentSort.column) {
-        // Sort by column header
-        filtered = sortCards(filtered, currentSort.column, currentSort.direction);
-    }
-
-    // Calculate total available cards based on release filter
-    const totalAvailable = showUnreleased ? cardData.length : cardData.filter(card => card.release_en).length;
-
-    renderCards(filtered);
-    renderActiveFilters(filtered.length, totalAvailable);
-}
-
 // Initialize interface
 function initializeInterface() {
     document.getElementById('loading').style.display = 'none';
@@ -1708,24 +1997,13 @@ function initializeInterface() {
     // Initialize advanced filters
     initializeAdvancedFilters();
     
-    // Initialize effect sort dropdown
-    initializeEffectSortDropdown();
+    // Initialize multi-sort interface
+    initializeMultiSort();
 
     // Add event listeners for filters
     document.getElementById('nameFilter').addEventListener('input', debouncedFilterAndSort);
     document.getElementById('releasedFilter').addEventListener('change', debouncedFilterAndSort);
     document.getElementById('ownedFilter').addEventListener('change', debouncedFilterAndSort);
-    document.getElementById('effectSortFilter').addEventListener('change', (e) => {
-        // Clear column sorting when using effect sorting
-        if (e.target.value) {
-            currentSort.column = '';
-            currentSort.direction = '';
-            document.querySelectorAll('th.sortable').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
-            });
-        }
-        debouncedFilterAndSort();
-    });
     document.getElementById('globalLimitBreak').addEventListener('change', (e) => {
         setGlobalLimitBreak(e.target.value);
     });

@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -129,6 +129,174 @@ h1 {
 .filter-group .multi-select {
     width: 100%;
     min-width: auto;
+}
+
+/* Multi-Sort Styles */
+.multi-sort-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.sort-layer {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 0.75rem;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.sort-layer:hover {
+    background-color: #f0f0f0;
+    border-color: #ddd;
+}
+
+.sort-layer.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.sort-layer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.sort-layer-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort-priority-badge {
+    background-color: #007bff;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.sort-controls {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.sort-btn {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: #666;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+}
+
+.sort-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #999;
+    color: #333;
+}
+
+.sort-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.sort-btn.danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.sort-dropdowns {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.sort-category-select,
+.sort-option-select {
+    flex: 1;
+    min-width: 0;
+    padding: 0.3rem;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    background-color: white;
+}
+
+.sort-category-select {
+    max-width: 80px;
+}
+
+.sort-direction-toggle {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: #666;
+    transition: all 0.2s ease;
+    min-width: 45px;
+    text-align: center;
+}
+
+.sort-direction-toggle:hover {
+    background-color: #f8f9fa;
+    border-color: #999;
+}
+
+.sort-direction-toggle.desc {
+    color: #dc3545;
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.sort-direction-toggle.asc {
+    color: #28a745;
+    border-color: #28a745;
+    background-color: #f5fff5;
+}
+
+.add-sort-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.sort-icon {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.no-sorts-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    font-size: 0.85rem;
 }
 
 /* Data Management Section */
@@ -1228,6 +1396,27 @@ tbody tr.unowned .card-name {
         flex: 1;
         min-width: 120px;
     }
+    
+    /* Mobile sort layer adjustments */
+    .sort-dropdowns {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .sort-category-select,
+    .sort-option-select {
+        max-width: none;
+    }
+    
+    .sort-layer-header {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+    }
+    
+    .sort-controls {
+        align-self: flex-end;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1383,5 +1572,37 @@ tbody tr.unowned .card-name {
     
     .data-management h4 {
         font-size: 0.9rem;
+    }
+    
+    /* Ultra-mobile sort adjustments */
+    .sort-layer {
+        padding: 0.5rem;
+    }
+    
+    .sort-layer-title {
+        font-size: 0.8rem;
+    }
+    
+    .sort-priority-badge {
+        font-size: 0.6rem;
+        min-width: 18px;
+    }
+    
+    .sort-btn {
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+    
+    .sort-category-select,
+    .sort-option-select {
+        font-size: 0.75rem;
+        padding: 0.25rem;
+    }
+    
+    .sort-direction-toggle {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.4rem;
+        min-width: 40px;
     }
 }
