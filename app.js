@@ -2,6 +2,7 @@
 let cardData = [];
 let effectsData = {};
 let skillsData = {};
+let skillTypesData = {};
 let eventsData = {};
 let ownedCards = {}; // Owned card tracking
 let currentModalCard = null;
@@ -937,10 +938,11 @@ async function loadData() {
         console.log('Loading data files...');
         
         // Load all JSON files
-        const [cardsRes, effectsRes, skillsRes, eventsRes, eventsChainRes, eventsSpecialRes] = await Promise.all([
+        const [cardsRes, effectsRes, skillsRes, skillTypesRes, eventsRes, eventsChainRes, eventsSpecialRes] = await Promise.all([
             fetch('data/raw_cards.json'),
             fetch('data/raw_effects.json'),
             fetch('data/raw_skills.json'),
+            fetch('data/raw_skillTypes.json'),
             fetch('data/raw_events.json'),
             fetch('data/raw_eventsChain.json'),
             fetch('data/raw_eventsSpecial.json')
@@ -950,6 +952,7 @@ async function loadData() {
         const cardsData = await cardsRes.json();
         const effects = await effectsRes.json();
         const skills = await skillsRes.json();
+        const skillTypes = await skillTypesRes.json();
         const events = await eventsRes.json();
         const eventsChain = await eventsChainRes.json();
         const eventsSpecial = await eventsSpecialRes.json();
@@ -964,6 +967,11 @@ async function loadData() {
         // Process skills data into lookup
         skills.forEach(skill => {
             skillsData[skill.id] = skill;
+        });
+
+        // Process skill types data into lookup
+        skillTypes.forEach(skillType => {
+            skillTypesData[skillType.id] = skillType.string;
         });
 
         // Store card data
@@ -1086,9 +1094,19 @@ function getSkillName(skillId) {
     return skillsData[skillId]?.name_en || skillsData[skillId]?.enname || `Skill ${skillId}`;
 }
 
+function getCharName(charId) {    
+    const card = cardData.find(c => c.support_id === charId);
+    return card.char_name;
+}
+
 // Get skill description (English only)
 function getSkillDescription(skillId) {
     return skillsData[skillId]?.desc_en || skillsData[skillId]?.endesc || '';
+}
+
+// Get skill type description
+function getSkillTypeDescription(typeId) {
+    return skillTypesData[typeId] || typeId; // Fallback to original ID if not found
 }
 
 // Get effective level for a card (considering ownership, global LB, and individual settings)
@@ -1185,13 +1203,18 @@ function passesAdvancedFilters(card) {
     for (const [effectId, filter] of Object.entries(advancedFilters.effects)) {
         const effectArray = card.effects?.find(effect => effect[0] == effectId);
         if (effectArray) {
-            const value = calculateEffectValue(effectArray, cardLevel);
+            // Check if effect is locked at current level
+            const isLocked = isEffectLocked(effectArray, cardLevel);
+            const value = isLocked ? 0 : calculateEffectValue(effectArray, cardLevel);
+            
             if (value < filter.min) {
                 return false;
             }
         } else {
-            // Card doesn't have this effect, so it fails the filter
-            return false;
+            // Card doesn't have this effect at all, so it fails the filter (value = 0)
+            if (0 < filter.min) {
+                return false;
+            }
         }
     }
     
@@ -1839,7 +1862,7 @@ function renderHintSkills(card) {
                 <div class="skill-header">
                     <div class="skill-name">${skillName}</div>
                     <div class="skill-types">
-                        ${(skill.type || []).map(type => `<span class="skill-type">${type}</span>`).join('')}
+                        ${(skill.type || []).map(type => `<span class="skill-type">${getSkillTypeDescription(type)}</span>`).join('')}
                     </div>
                 </div>
                 <div class="skill-description">${getSkillDescription(skill.id)}</div>
@@ -1863,7 +1886,7 @@ function renderEventSkills(card) {
                 <div class="skill-header">
                     <div class="skill-name">${skillName}</div>
                     <div class="skill-types">
-                        ${(skill.type || []).map(type => `<span class="skill-type">${type}</span>`).join('')}
+                        ${(skill.type || []).map(type => `<span class="skill-type">${getSkillTypeDescription(type)}</span>`).join('')}
                         <span class="skill-type">Rarity ${skill.rarity || 1}</span>
                     </div>
                 </div>
@@ -1963,13 +1986,46 @@ function formatEventEffects(effects) {
         switch(type) {
             case 'sp': return `Speed ${value}`;
             case 'st': return `Stamina ${value}`;
-            case 'pt': return `Power ${value}`;
+            case 'po': return `Power ${value}`;
+            case 'pt': return `Skill Points ${value}`;
             case 'gu': return `Guts ${value}`;
             case 'in': return `Wit ${value}`;
             case 'en': return `Energy ${value}`;
             case 'mo': return `Mood ${value}`;
             case 'bo': return `Bond ${value}`;
+            case 'me': return `Maximum Energy ${value}`;            
             case 'sk': return `Skill: ${getSkillName(skillId)}`;
+            case '5s': return `All Stats ${value}`;
+            case 'rs': return `Random Stats (${statAmount}): ${value}`;
+            case 'sg': return `Obtain Skill: ${getSkillName(skillId)}`;
+            case 'sre': return `Lose Skill: ${getSkillName(skillId)}`;
+            case 'srh': return `Strategy Related Hint (${count || 1})`;
+            case 'sr': return `Skill Hint: ${getSkillName(skillId)} hint ${value}`;
+            case 'bo_l': return `Bond Low ${value}`;
+            case 'fa': return `Fans ${value}`;
+            case 'ct': return `${value}`; // ct is a passthrough
+            case 'ha': return 'Heal All Statuses';
+            case 'hp': return `Heal Status: ${getSkillName(skillId)}`;
+            case 'nsl': return 'Not Scenario Linked';            
+            case 'ps_h': return `Condition Healed: ${getSkillName(skillId)}`;
+            case 'ps_nh': return `Condition Not Healed: ${getSkillName(skillId)}`;
+            case 'pa': return `Passion ${value}`;
+            case 'mn': return `Mental ${value}`;
+            case 'rf': return 'Red Fragment';
+            case 'bf': return 'Blue Fragment';
+            case 'yf': return 'Yellow Fragment';
+            case 'wl_e': return `Win Level Exact: ${value}`;
+            case 'wl_l': return `Win Level Less: ${value}`;
+            case 'wl_c': return `Win Level Combined: ${value}`;
+            case 'app': return `Aptitude Points ${value}`;
+            case 'ntsr': return `NTSR ${value}`;
+            case 'ls': return `Last Trained Stat: ${value}`;
+            case 'mt': return `Minimum Token: ${value}`;
+            case 'ee': return 'Event Chain Ended';
+            case 'ds': return 'Can Start Dating';
+            case 'rr': return 'Normal Race Rewards';
+            case 'fe': return 'Full Energy';
+            case 'no': return 'Nothing Happens';
             default: return `${type}: ${value}`;
         }
     }).join(', ');

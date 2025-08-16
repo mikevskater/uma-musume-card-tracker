@@ -1,0 +1,86 @@
+[
+    {
+        "id": "nac",
+        "string": "no_condition"
+    },
+    {
+        "id": "run",
+        "string": "runner"
+    },
+    {
+        "id": "ldr",
+        "string": "leader"
+    },
+    {
+        "id": "btw",
+        "string": "betweener"
+    },
+    {
+        "id": "cha",
+        "string": "chaser"
+    },
+    {
+        "id": "sho",
+        "string": "short"
+    },
+    {
+        "id": "mil",
+        "string": "mile"
+    },
+    {
+        "id": "med",
+        "string": "medium"
+    },
+    {
+        "id": "lng",
+        "string": "long"
+    },
+    {
+        "id": "dir",
+        "string": "dirt"
+    },
+    {
+        "id": "tur",
+        "string": "turf"
+    },
+    {
+        "id": "l_0",
+        "string": "opening_leg"
+    },
+    {
+        "id": "l_1",
+        "string": "middle_leg"
+    },
+    {
+        "id": "l_2",
+        "string": "final_leg"
+    },
+    {
+        "id": "l_3",
+        "string": "last_spurt"
+    },
+    {
+        "id": "cor",
+        "string": "corner"
+    },
+    {
+        "id": "str",
+        "string": "straight"
+    },
+    {
+        "id": "f_c",
+        "string": "final_corner"
+    },
+    {
+        "id": "f_s",
+        "string": "final_straight"
+    },
+    {
+        "id": "slo",
+        "string": "uphill_or_downhill"
+    },
+    {
+        "id": "dbf",
+        "string": "debuff"
+    }
+]
