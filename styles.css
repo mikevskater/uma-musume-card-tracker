@@ -229,6 +229,15 @@ h1 {
     align-items: center;
 }
 
+.sort-dropdowns.single-dropdown .sort-category-select {
+    flex: 2; /* Take up more space when no option select */
+}
+
+.sort-dropdowns.has-options .sort-category-select {
+    flex: 1;
+    max-width: 80px;
+}
+
 .sort-category-select,
 .sort-option-select {
     flex: 1;
@@ -238,10 +247,6 @@ h1 {
     border-radius: 3px;
     font-size: 0.8rem;
     background-color: white;
-}
-
-.sort-category-select {
-    max-width: 80px;
 }
 
 .sort-direction-toggle {
@@ -255,6 +260,7 @@ h1 {
     transition: all 0.2s ease;
     min-width: 45px;
     text-align: center;
+    flex-shrink: 0; /* Don't allow direction button to shrink */
 }
 
 .sort-direction-toggle:hover {
@@ -1403,9 +1409,13 @@ tbody tr.unowned .card-name {
         gap: 0.5rem;
     }
     
+    .sort-dropdowns.single-dropdown .sort-category-select,
+    .sort-dropdowns.has-options .sort-category-select,
     .sort-category-select,
     .sort-option-select {
         max-width: none;
+        flex: none;
+        width: 100%;
     }
     
     .sort-layer-header {
@@ -1598,6 +1608,9 @@ tbody tr.unowned .card-name {
     .sort-option-select {
         font-size: 0.75rem;
         padding: 0.25rem;
+        width: 100%;
+        max-width: none;
+        flex: none;
     }
     
     .sort-direction-toggle {

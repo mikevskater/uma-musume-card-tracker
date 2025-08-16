@@ -337,9 +337,10 @@ function renderMultiSort() {
     container.innerHTML = multiSort.map((sort, index) => {
         const category = sortCategories[sort.category];
         const categoryName = category ? category.name : 'Unknown';
+        const hasOptions = category && category.hasOptions;
         
         let optionSelect = '';
-        if (category && category.hasOptions) {
+        if (hasOptions) {
             const options = category.getOptions();
             optionSelect = `
                 <select class="sort-option-select" data-index="${index}">
@@ -368,7 +369,7 @@ function renderMultiSort() {
                         <button class="sort-btn danger" data-action="remove" data-index="${index}" title="Remove">✕</button>
                     </div>
                 </div>
-                <div class="sort-dropdowns">
+                <div class="sort-dropdowns ${hasOptions ? 'has-options' : 'single-dropdown'}">
                     <select class="sort-category-select" data-index="${index}">
                         ${Object.entries(sortCategories).map(([key, cat]) => `
                             <option value="${key}" ${key === sort.category ? 'selected' : ''}>${cat.name}</option>
@@ -1244,14 +1245,14 @@ function getPriorityEffects(card, targetCount = 4) {
     
     // Add effects from sort configuration first
     multiSort.forEach(sort => {
-        if (sort.category === 'effect' && sort.option && !usedEffectIds.has(sort.option)) {
+        if (sort.category === 'effect' && sort.option && !usedEffectIds.has(parseInt(sort.option))) {
             const effectArray = card.effects?.find(effect => effect[0] == sort.option);
             if (effectArray) {
                 const value = calculateEffectValue(effectArray, cardLevel);
                 const effectName = getEffectName(sort.option);
                 const symbol = effectsData[sort.option]?.symbol === 'percent' ? '%' : '';
                 priorityEffects.push(`${effectName}: ${value}${symbol}`);
-                usedEffectIds.add(sort.option);
+                usedEffectIds.add(parseInt(sort.option));
             }
         }
     });
@@ -1266,7 +1267,8 @@ function getPriorityEffects(card, targetCount = 4) {
                 const symbol = effectsData[effect[0]].symbol === 'percent' ? '%' : '';
                 return {
                     display: `${effectName}: ${value}${symbol}`,
-                    value: value
+                    value: value,
+                    effectId: effect[0]
                 };
             })
             .sort((a, b) => b.value - a.value) // Sort by value descending
@@ -1274,6 +1276,7 @@ function getPriorityEffects(card, targetCount = 4) {
         
         remainingEffects.forEach(effect => {
             priorityEffects.push(effect.display);
+            usedEffectIds.add(effect.effectId); // Track this too for consistency
         });
     }
     
