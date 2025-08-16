@@ -1423,40 +1423,54 @@ function renderCharacterEvents(card) {
     }
     
     return characterEvents.slice(0, 5).map(event => {
-        // Try to get English title from array index 103
+        // Extract English title from localization arrays
         let eventTitle = 'Unknown Event';
         
-        // Look for English title at index 103 in the localization array
-        if (Array.isArray(event) && event.length > 3 && Array.isArray(event[3])) {
-            const localizationArray = event[3];
-            // Find index 103 in the array
-            for (let i = 0; i < localizationArray.length; i += 2) {
-                if (localizationArray[i] === 103) {
-                    eventTitle = localizationArray[i + 1];
+        // Look through the localization arrays for English (103)
+        if (Array.isArray(event) && event.length > 2) {
+            for (let i = 2; i < event.length; i++) {
+                if (Array.isArray(event[i]) && event[i].length >= 2 && event[i][0] === 103) {
+                    eventTitle = event[i][1];
                     break;
                 }
             }
         }
         
-        // Fallback to first element if no English title found
+        // Fallback to Japanese title if no English title found
         if (eventTitle === 'Unknown Event' && event[0]) {
             eventTitle = event[0];
         }
         
         const choices = event[1] || [];
         
+        // Generate option labels based on number of choices
+        const getOptionLabel = (index, totalChoices) => {
+            if (totalChoices === 1) {
+                return ''; // No label for single option
+            } else if (totalChoices === 2) {
+                return index === 0 ? 'Top Option' : 'Bottom Option';
+            } else if (totalChoices === 3) {
+                return index === 0 ? 'Top Option' : (index === 1 ? 'Middle Option' : 'Bottom Option');
+            } else {
+                return `Option ${index + 1}`;
+            }
+        };
+        
         return `
             <div class="event-item">
                 <div class="event-title">${eventTitle}</div>
                 <div class="event-choices">
-                    ${choices.map((choice, index) => `
-                        <div class="event-choice">
-                            <strong>Choice ${index + 1}:</strong> ${choice[0] || 'No description'}
-                            <div class="choice-effects">
-                                ${formatEventEffects(choice[1] || [])}
+                    ${choices.map((choice, index) => {
+                        const optionLabel = getOptionLabel(index, choices.length);
+                        return `
+                            <div class="event-choice">
+                                ${optionLabel ? `<strong>${optionLabel}:</strong> ` : ''}${choice[0] || 'No description'}
+                                <div class="choice-effects">
+                                    ${formatEventEffects(choice[1] || [])}
+                                </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
