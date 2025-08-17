@@ -16,7 +16,33 @@
         <div id="loading" class="loading">Loading card data...</div>
         <div id="error" class="error" style="display: none;"></div>
 
+        <!-- Card Comparison Section (Above Everything) -->
+        <div id="comparisonSection" class="comparison-section" style="display: none;">
+            <div class="comparison-header">
+                <h3>Card Comparison</h3>
+                <div class="comparison-actions">
+                    <button id="clearComparisonBtn" class="btn btn-secondary btn-sm">Clear All</button>
+                    <button id="closeComparisonBtn" class="btn btn-danger btn-sm">Close</button>
+                </div>
+            </div>
+            <div id="comparisonTable" class="comparison-table">
+                <!-- Comparison content will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Selection Mode Toggle (Above Main Layout) -->
+        <div id="selectionModeSection" class="selection-mode-section" style="display: none;">
+            <div class="selection-mode-toggle">
+                <label for="comparisonModeToggle">
+                    <input type="checkbox" id="comparisonModeToggle"> 
+                    Select cards to compare
+                    <span class="tooltip" data-tooltip="Enable selection mode to choose multiple cards for side-by-side comparison">ℹ️</span>
+                </label>
+            </div>
+        </div>
+
         <div class="main-layout" style="display: none;">
+
             <!-- Sidebar with filters -->
             <div class="sidebar">
                 <div id="controls" class="controls">
@@ -229,38 +255,56 @@
                 </div>
             </div>
 
-            <!-- Main content area -->
+            <!-- Main content area with table and selection container -->
             <div class="main-content">
-                <!-- Active Filters Display -->
-                <div id="activeFilters" class="active-filters" style="display: none;">
-                    <div class="active-filters-header">
-                        <span class="results-count" id="resultsCount">Showing all cards</span>
-                        <button class="btn btn-sm btn-secondary" id="clearAllFilters">Clear All Filters</button>
+                <div class="content-wrapper">
+                    <!-- Active Filters Display -->
+                    <div id="activeFilters" class="active-filters" style="display: none;">
+                        <div class="active-filters-header">
+                            <span class="results-count" id="resultsCount">Showing all cards</span>
+                            <button class="btn btn-sm btn-secondary" id="clearAllFilters">Clear All Filters</button>
+                        </div>
+                        <div class="filter-chips" id="filterChips">
+                            <!-- Dynamically populated filter chips -->
+                        </div>
                     </div>
-                    <div class="filter-chips" id="filterChips">
-                        <!-- Dynamically populated filter chips -->
+
+                    <!-- Card Table -->
+                    <div id="cardTable" class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Owned</th>
+                                    <th class="sortable" data-sort="icon">Icon <span class="sort-arrow"></span></th>
+                                    <th class="sortable" data-sort="name">Card <span class="sort-arrow"></span></th>
+                                    <th class="sortable" data-sort="rarity">Rarity <span class="sort-arrow"></span></th>
+                                    <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
+                                    <th>Level</th>
+                                    <th>Current LB</th>
+                                    <th>Primary Effects</th>
+                                    <th>Hints</th>
+                                    <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cardTableBody">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div id="cardTable" class="card-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Owned</th>
-                                <th class="sortable" data-sort="icon">Icon <span class="sort-arrow"></span></th>
-                                <th class="sortable" data-sort="name">Card <span class="sort-arrow"></span></th>
-                                <th class="sortable" data-sort="rarity">Rarity <span class="sort-arrow"></span></th>
-                                <th class="sortable" data-sort="type">Type <span class="sort-arrow"></span></th>
-                                <th>Level</th>
-                                <th>Current LB</th>
-                                <th>Primary Effects</th>
-                                <th>Hints</th>
-                                <th class="sortable" data-sort="release">Release <span class="sort-arrow"></span></th>
-                            </tr>
-                        </thead>
-                        <tbody id="cardTableBody">
-                        </tbody>
-                    </table>
+                <!-- Selection Container -->
+                <div id="selectionContainer" class="selection-container" style="display: none;">
+                    <div class="selection-header">
+                        <h4>Selected Cards</h4>
+                        <span id="selectionCount" class="selection-count">0 selected</span>
+                    </div>
+                    <div id="selectedCardsList" class="selected-cards-list">
+                        <!-- Selected card icons will be populated here -->
+                    </div>
+                    <div class="selection-actions">
+                        <button id="compareSelectedBtn" class="btn btn-primary btn-sm" disabled>Compare Cards</button>
+                        <button id="clearSelectedBtn" class="btn btn-secondary btn-sm">Clear All</button>
+                    </div>
                 </div>
             </div>
         </div>

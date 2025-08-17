@@ -5,7 +5,36 @@
 let currentModalCardIndex = -1;
 let currentFilteredCards = [];
 
-// Multi-Sort Functions
+// Card comparison management functions
+function toggleComparisonMode(enabled) {
+    comparisonMode = enabled;
+    
+    // Update UI classes
+    const mainContent = document.querySelector('.main-content');
+    const selectionContainer = document.getElementById('selectionContainer');
+    
+    if (comparisonMode) {
+        mainContent.classList.add('has-selection');
+        selectionContainer.style.display = 'block';
+        
+        // Add visual indicators to table rows
+        document.querySelectorAll('#cardTableBody tr').forEach(row => {
+            row.classList.add('comparison-mode');
+        });
+    } else {
+        mainContent.classList.remove('has-selection');
+        selectionContainer.style.display = 'none';
+        
+        // Remove visual indicators from table rows
+        document.querySelectorAll('#cardTableBody tr').forEach(row => {
+            row.classList.remove('comparison-mode');
+        });
+    }
+    
+    // Re-render table to update click handlers
+    renderCards(currentFilteredCards);
+    renderSelectionContainer();
+}
 function initializeMultiSort() {
     renderMultiSort();
     
@@ -259,14 +288,25 @@ function renderCards(cards = cardData) {
         const row = document.createElement('tr');
         const cardId = card.support_id;
         const isOwned = isCardOwned(cardId);
+        const isSelected = selectedCards.includes(cardId);
         
-        // Add ownership class
+        // Add ownership and selection classes
         row.className = isOwned ? 'owned' : 'unowned';
+        if (isSelected) row.classList.add('selected');
+        if (comparisonMode) row.classList.add('comparison-mode');
+        
         row.style.cursor = 'pointer';
+        row.dataset.cardId = cardId;
+        
+        // Add click handler based on mode
         row.addEventListener('click', (e) => {
-            // Don't open modal if clicking on checkbox, input, or select
+            // Don't open modal or select if clicking on checkbox, input, or select
             if (e.target.type !== 'checkbox' && e.target.type !== 'number' && e.target.tagName !== 'SELECT') {
-                openCardDetails(cardId);
+                if (comparisonMode) {
+                    toggleCardSelection(cardId);
+                } else {
+                    openCardDetails(cardId);
+                }
             }
         });
         
@@ -315,6 +355,7 @@ function renderCards(cards = cardData) {
         row.innerHTML = `
             <td class="ownership-checkbox">
                 <input type="checkbox" ${isOwned ? 'checked' : ''} data-card-id="${cardId}" onclick="event.stopPropagation()">
+                ${comparisonMode ? '<div class="selection-mode-indicator"></div>' : ''}
             </td>
             <td>
                 <img src="support_card_images/${cardId}_i.png" 
@@ -346,6 +387,8 @@ function renderCards(cards = cardData) {
             // Update the row class and level input state
             const row = e.target.closest('tr');
             row.className = owned ? 'owned' : 'unowned';
+            if (selectedCards.includes(cardId)) row.classList.add('selected');
+            if (comparisonMode) row.classList.add('comparison-mode');
             
             const levelInput = row.querySelector('.level-input');
             const lbSelect = row.querySelector('.lb-select');
@@ -1258,4 +1301,273 @@ function handleModalKeyNavigation(e) {
             closeCardDetails();
             break;
     }
+}
+
+// Render selection container
+function renderSelectionContainer() {
+    const selectionCount = document.getElementById('selectionCount');
+    const selectedCardsList = document.getElementById('selectedCardsList');
+    const compareBtn = document.getElementById('compareSelectedBtn');
+    
+    // Update count
+    selectionCount.textContent = `${selectedCards.length} selected`;
+    
+    // Enable/disable compare button
+    compareBtn.disabled = selectedCards.length === 0;
+    
+    // Render selected cards
+    if (selectedCards.length === 0) {
+        selectedCardsList.innerHTML = '<div class="no-selected-cards">No cards selected</div>';
+        return;
+    }
+    
+    selectedCardsList.innerHTML = selectedCards.map(cardId => {
+        const card = cardData.find(c => c.support_id === cardId);
+        if (!card) return '';
+        
+        return `
+            <div class="selected-card-item">
+                <img src="support_card_images/${cardId}_i.png" 
+                     class="selected-card-icon-small" 
+                     alt="${card.char_name || 'Unknown Card'}"
+                     onerror="this.style.display='none'"
+                     loading="lazy">
+                <div class="selected-card-info">
+                    <div class="selected-card-name">${card.char_name || 'Unknown Card'}</div>
+                    <div class="selected-card-details">
+                        <span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>
+                        <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
+                        Level ${getEffectiveLevel(card)}
+                    </div>
+                </div>
+                <button class="remove-selected-btn" data-card-id="${cardId}" title="Remove from comparison">×</button>
+            </div>
+        `;
+    }).join('');
+    
+    // Add event listeners for remove buttons
+    selectedCardsList.querySelectorAll('.remove-selected-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const cardId = parseInt(e.target.dataset.cardId);
+            removeCardFromSelection(cardId);
+        });
+    });
+}
+
+// Render comparison table
+function renderComparisonTable() {
+    const comparisonTable = document.getElementById('comparisonTable');
+    
+    if (selectedCards.length === 0) {
+        comparisonTable.innerHTML = '<div class="no-comparison-data">No cards selected for comparison</div>';
+        return;
+    }
+    
+    // Get selected card data
+    const cardsToCompare = selectedCards.map(cardId => 
+        cardData.find(c => c.support_id === cardId)
+    ).filter(card => card);
+    
+    if (cardsToCompare.length === 0) {
+        comparisonTable.innerHTML = '<div class="no-comparison-data">Selected cards not found</div>';
+        return;
+    }
+    
+    // Build comparison data structure
+    const comparisonData = buildComparisonData(cardsToCompare);
+    
+    // Render comparison grid
+    comparisonTable.innerHTML = `
+        <div class="comparison-grid">
+            ${renderComparisonRows(comparisonData)}
+        </div>
+    `;
+}
+
+// Build comparison data structure
+function buildComparisonData(cards) {
+    const data = {
+        cards: cards,
+        basicInfo: [],
+        effects: {},
+        hintSkills: {},
+        eventSkills: {}
+    };
+    
+    // Basic info rows
+    data.basicInfo = [
+        { label: 'Card', type: 'header' },
+        { label: 'Rarity', type: 'rarity' },
+        { label: 'Type', type: 'type' },
+        { label: 'Level', type: 'level' },
+        { label: 'Owned', type: 'owned' }
+    ];
+    
+    // Collect all effects from selected cards
+    const allEffectIds = new Set();
+    cards.forEach(card => {
+        if (card.effects) {
+            card.effects.forEach(effect => {
+                if (effect[0] && effectsData[effect[0]]) {
+                    allEffectIds.add(effect[0]);
+                }
+            });
+        }
+    });
+    
+    // Build effects data
+    Array.from(allEffectIds).forEach(effectId => {
+        const effectInfo = effectsData[effectId];
+        if (effectInfo && effectInfo.name_en) {
+            data.effects[effectId] = {
+                name: effectInfo.name_en,
+                symbol: effectInfo.symbol === 'percent' ? '%' : '',
+                values: cards.map(card => {
+                    const effectArray = card.effects?.find(effect => effect[0] == effectId);
+                    const level = getEffectiveLevel(card);
+                    if (effectArray) {
+                        const isLocked = isEffectLocked(effectArray, level);
+                        return {
+                            value: isLocked ? 0 : calculateEffectValue(effectArray, level),
+                            locked: isLocked
+                        };
+                    }
+                    return { value: 0, locked: true };
+                })
+            };
+        }
+    });
+    
+    // Collect hint skills
+    const allHintSkills = new Set();
+    cards.forEach(card => {
+        if (card.hints?.hint_skills) {
+            card.hints.hint_skills.forEach(skill => {
+                allHintSkills.add(skill.id);
+            });
+        }
+    });
+    
+    Array.from(allHintSkills).forEach(skillId => {
+        data.hintSkills[skillId] = {
+            name: getSkillName(skillId),
+            cards: cards.map(card => {
+                const hasSkill = card.hints?.hint_skills?.some(skill => skill.id === skillId);
+                return hasSkill;
+            })
+        };
+    });
+    
+    // Collect event skills
+    const allEventSkills = new Set();
+    cards.forEach(card => {
+        if (card.event_skills) {
+            card.event_skills.forEach(skill => {
+                allEventSkills.add(skill.id);
+            });
+        }
+    });
+    
+    Array.from(allEventSkills).forEach(skillId => {
+        data.eventSkills[skillId] = {
+            name: getSkillName(skillId),
+            cards: cards.map(card => {
+                const hasSkill = card.event_skills?.some(skill => skill.id === skillId);
+                return hasSkill;
+            })
+        };
+    });
+    
+    return data;
+}
+
+// Render comparison rows
+function renderComparisonRows(data) {
+    let html = '';
+    
+    // Card headers
+    html += '<div class="comparison-row-header">Cards</div>';
+    data.cards.forEach(card => {
+        html += `
+            <div class="comparison-card-column">
+                <div class="comparison-card-header">
+                    <img src="support_card_images/${card.support_id}_i.png" 
+                         class="comparison-card-icon" 
+                         alt="${card.char_name || 'Unknown Card'}"
+                         onerror="this.style.display='none'"
+                         loading="lazy">
+                    <div class="comparison-card-name">${card.char_name || 'Unknown Card'}</div>
+                    <div class="comparison-card-details">
+                        <span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>
+                        <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Basic info rows
+    data.basicInfo.slice(1).forEach(row => {
+        html += `<div class="comparison-row-header">${row.label}</div>`;
+        data.cards.forEach(card => {
+            html += '<div class="comparison-cell">';
+            switch(row.type) {
+                case 'rarity':
+                    html += `<span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>`;
+                    break;
+                case 'type':
+                    html += `<span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>`;
+                    break;
+                case 'level':
+                    html += getEffectiveLevel(card);
+                    break;
+                case 'owned':
+                    html += isCardOwned(card.support_id) ? '✓ Owned' : '✗ Not Owned';
+                    break;
+            }
+            html += '</div>';
+        });
+    });
+    
+    // Effects
+    if (Object.keys(data.effects).length > 0) {
+        Object.entries(data.effects).forEach(([effectId, effectData]) => {
+            html += `<div class="comparison-row-header">${effectData.name}</div>`;
+            effectData.values.forEach(valueData => {
+                html += `<div class="comparison-cell">`;
+                if (valueData.locked) {
+                    html += `<span class="comparison-effect-locked">Locked</span>`;
+                } else {
+                    html += `<span class="comparison-effect-value">${valueData.value}${effectData.symbol}</span>`;
+                }
+                html += '</div>';
+            });
+        });
+    }
+    
+    // Hint Skills
+    if (Object.keys(data.hintSkills).length > 0) {
+        Object.entries(data.hintSkills).forEach(([skillId, skillData]) => {
+            html += `<div class="comparison-row-header">Hint: ${skillData.name}</div>`;
+            skillData.cards.forEach(hasSkill => {
+                html += `<div class="comparison-cell">`;
+                html += hasSkill ? '✓' : '✗';
+                html += '</div>';
+            });
+        });
+    }
+    
+    // Event Skills
+    if (Object.keys(data.eventSkills).length > 0) {
+        Object.entries(data.eventSkills).forEach(([skillId, skillData]) => {
+            html += `<div class="comparison-row-header">Event: ${skillData.name}</div>`;
+            skillData.cards.forEach(hasSkill => {
+                html += `<div class="comparison-cell">`;
+                html += hasSkill ? '✓' : '✗';
+                html += '</div>';
+            });
+        });
+    }
+    
+    return html;
 }

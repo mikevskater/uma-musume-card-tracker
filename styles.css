@@ -2109,7 +2109,65 @@ tbody tr.unowned .card-name {
         flex: 1;
     }
     
-    /* Mobile sort layer adjustments */
+    /* Comparison feature mobile adjustments */
+    .comparison-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: start;
+    }
+    
+    .comparison-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .comparison-grid {
+        grid-template-columns: 150px repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .comparison-row-header {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+    }
+    
+    .comparison-card-header {
+        padding: 0.5rem;
+    }
+    
+    .comparison-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .comparison-card-name {
+        font-size: 0.8rem;
+    }
+    
+    .comparison-cell {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Mobile layout - selection container goes below table */
+    .main-content {
+        flex-direction: column !important;
+    }
+    
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        max-height: 300px;
+        order: 2;
+    }
+    
+    .content-wrapper {
+        order: 1;
+    }
+    
+    .selection-mode-toggle {
+        padding: 0.75rem 1rem;
+    }
     .sort-dropdowns {
         flex-direction: column;
         gap: 0.5rem;
@@ -2454,7 +2512,99 @@ tbody tr.unowned .card-name {
         font-size: 0.85rem;
     }
     
-    /* Ultra-mobile sort adjustments */
+    /* Ultra-mobile comparison adjustments */
+    .comparison-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .comparison-header h3 {
+        font-size: 1rem;
+    }
+    
+    .comparison-table {
+        padding: 0.75rem;
+    }
+    
+    .comparison-grid {
+        grid-template-columns: 120px repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .comparison-row-header {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+    }
+    
+    .comparison-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .comparison-card-name {
+        font-size: 0.75rem;
+    }
+    
+    .comparison-card-details {
+        font-size: 0.7rem;
+    }
+    
+    .comparison-cell {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+        min-height: 50px;
+    }
+    
+    .selection-mode-toggle {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .selection-mode-toggle label {
+        font-size: 0.9rem;
+    }
+    
+    /* Ultra-mobile: Force column layout for main content */
+    .main-content {
+        flex-direction: column !important;
+        gap: 0.75rem;
+    }
+    
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        max-height: 250px;
+        order: 2;
+    }
+    
+    .content-wrapper {
+        order: 1;
+    }
+    
+    .selected-card-item {
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+    
+    .selected-card-icon-small {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .selected-card-name {
+        font-size: 0.8rem;
+    }
+    
+    .selected-card-details {
+        font-size: 0.7rem;
+    }
+    
+    .selection-actions {
+        padding: 0.75rem;
+    }
+    
+    .selection-actions .btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+    }
     .sort-layer {
         padding: 0.5rem;
     }

@@ -26,6 +26,11 @@ let advancedFilters = {
     excludeSkillTypes: [] // array of skill type IDs to exclude
 };
 
+// Card comparison state
+let comparisonMode = false; // Whether selection mode is enabled
+let selectedCards = []; // Array of selected card IDs
+let showComparison = false; // Whether comparison table is visible
+
 // Initialize advanced filters UI
 function initializeAdvancedFilters() {
     // Build effect filters (will be updated dynamically)
@@ -135,7 +140,117 @@ function setShowMaxPotentialLevels(showMax) {
     debouncedFilterAndSort();
 }
 
-// Initialize multi-select dropdown functionality
+// Card comparison management functions
+function toggleComparisonMode(enabled) {
+    comparisonMode = enabled;
+    
+    // Update UI classes
+    const mainContent = document.querySelector('.main-content');
+    const selectionContainer = document.getElementById('selectionContainer');
+    
+    if (comparisonMode) {
+        mainContent.classList.add('has-selection');
+        selectionContainer.style.display = 'block';
+        
+        // Add visual indicators to table rows
+        document.querySelectorAll('#cardTableBody tr').forEach(row => {
+            row.classList.add('comparison-mode');
+        });
+    } else {
+        mainContent.classList.remove('has-selection');
+        selectionContainer.style.display = 'none';
+        
+        // Remove visual indicators from table rows
+        document.querySelectorAll('#cardTableBody tr').forEach(row => {
+            row.classList.remove('comparison-mode');
+        });
+    }
+    
+    // Re-render table to update click handlers
+    renderCards(currentFilteredCards);
+    renderSelectionContainer();
+}
+
+function toggleCardSelection(cardId) {
+    const index = selectedCards.indexOf(cardId);
+    
+    if (index === -1) {
+        // Add card to selection
+        selectedCards.push(cardId);
+    } else {
+        // Remove card from selection
+        selectedCards.splice(index, 1);
+    }
+    
+    // Update UI
+    updateCardSelectionStates();
+    renderSelectionContainer();
+    
+    // Hide comparison if no cards selected
+    if (selectedCards.length === 0 && showComparison) {
+        hideComparison();
+    }
+}
+
+function removeCardFromSelection(cardId) {
+    const index = selectedCards.indexOf(cardId);
+    if (index !== -1) {
+        selectedCards.splice(index, 1);
+        updateCardSelectionStates();
+        renderSelectionContainer();
+        
+        // Hide comparison if no cards selected
+        if (selectedCards.length === 0 && showComparison) {
+            hideComparison();
+        }
+    }
+}
+
+function clearAllSelectedCards() {
+    selectedCards = [];
+    updateCardSelectionStates();
+    renderSelectionContainer();
+    
+    if (showComparison) {
+        hideComparison();
+    }
+}
+
+function updateCardSelectionStates() {
+    document.querySelectorAll('#cardTableBody tr').forEach(row => {
+        const cardId = parseInt(row.dataset.cardId);
+        if (selectedCards.includes(cardId)) {
+            row.classList.add('selected');
+        } else {
+            row.classList.remove('selected');
+        }
+    });
+}
+
+function showComparisonTable() {
+    if (selectedCards.length === 0) {
+        showToast('Please select at least one card to compare', 'warning');
+        return;
+    }
+    
+    showComparison = true;
+    const comparisonSection = document.getElementById('comparisonSection');
+    comparisonSection.style.display = 'block';
+    renderComparisonTable();
+    
+    // Smooth scroll to comparison section
+    comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hideComparison() {
+    showComparison = false;
+    document.getElementById('comparisonSection').style.display = 'none';
+}
+
+function clearComparison() {
+    clearAllSelectedCards();
+    hideComparison();
+}
 function initializeMultiSelects() {
     const multiSelects = ['rarityFilter', 'typeFilter', 'hintSkillFilter', 'eventSkillFilter', 'includeSkillTypeFilter', 'excludeSkillTypeFilter'];
     
@@ -198,6 +313,7 @@ async function initializeInterface() {
     try {
         document.getElementById('loading').style.display = 'none';
         document.querySelector('.main-layout').style.display = 'flex';
+        document.getElementById('selectionModeSection').style.display = 'block'; // Show selection toggle
 
         // Initialize multi-select dropdowns
         initializeMultiSelects();
@@ -242,6 +358,16 @@ async function initializeInterface() {
             clearAllFilters();
             debouncedFilterAndSort();
         });
+
+        // Add event listeners for comparison feature
+        document.getElementById('comparisonModeToggle').addEventListener('change', (e) => {
+            toggleComparisonMode(e.target.checked);
+        });
+        
+        document.getElementById('compareSelectedBtn').addEventListener('click', showComparisonTable);
+        document.getElementById('clearSelectedBtn').addEventListener('click', clearAllSelectedCards);
+        document.getElementById('clearComparisonBtn').addEventListener('click', clearComparison);
+        document.getElementById('closeComparisonBtn').addEventListener('click', hideComparison);
 
         // Add sorting event listeners
         document.querySelectorAll('th.sortable').forEach(th => {
