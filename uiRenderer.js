@@ -1,6 +1,10 @@
 // UI Renderer Module
 // Handles all UI rendering, modal management, and display updates
 
+// Global data storage for modal navigation
+let currentModalCardIndex = -1;
+let currentFilteredCards = [];
+
 // Multi-Sort Functions
 function initializeMultiSort() {
     renderMultiSort();
@@ -265,7 +269,14 @@ function renderCards(cards = cardData) {
         
         // Get effective level for display
         const effectiveLevel = getEffectiveLevel(card);
-        const currentLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
+        
+        // FIXED: Determine which LB to display - respect global override settings
+        let displayLimitBreak;
+        if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
+            displayLimitBreak = globalLimitBreakLevel;
+        } else {
+            displayLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
+        }
         
         // Create level display with potential indicator
         const levelDisplay = showMaxPotentialLevels && isOwned ? 
@@ -293,7 +304,7 @@ function renderCards(cards = cardData) {
 
         // FIXED: Create LB dropdown instead of plain text
         const lbDropdownOptions = Array.from({length: 5}, (_, i) => 
-            `<option value="${i}" ${currentLimitBreak === i ? 'selected' : ''}>LB ${i}</option>`
+            `<option value="${i}" ${displayLimitBreak === i ? 'selected' : ''}>LB ${i}</option>`
         ).join('');
 
         const lbDropdown = `<select class="lb-select" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLB ? 'disabled' : ''}>${lbDropdownOptions}</select>`;
@@ -312,7 +323,7 @@ function renderCards(cards = cardData) {
             <td class="card-name">${card.char_name || 'Unknown Card'}</td>
             <td><span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span></td>
             <td><span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span></td>
-            <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][currentLimitBreak]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
+            <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][displayLimitBreak]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
             <td>${lbDropdown}</td>
             <td class="effects-summary">${mainEffectsDisplay}</td>
             <td class="effects-summary">${hintSkills}</td>
@@ -415,12 +426,19 @@ function updateCardDisplay(input) {
     
     const row = input.closest('tr');
     const isOwned = isCardOwned(cardId);
-    const currentLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
     
-    // Update limit break display (the dropdown should already show current LB)
+    // FIXED: Determine which LB to display - respect global override settings
+    let displayLimitBreak;
+    if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
+        displayLimitBreak = globalLimitBreakLevel;
+    } else {
+        displayLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
+    }
+    
+    // Update limit break display (the dropdown should show the correct LB)
     const lbSelect = row.querySelector('.lb-select');
-    if (lbSelect && lbSelect.value != currentLimitBreak) {
-        lbSelect.value = currentLimitBreak;
+    if (lbSelect && lbSelect.value != displayLimitBreak) {
+        lbSelect.value = displayLimitBreak;
     }
     
     // Recalculate and update priority effects (now filtered for unlocked only)
@@ -608,6 +626,14 @@ function openCardDetails(cardId) {
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
     
+    // Find the card's index in the current filtered results
+    currentModalCardIndex = currentFilteredCards.findIndex(c => c.support_id === cardId);
+    if (currentModalCardIndex === -1) {
+        // Fallback: if card not found in filtered results, use full dataset
+        currentFilteredCards = cardData;
+        currentModalCardIndex = cardData.findIndex(c => c.support_id === cardId);
+    }
+    
     currentModalCard = card;
     
     // Get current effective level
@@ -618,6 +644,9 @@ function openCardDetails(cardId) {
     const modal = document.getElementById('cardModal');
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Add keyboard event listener for modal navigation
+    document.addEventListener('keydown', handleModalKeyNavigation);
 }
 
 // Close card details modal
@@ -626,6 +655,10 @@ function closeCardDetails() {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     currentModalCard = null;
+    currentModalCardIndex = -1;
+    
+    // Remove keyboard event listener
+    document.removeEventListener('keydown', handleModalKeyNavigation);
 }
 
 // Render card details in modal
@@ -633,7 +666,37 @@ function renderCardDetails(card, level) {
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
     
-    modalTitle.textContent = `${card.char_name || 'Unknown Card'}`;
+    // Update modal title with navigation arrows
+    const totalCards = currentFilteredCards.length;
+    const cardPosition = currentModalCardIndex + 1;
+    
+    modalTitle.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <button class="modal-nav-btn" id="modalPrevBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+                &#8249;
+            </button>
+            <div style="text-align: center; flex: 1;">
+                <div>${card.char_name || 'Unknown Card'}</div>
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
+                    ${cardPosition} of ${totalCards}
+                </div>
+            </div>
+            <button class="modal-nav-btn" id="modalNextBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+                &#8250;
+            </button>
+        </div>
+    `;
+    
+    // Add event listeners for navigation buttons
+    const prevBtn = document.getElementById('modalPrevBtn');
+    const nextBtn = document.getElementById('modalNextBtn');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => navigateModal(-1));
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => navigateModal(1));
+    }
     
     const cardId = card.support_id;
     const isOwned = isCardOwned(cardId);
@@ -1098,4 +1161,56 @@ function showToast(message, type = 'success') {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+// Modal Navigation Functions
+function navigateModal(direction) {
+    if (!currentModalCard || currentFilteredCards.length <= 1) return;
+    
+    // Calculate new index with wraparound
+    let newIndex = currentModalCardIndex + direction;
+    if (newIndex >= currentFilteredCards.length) {
+        newIndex = 0; // Wrap to beginning
+    } else if (newIndex < 0) {
+        newIndex = currentFilteredCards.length - 1; // Wrap to end
+    }
+    
+    // Update current card and index
+    currentModalCardIndex = newIndex;
+    currentModalCard = currentFilteredCards[newIndex];
+    
+    // Get current effective level for new card
+    const currentLevel = getEffectiveLevel(currentModalCard);
+    
+    // Re-render modal with new card
+    renderCardDetails(currentModalCard, currentLevel);
+}
+
+// Handle keyboard navigation in modal
+function handleModalKeyNavigation(e) {
+    if (!currentModalCard) return;
+    
+    // Only handle if modal is open and no input is focused
+    const modal = document.getElementById('cardModal');
+    if (modal.style.display !== 'block') return;
+    
+    const activeElement = document.activeElement;
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'SELECT' || activeElement.tagName === 'TEXTAREA')) {
+        return; // Don't interfere with input focus
+    }
+    
+    switch(e.key) {
+        case 'ArrowLeft':
+            e.preventDefault();
+            navigateModal(-1);
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            navigateModal(1);
+            break;
+        case 'Escape':
+            e.preventDefault();
+            closeCardDetails();
+            break;
+    }
 }
