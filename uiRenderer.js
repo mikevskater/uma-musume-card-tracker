@@ -1354,7 +1354,7 @@ function renderSelectionContainer() {
     });
 }
 
-// Render comparison table
+// FIXED: Render comparison table with proper HTML table structure
 function renderComparisonTable() {
     const comparisonTable = document.getElementById('comparisonTable');
     
@@ -1376,32 +1376,54 @@ function renderComparisonTable() {
     // Build comparison data structure
     const comparisonData = buildComparisonData(cardsToCompare);
     
-    // Render comparison grid
+    // FIXED: Render proper HTML table instead of CSS Grid
     comparisonTable.innerHTML = `
-        <div class="comparison-grid">
-            ${renderComparisonRows(comparisonData)}
-        </div>
+        <table class="comparison-data-table">
+            <thead>
+                <tr>
+                    <th>Effect/Skill</th>
+                    ${cardsToCompare.map(card => `
+                        <th class="comparison-card-header-cell">
+                            <img src="support_card_images/${card.support_id}_i.png" 
+                                 class="comparison-card-icon" 
+                                 alt="${card.char_name || 'Unknown Card'}"
+                                 onerror="this.style.display='none'"
+                                 loading="lazy">
+                            <div class="comparison-card-name">${card.char_name || 'Unknown Card'}</div>
+                            <div class="comparison-card-details">
+                                <span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>
+                                <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
+                            </div>
+                        </th>
+                    `).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${renderComparisonTableRows(comparisonData)}
+            </tbody>
+        </table>
     `;
 }
 
-// Build comparison data structure
+// FIXED: Build comparison data structure optimized for table rendering
 function buildComparisonData(cards) {
     const data = {
         cards: cards,
-        basicInfo: [],
-        effects: {},
-        hintSkills: {},
-        eventSkills: {}
+        rows: []
     };
     
     // Basic info rows
-    data.basicInfo = [
-        { label: 'Card', type: 'header' },
-        { label: 'Rarity', type: 'rarity' },
-        { label: 'Type', type: 'type' },
-        { label: 'Level', type: 'level' },
-        { label: 'Owned', type: 'owned' }
-    ];
+    data.rows.push({
+        label: 'Level',
+        type: 'level',
+        values: cards.map(card => ({ value: getEffectiveLevel(card), type: 'level' }))
+    });
+    
+    data.rows.push({
+        label: 'Owned',
+        type: 'owned',
+        values: cards.map(card => ({ value: isCardOwned(card.support_id), type: 'owned' }))
+    });
     
     // Collect all effects from selected cards
     const allEffectIds = new Set();
@@ -1415,26 +1437,37 @@ function buildComparisonData(cards) {
         }
     });
     
-    // Build effects data
+    // Build effects rows with highlighting logic
     Array.from(allEffectIds).forEach(effectId => {
         const effectInfo = effectsData[effectId];
         if (effectInfo && effectInfo.name_en) {
-            data.effects[effectId] = {
-                name: effectInfo.name_en,
+            const values = cards.map(card => {
+                const effectArray = card.effects?.find(effect => effect[0] == effectId);
+                const level = getEffectiveLevel(card);
+                if (effectArray) {
+                    const isLocked = isEffectLocked(effectArray, level);
+                    return {
+                        value: isLocked ? 0 : calculateEffectValue(effectArray, level),
+                        locked: isLocked,
+                        hasEffect: true
+                    };
+                }
+                return { value: 0, locked: false, hasEffect: false };
+            });
+            
+            // FIXED: Find highest value for highlighting (excluding locked/missing effects)
+            const validValues = values.filter(v => v.hasEffect && !v.locked).map(v => v.value);
+            const highestValue = validValues.length > 0 ? Math.max(...validValues) : 0;
+            
+            data.rows.push({
+                label: effectInfo.name_en,
+                type: 'effect',
                 symbol: effectInfo.symbol === 'percent' ? '%' : '',
-                values: cards.map(card => {
-                    const effectArray = card.effects?.find(effect => effect[0] == effectId);
-                    const level = getEffectiveLevel(card);
-                    if (effectArray) {
-                        const isLocked = isEffectLocked(effectArray, level);
-                        return {
-                            value: isLocked ? 0 : calculateEffectValue(effectArray, level),
-                            locked: isLocked
-                        };
-                    }
-                    return { value: 0, locked: true };
-                })
-            };
+                values: values.map(v => ({
+                    ...v,
+                    isHighest: v.hasEffect && !v.locked && v.value === highestValue && v.value > 0
+                }))
+            });
         }
     });
     
@@ -1449,13 +1482,16 @@ function buildComparisonData(cards) {
     });
     
     Array.from(allHintSkills).forEach(skillId => {
-        data.hintSkills[skillId] = {
-            name: getSkillName(skillId),
-            cards: cards.map(card => {
-                const hasSkill = card.hints?.hint_skills?.some(skill => skill.id === skillId);
-                return hasSkill;
-            })
-        };
+        const values = cards.map(card => {
+            const hasSkill = card.hints?.hint_skills?.some(skill => skill.id === skillId);
+            return { value: hasSkill, type: 'skill' };
+        });
+        
+        data.rows.push({
+            label: `Hint: ${getSkillName(skillId)}`,
+            type: 'skill',
+            values: values
+        });
     });
     
     // Collect event skills
@@ -1469,105 +1505,63 @@ function buildComparisonData(cards) {
     });
     
     Array.from(allEventSkills).forEach(skillId => {
-        data.eventSkills[skillId] = {
-            name: getSkillName(skillId),
-            cards: cards.map(card => {
-                const hasSkill = card.event_skills?.some(skill => skill.id === skillId);
-                return hasSkill;
-            })
-        };
+        const values = cards.map(card => {
+            const hasSkill = card.event_skills?.some(skill => skill.id === skillId);
+            return { value: hasSkill, type: 'skill' };
+        });
+        
+        data.rows.push({
+            label: `Event: ${getSkillName(skillId)}`,
+            type: 'skill',
+            values: values
+        });
     });
     
     return data;
 }
 
-// Render comparison rows
-function renderComparisonRows(data) {
-    let html = '';
-    
-    // Card headers
-    html += '<div class="comparison-row-header">Cards</div>';
-    data.cards.forEach(card => {
-        html += `
-            <div class="comparison-card-column">
-                <div class="comparison-card-header">
-                    <img src="support_card_images/${card.support_id}_i.png" 
-                         class="comparison-card-icon" 
-                         alt="${card.char_name || 'Unknown Card'}"
-                         onerror="this.style.display='none'"
-                         loading="lazy">
-                    <div class="comparison-card-name">${card.char_name || 'Unknown Card'}</div>
-                    <div class="comparison-card-details">
-                        <span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>
-                        <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
-                    </div>
-                </div>
-            </div>
+// FIXED: Render comparison table rows with proper highlighting
+function renderComparisonTableRows(data) {
+    return data.rows.map(row => {
+        return `
+            <tr>
+                <td>${row.label}</td>
+                ${row.values.map(cellData => {
+                    let cellClass = 'has-value';
+                    let cellContent = '';
+                    
+                    switch(row.type) {
+                        case 'level':
+                            cellContent = cellData.value;
+                            break;
+                        case 'owned':
+                            cellContent = cellData.value ? '✓ Owned' : '✗ Not Owned';
+                            break;
+                        case 'effect':
+                            if (!cellData.hasEffect) {
+                                cellClass = 'no-value';
+                                cellContent = 'X';
+                            } else if (cellData.locked) {
+                                cellClass = 'locked-value';
+                                cellContent = 'Locked';
+                            } else if (cellData.isHighest) {
+                                cellClass = 'highest-value';
+                                cellContent = `${cellData.value}${row.symbol || ''}`;
+                            } else {
+                                cellClass = 'has-value';
+                                cellContent = `${cellData.value}${row.symbol || ''}`;
+                            }
+                            break;
+                        case 'skill':
+                            cellContent = cellData.value ? '✓' : '✗';
+                            break;
+                        default:
+                            cellContent = cellData.value;
+                    }
+                    
+                    return `<td class="${cellClass}">${cellContent}</td>`;
+                }).join('')}
+            </tr>
         `;
-    });
-    
-    // Basic info rows
-    data.basicInfo.slice(1).forEach(row => {
-        html += `<div class="comparison-row-header">${row.label}</div>`;
-        data.cards.forEach(card => {
-            html += '<div class="comparison-cell">';
-            switch(row.type) {
-                case 'rarity':
-                    html += `<span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span>`;
-                    break;
-                case 'type':
-                    html += `<span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>`;
-                    break;
-                case 'level':
-                    html += getEffectiveLevel(card);
-                    break;
-                case 'owned':
-                    html += isCardOwned(card.support_id) ? '✓ Owned' : '✗ Not Owned';
-                    break;
-            }
-            html += '</div>';
-        });
-    });
-    
-    // Effects
-    if (Object.keys(data.effects).length > 0) {
-        Object.entries(data.effects).forEach(([effectId, effectData]) => {
-            html += `<div class="comparison-row-header">${effectData.name}</div>`;
-            effectData.values.forEach(valueData => {
-                html += `<div class="comparison-cell">`;
-                if (valueData.locked) {
-                    html += `<span class="comparison-effect-locked">Locked</span>`;
-                } else {
-                    html += `<span class="comparison-effect-value">${valueData.value}${effectData.symbol}</span>`;
-                }
-                html += '</div>';
-            });
-        });
-    }
-    
-    // Hint Skills
-    if (Object.keys(data.hintSkills).length > 0) {
-        Object.entries(data.hintSkills).forEach(([skillId, skillData]) => {
-            html += `<div class="comparison-row-header">Hint: ${skillData.name}</div>`;
-            skillData.cards.forEach(hasSkill => {
-                html += `<div class="comparison-cell">`;
-                html += hasSkill ? '✓' : '✗';
-                html += '</div>';
-            });
-        });
-    }
-    
-    // Event Skills
-    if (Object.keys(data.eventSkills).length > 0) {
-        Object.entries(data.eventSkills).forEach(([skillId, skillData]) => {
-            html += `<div class="comparison-row-header">Event: ${skillData.name}</div>`;
-            skillData.cards.forEach(hasSkill => {
-                html += `<div class="comparison-cell">`;
-                html += hasSkill ? '✓' : '✗';
-                html += '</div>';
-            });
-        });
-    }
-    
-    return html;
+    }).join('');
 }

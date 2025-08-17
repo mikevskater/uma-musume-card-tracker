@@ -77,9 +77,350 @@ h1 {
     background: #a8a8a8;
 }
 
+/* FIXED: Main content layout for side-by-side comparison */
 .main-content {
     flex: 1;
     min-width: 0; /* Allows flex item to shrink below content size */
+    display: flex; /* Make this a flex container */
+    gap: 1rem; /* Space between content and selection */
+    align-items: flex-start; /* Align items to top */
+}
+
+/* FIXED: Content wrapper takes available space */
+.content-wrapper {
+    flex: 1; /* Take all available space */
+    min-width: 0; /* Allow shrinking */
+}
+
+/* FIXED: Selection container as fixed-width sidebar */
+.selection-container {
+    width: 280px;
+    min-width: 280px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    position: sticky;
+    top: 20px;
+    order: 2; /* Ensure it appears on the right */
+}
+
+/* Selection container header */
+.selection-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+}
+
+.selection-header h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.selection-count {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: normal;
+}
+
+/* Selected cards list */
+.selected-cards-list {
+    padding: 1rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.selected-card-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+
+.selected-card-item:hover {
+    background-color: #e9ecef;
+}
+
+.selected-card-item:last-child {
+    margin-bottom: 0;
+}
+
+.selected-card-icon-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.selected-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.selected-card-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.selected-card-details {
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.remove-selected-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.25rem;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.remove-selected-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Selection actions */
+.selection-actions {
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.selection-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* No selected cards message */
+.no-selected-cards {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 2rem 1rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin: 1rem;
+}
+
+/* Selection mode toggle section */
+.selection-mode-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.selection-mode-toggle {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.selection-mode-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Comparison mode styles */
+.comparison-mode {
+    position: relative;
+}
+
+.comparison-mode::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #007bff;
+    opacity: 0.6;
+}
+
+tbody tr.selected {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #2196f3 !important;
+}
+
+tbody tr.selected:hover {
+    background-color: #bbdefb !important;
+}
+
+/* FIXED: Comparison Section - Proper Table Structure */
+.comparison-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border-left: 4px solid #28a745;
+}
+
+.comparison-header {
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comparison-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.comparison-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.comparison-table {
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+/* FIXED: Proper comparison table styling */
+.comparison-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.comparison-data-table th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #34495e;
+}
+
+.comparison-data-table th:first-child {
+    background-color: #34495e;
+    width: 200px;
+    min-width: 200px;
+}
+
+.comparison-data-table td {
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.comparison-data-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+/* FIXED: Comparison value highlighting */
+.comparison-data-table .highest-value {
+    background-color: #d4edda !important;
+    color: #155724;
+    font-weight: 600;
+    position: relative;
+}
+
+.comparison-data-table .highest-value::after {
+    content: '🏆';
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.7rem;
+}
+
+.comparison-data-table .has-value {
+    background-color: white;
+    color: #2c3e50;
+}
+
+.comparison-data-table .no-value {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.comparison-data-table .locked-value {
+    background-color: #fff3cd;
+    color: #856404;
+    font-style: italic;
+}
+
+/* Comparison card headers in table */
+.comparison-card-header-cell {
+    padding: 1rem 0.75rem !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.comparison-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    border: 2px solid #ddd;
+    object-fit: cover;
+    margin: 0 auto 0.5rem auto;
+    display: block;
+}
+
+.comparison-card-name {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.comparison-card-details {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* No comparison data message */
+.no-comparison-data {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 3rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
 }
 
 .controls {
@@ -1034,6 +1375,13 @@ select, input[type="text"], input[type="number"] {
 
 .btn-primary:hover {
     background-color: #0056b3;
+}
+
+.btn-primary:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-secondary {
@@ -2053,6 +2401,12 @@ tbody tr.unowned .card-name {
     .debug-canvas-container {
         grid-template-columns: 1fr;
     }
+    
+    /* Adjust selection container for medium screens */
+    .selection-container {
+        width: 250px;
+        min-width: 250px;
+    }
 }
 
 @media (max-width: 968px) {
@@ -2070,8 +2424,24 @@ tbody tr.unowned .card-name {
         overflow-y: visible; /* Allow natural flow on mobile */
     }
     
+    /* FIXED: Mobile layout for main content - stack vertically */
     .main-content {
         order: 1; /* Put content above sidebar on mobile */
+        flex-direction: column; /* Stack vertically on tablets */
+        gap: 1rem;
+    }
+    
+    /* Selection container goes full width on tablet */
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        max-height: 300px;
+        order: 2; /* Below table on mobile */
+    }
+    
+    .content-wrapper {
+        order: 1; /* Table goes above selection on mobile */
     }
     
     .controls {
@@ -2121,48 +2491,28 @@ tbody tr.unowned .card-name {
         justify-content: flex-end;
     }
     
-    .comparison-grid {
-        grid-template-columns: 150px repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.75rem;
+    .comparison-data-table th:first-child {
+        width: 150px;
+        min-width: 150px;
     }
     
-    .comparison-row-header {
-        font-size: 0.85rem;
-        padding: 0.5rem;
-    }
-    
-    .comparison-card-header {
-        padding: 0.5rem;
+    .comparison-card-header-cell {
+        padding: 0.75rem 0.5rem !important;
     }
     
     .comparison-card-icon {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
     }
     
     .comparison-card-name {
         font-size: 0.8rem;
     }
     
-    .comparison-cell {
+    .comparison-data-table th,
+    .comparison-data-table td {
         padding: 0.5rem;
         font-size: 0.85rem;
-    }
-    
-    /* Mobile layout - selection container goes below table */
-    .main-content {
-        flex-direction: column !important;
-    }
-    
-    .selection-container {
-        width: 100%;
-        min-width: auto;
-        max-height: 300px;
-        order: 2;
-    }
-    
-    .content-wrapper {
-        order: 1;
     }
     
     .selection-mode-toggle {
@@ -2227,8 +2577,24 @@ tbody tr.unowned .card-name {
         order: 2; /* Put sidebar below content on mobile */
     }
     
+    /* FIXED: Force vertical layout on mobile */
     .main-content {
         order: 1; /* Put content above sidebar on mobile */
+        flex-direction: column !important; /* Force column layout */
+        gap: 1rem;
+    }
+    
+    /* Selection container full width on mobile */
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        max-height: 250px;
+        order: 2; /* Below table */
+    }
+    
+    .content-wrapper {
+        order: 1; /* Table above selection */
     }
     
     .modal-content {
@@ -2398,6 +2764,35 @@ tbody tr.unowned .card-name {
         padding-right: 1.2rem;
     }
     
+    /* Mobile comparison table adjustments */
+    .comparison-data-table {
+        font-size: 0.8rem;
+    }
+    
+    .comparison-data-table th:first-child {
+        width: 120px;
+        min-width: 120px;
+    }
+    
+    .comparison-card-header-cell {
+        padding: 0.5rem 0.25rem !important;
+    }
+    
+    .comparison-card-icon {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .comparison-card-name {
+        font-size: 0.75rem;
+    }
+    
+    .comparison-data-table th,
+    .comparison-data-table td {
+        padding: 0.4rem 0.25rem;
+        font-size: 0.8rem;
+    }
+    
     /* Recognition modal adjustments */
     .recognition-modal {
         max-width: 95%;
@@ -2525,33 +2920,37 @@ tbody tr.unowned .card-name {
         padding: 0.75rem;
     }
     
-    .comparison-grid {
-        grid-template-columns: 120px repeat(auto-fit, minmax(180px, 1fr));
-        gap: 0.5rem;
-    }
-    
-    .comparison-row-header {
-        font-size: 0.8rem;
-        padding: 0.4rem;
-    }
-    
-    .comparison-card-icon {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .comparison-card-name {
+    .comparison-data-table {
         font-size: 0.75rem;
     }
     
-    .comparison-card-details {
+    .comparison-data-table th:first-child {
+        width: 100px;
+        min-width: 100px;
         font-size: 0.7rem;
     }
     
-    .comparison-cell {
-        padding: 0.4rem;
-        font-size: 0.8rem;
-        min-height: 50px;
+    .comparison-card-header-cell {
+        padding: 0.4rem 0.2rem !important;
+    }
+    
+    .comparison-card-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .comparison-card-name {
+        font-size: 0.7rem;
+    }
+    
+    .comparison-card-details {
+        font-size: 0.65rem;
+    }
+    
+    .comparison-data-table th,
+    .comparison-data-table td {
+        padding: 0.3rem 0.2rem;
+        font-size: 0.75rem;
     }
     
     .selection-mode-toggle {
@@ -2560,23 +2959,6 @@ tbody tr.unowned .card-name {
     
     .selection-mode-toggle label {
         font-size: 0.9rem;
-    }
-    
-    /* Ultra-mobile: Force column layout for main content */
-    .main-content {
-        flex-direction: column !important;
-        gap: 0.75rem;
-    }
-    
-    .selection-container {
-        width: 100%;
-        min-width: auto;
-        max-height: 250px;
-        order: 2;
-    }
-    
-    .content-wrapper {
-        order: 1;
     }
     
     .selected-card-item {

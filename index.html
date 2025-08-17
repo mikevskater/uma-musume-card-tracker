@@ -255,8 +255,9 @@
                 </div>
             </div>
 
-            <!-- Main content area with table and selection container -->
+            <!-- FIXED: Main content area with proper flex layout for side-by-side comparison -->
             <div class="main-content">
+                <!-- FIXED: Content wrapper contains table and filters (takes most space) -->
                 <div class="content-wrapper">
                     <!-- Active Filters Display -->
                     <div id="activeFilters" class="active-filters" style="display: none;">
@@ -292,7 +293,7 @@
                     </div>
                 </div>
 
-                <!-- Selection Container -->
+                <!-- FIXED: Selection Container as fixed-width sidebar (only shows when comparison mode is enabled) -->
                 <div id="selectionContainer" class="selection-container" style="display: none;">
                     <div class="selection-header">
                         <h4>Selected Cards</h4>
