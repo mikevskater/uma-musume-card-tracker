@@ -511,50 +511,60 @@ function updateSkillFilterLabels(skillCounts) {
 
 // Re-bind skill filter event listeners after updating labels
 function rebindSkillFilterEvents() {
+    // Don't rebind event listeners that would interfere with multi-select behavior
+    // Instead, trigger the existing multi-select checkbox change handlers
+    
+    // Update hint skills filter
     const hintSkillDropdown = document.getElementById('hintSkillDropdown');
+    if (hintSkillDropdown) {
+        hintSkillDropdown.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                advancedFilters.hintSkills = Array.from(hintSkillDropdown.querySelectorAll('input:checked'))
+                    .map(input => parseInt(input.value));
+                updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
+                debouncedFilterAndSort();
+            });
+        });
+    }
+    
+    // Update event skills filter
     const eventSkillDropdown = document.getElementById('eventSkillDropdown');
+    if (eventSkillDropdown) {
+        eventSkillDropdown.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                advancedFilters.eventSkills = Array.from(eventSkillDropdown.querySelectorAll('input:checked'))
+                    .map(input => parseInt(input.value));
+                updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
+                debouncedFilterAndSort();
+            });
+        });
+    }
+    
+    // Update include skill types filter
     const includeSkillTypeDropdown = document.getElementById('includeSkillTypeDropdown');
+    if (includeSkillTypeDropdown) {
+        includeSkillTypeDropdown.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                advancedFilters.includeSkillTypes = Array.from(includeSkillTypeDropdown.querySelectorAll('input:checked'))
+                    .map(input => input.value);
+                updateMultiSelectText('includeSkillTypeFilter', 'Any Skill Types');
+                debouncedFilterAndSort();
+            });
+        });
+    }
+    
+    // Update exclude skill types filter
     const excludeSkillTypeDropdown = document.getElementById('excludeSkillTypeDropdown');
-    
-    // Remove old event listeners by cloning and replacing
-    const newHintDropdown = hintSkillDropdown.cloneNode(true);
-    const newEventDropdown = eventSkillDropdown.cloneNode(true);
-    const newIncludeTypeDropdown = includeSkillTypeDropdown.cloneNode(true);
-    const newExcludeTypeDropdown = excludeSkillTypeDropdown.cloneNode(true);
-    
-    hintSkillDropdown.parentNode.replaceChild(newHintDropdown, hintSkillDropdown);
-    eventSkillDropdown.parentNode.replaceChild(newEventDropdown, eventSkillDropdown);
-    includeSkillTypeDropdown.parentNode.replaceChild(newIncludeTypeDropdown, includeSkillTypeDropdown);
-    excludeSkillTypeDropdown.parentNode.replaceChild(newExcludeTypeDropdown, excludeSkillTypeDropdown);
-    
-    // Add new event listeners
-    newHintDropdown.addEventListener('change', () => {
-        advancedFilters.hintSkills = Array.from(newHintDropdown.querySelectorAll('input:checked'))
-            .map(input => parseInt(input.value));
-        updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
-        debouncedFilterAndSort();
-    });
-    
-    newEventDropdown.addEventListener('change', () => {
-        advancedFilters.eventSkills = Array.from(newEventDropdown.querySelectorAll('input:checked'))
-            .map(input => parseInt(input.value));
-        updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
-        debouncedFilterAndSort();
-    });
-    
-    newIncludeTypeDropdown.addEventListener('change', () => {
-        advancedFilters.includeSkillTypes = Array.from(newIncludeTypeDropdown.querySelectorAll('input:checked'))
-            .map(input => input.value);
-        updateMultiSelectText('includeSkillTypeFilter', 'Any Skill Types');
-        debouncedFilterAndSort();
-    });
-    
-    newExcludeTypeDropdown.addEventListener('change', () => {
-        advancedFilters.excludeSkillTypes = Array.from(newExcludeTypeDropdown.querySelectorAll('input:checked'))
-            .map(input => input.value);
-        updateMultiSelectText('excludeSkillTypeFilter', 'No Exclusions');
-        debouncedFilterAndSort();
-    });
+    if (excludeSkillTypeDropdown) {
+        excludeSkillTypeDropdown.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                advancedFilters.excludeSkillTypes = Array.from(excludeSkillTypeDropdown.querySelectorAll('input:checked'))
+                    .map(input => input.value);
+                updateMultiSelectText('excludeSkillTypeFilter', 'No Exclusions');
+                debouncedFilterAndSort();
+            });
+        });
+    }
 }
 
 // Build effect filters dynamically
@@ -605,17 +615,25 @@ function buildEffectFilters(effectRanges = {}) {
     });
 }
 
-// Build skill filters dynamically
+// FIXED: Build skill filters dynamically - Now includes skill type dropdowns!
 function buildSkillFilters() {
     // Get all unique hint skills
     const hintSkills = new Set();
     const eventSkills = new Set();
+    const allSkillTypes = new Set();
     
     cardData.forEach(card => {
         // Collect hint skills
         if (card.hints?.hint_skills) {
             card.hints.hint_skills.forEach(skill => {
                 hintSkills.add(skill.id);
+                
+                // Collect skill types from hint skills
+                if (skill.type && Array.isArray(skill.type)) {
+                    skill.type.forEach(type => {
+                        allSkillTypes.add(type);
+                    });
+                }
             });
         }
         
@@ -623,6 +641,13 @@ function buildSkillFilters() {
         if (card.event_skills) {
             card.event_skills.forEach(skill => {
                 eventSkills.add(skill.id);
+                
+                // Collect skill types from event skills
+                if (skill.type && Array.isArray(skill.type)) {
+                    skill.type.forEach(type => {
+                        allSkillTypes.add(type);
+                    });
+                }
             });
         }
     });
@@ -646,6 +671,28 @@ function buildSkillFilters() {
             <label>
                 <input type="checkbox" value="${skillId}"> 
                 ${getSkillName(skillId)}
+            </label>
+        `).join('');
+    
+    // FIXED: Build include skill type dropdown
+    const includeSkillTypeDropdown = document.getElementById('includeSkillTypeDropdown');
+    includeSkillTypeDropdown.innerHTML = Array.from(allSkillTypes)
+        .sort((a, b) => getSkillTypeDescription(a).localeCompare(getSkillTypeDescription(b)))
+        .map(typeId => `
+            <label>
+                <input type="checkbox" value="${typeId}"> 
+                ${getSkillTypeDescription(typeId)}
+            </label>
+        `).join('');
+    
+    // FIXED: Build exclude skill type dropdown
+    const excludeSkillTypeDropdown = document.getElementById('excludeSkillTypeDropdown');
+    excludeSkillTypeDropdown.innerHTML = Array.from(allSkillTypes)
+        .sort((a, b) => getSkillTypeDescription(a).localeCompare(getSkillTypeDescription(b)))
+        .map(typeId => `
+            <label>
+                <input type="checkbox" value="${typeId}"> 
+                ${getSkillTypeDescription(typeId)}
             </label>
         `).join('');
     

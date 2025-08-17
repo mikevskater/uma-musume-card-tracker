@@ -251,6 +251,8 @@ function clearComparison() {
     clearAllSelectedCards();
     hideComparison();
 }
+
+// FIXED: Initialize multi-select dropdowns with proper skill filter handling
 function initializeMultiSelects() {
     const multiSelects = ['rarityFilter', 'typeFilter', 'hintSkillFilter', 'eventSkillFilter', 'includeSkillTypeFilter', 'excludeSkillTypeFilter'];
     
@@ -288,7 +290,28 @@ function initializeMultiSelects() {
                 }
                 updateMultiSelectText(id, defaultText);
                 
+                // FIXED: Handle different filter types properly
                 if (id === 'rarityFilter' || id === 'typeFilter') {
+                    debouncedFilterAndSort();
+                } else if (id === 'hintSkillFilter') {
+                    // Update hint skills filter
+                    advancedFilters.hintSkills = Array.from(dropdown.querySelectorAll('input:checked'))
+                        .map(input => parseInt(input.value));
+                    debouncedFilterAndSort();
+                } else if (id === 'eventSkillFilter') {
+                    // Update event skills filter
+                    advancedFilters.eventSkills = Array.from(dropdown.querySelectorAll('input:checked'))
+                        .map(input => parseInt(input.value));
+                    debouncedFilterAndSort();
+                } else if (id === 'includeSkillTypeFilter') {
+                    // Update include skill types filter
+                    advancedFilters.includeSkillTypes = Array.from(dropdown.querySelectorAll('input:checked'))
+                        .map(input => input.value);
+                    debouncedFilterAndSort();
+                } else if (id === 'excludeSkillTypeFilter') {
+                    // Update exclude skill types filter
+                    advancedFilters.excludeSkillTypes = Array.from(dropdown.querySelectorAll('input:checked'))
+                        .map(input => input.value);
                     debouncedFilterAndSort();
                 }
             });
@@ -429,11 +452,6 @@ async function initializeApplication() {
         
         console.log('Application initialized successfully');
         
-        // Check for OpenCV availability and warn if not ready
-        if (typeof cv === 'undefined') {
-            console.warn('⚠️ OpenCV.js is still loading. Screenshot recognition will be available once loaded.');
-        }
-        
     } catch (error) {
         console.error('Application initialization failed:', error);
         
@@ -455,11 +473,6 @@ window.addEventListener('error', (event) => {
         stack: event.error?.stack,
         timestamp: new Date().toISOString()
     });
-    
-    // Check if it's an OpenCV related error
-    if (event.error?.message?.includes('cv') || event.filename?.includes('opencv')) {
-        console.warn('🔍 This appears to be an OpenCV-related error. Make sure OpenCV.js is properly loaded.');
-    }
 });
 
 // Enhanced unhandled promise rejection handler
@@ -469,13 +482,6 @@ window.addEventListener('unhandledrejection', (event) => {
         promise: event.promise,
         timestamp: new Date().toISOString()
     });
-    
-    // Check if it's a recognition-related error
-    if (event.reason?.message?.includes('recognition') || 
-        event.reason?.message?.includes('calibration') ||
-        event.reason?.message?.includes('template')) {
-        console.warn('🔍 This appears to be recognition-related. Check if OpenCV.js and Tesseract.js are loaded.');
-    }
 });
 
 // Load application when page loads

@@ -898,381 +898,6 @@ tbody tr.selected:hover {
     justify-content: center;
 }
 
-/* Recognition Section Styles */
-.recognition-section {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eee;
-}
-
-.recognition-section h5 {
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    font-size: 0.95rem;
-    font-weight: 600;
-}
-
-.recognition-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.recognition-progress {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 0.75rem;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background-color: #e9ecef;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #007bff, #0056b3);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-    width: 0%;
-}
-
-.progress-text {
-    font-size: 0.85rem;
-    color: #495057;
-    text-align: center;
-}
-
-/* Recognition Results Modal */
-.recognition-modal {
-    max-width: 800px;
-    max-height: 90vh;
-}
-
-.recognition-stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    border: 1px solid #e9ecef;
-}
-
-.recognition-stats span {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #495057;
-}
-
-.detected-cards-list {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-}
-
-.detected-card-item {
-    border-bottom: 1px solid #e9ecef;
-    transition: background-color 0.2s ease;
-}
-
-.detected-card-item:last-child {
-    border-bottom: none;
-}
-
-.detected-card-item:hover {
-    background-color: #f8f9fa;
-}
-
-.detected-card-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    cursor: pointer;
-    margin: 0;
-}
-
-.detected-card-checkbox input[type="checkbox"] {
-    margin: 0;
-    transform: scale(1.2);
-    accent-color: #007bff;
-}
-
-.detected-card-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.detected-card-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.detected-card-name {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.25rem;
-}
-
-.detected-card-details {
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.recognition-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e9ecef;
-}
-
-/* DEBUG MODAL STYLES */
-.debug-modal {
-    z-index: 2000; /* Higher than regular modals */
-}
-
-.debug-modal-content {
-    max-width: 1400px;
-    max-height: 95vh;
-    width: 95%;
-}
-
-.debug-modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.debug-modal-body {
-    padding: 1rem;
-    overflow-y: auto;
-    max-height: calc(95vh - 80px);
-}
-
-.debug-status-section {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #007bff;
-}
-
-.debug-status-section h3 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
-}
-
-.debug-status {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #495057;
-    padding: 0.5rem;
-    background-color: white;
-    border-radius: 4px;
-    border: 1px solid #e9ecef;
-}
-
-.debug-visualization-section {
-    margin-bottom: 2rem;
-}
-
-.debug-visualization-section h3 {
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
-}
-
-.debug-canvas-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.debug-canvas-wrapper {
-    background-color: white;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.debug-canvas-wrapper h4 {
-    margin: 0 0 0.75rem 0;
-    color: #2c3e50;
-    font-size: 1rem;
-    text-align: center;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.debug-canvas {
-    max-width: 100%;
-    max-height: 300px;
-    object-fit: contain;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    display: block;
-    margin: 0 auto;
-    background-color: #f8f9fa;
-}
-
-.debug-legend {
-    margin-top: 0.75rem;
-    padding: 0.5rem;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    font-size: 0.85rem;
-}
-
-.debug-legend div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.debug-legend div:last-child {
-    margin-bottom: 0;
-}
-
-.debug-details-section {
-    margin-bottom: 2rem;
-}
-
-.debug-details-section h3 {
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
-}
-
-.debug-details {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-    line-height: 1.6;
-}
-
-.debug-details div {
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    background-color: white;
-    border-radius: 4px;
-    border-left: 3px solid #007bff;
-}
-
-.debug-details div:last-child {
-    margin-bottom: 0;
-}
-
-.debug-details strong {
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.debug-details pre {
-    background-color: #f1f1f1;
-    padding: 0.5rem;
-    border-radius: 4px;
-    overflow-x: auto;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-}
-
-.debug-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border-top: 2px solid #e9ecef;
-    margin-top: 1rem;
-}
-
-/* Debug Parameters Modal */
-.debug-parameters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.parameter-group {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1.5rem;
-}
-
-.parameter-group h4 {
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    font-size: 1rem;
-    text-align: center;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.parameter-item {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.parameter-item:last-child {
-    margin-bottom: 0;
-}
-
-.parameter-item label {
-    font-weight: 600;
-    color: #495057;
-    font-size: 0.9rem;
-}
-
-.parameter-item input[type="range"] {
-    width: 100%;
-    margin: 0.25rem 0;
-}
-
-.parameter-item span {
-    font-weight: bold;
-    color: #007bff;
-    text-align: center;
-    padding: 0.25rem;
-    background-color: white;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    min-width: 50px;
-}
-
-.debug-parameters-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    border-top: 1px solid #e9ecef;
-}
-
 /* Advanced Filters in Sidebar */
 .advanced-filters {
     margin-bottom: 1.5rem;
@@ -2582,15 +2207,6 @@ tbody tr.unowned .card-name {
         min-width: 120px;
     }
     
-    .recognition-buttons {
-        flex-direction: row;
-        gap: 0.5rem;
-    }
-    
-    .recognition-buttons .btn {
-        flex: 1;
-    }
-    
     /* Comparison feature mobile adjustments */
     .comparison-header {
         flex-direction: column;
@@ -2654,26 +2270,6 @@ tbody tr.unowned .card-name {
         align-self: flex-end;
     }
     
-    /* Debug modal adjustments */
-    .debug-modal-content {
-        max-width: 98%;
-        width: 98%;
-        margin: 1vh auto;
-    }
-    
-    .debug-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .debug-parameters-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .debug-parameters-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
 }
 
 @media (max-width: 768px) {
@@ -2824,20 +2420,8 @@ tbody tr.unowned .card-name {
     .data-management-buttons .btn {
         width: 100%;
     }
-    
-    .recognition-buttons {
-        flex-direction: column;
-    }
-    
-    .recognition-buttons .btn {
-        width: 100%;
-    }
-    
+        
     .confirm-buttons {
-        flex-direction: column;
-    }
-    
-    .recognition-actions {
         flex-direction: column;
     }
     
@@ -2926,12 +2510,6 @@ tbody tr.unowned .card-name {
     .main-content.has-selection th:nth-child(8) { width: 140px; }
     .main-content.has-selection th:nth-child(9) { width: 100px; }
     .main-content.has-selection th:nth-child(10) { width: 80px; }
-    
-    /* Recognition modal adjustments */
-    .recognition-modal {
-        max-width: 95%;
-        max-height: 90vh;
-    }
     
     .detected-card-checkbox {
         flex-direction: column;
@@ -3037,9 +2615,6 @@ tbody tr.unowned .card-name {
         font-size: 0.9rem;
     }
     
-    .recognition-section h5 {
-        font-size: 0.85rem;
-    }
     
     /* Ultra-mobile comparison adjustments */
     .comparison-header {
@@ -3191,42 +2766,7 @@ tbody tr.unowned .card-name {
         padding-right: 1rem;
         background-size: 0.5rem;
     }
-    
-    /* Mobile recognition adjustments */
-    .progress-text {
-        font-size: 0.8rem;
-    }
-    
-    .recognition-stats {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-    
-    .detected-card-checkbox {
-        padding: 0.5rem;
-    }
-    
-    .detected-card-name {
-        font-size: 0.85rem;
-    }
-    
-    .detected-card-details {
-        font-size: 0.75rem;
-    }
-    
-    /* Ultra-mobile debug adjustments */
-    .debug-modal-content {
-        max-width: 99%;
-        width: 99%;
-        max-height: 99vh;
-    }
-    
-    .debug-modal-header h2 {
-        font-size: 1.2rem;
-    }
-    
-    /* FIXED Issue 2: Ultra-mobile modal header adjustments */
+            
     .modal-close {
         right: 0.75rem; /* Further adjust for mobile */
         width: 28px;
@@ -3260,18 +2800,5 @@ tbody tr.unowned .card-name {
     
     .modal-card-counter {
         font-size: 0.8rem;
-    }
-    
-    .debug-canvas {
-        max-height: 150px;
-    }
-    
-    .debug-details {
-        font-size: 0.75rem;
-    }
-    
-    .debug-actions .btn {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.6rem;
     }
 }
