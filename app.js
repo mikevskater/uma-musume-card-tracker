@@ -1,4 +1,4 @@
-// Main Application Controller
+// Main Application Controller with Debug Integration
 // Coordinates all modules and handles initialization
 
 // Global data storage
@@ -189,7 +189,7 @@ function initializeMultiSelects() {
     });
 }
 
-// Initialize recognition interface
+// Initialize recognition interface with debug integration
 function initializeRecognitionInterface() {
     const scanBtn = document.getElementById('scanScreenshotBtn');
     const fileInput = document.getElementById('screenshotFile');
@@ -205,6 +205,14 @@ function initializeRecognitionInterface() {
         const file = e.target.files[0];
         if (file) {
             try {
+                // Log file info for debugging
+                console.log('📷 Processing screenshot:', {
+                    name: file.name,
+                    size: `${(file.size / 1024 / 1024).toFixed(2)}MB`,
+                    type: file.type,
+                    lastModified: new Date(file.lastModified).toISOString()
+                });
+                
                 const results = await processScreenshot(file);
                 if (results && results.length > 0) {
                     showRecognitionResults(results);
@@ -214,6 +222,19 @@ function initializeRecognitionInterface() {
             } catch (error) {
                 console.error('Screenshot processing failed:', error);
                 showToast('Failed to process screenshot', 'error');
+                
+                // Show debug info in console
+                console.error('Debug info for failed processing:', {
+                    file: file.name,
+                    error: error.message,
+                    stack: error.stack,
+                    recognitionState: {
+                        cvReady: recognitionState?.cvReady,
+                        tesseractReady: recognitionState?.tesseractReady,
+                        isProcessing: recognitionState?.isProcessing,
+                        templatesReady: recognitionState?.cardTemplates?.size || 0
+                    }
+                });
             }
         }
         e.target.value = ''; // Reset file input
@@ -237,6 +258,264 @@ function initializeRecognitionInterface() {
     });
 }
 
+// Initialize debug interface
+function initializeDebugInterface() {
+    console.log('🔧 Initializing debug interface...');
+    
+    // Debug modal event listeners
+    const calibrationDebugModal = document.getElementById('calibrationDebugModal');
+    const debugParametersModal = document.getElementById('debugParametersModal');
+    
+    if (calibrationDebugModal) {
+        // Calibration debug modal close handlers
+        document.getElementById('calibrationDebugClose').addEventListener('click', () => {
+            calibrationDebugModal.style.display = 'none';
+        });
+        
+        document.getElementById('calibrationDebugOverlay').addEventListener('click', () => {
+            calibrationDebugModal.style.display = 'none';
+        });
+        
+        // Debug action button handlers
+        const debugParametersBtn = document.getElementById('debugParametersBtn');
+        const debugRerunBtn = document.getElementById('debugRerunBtn');
+        const debugSaveBtn = document.getElementById('debugSaveBtn');
+        
+        if (debugParametersBtn) {
+            debugParametersBtn.addEventListener('click', () => {
+                showDebugParametersModal();
+            });
+        }
+        
+        if (debugRerunBtn) {
+            debugRerunBtn.addEventListener('click', async () => {
+                await rerunCalibrationWithCurrentParameters();
+            });
+        }
+        
+        if (debugSaveBtn) {
+            debugSaveBtn.addEventListener('click', () => {
+                saveDebugImages();
+            });
+        }
+    }
+    
+    // Initialize debug parameters modal if it exists
+    if (debugParametersModal) {
+        initializeDebugParametersModal();
+    }
+    
+    // Add debug console commands
+    if (typeof window !== 'undefined') {
+        window.debugRecognition = {
+            showLastCalibration: () => {
+                if (recognitionState?.debugData?.lastScreenshot) {
+                    showCalibrationDebugModal('Debug: Showing last calibration');
+                } else {
+                    console.log('No calibration data available. Run a screenshot recognition first.');
+                }
+            },
+            
+            adjustParameter: (param, value) => {
+                if (DEBUG_CONFIG.calibration.hasOwnProperty(param)) {
+                    const oldValue = DEBUG_CONFIG.calibration[param];
+                    DEBUG_CONFIG.calibration[param] = value;
+                    console.log(`🔧 Parameter ${param}: ${oldValue} → ${value}`);
+                } else {
+                    console.log('Available parameters:', Object.keys(DEBUG_CONFIG.calibration));
+                }
+            },
+            
+            getCurrentParams: () => {
+                console.log('Current debug parameters:', DEBUG_CONFIG.calibration);
+                return DEBUG_CONFIG.calibration;
+            },
+            
+            resetParams: () => {
+                // Reset to defaults
+                Object.assign(DEBUG_CONFIG.calibration, {
+                    cannyLow: 50,
+                    cannyHigh: 150,
+                    gaussianBlur: 5,
+                    minArea: 5000,
+                    maxArea: 100000,
+                    minAspectRatio: 0.6,
+                    maxAspectRatio: 0.9,
+                    maxVarianceThreshold: 1000,
+                    minCardsForCalibration: 3
+                });
+                console.log('🔄 Parameters reset to defaults');
+            },
+            
+            toggleDebug: () => {
+                DEBUG_CONFIG.enabled = !DEBUG_CONFIG.enabled;
+                console.log(`🐛 Debug mode: ${DEBUG_CONFIG.enabled ? 'ENABLED' : 'DISABLED'}`);
+            }
+        };
+        
+        console.log('🎮 Debug console commands available:');
+        console.log('   window.debugRecognition.showLastCalibration() - Show last calibration debug');
+        console.log('   window.debugRecognition.adjustParameter(param, value) - Adjust calibration parameters');
+        console.log('   window.debugRecognition.getCurrentParams() - Show current parameters');
+        console.log('   window.debugRecognition.resetParams() - Reset to defaults');
+        console.log('   window.debugRecognition.toggleDebug() - Toggle debug mode');
+    }
+    
+    console.log('✅ Debug interface initialized');
+}
+
+// Show debug parameters modal
+function showDebugParametersModal() {
+    const modal = document.getElementById('debugParametersModal');
+    if (!modal) {
+        console.warn('Debug parameters modal not found');
+        return;
+    }
+    
+    // Update slider values
+    const params = DEBUG_CONFIG.calibration;
+    
+    // Set slider values and update displays
+    Object.entries(params).forEach(([key, value]) => {
+        const slider = document.getElementById(`debug${key.charAt(0).toUpperCase() + key.slice(1)}`);
+        const display = document.getElementById(`debug${key.charAt(0).toUpperCase() + key.slice(1)}Value`);
+        
+        if (slider && display) {
+            slider.value = value;
+            display.textContent = value;
+        }
+    });
+    
+    modal.style.display = 'block';
+}
+
+// Initialize debug parameters modal
+function initializeDebugParametersModal() {
+    const modal = document.getElementById('debugParametersModal');
+    
+    // Close handlers
+    document.getElementById('debugParametersClose').addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    
+    document.getElementById('debugParametersOverlay').addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    
+    // Parameter slider handlers
+    const parameterInputs = [
+        'debugCannyLow', 'debugCannyHigh', 'debugGaussianBlur',
+        'debugMinArea', 'debugMaxArea', 'debugMinAspectRatio', 'debugMaxAspectRatio'
+    ];
+    
+    parameterInputs.forEach(inputId => {
+        const slider = document.getElementById(inputId);
+        const display = document.getElementById(inputId + 'Value');
+        
+        if (slider && display) {
+            slider.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                display.textContent = value;
+                
+                // Update DEBUG_CONFIG
+                const paramName = inputId.replace('debug', '').charAt(0).toLowerCase() + inputId.replace('debug', '').slice(1);
+                DEBUG_CONFIG.calibration[paramName] = value;
+                
+                console.log(`🔧 Parameter ${paramName} updated to: ${value}`);
+            });
+        }
+    });
+    
+    // Reset button
+    document.getElementById('debugParametersReset').addEventListener('click', () => {
+        // Reset to defaults and update UI
+        window.debugRecognition.resetParams();
+        showDebugParametersModal(); // Refresh the modal with default values
+    });
+    
+    // Apply button
+    document.getElementById('debugParametersApply').addEventListener('click', async () => {
+        modal.style.display = 'none';
+        showToast('Parameters updated! Try scanning a screenshot to see the changes.', 'success');
+    });
+}
+
+// Rerun calibration with current parameters
+async function rerunCalibrationWithCurrentParameters() {
+    if (!recognitionState?.debugData?.lastScreenshot) {
+        showToast('No screenshot data available to rerun calibration', 'warning');
+        return;
+    }
+    
+    try {
+        showToast('Rerunning calibration with current parameters...', 'info');
+        
+        // Clone the last screenshot
+        const screenshot = recognitionState.debugData.lastScreenshot.clone();
+        
+        // Run calibration again
+        const success = await calibrateCardDimensions(screenshot);
+        
+        showToast(`Calibration ${success ? 'completed' : 'failed'} with updated parameters`, 
+                  success ? 'success' : 'error');
+        
+        // Clean up
+        screenshot.delete();
+        
+    } catch (error) {
+        console.error('Failed to rerun calibration:', error);
+        showToast(`Failed to rerun calibration: ${error.message}`, 'error');
+    }
+}
+
+// Save debug images
+function saveDebugImages() {
+    if (!recognitionState?.debugData?.calibrationSteps) {
+        showToast('No debug images available to save', 'warning');
+        return;
+    }
+    
+    try {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        let savedCount = 0;
+        
+        // Save each debug step
+        Object.entries(recognitionState.debugData.calibrationSteps).forEach(([stepName, mat]) => {
+            if (mat && typeof mat.delete === 'function') {
+                const canvas = document.createElement('canvas');
+                canvas.width = mat.cols;
+                canvas.height = mat.rows;
+                
+                try {
+                    cv.imshow(canvas, mat);
+                    
+                    // Convert to blob and download
+                    canvas.toBlob((blob) => {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `debug_${stepName}_${timestamp}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    });
+                    
+                    savedCount++;
+                } catch (error) {
+                    console.warn(`Failed to save debug image for ${stepName}:`, error);
+                }
+            }
+        });
+        
+        showToast(`Saved ${savedCount} debug images`, 'success');
+        
+    } catch (error) {
+        console.error('Failed to save debug images:', error);
+        showToast(`Failed to save debug images: ${error.message}`, 'error');
+    }
+}
+
 // Initialize interface
 async function initializeInterface() {
     try {
@@ -254,6 +533,9 @@ async function initializeInterface() {
         
         // Initialize recognition interface
         initializeRecognitionInterface();
+        
+        // Initialize debug interface
+        initializeDebugInterface();
 
         // Add event listeners for filters
         document.getElementById('nameFilter').addEventListener('input', debouncedFilterAndSort);
@@ -314,6 +596,12 @@ async function initializeInterface() {
                 closeCardDetails();
                 document.getElementById('confirmModal').style.display = 'none';
                 document.getElementById('recognitionModal').style.display = 'none';
+                
+                // Close debug modals
+                const calibrationDebugModal = document.getElementById('calibrationDebugModal');
+                const debugParametersModal = document.getElementById('debugParametersModal');
+                if (calibrationDebugModal) calibrationDebugModal.style.display = 'none';
+                if (debugParametersModal) debugParametersModal.style.display = 'none';
             }
         });
 
@@ -321,6 +609,14 @@ async function initializeInterface() {
         filterAndSortCards();
         
         console.log('Interface initialized successfully');
+        
+        // Show debug info in console
+        console.log('🎯 Uma Musume Support Card Tracker Ready!');
+        console.log('📊 Features loaded:');
+        console.log('   ✅ Card collection tracking');
+        console.log('   ✅ Multi-layer sorting & filtering');
+        console.log('   ✅ Screenshot recognition with auto-calibration');
+        console.log('   🐛 Debug mode enabled - check console commands');
         
     } catch (error) {
         console.error('Failed to initialize interface:', error);
@@ -344,6 +640,11 @@ async function initializeApplication() {
         
         console.log('Application initialized successfully');
         
+        // Check for OpenCV availability and warn if not ready
+        if (typeof cv === 'undefined') {
+            console.warn('⚠️ OpenCV.js is still loading. Screenshot recognition will be available once loaded.');
+        }
+        
     } catch (error) {
         console.error('Application initialization failed:', error);
         
@@ -354,6 +655,39 @@ async function initializeApplication() {
         errorDiv.textContent = `Failed to initialize application: ${error.message}`;
     }
 }
+
+// Enhanced error handler for debugging
+window.addEventListener('error', (event) => {
+    console.error('🚨 Global error caught:', {
+        message: event.error?.message || event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        stack: event.error?.stack,
+        timestamp: new Date().toISOString()
+    });
+    
+    // Check if it's an OpenCV related error
+    if (event.error?.message?.includes('cv') || event.filename?.includes('opencv')) {
+        console.warn('🔍 This appears to be an OpenCV-related error. Make sure OpenCV.js is properly loaded.');
+    }
+});
+
+// Enhanced unhandled promise rejection handler
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('🚨 Unhandled promise rejection:', {
+        reason: event.reason,
+        promise: event.promise,
+        timestamp: new Date().toISOString()
+    });
+    
+    // Check if it's a recognition-related error
+    if (event.reason?.message?.includes('recognition') || 
+        event.reason?.message?.includes('calibration') ||
+        event.reason?.message?.includes('template')) {
+        console.warn('🔍 This appears to be recognition-related. Check if OpenCV.js and Tesseract.js are loaded.');
+    }
+});
 
 // Load application when page loads
 document.addEventListener('DOMContentLoaded', () => {
