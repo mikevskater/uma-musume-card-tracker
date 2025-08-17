@@ -21,7 +21,9 @@ let multiSort = []; // Array of { category, option, direction } objects
 let advancedFilters = {
     effects: {}, // effectId: { min: value, max: value }
     hintSkills: [], // array of skill IDs
-    eventSkills: [] // array of skill IDs
+    eventSkills: [], // array of skill IDs
+    includeSkillTypes: [], // array of skill type IDs to include
+    excludeSkillTypes: [] // array of skill type IDs to exclude
 };
 
 // Initialize advanced filters UI
@@ -135,7 +137,7 @@ function setShowMaxPotentialLevels(showMax) {
 
 // Initialize multi-select dropdown functionality
 function initializeMultiSelects() {
-    const multiSelects = ['rarityFilter', 'typeFilter', 'hintSkillFilter', 'eventSkillFilter'];
+    const multiSelects = ['rarityFilter', 'typeFilter', 'hintSkillFilter', 'eventSkillFilter', 'includeSkillTypeFilter', 'excludeSkillTypeFilter'];
     
     multiSelects.forEach(id => {
         const multiSelect = document.getElementById(id);
@@ -166,6 +168,8 @@ function initializeMultiSelects() {
                     case 'typeFilter': defaultText = 'All Types'; break;
                     case 'hintSkillFilter': defaultText = 'Any Hint Skills'; break;
                     case 'eventSkillFilter': defaultText = 'Any Event Skills'; break;
+                    case 'includeSkillTypeFilter': defaultText = 'Any Skill Types'; break;
+                    case 'excludeSkillTypeFilter': defaultText = 'No Exclusions'; break;
                 }
                 updateMultiSelectText(id, defaultText);
                 
@@ -275,6 +279,7 @@ async function initializeInterface() {
         console.log('📊 Features loaded:');
         console.log('   ✅ Card collection tracking');
         console.log('   ✅ Multi-layer sorting & filtering');
+        console.log('   ✅ Skill type filtering');
         
     } catch (error) {
         console.error('Failed to initialize interface:', error);

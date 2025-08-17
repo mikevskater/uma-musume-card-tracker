@@ -249,6 +249,9 @@ function handleCardImageError(img) {
 
 // Render card table
 function renderCards(cards = cardData) {
+    // FIXED Issue 1: Store the filtered cards for modal navigation
+    currentFilteredCards = cards;
+    
     const tbody = document.getElementById('cardTableBody');
     tbody.innerHTML = '';
 
@@ -574,6 +577,32 @@ function renderActiveFilters(filteredCount, totalCount) {
         });
     }
     
+    if (advancedFilters.includeSkillTypes.length > 0) {
+        const typeNames = advancedFilters.includeSkillTypes.map(typeId => getSkillTypeDescription(typeId));
+        chips.push({
+            type: 'includeSkillTypes',
+            label: `Include Types: ${typeNames.join(', ')}`,
+            remove: () => {
+                advancedFilters.includeSkillTypes = [];
+                document.querySelectorAll('#includeSkillTypeDropdown input').forEach(input => input.checked = false);
+                updateMultiSelectText('includeSkillTypeFilter', 'Any Skill Types');
+            }
+        });
+    }
+    
+    if (advancedFilters.excludeSkillTypes.length > 0) {
+        const typeNames = advancedFilters.excludeSkillTypes.map(typeId => getSkillTypeDescription(typeId));
+        chips.push({
+            type: 'excludeSkillTypes',
+            label: `Exclude Types: ${typeNames.join(', ')}`,
+            remove: () => {
+                advancedFilters.excludeSkillTypes = [];
+                document.querySelectorAll('#excludeSkillTypeDropdown input').forEach(input => input.checked = false);
+                updateMultiSelectText('excludeSkillTypeFilter', 'No Exclusions');
+            }
+        });
+    }
+    
     // Render chips
     filterChips.innerHTML = chips.map(chip => `
         <div class="filter-chip" data-filter-type="${chip.type}">
@@ -626,19 +655,19 @@ function openCardDetails(cardId) {
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
     
-    // FIXED: Ensure we're using the most current filtered cards
-    // currentFilteredCards should already be set by renderCards(), but double-check
+    // FIXED Issue 1: currentFilteredCards is now properly set by renderCards()
+    // Validate that we have the filtered cards
     if (!currentFilteredCards || currentFilteredCards.length === 0) {
-        console.warn('No filtered cards available, using full dataset');
-        currentFilteredCards = cardData;
+        console.warn('No filtered cards available, this should not happen');
+        currentFilteredCards = cardData; // Fallback to prevent errors
     }
     
     // Find the card's index in the current filtered results
     currentModalCardIndex = currentFilteredCards.findIndex(c => c.support_id === cardId);
     
     if (currentModalCardIndex === -1) {
-        console.warn(`Card ${cardId} not found in current filter. Showing single card.`);
-        // This shouldn't happen if the modal was opened from the table, but handle gracefully
+        console.warn(`Card ${cardId} not found in current filter. This should not happen if opened from table.`);
+        // If for some reason the card isn't in filtered results, add it as single item
         currentFilteredCards = [card];
         currentModalCardIndex = 0;
     }
@@ -679,23 +708,27 @@ function renderCardDetails(card, level) {
     const totalCards = currentFilteredCards.length;
     const cardPosition = currentModalCardIndex + 1;
     
-    // FIXED: Better modal header layout with proper centering
+    // FIXED Issue 2: Better modal header layout with more structured divs
     modalTitle.innerHTML = `
-        <div style="display: flex; align-items: center; width: 100%; position: relative;">
-            <button class="modal-nav-btn" id="modalPrevBtn" style="position: absolute; left: 0;" ${totalCards <= 1 ? 'disabled' : ''}>
-                &#8249;
-            </button>
-            <div style="flex: 1; text-align: center; padding: 0 60px;">
-                <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem;">
+        <div class="modal-header-wrapper">
+            <div class="modal-nav-section modal-nav-left">
+                <button class="modal-nav-btn" id="modalPrevBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+                    &#8249;
+                </button>
+            </div>
+            <div class="modal-title-section">
+                <div class="modal-card-name">
                     ${card.char_name || 'Unknown Card'}
                 </div>
-                <div style="font-size: 0.85rem; opacity: 0.8;">
+                <div class="modal-card-counter">
                     ${cardPosition} of ${totalCards}
                 </div>
             </div>
-            <button class="modal-nav-btn" id="modalNextBtn" style="position: absolute; right: 0;" ${totalCards <= 1 ? 'disabled' : ''}>
-                &#8250;
-            </button>
+            <div class="modal-nav-section modal-nav-right">
+                <button class="modal-nav-btn" id="modalNextBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+                    &#8250;
+                </button>
+            </div>
         </div>
     `;
     

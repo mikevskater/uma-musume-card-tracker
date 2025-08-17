@@ -1507,11 +1507,14 @@ tbody tr.unowned .card-name {
     justify-content: space-between;
     align-items: center;
     border-radius: 12px 12px 0 0;
+    position: relative; /* Added for absolute positioning of close button */
 }
 
 .modal-header h2 {
     margin: 0;
     font-size: 1.5rem;
+    flex: 1; /* Take full width */
+    width: 100%; /* Ensure full width */
 }
 
 .modal-close {
@@ -1528,10 +1531,66 @@ tbody tr.unowned .card-name {
     justify-content: center;
     border-radius: 4px;
     transition: background-color 0.2s;
+    position: absolute; /* Position absolutely */
+    top: 50%; /* Center vertically */
+    right: 1.5rem; /* Position from right edge */
+    transform: translateY(-50%); /* Perfect vertical centering */
+    z-index: 10; /* Ensure it's above other content */
 }
 
 .modal-close:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* FIXED Issue 2: Better Modal Header Layout Structure */
+.modal-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 48px; /* Ensure minimum height for buttons */
+}
+
+.modal-nav-section {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 100%;
+}
+
+.modal-nav-left {
+    justify-content: flex-start;
+}
+
+.modal-nav-right {
+    justify-content: flex-end;
+    margin-right: 50px; /* Push right button inward to avoid close button */
+}
+
+.modal-title-section {
+    flex: 1;
+    text-align: center;
+    min-width: 0; /* Allow text to shrink */
+    padding: 0 10px; /* Small padding for breathing room */
+    /* Add padding to account for close button */
+    padding-right: 50px; /* Space for close button */
+}
+
+.modal-card-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-counter {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    white-space: nowrap;
 }
 
 /* Modal Navigation Button Styles */
@@ -2124,13 +2183,41 @@ tbody tr.unowned .card-name {
         padding: 1rem;
     }
     
-    /* Modal header responsive adjustments */
+    /* FIXED Issue 2: Modal header responsive adjustments */
     .modal-header {
         padding: 0.75rem 1rem;
     }
     
     .modal-header h2 {
         font-size: 1.2rem;
+    }
+    
+    .modal-close {
+        right: 1rem; /* Adjust close button position for smaller screens */
+    }
+    
+    .modal-nav-section {
+        width: 50px;
+    }
+    
+    .modal-nav-right {
+        margin-right: 45px; /* Adjust for smaller close button on tablet */
+    }
+    
+    .modal-title-section {
+        padding: 0 8px;
+        padding-right: 45px; /* Adjust for smaller close button */
+    }
+    
+    .modal-card-name {
+        font-size: 1.1rem;
+    }
+    
+    .modal-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+        padding: 0.25rem;
     }
     
     .card-detail-header {
@@ -2450,17 +2537,40 @@ tbody tr.unowned .card-name {
         font-size: 1.2rem;
     }
     
-    /* Mobile modal navigation adjustments */
-    .modal-nav-btn {
-        width: 40px;
-        height: 40px;
+    /* FIXED Issue 2: Ultra-mobile modal header adjustments */
+    .modal-close {
+        right: 0.75rem; /* Further adjust for mobile */
+        width: 28px;
+        height: 28px;
         font-size: 1.5rem;
-        padding: 0.25rem;
     }
     
-    /* Adjust padding for mobile modal header */
-    .modal-header div[style*="padding: 0 60px"] {
-        padding: 0 50px !important;
+    .modal-nav-section {
+        width: 45px;
+    }
+    
+    .modal-nav-right {
+        margin-right: 35px; /* Adjust for smaller close button on mobile */
+    }
+    
+    .modal-title-section {
+        padding: 0 5px;
+        padding-right: 35px; /* Adjust for smaller close button */
+    }
+    
+    .modal-nav-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.3rem;
+        padding: 0.2rem;
+    }
+    
+    .modal-card-name {
+        font-size: 1rem;
+    }
+    
+    .modal-card-counter {
+        font-size: 0.8rem;
     }
     
     .debug-canvas {
@@ -2474,22 +2584,5 @@ tbody tr.unowned .card-name {
     .debug-actions .btn {
         font-size: 0.8rem;
         padding: 0.4rem 0.6rem;
-    }
-    
-    /* Ultra-mobile modal navigation adjustments */
-    .modal-nav-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1.3rem;
-        padding: 0.2rem;
-    }
-    
-    .modal-header h2 {
-        font-size: 1rem;
-    }
-    
-    /* Adjust padding for ultra-mobile modal header */
-    .modal-header div[style*="padding: 0 60px"] {
-        padding: 0 45px !important;
     }
 }
