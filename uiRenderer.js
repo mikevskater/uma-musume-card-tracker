@@ -626,12 +626,21 @@ function openCardDetails(cardId) {
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
     
+    // FIXED: Ensure we're using the most current filtered cards
+    // currentFilteredCards should already be set by renderCards(), but double-check
+    if (!currentFilteredCards || currentFilteredCards.length === 0) {
+        console.warn('No filtered cards available, using full dataset');
+        currentFilteredCards = cardData;
+    }
+    
     // Find the card's index in the current filtered results
     currentModalCardIndex = currentFilteredCards.findIndex(c => c.support_id === cardId);
+    
     if (currentModalCardIndex === -1) {
-        // Fallback: if card not found in filtered results, use full dataset
-        currentFilteredCards = cardData;
-        currentModalCardIndex = cardData.findIndex(c => c.support_id === cardId);
+        console.warn(`Card ${cardId} not found in current filter. Showing single card.`);
+        // This shouldn't happen if the modal was opened from the table, but handle gracefully
+        currentFilteredCards = [card];
+        currentModalCardIndex = 0;
     }
     
     currentModalCard = card;
@@ -670,18 +679,21 @@ function renderCardDetails(card, level) {
     const totalCards = currentFilteredCards.length;
     const cardPosition = currentModalCardIndex + 1;
     
+    // FIXED: Better modal header layout with proper centering
     modalTitle.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <button class="modal-nav-btn" id="modalPrevBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+        <div style="display: flex; align-items: center; width: 100%; position: relative;">
+            <button class="modal-nav-btn" id="modalPrevBtn" style="position: absolute; left: 0;" ${totalCards <= 1 ? 'disabled' : ''}>
                 &#8249;
             </button>
-            <div style="text-align: center; flex: 1;">
-                <div>${card.char_name || 'Unknown Card'}</div>
-                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
+            <div style="flex: 1; text-align: center; padding: 0 60px;">
+                <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem;">
+                    ${card.char_name || 'Unknown Card'}
+                </div>
+                <div style="font-size: 0.85rem; opacity: 0.8;">
                     ${cardPosition} of ${totalCards}
                 </div>
             </div>
-            <button class="modal-nav-btn" id="modalNextBtn" ${totalCards <= 1 ? 'disabled' : ''}>
+            <button class="modal-nav-btn" id="modalNextBtn" style="position: absolute; right: 0;" ${totalCards <= 1 ? 'disabled' : ''}>
                 &#8250;
             </button>
         </div>

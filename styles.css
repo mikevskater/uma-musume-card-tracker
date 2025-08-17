@@ -1550,6 +1550,7 @@ tbody tr.unowned .card-name {
     border-radius: 50%;
     transition: background-color 0.2s ease;
     user-select: none;
+    z-index: 10; /* Ensure buttons are above other content */
 }
 
 .modal-nav-btn:hover:not(:disabled) {
@@ -2457,6 +2458,11 @@ tbody tr.unowned .card-name {
         padding: 0.25rem;
     }
     
+    /* Adjust padding for mobile modal header */
+    .modal-header div[style*="padding: 0 60px"] {
+        padding: 0 50px !important;
+    }
+    
     .debug-canvas {
         max-height: 150px;
     }
@@ -2480,5 +2486,10 @@ tbody tr.unowned .card-name {
     
     .modal-header h2 {
         font-size: 1rem;
+    }
+    
+    /* Adjust padding for ultra-mobile modal header */
+    .modal-header div[style*="padding: 0 60px"] {
+        padding: 0 45px !important;
     }
 }
