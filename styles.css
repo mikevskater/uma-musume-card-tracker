@@ -1403,6 +1403,45 @@ tbody tr.unowned .card-name {
     opacity: 0.7;
 }
 
+/* ADDED: LB Select Dropdown Styles */
+.lb-select {
+    width: 70px;
+    padding: 0.3rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background-color: white;
+    cursor: pointer;
+    text-align: center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 0.6rem;
+    padding-right: 1.5rem;
+}
+
+.lb-select:hover:not(:disabled) {
+    border-color: #bbb;
+    background-color: #f8f9fa;
+}
+
+.lb-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.lb-select:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+    border-color: #e9ecef;
+}
+
 .max-potential-indicator {
     background-color: #28a745;
     color: white;
@@ -2165,6 +2204,14 @@ tbody tr.unowned .card-name {
         width: 50px;
     }
     
+    /* Mobile LB select adjustments */
+    .lb-select {
+        width: 60px;
+        font-size: 0.7rem;
+        padding: 0.2rem;
+        padding-right: 1.2rem;
+    }
+    
     /* Recognition modal adjustments */
     .recognition-modal {
         max-width: 95%;
@@ -2317,6 +2364,15 @@ tbody tr.unowned .card-name {
     /* Mobile table row height adjustments */
     tbody tr {
         height: 45px;
+    }
+    
+    /* Mobile LB select ultra-small adjustments */
+    .lb-select {
+        width: 55px;
+        font-size: 0.65rem;
+        padding: 0.15rem;
+        padding-right: 1rem;
+        background-size: 0.5rem;
     }
     
     /* Mobile recognition adjustments */

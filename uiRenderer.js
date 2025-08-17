@@ -168,17 +168,17 @@ function clearAllSorts() {
     debouncedFilterAndSort();
 }
 
-// Get priority effects for display based on sort configuration
+// Get priority effects for display based on sort configuration - FIXED: Now filters out locked effects
 function getPriorityEffects(card, targetCount = 4) {
     const cardLevel = getEffectiveLevel(card);
     const priorityEffects = [];
     const usedEffectIds = new Set();
     
-    // Add effects from sort configuration first
+    // Add effects from sort configuration first (only if unlocked)
     multiSort.forEach(sort => {
         if (sort.category === 'effect' && sort.option && !usedEffectIds.has(parseInt(sort.option))) {
             const effectArray = card.effects?.find(effect => effect[0] == sort.option);
-            if (effectArray) {
+            if (effectArray && !isEffectLocked(effectArray, cardLevel)) {
                 const value = calculateEffectValue(effectArray, cardLevel);
                 const effectName = getEffectName(sort.option);
                 const symbol = effectsData[sort.option]?.symbol === 'percent' ? '%' : '';
@@ -188,10 +188,11 @@ function getPriorityEffects(card, targetCount = 4) {
         }
     });
     
-    // Fill remaining slots with highest value effects not already included
+    // Fill remaining slots with highest value effects not already included (only unlocked)
     if (priorityEffects.length < targetCount && card.effects) {
         const remainingEffects = card.effects
             .filter(effect => effect[0] && effectsData[effect[0]] && !usedEffectIds.has(effect[0]))
+            .filter(effect => !isEffectLocked(effect, cardLevel)) // FIXED: Filter out locked effects
             .map(effect => {
                 const value = calculateEffectValue(effect, cardLevel);
                 const effectName = getEffectName(effect[0]);
@@ -256,8 +257,8 @@ function renderCards(cards = cardData) {
         row.className = isOwned ? 'owned' : 'unowned';
         row.style.cursor = 'pointer';
         row.addEventListener('click', (e) => {
-            // Don't open modal if clicking on checkbox or input
-            if (e.target.type !== 'checkbox' && e.target.type !== 'number') {
+            // Don't open modal if clicking on checkbox, input, or select
+            if (e.target.type !== 'checkbox' && e.target.type !== 'number' && e.target.tagName !== 'SELECT') {
                 openCardDetails(cardId);
             }
         });
@@ -271,7 +272,7 @@ function renderCards(cards = cardData) {
             `${effectiveLevel} <span class="max-potential-indicator">MAX</span>` : 
             effectiveLevel;
         
-        // Get priority effects based on sort configuration
+        // Get priority effects based on sort configuration (now filtered for unlocked only)
         const priorityEffects = getPriorityEffects(card, 4);
         const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
 
@@ -284,6 +285,18 @@ function renderCards(cards = cardData) {
         const shouldDisableLevel = !isOwned && globalLimitBreakLevel === null ||
                                   globalLimitBreakLevel !== null && 
                                   (globalLimitBreakOverrideOwned || !isOwned);
+
+        // Determine if LB select should be disabled
+        const shouldDisableLB = !isOwned && globalLimitBreakLevel === null ||
+                               globalLimitBreakLevel !== null && 
+                               (globalLimitBreakOverrideOwned || !isOwned);
+
+        // FIXED: Create LB dropdown instead of plain text
+        const lbDropdownOptions = Array.from({length: 5}, (_, i) => 
+            `<option value="${i}" ${currentLimitBreak === i ? 'selected' : ''}>LB ${i}</option>`
+        ).join('');
+
+        const lbDropdown = `<select class="lb-select" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLB ? 'disabled' : ''}>${lbDropdownOptions}</select>`;
 
         row.innerHTML = `
             <td class="ownership-checkbox">
@@ -300,7 +313,7 @@ function renderCards(cards = cardData) {
             <td><span class="rarity rarity-${card.rarity}">${['', 'R', 'SR', 'SSR'][card.rarity]}</span></td>
             <td><span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span></td>
             <td><input type="number" class="level-input" value="${effectiveLevel}" min="1" max="${limitBreaks[card.rarity][currentLimitBreak]}" data-card-id="${cardId}" onclick="event.stopPropagation()" ${shouldDisableLevel ? 'disabled' : ''}></td>
-            <td>${currentLimitBreak}</td>
+            <td>${lbDropdown}</td>
             <td class="effects-summary">${mainEffectsDisplay}</td>
             <td class="effects-summary">${hintSkills}</td>
             <td>${card.release_en || 'Unreleased'}</td>
@@ -321,23 +334,37 @@ function renderCards(cards = cardData) {
             row.className = owned ? 'owned' : 'unowned';
             
             const levelInput = row.querySelector('.level-input');
+            const lbSelect = row.querySelector('.lb-select');
             const shouldDisableLevel = !owned && globalLimitBreakLevel === null ||
                                       globalLimitBreakLevel !== null && 
                                       (globalLimitBreakOverrideOwned || !owned);
+            const shouldDisableLB = !owned && globalLimitBreakLevel === null ||
+                                   globalLimitBreakLevel !== null && 
+                                   (globalLimitBreakOverrideOwned || !owned);
+            
             levelInput.disabled = shouldDisableLevel;
+            lbSelect.disabled = shouldDisableLB;
             
             if (owned) {
                 levelInput.value = getOwnedCardLevel(cardId);
+                lbSelect.value = getOwnedCardLimitBreak(cardId);
             } else {
                 const card = cardData.find(c => c.support_id === cardId);
                 levelInput.value = getEffectiveLevel(card);
+                lbSelect.value = 2; // Default LB
             }
             updateCardDisplay(levelInput);
         });
     });
 
-    // Add event listeners for level inputs
+    // FIXED: Add both 'input' and 'change' event listeners for level inputs for real-time updates
     document.querySelectorAll('.level-input').forEach(input => {
+        // Real-time updates while typing
+        input.addEventListener('input', (e) => {
+            updateCardDisplay(e.target);
+        });
+        
+        // Final update when done editing
         input.addEventListener('change', (e) => {
             updateCardDisplay(e.target);
             
@@ -346,6 +373,33 @@ function renderCards(cards = cardData) {
             if (isCardOwned(cardId) && 
                 (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
                 setOwnedCardLevel(cardId, parseInt(e.target.value));
+            }
+        });
+    });
+
+    // FIXED: Add event listeners for LB dropdown changes
+    document.querySelectorAll('.lb-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const cardId = parseInt(e.target.dataset.cardId);
+            const newLimitBreak = parseInt(e.target.value);
+            
+            if (isCardOwned(cardId) && 
+                (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
+                setOwnedCardLimitBreak(cardId, newLimitBreak);
+                
+                // Update level input max value
+                const card = cardData.find(c => c.support_id === cardId);
+                const maxLevel = limitBreaks[card.rarity][newLimitBreak];
+                const levelInput = e.target.closest('tr').querySelector('.level-input');
+                levelInput.max = maxLevel;
+                
+                // Update current level if it exceeds new max
+                if (parseInt(levelInput.value) > maxLevel) {
+                    levelInput.value = maxLevel;
+                    setOwnedCardLevel(cardId, maxLevel);
+                }
+                
+                updateCardDisplay(levelInput);
             }
         });
     });
@@ -363,10 +417,13 @@ function updateCardDisplay(input) {
     const isOwned = isCardOwned(cardId);
     const currentLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
     
-    // Update limit break display (show current LB, not calculated from level)
-    row.children[6].textContent = currentLimitBreak;
+    // Update limit break display (the dropdown should already show current LB)
+    const lbSelect = row.querySelector('.lb-select');
+    if (lbSelect && lbSelect.value != currentLimitBreak) {
+        lbSelect.value = currentLimitBreak;
+    }
     
-    // Recalculate and update priority effects
+    // Recalculate and update priority effects (now filtered for unlocked only)
     const priorityEffects = getPriorityEffects(card, 4);
     const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
     row.children[7].innerHTML = mainEffectsDisplay;
@@ -726,7 +783,7 @@ function setupModalEventListeners(card, cardId, isOwned) {
         }
     });
     
-    // Modal limit break select
+    // FIXED: Modal limit break select - now also updates table LB dropdown max value
     const modalLimitBreakSelect = document.getElementById('modalLimitBreakSelect');
     modalLimitBreakSelect.addEventListener('change', (e) => {
         const newLimitBreak = parseInt(e.target.value);
@@ -748,11 +805,16 @@ function setupModalEventListeners(card, cardId, isOwned) {
             
             updateModalDisplay(parseInt(modalLevelInput.value));
             
-            // Update table display
+            // FIXED: Update table display - both level input max and LB dropdown value
             const tableInput = document.querySelector(`input[data-card-id="${cardId}"]`);
+            const tableLBSelect = document.querySelector(`select[data-card-id="${cardId}"]`);
             if (tableInput) {
+                tableInput.max = maxLevel; // Update max attribute
                 tableInput.value = parseInt(modalLevelInput.value);
                 updateCardDisplay(tableInput);
+            }
+            if (tableLBSelect) {
+                tableLBSelect.value = newLimitBreak; // Update LB dropdown
             }
         }
     });
