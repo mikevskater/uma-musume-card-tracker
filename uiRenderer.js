@@ -191,9 +191,10 @@ function clearAllSorts() {
     debouncedFilterAndSort();
 }
 
-// Get priority effects for display based on sort configuration - FIXED: Now filters out locked effects
-function getPriorityEffects(card, targetCount = 4) {
-    const cardLevel = getEffectiveLevel(card);
+// FIXED: Get priority effects for display based on sort configuration - Now accepts optional level override
+function getPriorityEffects(card, targetCount = 4, overrideLevel = null) {
+    // Use override level if provided, otherwise get the effective level from card data
+    const cardLevel = overrideLevel !== null ? overrideLevel : getEffectiveLevel(card);
     const priorityEffects = [];
     const usedEffectIds = new Set();
     
@@ -215,7 +216,7 @@ function getPriorityEffects(card, targetCount = 4) {
     if (priorityEffects.length < targetCount && card.effects) {
         const remainingEffects = card.effects
             .filter(effect => effect[0] && effectsData[effect[0]] && !usedEffectIds.has(effect[0]))
-            .filter(effect => !isEffectLocked(effect, cardLevel)) // FIXED: Filter out locked effects
+            .filter(effect => !isEffectLocked(effect, cardLevel)) // Filter out locked effects
             .map(effect => {
                 const value = calculateEffectValue(effect, cardLevel);
                 const effectName = getEffectName(effect[0]);
@@ -268,7 +269,7 @@ function handleCardImageError(img) {
 
 // Render card table
 function renderCards(cards = cardData) {
-    // FIXED Issue 1: Store the filtered cards for modal navigation
+    // Store the filtered cards for modal navigation
     currentFilteredCards = cards;
     
     const tbody = document.getElementById('cardTableBody');
@@ -302,7 +303,7 @@ function renderCards(cards = cardData) {
         // Get effective level for display
         const effectiveLevel = getEffectiveLevel(card);
         
-        // FIXED: Determine which LB to display - respect global override settings
+        // Determine which LB to display - respect global override settings
         let displayLimitBreak;
         if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
             displayLimitBreak = globalLimitBreakLevel;
@@ -315,8 +316,8 @@ function renderCards(cards = cardData) {
             `${effectiveLevel} <span class="max-potential-indicator">MAX</span>` : 
             effectiveLevel;
         
-        // Get priority effects based on sort configuration (now filtered for unlocked only)
-        const priorityEffects = getPriorityEffects(card, 4);
+        // FIXED: Get priority effects based on sort configuration using current effective level
+        const priorityEffects = getPriorityEffects(card, 4, effectiveLevel);
         const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
 
         // Get hint skills
@@ -334,7 +335,7 @@ function renderCards(cards = cardData) {
                                globalLimitBreakLevel !== null && 
                                (globalLimitBreakOverrideOwned || !isOwned);
 
-        // FIXED: Create LB dropdown instead of plain text
+        // Create LB dropdown instead of plain text
         const lbDropdownOptions = Array.from({length: 5}, (_, i) => 
             `<option value="${i}" ${displayLimitBreak === i ? 'selected' : ''}>LB ${i}</option>`
         ).join('');
@@ -421,7 +422,7 @@ function renderCards(cards = cardData) {
         });
     });
 
-    // FIXED: Add event listeners for LB dropdown changes
+    // Add event listeners for LB dropdown changes
     document.querySelectorAll('.lb-select').forEach(select => {
         select.addEventListener('change', (e) => {
             const cardId = parseInt(e.target.dataset.cardId);
@@ -449,7 +450,7 @@ function renderCards(cards = cardData) {
     });
 }
 
-// Update card display when level changes
+// FIXED: Update card display when level changes - Now passes typed level to getPriorityEffects
 function updateCardDisplay(input) {
     const cardId = parseInt(input.dataset.cardId);
     const level = parseInt(input.value);
@@ -460,7 +461,7 @@ function updateCardDisplay(input) {
     const row = input.closest('tr');
     const isOwned = isCardOwned(cardId);
     
-    // FIXED: Determine which LB to display - respect global override settings
+    // Determine which LB to display - respect global override settings
     let displayLimitBreak;
     if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
         displayLimitBreak = globalLimitBreakLevel;
@@ -474,8 +475,8 @@ function updateCardDisplay(input) {
         lbSelect.value = displayLimitBreak;
     }
     
-    // Recalculate and update priority effects (now filtered for unlocked only)
-    const priorityEffects = getPriorityEffects(card, 4);
+    // FIXED: Recalculate and update priority effects using the typed level
+    const priorityEffects = getPriorityEffects(card, 4, level);
     const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
     row.children[7].innerHTML = mainEffectsDisplay;
     
@@ -685,7 +686,6 @@ function openCardDetails(cardId) {
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
     
-    // FIXED Issue 1: currentFilteredCards is now properly set by renderCards()
     // Validate that we have the filtered cards
     if (!currentFilteredCards || currentFilteredCards.length === 0) {
         console.warn('No filtered cards available, this should not happen');
@@ -738,7 +738,7 @@ function renderCardDetails(card, level) {
     const totalCards = currentFilteredCards.length;
     const cardPosition = currentModalCardIndex + 1;
     
-    // FIXED Issue 2: Better modal header layout with more structured divs
+    // Better modal header layout with more structured divs
     modalTitle.innerHTML = `
         <div class="modal-header-wrapper">
             <div class="modal-nav-section modal-nav-left">
@@ -921,7 +921,7 @@ function setupModalEventListeners(card, cardId, isOwned) {
         }
     });
     
-    // FIXED: Modal limit break select - now also updates table LB dropdown max value
+    // Modal limit break select - now also updates table LB dropdown max value
     const modalLimitBreakSelect = document.getElementById('modalLimitBreakSelect');
     modalLimitBreakSelect.addEventListener('change', (e) => {
         const newLimitBreak = parseInt(e.target.value);
@@ -943,7 +943,7 @@ function setupModalEventListeners(card, cardId, isOwned) {
             
             updateModalDisplay(parseInt(modalLevelInput.value));
             
-            // FIXED: Update table display - both level input max and LB dropdown value
+            // Update table display - both level input max and LB dropdown value
             const tableInput = document.querySelector(`input[data-card-id="${cardId}"]`);
             const tableLBSelect = document.querySelector(`select[data-card-id="${cardId}"]`);
             if (tableInput) {
@@ -1341,7 +1341,7 @@ function renderSelectionContainer() {
     });
 }
 
-// FIXED: Render comparison table with proper HTML table structure and sections
+// Render comparison table with proper HTML table structure and sections
 function renderComparisonTable() {
     const comparisonTable = document.getElementById('comparisonTable');
     
@@ -1363,7 +1363,7 @@ function renderComparisonTable() {
     // Build comparison data structure with sections
     const comparisonData = buildComparisonData(cardsToCompare);
     
-    // FIXED: Render proper HTML table instead of CSS Grid with sections
+    // Render proper HTML table instead of CSS Grid with sections
     comparisonTable.innerHTML = `
         <table class="comparison-data-table">
             <thead>
@@ -1395,7 +1395,7 @@ function renderComparisonTable() {
     window.currentComparisonData = comparisonData;
 }
 
-// ADDED: Global function for toggling comparison sections (needed for onclick handlers)
+// Global function for toggling comparison sections (needed for onclick handlers)
 window.toggleComparisonSection = function(sectionIndex) {
     if (!window.currentComparisonData) return;
     
@@ -1422,7 +1422,7 @@ window.toggleComparisonSection = function(sectionIndex) {
     }
 };
 
-// FIXED: Build comparison data structure optimized for table rendering with sections
+// Build comparison data structure optimized for table rendering with sections
 function buildComparisonData(cards) {
     const data = {
         cards: cards,
@@ -1576,7 +1576,7 @@ function buildComparisonData(cards) {
     return data;
 }
 
-// FIXED: Render comparison table rows with sections and improved highlighting
+// Render comparison table rows with sections and improved highlighting
 function renderComparisonTableRows(data) {
     let html = '';
     let rowIndex = 0;
@@ -1626,7 +1626,7 @@ function renderComparisonTableRows(data) {
                                 }
                                 break;
                             case 'skill':
-                                // IMPROVED: Green highlighting for skills that are present
+                                // Green highlighting for skills that are present
                                 if (cellData.value) {
                                     cellClass = 'has-skill';
                                     cellContent = '✓';
