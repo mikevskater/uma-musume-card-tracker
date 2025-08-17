@@ -16,22 +16,12 @@ function toggleComparisonMode(enabled) {
     if (comparisonMode) {
         mainContent.classList.add('has-selection');
         selectionContainer.style.display = 'block';
-        
-        // Add visual indicators to table rows
-        document.querySelectorAll('#cardTableBody tr').forEach(row => {
-            row.classList.add('comparison-mode');
-        });
     } else {
         mainContent.classList.remove('has-selection');
         selectionContainer.style.display = 'none';
-        
-        // Remove visual indicators from table rows
-        document.querySelectorAll('#cardTableBody tr').forEach(row => {
-            row.classList.remove('comparison-mode');
-        });
     }
     
-    // Re-render table to update click handlers
+    // Re-render table to update click handlers and selection states
     renderCards(currentFilteredCards);
     renderSelectionContainer();
 }
@@ -293,7 +283,6 @@ function renderCards(cards = cardData) {
         // Add ownership and selection classes
         row.className = isOwned ? 'owned' : 'unowned';
         if (isSelected) row.classList.add('selected');
-        if (comparisonMode) row.classList.add('comparison-mode');
         
         row.style.cursor = 'pointer';
         row.dataset.cardId = cardId;
@@ -355,7 +344,6 @@ function renderCards(cards = cardData) {
         row.innerHTML = `
             <td class="ownership-checkbox">
                 <input type="checkbox" ${isOwned ? 'checked' : ''} data-card-id="${cardId}" onclick="event.stopPropagation()">
-                ${comparisonMode ? '<div class="selection-mode-indicator"></div>' : ''}
             </td>
             <td>
                 <img src="support_card_images/${cardId}_i.png" 
@@ -388,7 +376,6 @@ function renderCards(cards = cardData) {
             const row = e.target.closest('tr');
             row.className = owned ? 'owned' : 'unowned';
             if (selectedCards.includes(cardId)) row.classList.add('selected');
-            if (comparisonMode) row.classList.add('comparison-mode');
             
             const levelInput = row.querySelector('.level-input');
             const lbSelect = row.querySelector('.lb-select');
@@ -1354,7 +1341,7 @@ function renderSelectionContainer() {
     });
 }
 
-// FIXED: Render comparison table with proper HTML table structure
+// FIXED: Render comparison table with proper HTML table structure and sections
 function renderComparisonTable() {
     const comparisonTable = document.getElementById('comparisonTable');
     
@@ -1373,10 +1360,10 @@ function renderComparisonTable() {
         return;
     }
     
-    // Build comparison data structure
+    // Build comparison data structure with sections
     const comparisonData = buildComparisonData(cardsToCompare);
     
-    // FIXED: Render proper HTML table instead of CSS Grid
+    // FIXED: Render proper HTML table instead of CSS Grid with sections
     comparisonTable.innerHTML = `
         <table class="comparison-data-table">
             <thead>
@@ -1403,27 +1390,72 @@ function renderComparisonTable() {
             </tbody>
         </table>
     `;
+    
+    // Store the comparison data for the toggle function
+    window.currentComparisonData = comparisonData;
 }
 
-// FIXED: Build comparison data structure optimized for table rendering
+// ADDED: Global function for toggling comparison sections (needed for onclick handlers)
+window.toggleComparisonSection = function(sectionIndex) {
+    if (!window.currentComparisonData) return;
+    
+    const section = window.currentComparisonData.sections[sectionIndex];
+    if (!section || !section.collapsible) return;
+    
+    const headerRow = document.querySelector(`tr.comparison-section-header[data-section="${sectionIndex}"]`);
+    const sectionRows = document.querySelectorAll(`tr.comparison-section-row[data-section="${sectionIndex}"]`);
+    
+    if (headerRow && sectionRows.length > 0) {
+        const isCollapsed = headerRow.classList.contains('collapsed');
+        
+        if (isCollapsed) {
+            // Expand section
+            headerRow.classList.remove('collapsed');
+            sectionRows.forEach(row => row.classList.remove('hidden'));
+            section.collapsed = false;
+        } else {
+            // Collapse section
+            headerRow.classList.add('collapsed');
+            sectionRows.forEach(row => row.classList.add('hidden'));
+            section.collapsed = true;
+        }
+    }
+};
+
+// FIXED: Build comparison data structure optimized for table rendering with sections
 function buildComparisonData(cards) {
     const data = {
         cards: cards,
+        sections: []
+    };
+    
+    // Basic info section
+    const basicSection = {
+        name: 'Basic Information',
+        collapsible: false,
         rows: []
     };
     
-    // Basic info rows
-    data.rows.push({
+    basicSection.rows.push({
         label: 'Level',
         type: 'level',
         values: cards.map(card => ({ value: getEffectiveLevel(card), type: 'level' }))
     });
     
-    data.rows.push({
+    basicSection.rows.push({
         label: 'Owned',
         type: 'owned',
         values: cards.map(card => ({ value: isCardOwned(card.support_id), type: 'owned' }))
     });
+    
+    data.sections.push(basicSection);
+    
+    // Effects section
+    const effectsSection = {
+        name: 'Effects',
+        collapsible: false,
+        rows: []
+    };
     
     // Collect all effects from selected cards
     const allEffectIds = new Set();
@@ -1455,11 +1487,11 @@ function buildComparisonData(cards) {
                 return { value: 0, locked: false, hasEffect: false };
             });
             
-            // FIXED: Find highest value for highlighting (excluding locked/missing effects)
+            // Find highest value for highlighting (excluding locked/missing effects)
             const validValues = values.filter(v => v.hasEffect && !v.locked).map(v => v.value);
             const highestValue = validValues.length > 0 ? Math.max(...validValues) : 0;
             
-            data.rows.push({
+            effectsSection.rows.push({
                 label: effectInfo.name_en,
                 type: 'effect',
                 symbol: effectInfo.symbol === 'percent' ? '%' : '',
@@ -1471,7 +1503,9 @@ function buildComparisonData(cards) {
         }
     });
     
-    // Collect hint skills
+    data.sections.push(effectsSection);
+    
+    // Hint skills section (collapsible)
     const allHintSkills = new Set();
     cards.forEach(card => {
         if (card.hints?.hint_skills) {
@@ -1481,20 +1515,31 @@ function buildComparisonData(cards) {
         }
     });
     
-    Array.from(allHintSkills).forEach(skillId => {
-        const values = cards.map(card => {
-            const hasSkill = card.hints?.hint_skills?.some(skill => skill.id === skillId);
-            return { value: hasSkill, type: 'skill' };
+    if (allHintSkills.size > 0) {
+        const hintSkillsSection = {
+            name: 'Hint Skills',
+            collapsible: true,
+            collapsed: true, // Start collapsed
+            rows: []
+        };
+        
+        Array.from(allHintSkills).forEach(skillId => {
+            const values = cards.map(card => {
+                const hasSkill = card.hints?.hint_skills?.some(skill => skill.id === skillId);
+                return { value: hasSkill, type: 'skill' };
+            });
+            
+            hintSkillsSection.rows.push({
+                label: `${getSkillName(skillId)}`,
+                type: 'skill',
+                values: values
+            });
         });
         
-        data.rows.push({
-            label: `Hint: ${getSkillName(skillId)}`,
-            type: 'skill',
-            values: values
-        });
-    });
+        data.sections.push(hintSkillsSection);
+    }
     
-    // Collect event skills
+    // Event skills section (collapsible)
     const allEventSkills = new Set();
     cards.forEach(card => {
         if (card.event_skills) {
@@ -1504,64 +1549,103 @@ function buildComparisonData(cards) {
         }
     });
     
-    Array.from(allEventSkills).forEach(skillId => {
-        const values = cards.map(card => {
-            const hasSkill = card.event_skills?.some(skill => skill.id === skillId);
-            return { value: hasSkill, type: 'skill' };
+    if (allEventSkills.size > 0) {
+        const eventSkillsSection = {
+            name: 'Event Skills',
+            collapsible: true,
+            collapsed: true, // Start collapsed
+            rows: []
+        };
+        
+        Array.from(allEventSkills).forEach(skillId => {
+            const values = cards.map(card => {
+                const hasSkill = card.event_skills?.some(skill => skill.id === skillId);
+                return { value: hasSkill, type: 'skill' };
+            });
+            
+            eventSkillsSection.rows.push({
+                label: `${getSkillName(skillId)}`,
+                type: 'skill',
+                values: values
+            });
         });
         
-        data.rows.push({
-            label: `Event: ${getSkillName(skillId)}`,
-            type: 'skill',
-            values: values
-        });
-    });
+        data.sections.push(eventSkillsSection);
+    }
     
     return data;
 }
 
-// FIXED: Render comparison table rows with proper highlighting
+// FIXED: Render comparison table rows with sections and improved highlighting
 function renderComparisonTableRows(data) {
-    return data.rows.map(row => {
-        return `
-            <tr>
-                <td>${row.label}</td>
-                ${row.values.map(cellData => {
-                    let cellClass = 'has-value';
-                    let cellContent = '';
-                    
-                    switch(row.type) {
-                        case 'level':
-                            cellContent = cellData.value;
-                            break;
-                        case 'owned':
-                            cellContent = cellData.value ? '✓ Owned' : '✗ Not Owned';
-                            break;
-                        case 'effect':
-                            if (!cellData.hasEffect) {
-                                cellClass = 'no-value';
-                                cellContent = 'X';
-                            } else if (cellData.locked) {
-                                cellClass = 'locked-value';
-                                cellContent = 'Locked';
-                            } else if (cellData.isHighest) {
-                                cellClass = 'highest-value';
-                                cellContent = `${cellData.value}${row.symbol || ''}`;
-                            } else {
-                                cellClass = 'has-value';
-                                cellContent = `${cellData.value}${row.symbol || ''}`;
-                            }
-                            break;
-                        case 'skill':
-                            cellContent = cellData.value ? '✓' : '✗';
-                            break;
-                        default:
-                            cellContent = cellData.value;
-                    }
-                    
-                    return `<td class="${cellClass}">${cellContent}</td>`;
-                }).join('')}
-            </tr>
-        `;
-    }).join('');
+    let html = '';
+    let rowIndex = 0;
+    
+    data.sections.forEach((section, sectionIndex) => {
+        // Add section header if collapsible
+        if (section.collapsible) {
+            html += `
+                <tr class="comparison-section-header ${section.collapsed ? 'collapsed' : ''}" 
+                    data-section="${sectionIndex}" 
+                    onclick="toggleComparisonSection(${sectionIndex})">
+                    <td colspan="${data.cards.length + 1}">${section.name} (${section.rows.length} items)</td>
+                </tr>
+            `;
+        }
+        
+        // Add section rows
+        section.rows.forEach(row => {
+            const isHidden = section.collapsible && section.collapsed;
+            html += `
+                <tr class="comparison-section-row ${isHidden ? 'hidden' : ''}" data-section="${sectionIndex}">
+                    <td>${row.label}</td>
+                    ${row.values.map(cellData => {
+                        let cellClass = 'has-value';
+                        let cellContent = '';
+                        
+                        switch(row.type) {
+                            case 'level':
+                                cellContent = cellData.value;
+                                break;
+                            case 'owned':
+                                cellContent = cellData.value ? '✓ Owned' : '✗ Not Owned';
+                                break;
+                            case 'effect':
+                                if (!cellData.hasEffect) {
+                                    cellClass = 'no-value';
+                                    cellContent = 'X';
+                                } else if (cellData.locked) {
+                                    cellClass = 'locked-value';
+                                    cellContent = 'Locked';
+                                } else if (cellData.isHighest) {
+                                    cellClass = 'highest-value';
+                                    cellContent = `${cellData.value}${row.symbol || ''}`;
+                                } else {
+                                    cellClass = 'has-value';
+                                    cellContent = `${cellData.value}${row.symbol || ''}`;
+                                }
+                                break;
+                            case 'skill':
+                                // IMPROVED: Green highlighting for skills that are present
+                                if (cellData.value) {
+                                    cellClass = 'has-skill';
+                                    cellContent = '✓';
+                                } else {
+                                    cellClass = 'no-skill';
+                                    cellContent = '✗';
+                                }
+                                break;
+                            default:
+                                cellContent = cellData.value;
+                        }
+                        
+                        return `<td class="${cellClass}">${cellContent}</td>`;
+                    }).join('')}
+                </tr>
+            `;
+            rowIndex++;
+        });
+    });
+    
+    return html;
 }

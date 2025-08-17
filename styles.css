@@ -86,6 +86,56 @@ h1 {
     align-items: flex-start; /* Align items to top */
 }
 
+/* IMPROVED: Visual indication for selection mode without layout disruption */
+.main-content.has-selection .card-table {
+    border-left: 4px solid #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.1);
+    /* Ensure table adjusts properly when selection panel is visible */
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Subtle selection mode indicator to table header */
+.main-content.has-selection .card-table thead {
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+}
+
+.main-content.has-selection tbody tr {
+    transition: all 0.2s ease;
+}
+
+.main-content.has-selection tbody tr:hover {
+    background-color: #f0f8ff !important;
+    transform: translateX(2px);
+}
+
+.main-content.has-selection table {
+    /* Use table-layout fixed for better column control */
+    table-layout: fixed;
+    width: 100%;
+    min-width: 800px; /* Minimum width to prevent cramping */
+}
+
+.main-content.has-selection th,
+.main-content.has-selection td {
+    /* Ensure consistent column widths */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Specific column width adjustments when selection is active */
+.main-content.has-selection th:nth-child(1) { width: 60px; } /* Owned checkbox */
+.main-content.has-selection th:nth-child(2) { width: 50px; } /* Icon */
+.main-content.has-selection th:nth-child(3) { width: 140px; } /* Card name */
+.main-content.has-selection th:nth-child(4) { width: 60px; } /* Rarity */
+.main-content.has-selection th:nth-child(5) { width: 70px; } /* Type */
+.main-content.has-selection th:nth-child(6) { width: 70px; } /* Level */
+.main-content.has-selection th:nth-child(7) { width: 70px; } /* LB */
+.main-content.has-selection th:nth-child(8) { width: 180px; } /* Effects */
+.main-content.has-selection th:nth-child(9) { width: 120px; } /* Hints */
+.main-content.has-selection th:nth-child(10) { width: 100px; } /* Release */
+
 /* FIXED: Content wrapper takes available space */
 .content-wrapper {
     flex: 1; /* Take all available space */
@@ -143,6 +193,7 @@ h1 {
     margin-bottom: 0.75rem;
     background-color: #f8f9fa;
     transition: background-color 0.2s ease;
+    position: relative; /* ADDED: For absolute positioning of remove button */
 }
 
 .selected-card-item:hover {
@@ -165,6 +216,7 @@ h1 {
 .selected-card-info {
     flex: 1;
     min-width: 0;
+    padding-right: 1.5rem; /* ADDED: Space for remove button */
 }
 
 .selected-card-name {
@@ -184,17 +236,26 @@ h1 {
     align-items: center;
 }
 
+/* IMPROVED: Move remove button to top-right corner */
 .remove-selected-btn {
     background: none;
     border: none;
     color: #dc3545;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
-    padding: 0.25rem;
+    padding: 0.2rem;
     border-radius: 3px;
     transition: background-color 0.2s ease;
-    flex-shrink: 0;
+    position: absolute; /* CHANGED: Position absolutely */
+    top: 0.5rem; /* ADDED: Position from top */
+    right: 0.5rem; /* ADDED: Position from right */
+    width: 20px; /* ADDED: Fixed size */
+    height: 20px; /* ADDED: Fixed size */
+    display: flex; /* ADDED: Center the × */
+    align-items: center; /* ADDED: Center the × */
+    justify-content: center; /* ADDED: Center the × */
+    line-height: 1; /* ADDED: Prevent line height issues */
 }
 
 .remove-selected-btn:hover {
@@ -250,22 +311,7 @@ h1 {
     margin: 0;
 }
 
-/* Comparison mode styles */
-.comparison-mode {
-    position: relative;
-}
-
-.comparison-mode::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background-color: #007bff;
-    opacity: 0.6;
-}
-
+/* FIXED: Cleaner comparison mode styles without layout-breaking pseudo-elements */
 tbody tr.selected {
     background-color: #e3f2fd !important;
     border-left: 4px solid #2196f3 !important;
@@ -274,6 +320,9 @@ tbody tr.selected {
 tbody tr.selected:hover {
     background-color: #bbdefb !important;
 }
+
+/* REMOVED: Problematic comparison-mode pseudo-element that was breaking table layout */
+/* .comparison-mode::before - DELETED this as it was causing alignment issues */
 
 /* FIXED: Comparison Section - Proper Table Structure */
 .comparison-section {
@@ -369,6 +418,18 @@ tbody tr.selected:hover {
     color: #2c3e50;
 }
 
+/* IMPROVED: Green highlighting for skill cells that have the skill */
+.comparison-data-table .has-skill {
+    background-color: #d4edda !important;
+    color: #155724;
+    font-weight: 600;
+}
+
+.comparison-data-table .no-skill {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
 .comparison-data-table .no-value {
     background-color: #f8f9fa;
     color: #6c757d;
@@ -379,6 +440,57 @@ tbody tr.selected:hover {
     background-color: #fff3cd;
     color: #856404;
     font-style: italic;
+}
+
+/* ADDED: Collapsible comparison sections */
+.comparison-section-header {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.comparison-section-header:hover {
+    background-color: #e9ecef;
+}
+
+.comparison-section-header td {
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    background-color: transparent !important;
+    padding: 0.75rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.comparison-section-header td:first-child {
+    position: relative;
+    padding-left: 2rem !important;
+}
+
+/* Expand/collapse icon */
+.comparison-section-header td:first-child::before {
+    content: '▼';
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: #666;
+    transition: transform 0.2s ease;
+}
+
+.comparison-section-header.collapsed td:first-child::before {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+/* Section rows */
+.comparison-section-row {
+    transition: opacity 0.2s ease;
+}
+
+.comparison-section-row.hidden {
+    display: none;
 }
 
 /* Comparison card headers in table */
@@ -2793,6 +2905,28 @@ tbody tr.unowned .card-name {
         font-size: 0.8rem;
     }
     
+    /* ADDED: Mobile adjustments for collapsible sections */
+    .comparison-section-header td:first-child::before {
+        left: 0.25rem;
+        font-size: 0.7rem;
+    }
+    
+    .comparison-section-header td:first-child {
+        padding-left: 1.5rem !important;
+    }
+    
+    /* IMPROVED: Mobile table layout when selection is active */
+    .main-content.has-selection th:nth-child(1) { width: 50px; }
+    .main-content.has-selection th:nth-child(2) { width: 40px; }
+    .main-content.has-selection th:nth-child(3) { width: 100px; }
+    .main-content.has-selection th:nth-child(4) { width: 50px; }
+    .main-content.has-selection th:nth-child(5) { width: 60px; }
+    .main-content.has-selection th:nth-child(6) { width: 60px; }
+    .main-content.has-selection th:nth-child(7) { width: 60px; }
+    .main-content.has-selection th:nth-child(8) { width: 140px; }
+    .main-content.has-selection th:nth-child(9) { width: 100px; }
+    .main-content.has-selection th:nth-child(10) { width: 80px; }
+    
     /* Recognition modal adjustments */
     .recognition-modal {
         max-width: 95%;
@@ -2952,6 +3086,29 @@ tbody tr.unowned .card-name {
         padding: 0.3rem 0.2rem;
         font-size: 0.75rem;
     }
+    
+    /* ADDED: Ultra-mobile collapsible section adjustments */
+    .comparison-section-header td:first-child::before {
+        left: 0.15rem;
+        font-size: 0.6rem;
+    }
+    
+    .comparison-section-header td:first-child {
+        padding-left: 1.2rem !important;
+        font-size: 0.7rem !important;
+    }
+    
+    /* IMPROVED: Ultra-mobile table layout when selection is active */
+    .main-content.has-selection th:nth-child(1) { width: 45px; }
+    .main-content.has-selection th:nth-child(2) { width: 35px; }
+    .main-content.has-selection th:nth-child(3) { width: 80px; }
+    .main-content.has-selection th:nth-child(4) { width: 40px; }
+    .main-content.has-selection th:nth-child(5) { width: 50px; }
+    .main-content.has-selection th:nth-child(6) { width: 50px; }
+    .main-content.has-selection th:nth-child(7) { width: 50px; }
+    .main-content.has-selection th:nth-child(8) { width: 120px; }
+    .main-content.has-selection th:nth-child(9) { width: 80px; }
+    .main-content.has-selection th:nth-child(10) { width: 70px; }
     
     .selection-mode-toggle {
         padding: 0.5rem 0.75rem;
