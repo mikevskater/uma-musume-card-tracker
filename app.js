@@ -11,7 +11,7 @@ let ownedCards = {}; // Owned card tracking
 let currentModalCard = null;
 let currentSort = { column: '', direction: '' };
 let globalLimitBreakLevel = null;
-let globalLimitBreakOverrideOwned = true; // New: toggle for applying global LB to owned cards
+let globalLimitBreakOverrideOwned = false; // New: toggle for applying global LB to owned cards
 let showMaxPotentialLevels = false; // New: toggle for showing max potential vs current levels
 
 // Multi-layer sorting state
