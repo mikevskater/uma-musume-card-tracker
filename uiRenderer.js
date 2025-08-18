@@ -1117,7 +1117,7 @@ function renderCharacterEvents(card) {
                         const optionLabel = getOptionLabel(index, choices.length);
                         return `
                             <div class="event-choice">
-                                ${optionLabel ? `<strong>${optionLabel}:</strong> ` : ''}${choice[0] || 'No description'}
+                                ${optionLabel ? `<strong>${optionLabel}:</strong> ` : ''}
                                 <div class="choice-effects">
                                     ${formatEventEffects(choice[1] || [])}
                                 </div>
