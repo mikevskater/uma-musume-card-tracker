@@ -5,19 +5,19 @@
     },
     {
         "id": "run",
-        "string": "runner"
+        "string": "front_runner"
     },
     {
         "id": "ldr",
-        "string": "leader"
+        "string": "pace_chaser"
     },
     {
         "id": "btw",
-        "string": "betweener"
+        "string": "late_surger"
     },
     {
         "id": "cha",
-        "string": "chaser"
+        "string": "end_closer"
     },
     {
         "id": "sho",
