@@ -1,5 +1,5 @@
 /* =================================================================
-   COMPONENTS.CSS - UI Components
+   COMPONENTS.CSS - UI Components with Dark Mode Support
    ================================================================= */
 
 /* =================================================================
@@ -95,12 +95,13 @@ input[type="password"],
 select,
 textarea {
     padding: var(--space-sm);
-    border: 1px solid var(--color-gray-300);
+    border: 1px solid var(--border-primary);
     border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     height: var(--input-height);
-    background-color: var(--color-white);
-    transition: border-color var(--transition-normal);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color var(--transition-normal), background-color var(--transition-theme), color var(--transition-theme);
 }
 
 input[type="text"]:focus,
@@ -117,11 +118,11 @@ textarea:focus {
 input:disabled,
 select:disabled,
 textarea:disabled {
-    background-color: var(--color-gray-50);
-    color: var(--color-gray-600);
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
     cursor: not-allowed;
     opacity: 0.7;
-    border-color: var(--color-gray-200);
+    border-color: var(--border-primary);
 }
 
 /* Checkbox Styling */
@@ -152,10 +153,11 @@ input[type="checkbox"]:disabled {
 .lb-select {
     width: 70px;
     padding: var(--space-xs);
-    border: 1px solid var(--color-gray-300);
+    border: 1px solid var(--border-primary);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     cursor: pointer;
     text-align: center;
     height: var(--input-height-sm);
@@ -167,9 +169,13 @@ input[type="checkbox"]:disabled {
     padding-right: var(--space-xl);
 }
 
+[data-theme="dark"] .lb-select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23c0c0c0' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+}
+
 .lb-select:hover:not(:disabled) {
-    border-color: var(--color-gray-400);
-    background-color: var(--color-gray-50);
+    border-color: var(--border-accent);
+    background-color: var(--bg-secondary);
 }
 
 .lb-select:focus {
@@ -183,14 +189,16 @@ input[type="checkbox"]:disabled {
 .modal-lb-select {
     flex: 1;
     padding: var(--space-sm);
-    border: 1px solid var(--color-gray-300);
+    border: 1px solid var(--border-primary);
     border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     height: var(--input-height);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* =================================================================
-   COMPARISON MODE DISABLED STYLING (NEW)
+   COMPARISON MODE DISABLED STYLING (ENHANCED)
    ================================================================= */
 
 /* Visual feedback for disabled controls in comparison mode */
@@ -248,6 +256,11 @@ input[type="checkbox"]:disabled {
     pointer-events: none;
 }
 
+[data-theme="dark"] .comparison-mode-disabled:hover::before {
+    background-color: var(--bg-accent);
+    color: var(--text-primary);
+}
+
 @keyframes tooltip-fade-in {
     to {
         opacity: 1;
@@ -262,13 +275,13 @@ input[type="checkbox"]:disabled {
 .card-icon {
     width: var(--card-icon-size);
     height: var(--card-icon-size);
-    border: 2px solid var(--color-gray-300);
+    border: 2px solid var(--border-primary);
     border-radius: var(--radius-md);
     display: block;
     margin: 0 auto;
     object-fit: cover;
     object-position: center;
-    transition: transform var(--transition-normal);
+    transition: transform var(--transition-normal), border-color var(--transition-theme);
 }
 
 .card-icon:hover {
@@ -278,14 +291,14 @@ input[type="checkbox"]:disabled {
 .card-icon-fallback {
     width: var(--card-icon-size);
     height: var(--card-icon-size);
-    background-color: var(--color-gray-100);
-    border: 2px solid var(--color-gray-300);
+    background-color: var(--bg-tertiary);
+    border: 2px solid var(--border-primary);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--font-size-xs);
-    color: var(--color-gray-500);
+    color: var(--text-muted);
     margin: 0 auto;
 }
 
@@ -307,14 +320,14 @@ input[type="checkbox"]:disabled {
 .card-image-fallback {
     width: var(--card-image-width);
     height: var(--card-image-height);
-    background-color: var(--color-gray-100);
+    background-color: var(--bg-tertiary);
     border-radius: var(--radius-xl);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--font-size-sm);
-    color: var(--color-gray-500);
-    border: 2px solid var(--color-gray-300);
+    color: var(--text-muted);
+    border: 2px solid var(--border-primary);
     box-shadow: var(--shadow-lg);
 }
 
@@ -340,7 +353,7 @@ input[type="checkbox"]:disabled {
 
 .card-image.rarity-3 {
     border: 3px solid transparent;
-    background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+    background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                 linear-gradient(45deg, 
                     #ff0000, #ff7f00, #ffff00, #00ff00, 
                     #0000ff, #4b0082, #9400d3, #ff0000
@@ -355,35 +368,35 @@ input[type="checkbox"]:disabled {
 
 @keyframes rainbow-border {
     0% {
-        background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                     linear-gradient(45deg, 
                         #ff0000, #ff7f00, #ffff00, #00ff00, 
                         #0000ff, #4b0082, #9400d3, #ff0000
                     ) border-box;
     }
     25% {
-        background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                     linear-gradient(135deg, 
                         #ff7f00, #ffff00, #00ff00, #0000ff, 
                         #4b0082, #9400d3, #ff0000, #ff7f00
                     ) border-box;
     }
     50% {
-        background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                     linear-gradient(225deg, 
                         #ffff00, #00ff00, #0000ff, #4b0082, 
                         #9400d3, #ff0000, #ff7f00, #ffff00
                     ) border-box;
     }
     75% {
-        background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                     linear-gradient(315deg, 
                         #00ff00, #0000ff, #4b0082, #9400d3, 
                         #ff0000, #ff7f00, #ffff00, #00ff00
                     ) border-box;
     }
     100% {
-        background: linear-gradient(var(--color-white), var(--color-white)) padding-box,
+        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
                     linear-gradient(45deg, 
                         #ff0000, #ff7f00, #ffff00, #00ff00, 
                         #0000ff, #4b0082, #9400d3, #ff0000
@@ -494,7 +507,7 @@ input[type="checkbox"]:disabled {
 
 /* Skill Item Highlighting */
 .skill-item-highlighted {
-    background-color: var(--color-secondary-bg) !important;
+    background-color: rgba(52, 152, 219, 0.1) !important;
     border-left: 4px solid var(--color-secondary) !important;
     box-shadow: var(--shadow-sm);
 }
@@ -517,8 +530,8 @@ input[type="checkbox"]:disabled {
 
 /* Enhanced skill type badges */
 .skill-type {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
+    background-color: var(--bg-accent);
+    color: var(--text-secondary);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-sm);
     font-size: var(--font-size-xs);
@@ -531,8 +544,8 @@ input[type="checkbox"]:disabled {
    ================================================================= */
 
 .filter-chip {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
+    background-color: var(--bg-accent);
+    color: var(--text-secondary);
     padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-pill);
     font-size: var(--font-size-sm);
@@ -542,18 +555,18 @@ input[type="checkbox"]:disabled {
     gap: var(--space-sm);
     transition: all var(--transition-normal);
     cursor: pointer;
-    border: 1px solid var(--color-gray-300);
+    border: 1px solid var(--border-primary);
 }
 
 .filter-chip:hover {
-    background-color: var(--color-gray-300);
-    border-color: var(--color-gray-400);
+    background-color: var(--bg-muted);
+    border-color: var(--border-accent);
 }
 
 .filter-chip .remove-chip {
     background: none;
     border: none;
-    color: var(--color-gray-600);
+    color: var(--text-muted);
     cursor: pointer;
     font-size: var(--font-size-lg);
     line-height: 1;
@@ -584,8 +597,8 @@ input[type="checkbox"]:disabled {
     justify-content: center;
     width: 16px;
     height: 16px;
-    background-color: var(--color-gray-600);
-    color: var(--color-white);
+    background-color: var(--text-muted);
+    color: var(--bg-primary);
     border-radius: var(--radius-round);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
@@ -595,7 +608,7 @@ input[type="checkbox"]:disabled {
 }
 
 .tooltip:hover {
-    background-color: var(--color-gray-700);
+    background-color: var(--text-secondary);
 }
 
 .tooltip::before {
@@ -604,8 +617,8 @@ input[type="checkbox"]:disabled {
     bottom: 130%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--color-gray-800);
-    color: var(--color-white);
+    background-color: var(--bg-accent);
+    color: var(--text-primary);
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
@@ -620,6 +633,8 @@ input[type="checkbox"]:disabled {
     white-space: normal;
     line-height: var(--line-height-normal);
     text-align: center;
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-lg);
 }
 
 .tooltip::after {
@@ -629,7 +644,7 @@ input[type="checkbox"]:disabled {
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-top-color: var(--color-gray-800);
+    border-top-color: var(--bg-accent);
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-slow), visibility var(--transition-slow);
@@ -670,4 +685,9 @@ input[type="checkbox"]:disabled {
 
 .toast.warning {
     background-color: var(--color-warning);
+    color: var(--color-gray-800);
+}
+
+[data-theme="dark"] .toast.warning {
+    color: var(--color-white);
 }

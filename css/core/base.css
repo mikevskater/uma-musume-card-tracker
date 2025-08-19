@@ -1,5 +1,5 @@
 /* =================================================================
-   BASE.CSS - Design System Foundation
+   BASE.CSS - Design System Foundation with Dark Mode Support
    ================================================================= */
 
 /* Reset & Base Styles */
@@ -9,7 +9,7 @@
     box-sizing: border-box;
 }
 
-/* CSS Custom Properties - Design Tokens */
+/* CSS Custom Properties - Design Tokens with Dark Mode Support */
 :root {
     /* Colors - Primary Palette */
     --color-primary: #2c3e50;
@@ -45,7 +45,7 @@
     --color-info-bg: #d1ecf1;
     --color-info-text: #0c5460;
     
-    /* Colors - Neutrals */
+    /* Colors - Neutrals (Light Mode) */
     --color-white: #ffffff;
     --color-gray-50: #f8f9fa;
     --color-gray-100: #f5f5f5;
@@ -58,6 +58,26 @@
     --color-gray-800: #343a40;
     --color-gray-900: #212529;
     --color-black: #000000;
+    
+    /* Theme-Aware Colors (Light Mode Defaults) */
+    --bg-primary: var(--color-white);
+    --bg-secondary: var(--color-gray-50);
+    --bg-tertiary: var(--color-gray-100);
+    --bg-accent: var(--color-gray-200);
+    --bg-muted: var(--color-gray-300);
+    
+    --text-primary: var(--color-gray-800);
+    --text-secondary: var(--color-gray-600);
+    --text-muted: var(--color-gray-500);
+    --text-inverse: var(--color-white);
+    
+    --border-primary: var(--color-gray-200);
+    --border-secondary: var(--color-gray-300);
+    --border-accent: var(--color-gray-400);
+    
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-color-light: rgba(0, 0, 0, 0.05);
+    --shadow-color-heavy: rgba(0, 0, 0, 0.2);
     
     /* Colors - Rarity System */
     --color-rarity-r: #3498db;        /* R - Blue */
@@ -119,16 +139,17 @@
     --radius-pill: 20px;
     
     /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.15);
-    --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.2);
-    --shadow-2xl: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 2px var(--shadow-color-light);
+    --shadow-md: 0 2px 4px var(--shadow-color);
+    --shadow-lg: 0 2px 8px var(--shadow-color);
+    --shadow-xl: 0 4px 12px var(--shadow-color-heavy);
+    --shadow-2xl: 0 10px 30px var(--shadow-color-heavy);
     
     /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.2s ease;
     --transition-slow: 0.3s ease;
+    --transition-theme: 0.25s ease;
     
     /* Z-Index Scale */
     --z-dropdown: 100;
@@ -165,13 +186,72 @@
     --table-row-height-xs: 45px;
 }
 
+/* Dark Mode Theme Overrides */
+[data-theme="dark"] {
+    /* Theme-Aware Colors (Dark Mode) */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #242424;
+    --bg-tertiary: #2d2d2d;
+    --bg-accent: #363636;
+    --bg-muted: #404040;
+    
+    --text-primary: #f0f0f0;
+    --text-secondary: #c0c0c0;
+    --text-muted: #a0a0a0;
+    --text-inverse: #1a1a1a;
+    
+    --border-primary: #404040;
+    --border-secondary: #505050;
+    --border-accent: #606060;
+    
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-color-light: rgba(0, 0, 0, 0.2);
+    --shadow-color-heavy: rgba(0, 0, 0, 0.5);
+    
+    /* Dark Mode Semantic Colors */
+    --color-success-bg: #1a4a2e;
+    --color-success-text: #7cfc00;
+    
+    --color-warning-bg: #4a3d1a;
+    --color-warning-text: #ffd700;
+    
+    --color-danger-bg: #4a1a1a;
+    --color-danger-text: #ff6b6b;
+    
+    --color-info-bg: #1a3e4a;
+    --color-info-text: #5bc0de;
+    
+    /* Dark Mode Card Type Backgrounds */
+    --color-type-speed-bg: #1a3329;
+    --color-type-stamina-bg: #3d321a;
+    --color-type-power-bg: #3d1a1a;
+    --color-type-guts-bg: #1a3239;
+    --color-type-wisdom-bg: #2a2a2a;
+    --color-type-friend-bg: #2d1a3d;
+    
+    /* Dark Mode Primary Colors (slightly adjusted for better contrast) */
+    --color-primary: #5f90c7;
+    --color-primary-light: #7ea3cc;
+}
+
+/* Smooth transitions for theme switching */
+*,
+*::before,
+*::after {
+    transition: background-color var(--transition-theme),
+                border-color var(--transition-theme),
+                color var(--transition-theme),
+                box-shadow var(--transition-theme);
+}
+
 /* Typography Base */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
-    color: var(--color-gray-800);
-    background-color: var(--color-gray-100);
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+    transition: background-color var(--transition-theme), color var(--transition-theme);
 }
 
 /* Heading Scale */
@@ -180,6 +260,7 @@ h1 {
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     margin-bottom: var(--space-sm);
+    color: var(--text-primary);
 }
 
 h2 {
@@ -187,6 +268,7 @@ h2 {
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
     margin-bottom: var(--space-sm);
+    color: var(--text-primary);
 }
 
 h3 {
@@ -194,6 +276,7 @@ h3 {
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-normal);
     margin-bottom: var(--space-md);
+    color: var(--text-primary);
 }
 
 h4 {
@@ -201,6 +284,7 @@ h4 {
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-normal);
     margin-bottom: var(--space-md);
+    color: var(--text-primary);
 }
 
 /* Focus States */
@@ -226,24 +310,24 @@ h4 {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-gray-200);
+    background: var(--bg-accent);
     border-radius: var(--radius-md);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
+    background: var(--border-accent);
     border-radius: var(--radius-md);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
+    background: var(--text-muted);
 }
 
 /* Loading States */
 .loading {
     text-align: center;
     font-size: var(--font-size-lg);
-    color: var(--color-gray-600);
+    color: var(--text-secondary);
     margin: var(--space-2xl) 0;
 }
 
@@ -255,6 +339,54 @@ h4 {
     border-radius: var(--radius-md);
     margin: var(--space-lg) 0;
     border: 1px solid var(--color-danger);
+}
+
+/* Dark Mode Toggle Styles */
+.theme-toggle {
+    position: fixed;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    z-index: var(--z-fixed);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-round);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    font-size: var(--font-size-xl);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xl);
+    background: var(--bg-secondary);
+}
+
+.theme-toggle:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+}
+
+/* Theme toggle icons */
+.theme-toggle .light-icon {
+    display: block;
+}
+
+.theme-toggle .dark-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .light-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .dark-icon {
+    display: block;
 }
 
 /* Accessibility */

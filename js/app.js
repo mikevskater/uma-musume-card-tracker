@@ -1,4 +1,4 @@
-// Main Application Controller (Refactored)
+// Main Application Controller (Refactored with Dark Mode Support)
 // Simplified initialization and coordination
 
 // ===== GLOBAL STATE =====
@@ -43,9 +43,12 @@ let showComparison = false;
 // Main application initialization
 async function initializeApplication() {
     try {
-        console.log('Starting Uma Musume Support Card Tracker...');
+        console.log('🎯 Starting Uma Musume Support Card Tracker...');
         
-        // Load card data first
+        // ENHANCED: Initialize theme system first (before any UI rendering)
+        initializeThemeSystem();
+        
+        // Load card data
         const dataLoaded = await loadData();
         if (!dataLoaded) {
             throw new Error('Failed to load card data');
@@ -54,11 +57,11 @@ async function initializeApplication() {
         // Initialize the user interface
         await initializeInterface();
         
-        console.log('Application initialized successfully');
+        console.log('✅ Application initialized successfully');
         logApplicationReady();
         
     } catch (error) {
-        console.error('Application initialization failed:', error);
+        console.error('❌ Application initialization failed:', error);
         showApplicationError(error);
     }
 }
@@ -83,7 +86,7 @@ async function initializeInterface() {
         // Initial render
         filterAndSortCards();
         
-        console.log('Interface initialized successfully');
+        console.log('🔧 Interface initialized successfully');
         
     } catch (error) {
         console.error('Failed to initialize interface:', error);
@@ -143,6 +146,7 @@ function initializeMultiSort() {
 
 // Log application ready status
 function logApplicationReady() {
+    const currentTheme = getCurrentTheme();
     console.log('🎯 Uma Musume Support Card Tracker Ready!');
     console.log('📊 Features loaded:');
     console.log('   ✅ Card collection tracking');
@@ -151,6 +155,7 @@ function logApplicationReady() {
     console.log('   ✅ Card comparison system');
     console.log('   ✅ Modal navigation');
     console.log('   ✅ Real-time level updates');
+    console.log(`   🌙 Dark mode system (${currentTheme} mode active)`);
 }
 
 // Show application error
@@ -171,7 +176,8 @@ window.addEventListener('error', (event) => {
         lineno: event.lineno,
         colno: event.colno,
         stack: event.error?.stack,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        theme: getCurrentTheme() // Include theme info for debugging
     });
 });
 
@@ -180,7 +186,8 @@ window.addEventListener('unhandledrejection', (event) => {
     console.error('🚨 Unhandled promise rejection:', {
         reason: event.reason,
         promise: event.promise,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        theme: getCurrentTheme() // Include theme info for debugging
     });
 });
 
@@ -188,7 +195,7 @@ window.addEventListener('unhandledrejection', (event) => {
 
 // Load application when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing application...');
+    console.log('📄 DOM loaded, initializing application...');
     initializeApplication();
 });
 

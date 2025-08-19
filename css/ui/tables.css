@@ -1,5 +1,5 @@
 /* =================================================================
-   TABLES.CSS - Table Components (ENHANCED)
+   TABLES.CSS - Table Components with Dark Mode Support (ENHANCED)
    ================================================================= */
 
 /* =================================================================
@@ -14,8 +14,12 @@ table {
 th, td {
     padding: var(--space-md);
     text-align: left;
-    border-bottom: 1px solid var(--color-gray-200);
+    border-bottom: 1px solid var(--border-primary);
     vertical-align: middle;
+    color: var(--text-primary);
+    transition: background-color var(--transition-theme), 
+                color var(--transition-theme), 
+                border-color var(--transition-theme);
 }
 
 th {
@@ -36,44 +40,66 @@ tbody tr {
     height: var(--table-row-height);
     transition: all var(--transition-normal);
     cursor: pointer;
+    background-color: var(--bg-primary);
 }
 
 tbody tr:hover {
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
 }
 
 /* Row States */
 tbody tr.owned {
-    background-color: #f8fff8;
+    background-color: var(--color-success-bg);
     border-left: 4px solid var(--color-success);
+    color: var(--color-success-text);
 }
 
 tbody tr.owned:hover {
-    background-color: #f0fff0;
+    background-color: rgba(39, 174, 96, 0.15);
+}
+
+[data-theme="dark"] tbody tr.owned {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+[data-theme="dark"] tbody tr.owned:hover {
+    background-color: rgba(39, 174, 96, 0.2);
 }
 
 tbody tr.unowned {
-    background-color: var(--color-gray-50);
-    color: var(--color-gray-600);
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
     opacity: 0.8;
 }
 
 tbody tr.unowned:hover {
-    background-color: var(--color-gray-100);
+    background-color: var(--bg-accent);
+    opacity: 1;
 }
 
 tbody tr.unowned .card-name {
-    color: var(--color-gray-500);
+    color: var(--text-muted);
 }
 
 /* Selection States */
 tbody tr.selected {
-    background-color: #e3f2fd !important;
+    background-color: rgba(52, 152, 219, 0.15) !important;
     border-left: 4px solid #2196f3 !important;
+    color: var(--text-primary);
 }
 
 tbody tr.selected:hover {
-    background-color: #bbdefb !important;
+    background-color: rgba(52, 152, 219, 0.25) !important;
+}
+
+[data-theme="dark"] tbody tr.selected {
+    background-color: rgba(52, 152, 219, 0.2) !important;
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] tbody tr.selected:hover {
+    background-color: rgba(52, 152, 219, 0.3) !important;
 }
 
 /* Sortable Headers */
@@ -81,6 +107,7 @@ th.sortable {
     cursor: pointer;
     user-select: none;
     position: relative;
+    transition: background-color var(--transition-normal);
 }
 
 th.sortable:hover {
@@ -111,6 +138,7 @@ td.ownership-checkbox {
     text-align: center;
     vertical-align: middle;
     position: relative;
+    background-color: inherit;
 }
 
 td.ownership-checkbox::before {
@@ -137,12 +165,12 @@ td.ownership-checkbox input[type="checkbox"] {
 
 .char-name {
     font-size: var(--font-size-base);
-    color: var(--color-gray-600);
+    color: var(--text-secondary);
 }
 
 .effects-summary {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    color: var(--text-secondary);
     line-height: var(--line-height-normal);
 }
 
@@ -178,9 +206,10 @@ td.ownership-checkbox input[type="checkbox"] {
 .comparison-data-table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid var(--color-gray-200);
+    border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    background-color: var(--bg-primary);
 }
 
 .comparison-data-table th {
@@ -200,15 +229,17 @@ td.ownership-checkbox input[type="checkbox"] {
 
 .comparison-data-table td {
     padding: var(--space-md);
-    border: 1px solid var(--color-gray-200);
+    border: 1px solid var(--border-primary);
     text-align: center;
     vertical-align: middle;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .comparison-data-table td:first-child {
     text-align: left;
     font-weight: var(--font-weight-semibold);
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
     color: var(--color-primary);
 }
 
@@ -229,8 +260,8 @@ td.ownership-checkbox input[type="checkbox"] {
 }
 
 .comparison-data-table .has-value {
-    background-color: var(--color-white);
-    color: var(--color-primary);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .comparison-data-table .has-skill {
@@ -240,13 +271,13 @@ td.ownership-checkbox input[type="checkbox"] {
 }
 
 .comparison-data-table .no-skill {
-    background-color: var(--color-gray-50);
-    color: var(--color-gray-600);
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
 }
 
 .comparison-data-table .no-value {
-    background-color: var(--color-gray-50);
-    color: var(--color-gray-600);
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
     font-style: italic;
 }
 
@@ -262,20 +293,20 @@ td.ownership-checkbox input[type="checkbox"] {
 
 /* Skill Filter Highlighted Rows */
 .comparison-data-table tr.skill-filter-highlighted {
-    background-color: var(--color-secondary-bg);
+    background-color: rgba(52, 152, 219, 0.1);
     box-shadow: inset 4px 0 0 var(--color-secondary);
 }
 
 .comparison-data-table tr.skill-filter-highlighted td:first-child {
-    background-color: var(--color-secondary-bg) !important;
-    color: var(--color-secondary-dark) !important;
+    background-color: rgba(52, 152, 219, 0.15) !important;
+    color: var(--color-secondary) !important;
     font-weight: var(--font-weight-bold);
     position: relative;
 }
 
 /* Filter indicator for highlighted skill labels */
 .comparison-data-table .skill-label-highlighted::before {
-    content: '★';
+    content: '☆';
     color: var(--color-secondary);
     font-weight: var(--font-weight-bold);
     margin-right: var(--space-xs);
@@ -283,8 +314,8 @@ td.ownership-checkbox input[type="checkbox"] {
 
 /* ENHANCED: Combined skill cell styling - preserve green background with blue highlighting */
 .comparison-data-table .skill-cell-highlighted {
-    background-color: var(--color-secondary-bg) !important;
-    color: var(--color-secondary-text) !important;
+    background-color: rgba(52, 152, 219, 0.15) !important;
+    color: var(--color-secondary) !important;
     font-weight: var(--font-weight-bold);
     position: relative;
     box-shadow: inset 0 0 0 2px var(--color-secondary);
@@ -310,7 +341,7 @@ td.ownership-checkbox input[type="checkbox"] {
     color: var(--color-secondary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    text-shadow: 0 0 2px var(--color-white);
+    text-shadow: 0 0 2px var(--bg-primary);
 }
 
 /* Standard skill cell highlighting without skill presence */
@@ -329,7 +360,7 @@ td.ownership-checkbox input[type="checkbox"] {
    ================================================================= */
 
 .comparison-section-header {
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
     cursor: pointer;
     user-select: none;
     transition: background-color var(--transition-normal);
@@ -337,7 +368,7 @@ td.ownership-checkbox input[type="checkbox"] {
 }
 
 .comparison-section-header:hover {
-    background-color: var(--color-gray-200);
+    background-color: var(--bg-accent);
 }
 
 .comparison-section-header td {
@@ -345,7 +376,7 @@ td.ownership-checkbox input[type="checkbox"] {
     color: var(--color-primary) !important;
     background-color: transparent !important;
     padding: var(--space-md) !important;
-    border: 1px solid var(--color-gray-300) !important;
+    border: 1px solid var(--border-primary) !important;
 }
 
 .comparison-section-header td:first-child {
@@ -361,7 +392,7 @@ td.ownership-checkbox input[type="checkbox"] {
     top: 50%;
     transform: translateY(-50%);
     font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    color: var(--text-secondary);
     transition: transform var(--transition-normal);
 }
 
@@ -372,6 +403,7 @@ td.ownership-checkbox input[type="checkbox"] {
 /* Section rows */
 .comparison-section-row {
     transition: opacity var(--transition-normal);
+    background-color: var(--bg-primary);
 }
 
 .comparison-section-row.hidden {
@@ -383,13 +415,14 @@ td.ownership-checkbox input[type="checkbox"] {
     padding: var(--space-lg) var(--space-md) !important;
     text-align: center !important;
     vertical-align: middle !important;
+    background-color: var(--color-primary) !important;
 }
 
 .comparison-card-icon {
     width: 50px;
     height: 50px;
     border-radius: var(--radius-md);
-    border: 2px solid var(--color-gray-300);
+    border: 2px solid var(--border-primary);
     object-fit: cover;
     margin: 0 auto var(--space-sm) auto;
     display: block;
@@ -413,18 +446,18 @@ td.ownership-checkbox input[type="checkbox"] {
 /* No Data States */
 .no-comparison-data {
     text-align: center;
-    color: var(--color-gray-500);
+    color: var(--text-muted);
     font-style: italic;
     padding: var(--space-3xl);
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
     border-radius: var(--radius-lg);
 }
 
 .no-data {
     text-align: center;
-    color: var(--color-gray-500);
+    color: var(--text-muted);
     font-style: italic;
     padding: var(--space-2xl);
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
     border-radius: var(--radius-lg);
 }

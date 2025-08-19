@@ -1,5 +1,113 @@
-// UI Components and Builders (ENHANCED)
-// Reusable functions for creating consistent UI elements with comparison mode support
+// UI Components and Builders (ENHANCED WITH DARK MODE)
+// Reusable functions for creating consistent UI elements with dark mode support
+
+// ===== THEME MANAGEMENT =====
+
+// Theme management constants
+const THEME_STORAGE_KEY = 'uma_theme_preference';
+const THEMES = {
+    LIGHT: 'light',
+    DARK: 'dark'
+};
+
+// Initialize theme system
+function initializeThemeSystem() {
+    // Get saved theme preference or detect system preference
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    let initialTheme;
+    
+    if (savedTheme && Object.values(THEMES).includes(savedTheme)) {
+        initialTheme = savedTheme;
+    } else {
+        // Detect system preference
+        initialTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 
+                      THEMES.DARK : THEMES.LIGHT;
+    }
+    
+    // Apply initial theme
+    setTheme(initialTheme);
+    
+    // Setup theme toggle event listener
+    setupThemeToggle();
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        // Only auto-switch if user hasn't set a preference
+        if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+            setTheme(e.matches ? THEMES.DARK : THEMES.LIGHT);
+        }
+    });
+    
+    console.log(`🌙 Theme system initialized with ${initialTheme} mode`);
+}
+
+// Set theme
+function setTheme(theme) {
+    if (!Object.values(THEMES).includes(theme)) {
+        console.warn(`Invalid theme: ${theme}`);
+        return;
+    }
+    
+    const html = document.documentElement;
+    
+    if (theme === THEMES.DARK) {
+        html.setAttribute('data-theme', 'dark');
+    } else {
+        html.removeAttribute('data-theme');
+    }
+    
+    // Save preference
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    
+    // Update toggle button state
+    updateThemeToggleState(theme);
+}
+
+// Get current theme
+function getCurrentTheme() {
+    return document.documentElement.hasAttribute('data-theme') ? THEMES.DARK : THEMES.LIGHT;
+}
+
+// Toggle theme
+function toggleTheme() {
+    const currentTheme = getCurrentTheme();
+    const newTheme = currentTheme === THEMES.LIGHT ? THEMES.DARK : THEMES.LIGHT;
+    setTheme(newTheme);
+    
+    // Show toast notification
+    showToast(`Switched to ${newTheme} mode`, 'success');
+}
+
+// Setup theme toggle event listener
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Add keyboard support
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+        
+        // Update initial state
+        updateThemeToggleState(getCurrentTheme());
+    }
+}
+
+// Update theme toggle button state
+function updateThemeToggleState(theme) {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        const isDark = theme === THEMES.DARK;
+        themeToggle.setAttribute('aria-label', 
+            isDark ? 'Switch to light mode' : 'Switch to dark mode'
+        );
+        themeToggle.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    }
+}
 
 // ===== DOM UTILITIES =====
 
@@ -415,7 +523,7 @@ function createSelectedCardItem(card) {
 
 // ===== NOTIFICATION COMPONENTS =====
 
-// Create and show toast notification
+// Create and show toast notification (ENHANCED with theme support)
 function showToast(message, type = 'success') {
     // Remove existing toast if any
     const existingToast = document.querySelector('.toast');
@@ -559,6 +667,8 @@ function getSortOptionLabel(category, option) {
     switch (category) {
         case 'effect':
             return effectsData[option]?.name_en || `Effect ${option}`;
+        case 'skillTypeCount':
+            return getSkillTypeDescription(option);
         default:
             return option;
     }
@@ -568,6 +678,16 @@ function getSortOptionLabel(category, option) {
 
 // Export all components to global scope
 window.UIComponents = {
+    // Theme management
+    initializeThemeSystem,
+    setTheme,
+    getCurrentTheme,
+    toggleTheme,
+    setupThemeToggle,
+    updateThemeToggleState,
+    THEMES,
+    
+    // Core utilities
     createElement,
     createCardIconFallback,
     createCardImageFallback,

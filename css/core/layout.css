@@ -1,5 +1,5 @@
 /* =================================================================
-   LAYOUT.CSS - Layout Systems & Containers
+   LAYOUT.CSS - Layout Systems & Containers with Dark Mode Support
    ================================================================= */
 
 /* Main Container */
@@ -17,6 +17,7 @@ header {
     margin-bottom: var(--space-2xl);
     border-radius: var(--radius-xl);
     text-align: center;
+    position: relative;
 }
 
 /* Main Layout Structure */
@@ -30,7 +31,7 @@ header {
 .sidebar {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
     height: fit-content;
@@ -38,6 +39,7 @@ header {
     overflow-y: auto;
     position: sticky;
     top: var(--space-xl);
+    border: 1px solid var(--border-primary);
 }
 
 /* Main Content Area */
@@ -59,7 +61,7 @@ header {
 .selection-container {
     width: var(--selection-width);
     min-width: var(--selection-width);
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
     max-height: calc(100vh - 40px);
@@ -67,23 +69,27 @@ header {
     position: sticky;
     top: var(--space-xl);
     order: 2;
+    border: 1px solid var(--border-primary);
 }
 
 /* Selection Mode Section */
 .selection-mode-section {
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-md);
     margin-bottom: var(--space-lg);
+    border: 1px solid var(--border-primary);
 }
 
 /* Active Filters Display */
 .active-filters {
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     padding: var(--space-lg);
     margin-bottom: var(--space-lg);
     box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--color-secondary);
+    border: 1px solid var(--border-primary);
     border-left: 4px solid var(--color-secondary);
 }
 
@@ -107,17 +113,19 @@ header {
 
 /* Comparison Section */
 .comparison-section {
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
     margin-bottom: var(--space-2xl);
     border-left: 4px solid var(--color-success);
+    border: 1px solid var(--border-primary);
+    border-left: 4px solid var(--color-success);
 }
 
 .comparison-header {
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-secondary);
     padding: var(--space-lg) var(--space-xl);
-    border-bottom: 1px solid var(--color-gray-200);
+    border-bottom: 1px solid var(--border-primary);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     display: flex;
     justify-content: space-between;
@@ -142,16 +150,17 @@ header {
 
 /* Card Table Container */
 .card-table {
-    background-color: var(--color-white);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-xl);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-primary);
 }
 
 /* Visual Comparison Mode Indicators */
 .main-content.has-selection .card-table {
     border-left: 4px solid var(--color-secondary);
-    box-shadow: var(--shadow-lg), 0 0 8px rgba(0, 123, 255, 0.1);
+    box-shadow: var(--shadow-lg), 0 0 8px rgba(52, 152, 219, 0.1);
 }
 
 .main-content.has-selection .card-table thead {
@@ -163,7 +172,7 @@ header {
 }
 
 .main-content.has-selection tbody tr:hover {
-    background-color: #f0f8ff !important;
+    background-color: var(--bg-secondary) !important;
     transform: translateX(2px);
 }
 
