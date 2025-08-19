@@ -341,6 +341,42 @@ h4 {
     border: 1px solid var(--color-danger);
 }
 
+/* Help Toggle Styles */
+.help-toggle {
+    position: fixed;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    z-index: var(--z-fixed);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-round);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    font-size: var(--font-size-xl);
+}
+
+.help-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xl);
+    background: var(--bg-secondary);
+}
+
+.help-toggle:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+}
+
+.help-icon {
+    color: var(--color-info);
+    transition: color var(--transition-theme);
+}
+
 /* Dark Mode Toggle Styles */
 .theme-toggle {
     position: fixed;

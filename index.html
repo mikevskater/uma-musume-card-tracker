@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Help Button -->
+    <button id="helpToggle" class="help-toggle" aria-label="Open help and tutorial">
+        <span class="help-icon">ℹ️</span>
+    </button>
+
     <!-- Dark Mode Toggle -->
     <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
         <span class="light-icon">🌙</span>
@@ -327,6 +332,34 @@
             </div>
             <div class="modal-body" id="modalBody">
                 <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal help-modal" style="display: none;">
+        <div class="modal-overlay" id="helpOverlay"></div>
+        <div class="modal-content help-modal-content">
+            <div class="modal-header">
+                <h2>Help & Tutorial</h2>
+                <button class="modal-close" id="helpClose">&times;</button>
+            </div>
+            <div class="modal-body help-modal-body">
+                <div class="help-layout">
+                    <nav class="help-navigation">
+                        <ul class="help-nav-list">
+                            <li><button class="help-nav-item active" data-section="welcome">Welcome</button></li>
+                            <li><button class="help-nav-item" data-section="filtering">Filtering</button></li>
+                            <li><button class="help-nav-item" data-section="sorting">Sorting</button></li>
+                            <li><button class="help-nav-item" data-section="comparison">Comparison</button></li>
+                            <li><button class="help-nav-item" data-section="collection">Collection</button></li>
+                            <li><button class="help-nav-item" data-section="tips">Tips & Tricks</button></li>
+                        </ul>
+                    </nav>
+                    <main class="help-content" id="helpContent">
+                        <!-- Content will be populated by JavaScript -->
+                    </main>
+                </div>
             </div>
         </div>
     </div>

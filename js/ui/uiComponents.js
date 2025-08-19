@@ -1,4 +1,4 @@
-// UI Components and Builders (ENHANCED WITH DARK MODE)
+// UI Components and Builders (ENHANCED WITH DARK MODE & HELP SYSTEM)
 // Reusable functions for creating consistent UI elements with dark mode support
 
 // ===== THEME MANAGEMENT =====
@@ -107,6 +107,69 @@ function updateThemeToggleState(theme) {
         );
         themeToggle.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
     }
+}
+
+// ===== HELP SYSTEM MANAGEMENT =====
+
+// Initialize help system
+function initializeHelpSystem() {
+    const helpToggle = document.getElementById('helpToggle');
+    if (helpToggle) {
+        helpToggle.addEventListener('click', openHelpModal);
+        
+        // Add keyboard support
+        helpToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openHelpModal();
+            }
+        });
+        
+        // Set accessibility attributes
+        helpToggle.setAttribute('aria-label', 'Open help and tutorial');
+        helpToggle.title = 'Open help and tutorial';
+    }
+    
+    // Setup help modal event listeners
+    setupHelpModalEvents();
+    
+    console.log('📖 Help system initialized');
+}
+
+// Setup help modal event listeners
+function setupHelpModalEvents() {
+    // Close button
+    const helpClose = document.getElementById('helpClose');
+    if (helpClose) {
+        helpClose.addEventListener('click', closeHelpModal);
+    }
+    
+    // Overlay click to close
+    const helpOverlay = document.getElementById('helpOverlay');
+    if (helpOverlay) {
+        helpOverlay.addEventListener('click', closeHelpModal);
+    }
+    
+    // Navigation items
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('help-nav-item')) {
+            const sectionId = e.target.getAttribute('data-section');
+            if (sectionId) {
+                navigateToHelpSection(sectionId);
+            }
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const helpModal = document.getElementById('helpModal');
+        if (helpModal && helpModal.style.display === 'block') {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeHelpModal();
+            }
+        }
+    });
 }
 
 // ===== DOM UTILITIES =====
@@ -368,6 +431,79 @@ function createModalHeader(cardName, cardPosition, totalCards) {
     wrapper.appendChild(rightNav);
     
     return wrapper;
+}
+
+// ===== HELP MODAL COMPONENTS =====
+
+// Create help navigation item
+function createHelpNavItem(sectionId, label, isActive = false) {
+    return createElement('button', {
+        className: `help-nav-item ${isActive ? 'active' : ''}`,
+        'data-section': sectionId,
+        textContent: label
+    });
+}
+
+// Create help section container
+function createHelpSection(sectionId, content, isActive = false) {
+    return createElement('div', {
+        className: `help-section ${isActive ? 'active' : ''}`,
+        'data-section': sectionId,
+        innerHTML: content
+    });
+}
+
+// Create help step element
+function createHelpStep(content) {
+    return createElement('div', {
+        className: 'help-step',
+        innerHTML: content
+    });
+}
+
+// Create help grid container
+function createHelpGrid(items) {
+    const grid = createElement('div', {
+        className: 'help-grid'
+    });
+    
+    items.forEach(item => {
+        const gridItem = createElement('div', {
+            className: 'help-grid-item',
+            innerHTML: `<h5>${item.title}</h5><p>${item.content}</p>`
+        });
+        grid.appendChild(gridItem);
+    });
+    
+    return grid;
+}
+
+// Create help tip/highlight/warning box
+function createHelpBox(type, content) {
+    const validTypes = ['tip', 'highlight', 'warning'];
+    const boxType = validTypes.includes(type) ? type : 'tip';
+    
+    return createElement('div', {
+        className: `help-${boxType}`,
+        innerHTML: content
+    });
+}
+
+// Create help image placeholder
+function createHelpImagePlaceholder(description) {
+    return createElement('div', {
+        className: 'help-image-placeholder',
+        innerHTML: `📷 ${description}<br><small>Screenshot placeholder</small>`
+    });
+}
+
+// Create keyboard shortcut display
+function createKeyboardShortcut(keys) {
+    const shortcuts = Array.isArray(keys) ? keys : [keys];
+    return createElement('span', {
+        className: 'help-shortcut',
+        innerHTML: shortcuts.map(key => `<kbd>${key}</kbd>`).join(' + ')
+    });
 }
 
 // ===== SORT COMPONENTS =====
@@ -674,6 +810,19 @@ function getSortOptionLabel(category, option) {
     }
 }
 
+// ===== INITIALIZATION FUNCTIONS =====
+
+// Initialize all UI systems
+function initializeUIComponents() {
+    // Initialize theme system first
+    initializeThemeSystem();
+    
+    // Initialize help system
+    initializeHelpSystem();
+    
+    console.log('🎨 UI Components initialized');
+}
+
 // ===== EXPORTS =====
 
 // Export all components to global scope
@@ -686,6 +835,17 @@ window.UIComponents = {
     setupThemeToggle,
     updateThemeToggleState,
     THEMES,
+    
+    // Help system
+    initializeHelpSystem,
+    setupHelpModalEvents,
+    createHelpNavItem,
+    createHelpSection,
+    createHelpStep,
+    createHelpGrid,
+    createHelpBox,
+    createHelpImagePlaceholder,
+    createKeyboardShortcut,
     
     // Core utilities
     createElement,
@@ -713,7 +873,10 @@ window.UIComponents = {
     createSkillItem,
     checkSkillTypeFilters,
     getSelectedValues,
-    getSortOptionLabel
+    getSortOptionLabel,
+    
+    // Initialization
+    initializeUIComponents
 };
 
 // Also export individual functions to global scope for backward compatibility
