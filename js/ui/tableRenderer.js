@@ -29,22 +29,34 @@ function createCardTableRow(card) {
         'data-card-id': cardId
     });
     
-    // Get effective level and limit break for display
-    const effectiveLevel = getEffectiveLevel(card);
-    let displayLimitBreak;
+    // FIXED: Proper level and limit break calculation for form elements
+    let displayLevel, displayLimitBreak;
+    
+    // Determine what values to show in form elements
     if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
+        // Global override is active
         displayLimitBreak = globalLimitBreakLevel;
+        displayLevel = limitBreaks[card.rarity][globalLimitBreakLevel]; // Max level for global LB
+    } else if (isOwned) {
+        // Owned card - use actual owned values
+        displayLevel = getOwnedCardLevel(cardId);
+        displayLimitBreak = getOwnedCardLimitBreak(cardId);
     } else {
-        displayLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
+        // Unowned card - use defaults
+        displayLevel = limitBreaks[card.rarity][2]; // Default level for LB 2
+        displayLimitBreak = 2; // Default LB
     }
+    
+    // FIXED: For effect calculations (different from form display), use getEffectiveLevel
+    const effectiveLevelForEffects = getEffectiveLevel(card);
     
     // Create level display with potential indicator
     const levelDisplay = showMaxPotentialLevels && isOwned ? 
-        `${effectiveLevel} <span class="max-potential-indicator">MAX</span>` : 
-        effectiveLevel;
+        `${effectiveLevelForEffects} <span class="max-potential-indicator">MAX</span>` : 
+        effectiveLevelForEffects;
     
-    // Get priority effects based on current level
-    const priorityEffects = getPriorityEffects(card, 4, effectiveLevel);
+    // Get priority effects based on effective level (for effects display)
+    const priorityEffects = getPriorityEffects(card, 4, effectiveLevelForEffects);
     const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
 
     // Get hint skills (limit to 3)
@@ -52,20 +64,23 @@ function createCardTableRow(card) {
         getSkillName(skill.id)
     ).join('<br>') || 'None';
 
-    // ENHANCED: Determine control states with comparison mode consideration
-    const shouldDisableLevel = !isOwned && globalLimitBreakLevel === null ||
-                              globalLimitBreakLevel !== null && 
-                              (globalLimitBreakOverrideOwned || !isOwned) ||
-                              comparisonMode; // NEW: Disable in comparison mode
+    // FIXED: Determine control states with proper logic
+    const shouldDisableOwnership = comparisonMode;
+    
+    const shouldDisableLevel = comparisonMode || 
+                              (!isOwned && globalLimitBreakLevel === null) ||
+                              (globalLimitBreakLevel !== null && 
+                               (globalLimitBreakOverrideOwned || !isOwned));
 
-    const shouldDisableLB = !isOwned && globalLimitBreakLevel === null ||
-                           globalLimitBreakLevel !== null && 
-                           (globalLimitBreakOverrideOwned || !isOwned) ||
-                           comparisonMode; // NEW: Disable in comparison mode
+    const shouldDisableLB = comparisonMode || 
+                           (!isOwned && globalLimitBreakLevel === null) ||
+                           (globalLimitBreakLevel !== null && 
+                            (globalLimitBreakOverrideOwned || !isOwned));
 
-    const shouldDisableOwnership = comparisonMode; // NEW: Disable ownership checkbox in comparison mode
+    // FIXED: Use proper max level calculation for level input
+    const maxLevelForInput = limitBreaks[card.rarity][displayLimitBreak];
 
-    // Build row HTML
+    // Build row HTML with FIXED values
     row.innerHTML = `
         <td class="ownership-checkbox${comparisonMode ? ' comparison-mode-disabled' : ''}">
             ${createOwnershipCheckbox(cardId, isOwned, shouldDisableOwnership).outerHTML}
@@ -79,8 +94,8 @@ function createCardTableRow(card) {
         <td class="${comparisonMode ? 'comparison-mode-disabled' : ''}">
             ${createLevelInput(
                 cardId, 
-                effectiveLevel, 
-                limitBreaks[card.rarity][displayLimitBreak], 
+                displayLevel,  // FIXED: Use actual owned level or appropriate default
+                maxLevelForInput, 
                 shouldDisableLevel
             ).outerHTML}
         </td>
@@ -98,7 +113,7 @@ function createCardTableRow(card) {
 // Update card display when level changes
 function updateCardDisplay(input) {
     const cardId = parseInt(input.dataset.cardId);
-    const level = parseInt(input.value);
+    const typedLevel = parseInt(input.value);
     const card = cardData.find(c => c.support_id === cardId);
     
     if (!card) return;
@@ -106,7 +121,20 @@ function updateCardDisplay(input) {
     const row = input.closest('tr');
     const isOwned = isCardOwned(cardId);
     
-    // Determine which LB to display - respect global override settings
+    // FIXED: Determine which level to use for effects calculation
+    let effectiveLevelForEffects;
+    if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
+        // Global override active - use the global level
+        effectiveLevelForEffects = limitBreaks[card.rarity][globalLimitBreakLevel];
+    } else if (isOwned) {
+        // Owned card - use the typed level
+        effectiveLevelForEffects = typedLevel;
+    } else {
+        // Unowned card - use typed level or default
+        effectiveLevelForEffects = typedLevel;
+    }
+    
+    // Determine display LB for form sync
     let displayLimitBreak;
     if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
         displayLimitBreak = globalLimitBreakLevel;
@@ -114,23 +142,23 @@ function updateCardDisplay(input) {
         displayLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
     }
     
-    // Update limit break display if needed
+    // FIXED: Update limit break display to match calculated value
     const lbSelect = row.querySelector('.lb-select');
     if (lbSelect && lbSelect.value != displayLimitBreak) {
         lbSelect.value = displayLimitBreak;
     }
     
-    // Recalculate and update priority effects using the typed level
-    const priorityEffects = getPriorityEffects(card, 4, level);
+    // Recalculate and update priority effects using the effective level
+    const priorityEffects = getPriorityEffects(card, 4, effectiveLevelForEffects);
     const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
     row.children[7].innerHTML = mainEffectsDisplay;
     
     // Update modal if it's open for this card
     if (currentModalCard && currentModalCard.support_id === cardId) {
         const modalLevelInput = document.getElementById('modalLevelInput');
-        if (modalLevelInput && modalLevelInput.value != level) {
-            modalLevelInput.value = level;
-            updateModalDisplay(level);
+        if (modalLevelInput && modalLevelInput.value != typedLevel) {
+            modalLevelInput.value = typedLevel;
+            updateModalDisplay(typedLevel);
         }
     }
 }
@@ -572,3 +600,188 @@ window.TableRenderer = {
 
 // Export individual functions to global scope for backward compatibility
 Object.assign(window, window.TableRenderer);
+
+// Debug Tools for UI Sync Issue
+// Add these functions to help verify the fix
+
+// 1. Verify table sync after any operation
+function debugTableSync() {
+    console.log('=== TABLE SYNC DEBUG ===');
+    
+    const rows = document.querySelectorAll('#cardTableBody tr');
+    let syncIssues = 0;
+    
+    rows.forEach(row => {
+        const cardId = parseInt(row.dataset.cardId);
+        const isOwned = isCardOwned(cardId);
+        
+        // Get form elements
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        const levelInput = row.querySelector('.level-input');
+        const lbSelect = row.querySelector('.lb-select');
+        
+        // Get expected values
+        const expectedChecked = isOwned;
+        const expectedLevel = isOwned ? getOwnedCardLevel(cardId) : null;
+        const expectedLB = isOwned ? getOwnedCardLimitBreak(cardId) : null;
+        
+        // Check for sync issues
+        const issues = [];
+        
+        if (checkbox.checked !== expectedChecked) {
+            issues.push(`Checkbox: got ${checkbox.checked}, expected ${expectedChecked}`);
+        }
+        
+        if (isOwned && parseInt(levelInput.value) !== expectedLevel) {
+            issues.push(`Level: got ${levelInput.value}, expected ${expectedLevel}`);
+        }
+        
+        if (isOwned && parseInt(lbSelect.value) !== expectedLB) {
+            issues.push(`LB: got ${lbSelect.value}, expected ${expectedLB}`);
+        }
+        
+        if (issues.length > 0) {
+            console.log(`Card ${cardId} SYNC ISSUES:`, issues);
+            console.log('  Data:', { isOwned, expectedLevel, expectedLB });
+            console.log('  Form:', { 
+                checked: checkbox.checked, 
+                level: levelInput.value, 
+                lb: lbSelect.value 
+            });
+            syncIssues++;
+        }
+    });
+    
+    console.log(`Found ${syncIssues} sync issues out of ${rows.length} rows`);
+    return syncIssues === 0;
+}
+
+// 2. Verify specific card sync
+function debugCardSync(cardId) {
+    console.log(`=== CARD ${cardId} SYNC DEBUG ===`);
+    
+    const row = document.querySelector(`tr[data-card-id="${cardId}"]`);
+    if (!row) {
+        console.log('Row not found');
+        return false;
+    }
+    
+    const isOwned = isCardOwned(cardId);
+    const ownedLevel = getOwnedCardLevel(cardId);
+    const ownedLB = getOwnedCardLimitBreak(cardId);
+    
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    const levelInput = row.querySelector('.level-input');
+    const lbSelect = row.querySelector('.lb-select');
+    
+    console.log('Data state:', {
+        isOwned,
+        ownedLevel,
+        ownedLB,
+        ownedCardsData: ownedCards[cardId]
+    });
+    
+    console.log('Form state:', {
+        checkboxChecked: checkbox.checked,
+        levelValue: parseInt(levelInput.value),
+        lbValue: parseInt(lbSelect.value),
+        levelDisabled: levelInput.disabled,
+        lbDisabled: lbSelect.disabled
+    });
+    
+    console.log('Global settings:', {
+        globalLimitBreakLevel,
+        globalLimitBreakOverrideOwned,
+        showMaxPotentialLevels
+    });
+    
+    const syncOK = checkbox.checked === isOwned &&
+                   (!isOwned || parseInt(levelInput.value) === ownedLevel) &&
+                   (!isOwned || parseInt(lbSelect.value) === ownedLB);
+    
+    console.log('Sync status:', syncOK ? '✅ OK' : '❌ BROKEN');
+    return syncOK;
+}
+
+// 3. Test all critical scenarios
+function testTableSyncScenarios() {
+    console.log('=== TESTING ALL SYNC SCENARIOS ===');
+    
+    const scenarios = [
+        {
+            name: 'Fresh page load',
+            action: () => window.location.reload()
+        },
+        {
+            name: 'Apply filter',
+            action: () => {
+                document.getElementById('ownedFilter').value = 'owned';
+                debouncedFilterAndSort();
+            }
+        },
+        {
+            name: 'Clear filter', 
+            action: () => {
+                document.getElementById('ownedFilter').value = '';
+                debouncedFilterAndSort();
+            }
+        },
+        {
+            name: 'Change sort',
+            action: () => handleSort('rarity')
+        },
+        {
+            name: 'Toggle global LB',
+            action: () => {
+                const select = document.getElementById('globalLimitBreak');
+                select.value = select.value === '4' ? '' : '4';
+                setGlobalLimitBreak(select.value);
+            }
+        },
+        {
+            name: 'Toggle apply to owned',
+            action: () => {
+                const checkbox = document.getElementById('globalOverrideOwned');
+                checkbox.checked = !checkbox.checked;
+                setGlobalLimitBreakOverride(checkbox.checked);
+            }
+        }
+    ];
+    
+    scenarios.forEach(scenario => {
+        console.log(`\n--- Testing: ${scenario.name} ---`);
+        scenario.action();
+        setTimeout(() => {
+            const syncOK = debugTableSync();
+            console.log(`${scenario.name}: ${syncOK ? '✅ PASS' : '❌ FAIL'}`);
+        }, 500);
+    });
+}
+
+// 4. Monitor sync in real-time
+function startSyncMonitoring() {
+    console.log('Starting sync monitoring...');
+    
+    // Monitor table updates
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach(mutation => {
+            if (mutation.target.id === 'cardTableBody') {
+                console.log('Table updated, checking sync...');
+                setTimeout(() => debugTableSync(), 100);
+            }
+        });
+    });
+    
+    const tableBody = document.getElementById('cardTableBody');
+    if (tableBody) {
+        observer.observe(tableBody, { childList: true, subtree: true });
+        console.log('✅ Sync monitoring active');
+        return observer;
+    }
+}
+
+// Add these to window for console access
+window.debugTableSync = debugTableSync;
+window.debugCardSync = debugCardSync;
+window.testTableSyncScenarios = testTableSyncScenarios;
+window.startSyncMonitoring = startSyncMonitoring;

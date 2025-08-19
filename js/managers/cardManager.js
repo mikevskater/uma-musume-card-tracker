@@ -84,15 +84,36 @@ function setOwnedCardLimitBreak(cardId, limitBreakLevel) {
     if (ownedCards[cardId] && ownedCards[cardId].owned) {
         const card = cardData.find(c => c.support_id === cardId);
         if (card) {
+            const oldLimitBreak = ownedCards[cardId].limitBreak;
+            const oldLevel = ownedCards[cardId].level;
+            
+            // Update limit break level
             ownedCards[cardId].limitBreak = limitBreakLevel;
-            // Ensure level doesn't exceed new limit break maximum
-            const maxLevel = limitBreaks[card.rarity][limitBreakLevel];
-            if (ownedCards[cardId].level > maxLevel) {
-                ownedCards[cardId].level = maxLevel;
+            
+            // ENHANCED: Calculate new max level and clamp if necessary
+            const newMaxLevel = limitBreaks[card.rarity][limitBreakLevel];
+            let newLevel = oldLevel;
+            
+            if (oldLevel > newMaxLevel) {
+                newLevel = newMaxLevel;
+                ownedCards[cardId].level = newLevel;
+                console.log(`🔧 Level clamped for card ${cardId}: ${oldLevel} → ${newLevel} (LB ${oldLimitBreak} → ${limitBreakLevel})`);
             }
+            
             saveOwnedCards();
+            
+            // ENHANCED: Return clamping info for UI updates
+            return {
+                oldLevel,
+                newLevel,
+                levelChanged: oldLevel !== newLevel,
+                oldLimitBreak,
+                newLimitBreak: limitBreakLevel,
+                newMaxLevel
+            };
         }
     }
+    return null;
 }
 
 // ===== CARD OWNERSHIP QUERIES =====

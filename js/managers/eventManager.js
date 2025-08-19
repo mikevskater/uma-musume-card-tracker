@@ -157,25 +157,10 @@ function initializeTableEvents() {
     addDelegatedListener('.lb-select', 'change', function(e) {
         const cardId = parseInt(this.dataset.cardId);
         const newLimitBreak = parseInt(this.value);
+        const tableRow = this.closest('tr');
         
-        if (isCardOwned(cardId) && 
-            (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
-            setOwnedCardLimitBreak(cardId, newLimitBreak);
-            
-            // Update level input constraints
-            const card = cardData.find(c => c.support_id === cardId);
-            const maxLevel = limitBreaks[card.rarity][newLimitBreak];
-            const levelInput = this.closest('tr').querySelector('.level-input');
-            levelInput.max = maxLevel;
-            
-            // Clamp current level if needed
-            if (parseInt(levelInput.value) > maxLevel) {
-                levelInput.value = maxLevel;
-                setOwnedCardLevel(cardId, maxLevel);
-            }
-            
-            updateCardDisplay(levelInput);
-        }
+        // ENHANCED: Use the new handler with level clamping
+        handleTableLimitBreakChange(cardId, newLimitBreak, tableRow);
     });
     
     // Row click handlers (for modal or selection)
@@ -416,33 +401,101 @@ function handleModalLimitBreakChange(e, cardId) {
     
     if (isCardOwned(cardId) && 
         (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
-        setOwnedCardLimitBreak(cardId, newLimitBreak);
         
-        // Update level input max value
-        const card = cardData.find(c => c.support_id === cardId);
-        const maxLevel = limitBreaks[card.rarity][newLimitBreak];
-        const modalLevelInput = document.getElementById('modalLevelInput');
-        modalLevelInput.max = maxLevel;
+        // Use the setOwnedCardLimitBreak function
+        const clampResult = setOwnedCardLimitBreak(cardId, newLimitBreak);
         
-        // Update current level if it exceeds new max
-        if (parseInt(modalLevelInput.value) > maxLevel) {
-            modalLevelInput.value = maxLevel;
-            setOwnedCardLevel(cardId, maxLevel);
+        if (clampResult) {
+            const { newLevel, levelChanged, newMaxLevel } = clampResult;
+            
+            // Update modal level input constraints and value
+            const modalLevelInput = document.getElementById('modalLevelInput');
+            if (modalLevelInput) {
+                modalLevelInput.max = newMaxLevel;
+                
+                // Update level if it was clamped
+                if (levelChanged) {
+                    modalLevelInput.value = newLevel;
+                    updateModalDisplay(newLevel);
+                    
+                    // Show user feedback about level clamping
+                    showToast(`Level reduced to ${newLevel} (max for LB ${newLimitBreak})`, 'warning');
+                }
+            }
+            
+            // Update corresponding table row
+            updateTableRowAfterLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel);
+            
+            console.log(`🔄 Modal LB change: Card ${cardId} → LB ${newLimitBreak}, Level ${newLevel}`);
+        }
+    }
+}
+
+function handleTableLimitBreakChange(cardId, newLimitBreak, tableRow) {
+    if (isCardOwned(cardId) && 
+        (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
+        
+        // ENHANCED: Use the enhanced setOwnedCardLimitBreak function
+        const clampResult = setOwnedCardLimitBreak(cardId, newLimitBreak);
+        
+        if (clampResult) {
+            const { newLevel, levelChanged, newMaxLevel } = clampResult;
+            
+            // Update table level input constraints and value
+            const levelInput = tableRow.querySelector('.level-input');
+            if (levelInput) {
+                levelInput.max = newMaxLevel;
+                
+                // ENHANCED: Update level if it was clamped
+                if (levelChanged) {
+                    levelInput.value = newLevel;
+                    updateCardDisplay(levelInput);
+                    
+                    // Show user feedback about level clamping
+                    showToast(`Level reduced to ${newLevel} (max for LB ${newLimitBreak})`, 'warning');
+                }
+            }
+            
+            // ENHANCED: Update modal if open for this card
+            if (currentModalCard && currentModalCard.support_id === cardId) {
+                updateModalAfterTableLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel);
+            }
+            
+            console.log(`🔄 Table LB change: Card ${cardId} → LB ${newLimitBreak}, Level ${newLevel}`);
+        }
+    }
+}
+
+function updateTableRowAfterLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel) {
+    const tableRow = document.querySelector(`tr[data-card-id="${cardId}"]`);
+    if (tableRow) {
+        const levelInput = tableRow.querySelector('.level-input');
+        const lbSelect = tableRow.querySelector('.lb-select');
+        
+        if (levelInput) {
+            levelInput.max = newMaxLevel;
+            levelInput.value = newLevel;
+            updateCardDisplay(levelInput);
         }
         
-        updateModalDisplay(parseInt(modalLevelInput.value));
-        
-        // Update table display
-        const tableInput = document.querySelector(`input[data-card-id="${cardId}"]`);
-        const tableLBSelect = document.querySelector(`select[data-card-id="${cardId}"]`);
-        if (tableInput) {
-            tableInput.max = maxLevel;
-            tableInput.value = parseInt(modalLevelInput.value);
-            updateCardDisplay(tableInput);
+        if (lbSelect && lbSelect.value != newLimitBreak) {
+            lbSelect.value = newLimitBreak;
         }
-        if (tableLBSelect) {
-            tableLBSelect.value = newLimitBreak;
-        }
+    }
+}
+
+function updateModalAfterTableLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel) {
+    const modalLevelInput = document.getElementById('modalLevelInput');
+    const modalLBSelect = document.getElementById('modalLimitBreakSelect');
+    
+    if (modalLevelInput) {
+        modalLevelInput.max = newMaxLevel;
+        modalLevelInput.value = newLevel;
+        updateModalDisplay(newLevel);
+    }
+    
+    if (modalLBSelect && modalLBSelect.value != newLimitBreak) {
+        modalLBSelect.value = newLimitBreak;
     }
 }
 

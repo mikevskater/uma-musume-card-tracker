@@ -354,42 +354,64 @@ function createTypeBadge(type) {
 
 // Create level input
 function createLevelInput(cardId, currentLevel, maxLevel, disabled = false) {
-    return createElement('input', {
+    const input = createElement('input', {
         type: 'number',
         className: 'level-input',
-        value: currentLevel,
         min: '1',
         max: maxLevel,
         'data-card-id': cardId,
         onclick: 'event.stopPropagation()',
         disabled: disabled
     });
+    
+    input.value = currentLevel;
+    input.setAttribute('value', currentLevel.toString());
+    
+    return input;
 }
 
 // Create limit break select
 function createLimitBreakSelect(cardId, currentLB, rarity, disabled = false) {
-    const options = Array.from({length: 5}, (_, i) => 
-        `<option value="${i}" ${currentLB === i ? 'selected' : ''}>LB ${i}</option>`
-    ).join('');
-    
-    return createElement('select', {
+    const select = createElement('select', {
         className: 'lb-select',
         'data-card-id': cardId,
         onclick: 'event.stopPropagation()',
-        disabled: disabled,
-        innerHTML: options
+        disabled: disabled
     });
+    
+    for (let i = 0; i <= 4; i++) {
+        const option = createElement('option', {
+            value: i.toString(),
+            textContent: `LB ${i}`
+        });   
+    
+        if (i === currentLB) {
+            option.selected = true;
+            option.setAttribute('selected', 'selected');
+        }
+        
+        select.appendChild(option);
+    }
+    
+    return select;
 }
 
 // ENHANCED: Create ownership checkbox with comparison mode support
 function createOwnershipCheckbox(cardId, isOwned, disabled = false) {
     const checkbox = createElement('input', {
         type: 'checkbox',
-        checked: isOwned,
         'data-card-id': cardId,
         onclick: 'event.stopPropagation()',
         disabled: disabled
     });
+    
+    // FIXED: Set both property AND attribute for HTML serialization
+    checkbox.checked = isOwned;
+    if (isOwned) {
+        checkbox.setAttribute('checked', 'checked');
+    } else {
+        checkbox.removeAttribute('checked');
+    }
     
     // Add comparison mode styling if disabled due to comparison mode
     if (disabled && comparisonMode) {
