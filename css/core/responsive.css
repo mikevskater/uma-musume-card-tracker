@@ -1,0 +1,822 @@
+/* =================================================================
+   RESPONSIVE.CSS - Responsive Breakpoints
+   ================================================================= */
+
+/* =================================================================
+   TABLET & MEDIUM SCREENS (1200px and below)
+   ================================================================= */
+
+@media (max-width: 1200px) {
+    :root {
+        --sidebar-width: var(--sidebar-width-md);
+        --selection-width: var(--selection-width-md);
+    }
+    
+    .sidebar {
+        width: var(--sidebar-width-md);
+        min-width: var(--sidebar-width-md);
+        max-height: calc(100vh - 40px);
+    }
+    
+    .main-layout {
+        gap: var(--space-lg);
+    }
+    
+    .selection-container {
+        width: var(--selection-width-md);
+        min-width: var(--selection-width-md);
+    }
+}
+
+/* =================================================================
+   TABLET LANDSCAPE (968px - 1200px)
+   ================================================================= */
+
+@media (max-width: 968px) {
+    /* Layout Changes - Stack Vertically */
+    .main-layout {
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        order: 2; /* Put sidebar below content */
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    /* Main Content - Stack Vertically on Tablet */
+    .main-content {
+        order: 1; /* Put content above sidebar */
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+    
+    /* Selection container goes full width */
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        max-height: 400px;
+        order: 2; /* Below table */
+    }
+    
+    .content-wrapper {
+        order: 1; /* Table above selection */
+    }
+    
+    /* Selection Mode Toggle - Tablet adjustments */
+    .selection-mode-section {
+        justify-content: center;
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    .selection-mode-toggle label {
+        font-size: var(--font-size-base);
+    }
+    
+    /* Controls adjustments */
+    .controls {
+        padding: var(--space-lg);
+    }
+    
+    .basic-filters {
+        gap: var(--space-md);
+        margin-bottom: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
+    
+    .data-management {
+        margin-top: var(--space-lg);
+        padding-top: var(--space-lg);
+    }
+    
+    .data-management-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+    
+    .data-management-buttons .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    /* Comparison adjustments */
+    .comparison-header {
+        flex-direction: column;
+        gap: var(--space-md);
+        align-items: start;
+    }
+    
+    .comparison-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .comparison-data-table th:first-child {
+        width: 150px;
+        min-width: 150px;
+    }
+    
+    .comparison-card-header-cell {
+        padding: var(--space-md) var(--space-sm) !important;
+    }
+    
+    .comparison-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .comparison-card-name {
+        font-size: var(--font-size-sm);
+    }
+    
+    .comparison-data-table th,
+    .comparison-data-table td {
+        padding: var(--space-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    /* Sort layer adjustments */
+    .sort-dropdowns {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    
+    .sort-dropdowns.single-dropdown .sort-category-select,
+    .sort-dropdowns.has-options .sort-category-select,
+    .sort-category-select,
+    .sort-option-select {
+        max-width: none;
+        flex: none;
+        width: 100%;
+    }
+    
+    .sort-layer-header {
+        flex-direction: column;
+        align-items: start;
+        gap: var(--space-sm);
+    }
+    
+    .sort-controls {
+        align-self: flex-end;
+    }
+}
+
+/* =================================================================
+   MOBILE (768px and below)
+   ================================================================= */
+
+@media (max-width: 768px) {
+    :root {
+        --card-icon-size: var(--card-icon-size-sm);
+        --table-row-height: var(--table-row-height-sm);
+        --card-image-width: 100px;
+        --card-image-height: 133px;
+    }
+    
+    /* Force vertical layout on mobile */
+    .main-content {
+        flex-direction: column !important;
+        gap: var(--space-lg);
+    }
+    
+    /* Selection container full width on mobile */
+    .selection-container {
+        width: 100%;
+        min-width: auto;
+        position: static;
+        max-height: 300px;
+        order: 2;
+    }
+    
+    .content-wrapper {
+        order: 1;
+    }
+    
+    /* Selection Mode Toggle - Mobile adjustments */
+    .selection-mode-section {
+        justify-content: center;
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    .selection-mode-toggle label {
+        font-size: var(--font-size-sm);
+        text-align: center;
+    }
+    
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        margin: 1vh auto;
+        max-height: 98vh;
+    }
+    
+    .modal-body {
+        padding: var(--space-lg);
+    }
+    
+    /* Modal header responsive adjustments */
+    .modal-header {
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    .modal-header h2 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .modal-close {
+        right: var(--space-lg);
+    }
+    
+    .modal-nav-section {
+        width: 50px;
+    }
+    
+    .modal-nav-right {
+        margin-right: 45px;
+    }
+    
+    .modal-title-section {
+        padding: 0 var(--space-sm);
+        padding-right: 45px;
+    }
+    
+    .modal-card-name {
+        font-size: var(--font-size-lg);
+    }
+    
+    .modal-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: var(--space-xl);
+        padding: var(--space-xs);
+    }
+    
+    /* Card detail adjustments */
+    .card-detail-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--space-lg);
+    }
+    
+    .card-image,
+    .card-image-fallback {
+        margin: 0 auto;
+    }
+    
+    .effects-grid,
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Level controls */
+    .level-controls {
+        flex-direction: column;
+        align-items: start;
+        gap: var(--space-sm);
+    }
+    
+    .level-control-row {
+        flex-direction: column;
+        align-items: start;
+        gap: var(--space-xs);
+        width: 100%;
+    }
+    
+    .level-control-row label {
+        min-width: auto;
+    }
+    
+    .modal-level-input,
+    .modal-lb-select {
+        width: 100%;
+    }
+    
+    /* Level display section */
+    .level-display-section {
+        padding: var(--space-md);
+    }
+    
+    .level-option {
+        margin-bottom: var(--space-sm);
+    }
+    
+    /* Multi-select dropdowns on mobile */
+    .multi-select {
+        min-width: 120px;
+    }
+    
+    .multi-select-dropdown,
+    .sidebar .multi-select-dropdown {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        top: auto;
+        max-height: 150px;
+    }
+    
+    /* Data management */
+    .data-management-buttons {
+        flex-direction: column;
+    }
+    
+    .data-management-buttons .btn {
+        width: 100%;
+    }
+    
+    /* Confirmation modal */
+    .confirm-buttons {
+        flex-direction: column;
+    }
+    
+    /* Active filters */
+    .active-filters-header {
+        flex-direction: column;
+        align-items: start;
+        gap: var(--space-sm);
+    }
+    
+    .filter-chips {
+        width: 100%;
+    }
+    
+    /* Table adjustments */
+    tbody tr {
+        height: var(--table-row-height-sm);
+    }
+    
+    td.ownership-checkbox {
+        height: var(--table-row-height-sm);
+        width: 50px;
+    }
+    
+    /* LB select mobile adjustments */
+    .lb-select {
+        width: 60px;
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs);
+        padding-right: var(--space-xl);
+    }
+    
+    /* Mobile comparison table adjustments */
+    .comparison-data-table {
+        font-size: var(--font-size-sm);
+    }
+    
+    .comparison-data-table th:first-child {
+        width: 120px;
+        min-width: 120px;
+    }
+    
+    .comparison-card-header-cell {
+        padding: var(--space-sm) var(--space-xs) !important;
+    }
+    
+    .comparison-card-icon {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .comparison-card-name {
+        font-size: var(--font-size-xs);
+    }
+    
+    .comparison-data-table th,
+    .comparison-data-table td {
+        padding: var(--space-sm) var(--space-xs);
+        font-size: var(--font-size-sm);
+    }
+    
+    /* Mobile collapsible sections */
+    .comparison-section-header td:first-child::before {
+        left: var(--space-xs);
+        font-size: var(--font-size-xs);
+    }
+    
+    .comparison-section-header td:first-child {
+        padding-left: var(--space-xl) !important;
+    }
+    
+    /* Selection mode column adjustments */
+    .main-content.has-selection th:nth-child(1) { width: 50px; }
+    .main-content.has-selection th:nth-child(2) { width: 40px; }
+    .main-content.has-selection th:nth-child(3) { width: 100px; }
+    .main-content.has-selection th:nth-child(4) { width: 50px; }
+    .main-content.has-selection th:nth-child(5) { width: 60px; }
+    .main-content.has-selection th:nth-child(6) { width: 60px; }
+    .main-content.has-selection th:nth-child(7) { width: 60px; }
+    .main-content.has-selection th:nth-child(8) { width: 140px; }
+    .main-content.has-selection th:nth-child(9) { width: 100px; }
+    .main-content.has-selection th:nth-child(10) { width: 80px; }
+    
+    /* Selection container mobile adjustments */
+    .selected-card-item {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+    
+    .selected-card-icon-small {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .selected-card-name {
+        font-size: var(--font-size-sm);
+    }
+    
+    .selected-card-details {
+        font-size: var(--font-size-xs);
+    }
+    
+    .selection-actions {
+        padding: var(--space-md);
+    }
+    
+    .selection-actions .btn {
+        font-size: var(--font-size-sm);
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    /* Sort layer mobile adjustments */
+    .sort-layer {
+        padding: var(--space-sm);
+    }
+    
+    .sort-layer-title {
+        font-size: var(--font-size-sm);
+    }
+    
+    .sort-priority-badge {
+        font-size: var(--font-size-xs);
+        min-width: 18px;
+    }
+    
+    .sort-btn {
+        min-width: 20px;
+        height: 20px;
+        font-size: var(--font-size-xs);
+    }
+    
+    .sort-category-select,
+    .sort-option-select {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs);
+        width: 100%;
+        max-width: none;
+        flex: none;
+    }
+    
+    .sort-direction-toggle {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs) var(--space-sm);
+        min-width: 40px;
+    }
+    
+    /* Tooltip mobile adjustments */
+    .tooltip::before {
+        max-width: 150px;
+        font-size: var(--font-size-xs);
+        padding: var(--space-sm) var(--space-md);
+    }
+}
+
+/* =================================================================
+   SMALL MOBILE (480px and below)
+   ================================================================= */
+
+@media (max-width: 480px) {
+    :root {
+        --card-icon-size: var(--card-icon-size-xs);
+        --table-row-height: var(--table-row-height-xs);
+        --card-image-width: 80px;
+        --card-image-height: 107px;
+    }
+    
+    .container {
+        padding: var(--space-sm);
+    }
+    
+    /* Controls */
+    .controls {
+        padding: var(--space-sm);
+    }
+    
+    .filter-group {
+        margin-bottom: var(--space-sm);
+        width: 100%;
+    }
+    
+    .multi-select {
+        min-width: 100%;
+    }
+    
+    /* Selection Mode Toggle Section - Ultra-mobile */
+    .selection-mode-section {
+        justify-content: center;
+        padding: var(--space-xs) var(--space-sm);
+    }
+    
+    .selection-mode-toggle label {
+        font-size: var(--font-size-xs);
+        text-align: center;
+    }
+    
+    /* Ultra-mobile selection container */
+    .selection-container {
+        max-height: 250px;
+    }
+    
+    /* Table */
+    th, td {
+        padding: var(--space-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    td.ownership-checkbox {
+        padding: 0;
+        height: var(--table-row-height-xs);
+        width: 45px;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-sm);
+    }
+    
+    /* Effect filter items */
+    .effect-filter-item {
+        gap: var(--space-xs);
+    }
+    
+    .effect-filter-item label {
+        min-width: auto;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+        padding: var(--space-sm);
+    }
+    
+    .basic-filters h3 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .data-management h4 {
+        font-size: var(--font-size-base);
+    }
+    
+    /* Ultra-mobile comparison adjustments */
+    .comparison-header {
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    .comparison-header h3 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .comparison-table {
+        padding: var(--space-md);
+    }
+    
+    .comparison-data-table {
+        font-size: var(--font-size-xs);
+    }
+    
+    .comparison-data-table th:first-child {
+        width: 100px;
+        min-width: 100px;
+        font-size: var(--font-size-xs);
+    }
+    
+    .comparison-card-header-cell {
+        padding: var(--space-sm) var(--space-xs) !important;
+    }
+    
+    .comparison-card-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .comparison-card-name {
+        font-size: var(--font-size-xs);
+    }
+    
+    .comparison-card-details {
+        font-size: 10px;
+    }
+    
+    .comparison-data-table th,
+    .comparison-data-table td {
+        padding: var(--space-xs) var(--space-xs);
+        font-size: var(--font-size-xs);
+    }
+    
+    /* Ultra-mobile collapsible sections */
+    .comparison-section-header td:first-child::before {
+        left: 2px;
+        font-size: 10px;
+    }
+    
+    .comparison-section-header td:first-child {
+        padding-left: var(--space-lg) !important;
+        font-size: var(--font-size-xs) !important;
+    }
+    
+    /* Ultra-mobile table layout when selection is active */
+    .main-content.has-selection th:nth-child(1) { width: 45px; }
+    .main-content.has-selection th:nth-child(2) { width: 35px; }
+    .main-content.has-selection th:nth-child(3) { width: 80px; }
+    .main-content.has-selection th:nth-child(4) { width: 40px; }
+    .main-content.has-selection th:nth-child(5) { width: 50px; }
+    .main-content.has-selection th:nth-child(6) { width: 50px; }
+    .main-content.has-selection th:nth-child(7) { width: 50px; }
+    .main-content.has-selection th:nth-child(8) { width: 120px; }
+    .main-content.has-selection th:nth-child(9) { width: 80px; }
+    .main-content.has-selection th:nth-child(10) { width: 70px; }
+    
+    /* Selected cards ultra-mobile */
+    .selected-card-item {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+    
+    .selected-card-icon-small {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .selected-card-name {
+        font-size: var(--font-size-sm);
+    }
+    
+    .selected-card-details {
+        font-size: var(--font-size-xs);
+    }
+    
+    .selection-actions {
+        padding: var(--space-md);
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .selection-actions .btn {
+        font-size: var(--font-size-sm);
+        padding: var(--space-sm) var(--space-md);
+        width: 100%;
+    }
+    
+    /* Sort layers ultra-mobile */
+    .sort-layer {
+        padding: var(--space-sm);
+    }
+    
+    .sort-layer-title {
+        font-size: var(--font-size-sm);
+    }
+    
+    .sort-priority-badge {
+        font-size: 10px;
+        min-width: 18px;
+    }
+    
+    .sort-btn {
+        min-width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+    
+    .sort-category-select,
+    .sort-option-select {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs);
+        width: 100%;
+        max-width: none;
+        flex: none;
+    }
+    
+    .sort-direction-toggle {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs) var(--space-sm);
+        min-width: 40px;
+    }
+    
+    /* LB select ultra-small adjustments */
+    .lb-select {
+        width: 55px;
+        font-size: 10px;
+        padding: var(--space-xs);
+        padding-right: var(--space-lg);
+        background-size: 0.5rem;
+    }
+    
+    /* Modal close ultra-mobile */
+    .modal-close {
+        right: var(--space-md);
+        width: 28px;
+        height: 28px;
+        font-size: var(--space-xl);
+    }
+    
+    .modal-nav-section {
+        width: 45px;
+    }
+    
+    .modal-nav-right {
+        margin-right: 35px;
+    }
+    
+    .modal-title-section {
+        padding: 0 var(--space-xs);
+        padding-right: 35px;
+    }
+    
+    .modal-nav-btn {
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-xl);
+        padding: var(--space-xs);
+    }
+    
+    .modal-card-name {
+        font-size: var(--font-size-lg);
+    }
+    
+    .modal-card-counter {
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* =================================================================
+   LANDSCAPE ORIENTATION ADJUSTMENTS
+   ================================================================= */
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .modal-content {
+        margin: 1vh auto;
+        max-height: 98vh;
+    }
+    
+    .selection-container {
+        max-height: calc(100vh - 60px);
+    }
+    
+    .sidebar {
+        max-height: calc(100vh - 60px);
+    }
+}
+
+/* =================================================================
+   HIGH DPI / RETINA DISPLAYS
+   ================================================================= */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card-icon,
+    .card-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* =================================================================
+   PRINT STYLES
+   ================================================================= */
+
+@media print {
+    .sidebar,
+    .selection-container,
+    .selection-mode-section,
+    .modal,
+    .toast,
+    .btn,
+    .filter-chip .remove-chip {
+        display: none !important;
+    }
+    
+    .main-layout {
+        flex-direction: column;
+    }
+    
+    .main-content {
+        flex-direction: column;
+    }
+    
+    .card-table {
+        box-shadow: none;
+        border: 1px solid var(--color-gray-300);
+    }
+    
+    th, td {
+        border: 1px solid var(--color-gray-300) !important;
+        padding: var(--space-sm) !important;
+    }
+    
+    .comparison-section {
+        break-inside: avoid;
+    }
+}

@@ -1,0 +1,264 @@
+/* =================================================================
+   LAYOUT.CSS - Layout Systems & Containers
+   ================================================================= */
+
+/* Main Container */
+.container {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+}
+
+/* Header */
+header {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+}
+
+/* Main Layout Structure */
+.main-layout {
+    display: flex;
+    gap: var(--space-xl);
+    min-height: calc(100vh - 200px);
+}
+
+/* Sidebar Layout */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    position: sticky;
+    top: var(--space-xl);
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+}
+
+/* Content Wrapper (Table + Filters) */
+.content-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Selection Container (Comparison Mode) */
+.selection-container {
+    width: var(--selection-width);
+    min-width: var(--selection-width);
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    position: sticky;
+    top: var(--space-xl);
+    order: 2;
+}
+
+/* Selection Mode Section */
+.selection-mode-section {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-lg);
+}
+
+/* Active Filters Display */
+.active-filters {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--color-secondary);
+}
+
+.active-filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.results-count {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+/* Comparison Section */
+.comparison-section {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--space-2xl);
+    border-left: 4px solid var(--color-success);
+}
+
+.comparison-header {
+    background-color: var(--color-gray-50);
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comparison-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+}
+
+.comparison-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.comparison-table {
+    padding: var(--space-xl);
+    overflow-x: auto;
+}
+
+/* Card Table Container */
+.card-table {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Visual Comparison Mode Indicators */
+.main-content.has-selection .card-table {
+    border-left: 4px solid var(--color-secondary);
+    box-shadow: var(--shadow-lg), 0 0 8px rgba(0, 123, 255, 0.1);
+}
+
+.main-content.has-selection .card-table thead {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+}
+
+.main-content.has-selection tbody tr {
+    transition: all var(--transition-normal);
+}
+
+.main-content.has-selection tbody tr:hover {
+    background-color: #f0f8ff !important;
+    transform: translateX(2px);
+}
+
+/* Grid Systems */
+.grid {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Flex Utilities */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.items-end {
+    align-items: flex-end;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-auto {
+    flex: auto;
+}
+
+.flex-none {
+    flex: none;
+}
+
+/* Section Spacing */
+.section {
+    margin-bottom: var(--space-2xl);
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.section-sm {
+    margin-bottom: var(--space-lg);
+}
+
+.section-lg {
+    margin-bottom: var(--space-3xl);
+}

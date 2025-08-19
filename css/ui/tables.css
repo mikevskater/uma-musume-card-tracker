@@ -1,0 +1,406 @@
+/* =================================================================
+   TABLES.CSS - Table Components
+   ================================================================= */
+
+/* =================================================================
+   BASE TABLE STYLES
+   ================================================================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-gray-200);
+    vertical-align: middle;
+}
+
+th {
+    background-color: var(--color-primary-light);
+    color: var(--color-white);
+    font-weight: var(--font-weight-semibold);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+/* =================================================================
+   CARD TABLE
+   ================================================================= */
+
+/* Table Rows */
+tbody tr {
+    height: var(--table-row-height);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: var(--color-gray-50);
+}
+
+/* Row States */
+tbody tr.owned {
+    background-color: #f8fff8;
+    border-left: 4px solid var(--color-success);
+}
+
+tbody tr.owned:hover {
+    background-color: #f0fff0;
+}
+
+tbody tr.unowned {
+    background-color: var(--color-gray-50);
+    color: var(--color-gray-600);
+    opacity: 0.8;
+}
+
+tbody tr.unowned:hover {
+    background-color: var(--color-gray-100);
+}
+
+tbody tr.unowned .card-name {
+    color: var(--color-gray-500);
+}
+
+/* Selection States */
+tbody tr.selected {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #2196f3 !important;
+}
+
+tbody tr.selected:hover {
+    background-color: #bbdefb !important;
+}
+
+/* Sortable Headers */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+th.sortable:hover {
+    background-color: var(--color-primary);
+}
+
+.sort-arrow {
+    margin-left: var(--space-sm);
+    font-size: var(--font-size-xs);
+    opacity: 0.5;
+}
+
+th.sort-asc .sort-arrow::after {
+    content: '▲';
+    opacity: 1;
+}
+
+th.sort-desc .sort-arrow::after {
+    content: '▼';
+    opacity: 1;
+}
+
+/* Ownership Checkbox Cell */
+td.ownership-checkbox {
+    padding: 0;
+    width: 60px;
+    height: var(--table-row-height);
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+
+td.ownership-checkbox::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+td.ownership-checkbox input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+}
+
+/* Table Cell Content */
+.card-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+}
+
+.char-name {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-600);
+}
+
+.effects-summary {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    line-height: var(--line-height-normal);
+}
+
+/* Column Width Control for Selection Mode */
+.main-content.has-selection table {
+    table-layout: fixed;
+    width: 100%;
+    min-width: 800px;
+}
+
+.main-content.has-selection th,
+.main-content.has-selection td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main-content.has-selection th:nth-child(1) { width: 60px; }   /* Owned */
+.main-content.has-selection th:nth-child(2) { width: 50px; }   /* Icon */
+.main-content.has-selection th:nth-child(3) { width: 140px; }  /* Card */
+.main-content.has-selection th:nth-child(4) { width: 60px; }   /* Rarity */
+.main-content.has-selection th:nth-child(5) { width: 70px; }   /* Type */
+.main-content.has-selection th:nth-child(6) { width: 70px; }   /* Level */
+.main-content.has-selection th:nth-child(7) { width: 70px; }   /* LB */
+.main-content.has-selection th:nth-child(8) { width: 180px; }  /* Effects */
+.main-content.has-selection th:nth-child(9) { width: 120px; }  /* Hints */
+.main-content.has-selection th:nth-child(10) { width: 100px; } /* Release */
+
+/* =================================================================
+   COMPARISON TABLE
+   ================================================================= */
+
+.comparison-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.comparison-data-table th {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-md);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    border: 1px solid var(--color-primary-light);
+}
+
+.comparison-data-table th:first-child {
+    background-color: var(--color-primary-light);
+    width: 200px;
+    min-width: 200px;
+}
+
+.comparison-data-table td {
+    padding: var(--space-md);
+    border: 1px solid var(--color-gray-200);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.comparison-data-table td:first-child {
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-gray-50);
+    color: var(--color-primary);
+}
+
+/* Comparison Value States */
+.comparison-data-table .highest-value {
+    background-color: var(--color-success-bg) !important;
+    color: var(--color-success-text);
+    font-weight: var(--font-weight-semibold);
+    position: relative;
+}
+
+.comparison-data-table .highest-value::after {
+    content: '🏆';
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    font-size: var(--font-size-xs);
+}
+
+.comparison-data-table .has-value {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+}
+
+.comparison-data-table .has-skill {
+    background-color: var(--color-success-bg) !important;
+    color: var(--color-success-text);
+    font-weight: var(--font-weight-semibold);
+}
+
+.comparison-data-table .no-skill {
+    background-color: var(--color-gray-50);
+    color: var(--color-gray-600);
+}
+
+.comparison-data-table .no-value {
+    background-color: var(--color-gray-50);
+    color: var(--color-gray-600);
+    font-style: italic;
+}
+
+.comparison-data-table .locked-value {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    font-style: italic;
+}
+
+/* =================================================================
+   SKILL TYPE FILTER HIGHLIGHTING (NEW)
+   ================================================================= */
+
+/* Skill Filter Highlighted Rows */
+.comparison-data-table tr.skill-filter-highlighted {
+    background-color: var(--color-secondary-bg);
+    box-shadow: inset 4px 0 0 var(--color-secondary);
+}
+
+.comparison-data-table tr.skill-filter-highlighted td:first-child {
+    background-color: var(--color-secondary-bg) !important;
+    color: var(--color-secondary-dark) !important;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+}
+
+/* Filter indicator for highlighted skill labels */
+.comparison-data-table .skill-label-highlighted::before {
+    content: '★';
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-bold);
+    margin-right: var(--space-xs);
+}
+
+/* Skill cells with filter highlighting */
+.comparison-data-table .skill-cell-highlighted {
+    background-color: var(--color-secondary-bg) !important;
+    color: var(--color-secondary-text) !important;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    box-shadow: inset 0 0 0 2px var(--color-secondary);
+}
+
+.comparison-data-table .skill-cell-highlighted::after {
+    content: '✦';
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    color: var(--color-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+/* =================================================================
+   COLLAPSIBLE COMPARISON SECTIONS
+   ================================================================= */
+
+.comparison-section-header {
+    background-color: var(--color-gray-50);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-normal);
+    position: relative;
+}
+
+.comparison-section-header:hover {
+    background-color: var(--color-gray-200);
+}
+
+.comparison-section-header td {
+    font-weight: var(--font-weight-semibold) !important;
+    color: var(--color-primary) !important;
+    background-color: transparent !important;
+    padding: var(--space-md) !important;
+    border: 1px solid var(--color-gray-300) !important;
+}
+
+.comparison-section-header td:first-child {
+    position: relative;
+    padding-left: var(--space-2xl) !important;
+}
+
+/* Expand/collapse icon */
+.comparison-section-header td:first-child::before {
+    content: '▼';
+    position: absolute;
+    left: var(--space-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    transition: transform var(--transition-normal);
+}
+
+.comparison-section-header.collapsed td:first-child::before {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+/* Section rows */
+.comparison-section-row {
+    transition: opacity var(--transition-normal);
+}
+
+.comparison-section-row.hidden {
+    display: none;
+}
+
+/* Comparison Card Headers */
+.comparison-card-header-cell {
+    padding: var(--space-lg) var(--space-md) !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.comparison-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-gray-300);
+    object-fit: cover;
+    margin: 0 auto var(--space-sm) auto;
+    display: block;
+}
+
+.comparison-card-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-white);
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-base);
+}
+
+.comparison-card-details {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+/* No Data States */
+.no-comparison-data {
+    text-align: center;
+    color: var(--color-gray-500);
+    font-style: italic;
+    padding: var(--space-3xl);
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+}
+
+.no-data {
+    text-align: center;
+    color: var(--color-gray-500);
+    font-style: italic;
+    padding: var(--space-2xl);
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+}

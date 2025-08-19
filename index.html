@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support Card Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <!-- Selection Mode Toggle (Above Main Layout) -->
+        <!-- Selection Mode Toggle (Right-aligned, Above Main Layout) -->
         <div id="selectionModeSection" class="selection-mode-section" style="display: none;">
             <div class="selection-mode-toggle">
                 <label for="comparisonModeToggle">
@@ -249,15 +249,13 @@
                             <button id="importBtn" class="btn btn-secondary">📂 Import Card Collection</button>
                             <button id="clearBtn" class="btn btn-danger">🗑️ Clear Card Collection</button>
                         </div>
-                        
-
                     </div>
                 </div>
             </div>
 
-            <!-- FIXED: Main content area with proper flex layout for side-by-side comparison -->
+            <!-- Main content area with proper flex layout for side-by-side comparison -->
             <div class="main-content">
-                <!-- FIXED: Content wrapper contains table and filters (takes most space) -->
+                <!-- Content wrapper contains table and filters (takes most space) -->
                 <div class="content-wrapper">
                     <!-- Active Filters Display -->
                     <div id="activeFilters" class="active-filters" style="display: none;">
@@ -293,7 +291,7 @@
                     </div>
                 </div>
 
-                <!-- FIXED: Selection Container as fixed-width sidebar (only shows when comparison mode is enabled) -->
+                <!-- Selection Container as fixed-width sidebar (only shows when comparison mode is enabled) -->
                 <div id="selectionContainer" class="selection-container" style="display: none;">
                     <div class="selection-header">
                         <h4>Selected Cards</h4>
@@ -343,10 +341,15 @@
         </div>
     </div>
 
-    <!-- Application Scripts (Modularized) -->
-    <script src="cardManager.js"></script>
-    <script src="uiRenderer.js"></script>
-    <script src="filterSort.js"></script>
-    <script src="app.js"></script>
+    <!-- Refactored Modular Scripts -->
+    <script src="js/utils/dataUtils.js"></script>
+    <script src="js/ui/uiComponents.js"></script>
+    <script src="js/ui/tableRenderer.js"></script>
+    <script src="js/ui/filterSort.js"></script>
+    <script src="js/managers/eventManager.js"></script>
+    <script src="js/managers/modalManager.js"></script>
+    <script src="js/managers/comparisonManager.js"></script>
+    <script src="js/managers/cardManager.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

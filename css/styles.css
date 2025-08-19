@@ -1,0 +1,59 @@
+/* =================================================================
+   UMA MUSUME SUPPORT CARD TRACKER - MAIN STYLESHEET
+   ================================================================= */
+
+/* =================================================================
+   DESIGN SYSTEM FOUNDATION
+   Foundation includes CSS custom properties, reset, typography,
+   focus states, scrollbars, and accessibility features.
+   ================================================================= */
+@import url('./core/base.css');
+
+/* =================================================================
+   LAYOUT SYSTEMS
+   Main layout structure, containers, grids, flex utilities,
+   and section spacing.
+   ================================================================= */
+@import url('./core/layout.css');
+
+/* =================================================================
+   RESPONSIVE BREAKPOINTS
+   All media queries and responsive adjustments organized by
+   breakpoint from desktop to mobile.
+   ================================================================= */
+@import url('./core/responsive.css');
+
+/* =================================================================
+   UI COMPONENTS
+   Buttons, form controls, cards, images, badges, labels,
+   filter chips, tooltips, and toast notifications.
+   ================================================================= */
+@import url('./ui/components.css');
+
+/* =================================================================
+   TABLE COMPONENTS
+   Card table styling, comparison tables, sortable headers,
+   row states, and data display.
+   ================================================================= */
+@import url('./ui/tables.css');
+
+/* =================================================================
+   MODAL COMPONENTS
+   Modal overlays, headers, navigation, content grids,
+   and confirmation dialogs.
+   ================================================================= */
+@import url('./ui/modals.css');
+
+/* =================================================================
+   FILTER & SORT COMPONENTS
+   Sidebar controls, filters, multi-select dropdowns,
+   advanced filters, multi-sort system, and selection management.
+   ================================================================= */
+@import url('./ui/filters.css');
+
+/* =================================================================
+   UTILITY CLASSES
+   Spacing, typography, colors, display, position, border,
+   shadow, opacity, cursor, transitions, and accessibility utilities.
+   ================================================================= */
+@import url('./utils/utilities.css');
