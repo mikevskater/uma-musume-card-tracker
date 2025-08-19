@@ -22,7 +22,36 @@ const sortCategories = {
     type: { name: 'Type', hasOptions: false },
     hintSkillCount: { name: 'Hint Skills', hasOptions: false },
     eventSkillCount: { name: 'Event Skills', hasOptions: false },
-    skillTypeCount: { name: 'Skill Type Count', hasOptions: false }, // NEW: Added Skill Type Count
+    skillTypeCount: { 
+        name: 'Skill Type Count', 
+        hasOptions: true, // CHANGED: Now has options
+        getOptions: () => {
+            // Get all unique skill types from cards
+            const allSkillTypes = new Set();
+            cardData.forEach(card => {
+                // Collect from hint skills
+                if (card.hints?.hint_skills) {
+                    card.hints.hint_skills.forEach(skill => {
+                        if (skill.type && Array.isArray(skill.type)) {
+                            skill.type.forEach(type => allSkillTypes.add(type));
+                        }
+                    });
+                }
+                // Collect from event skills
+                if (card.event_skills) {
+                    card.event_skills.forEach(skill => {
+                        if (skill.type && Array.isArray(skill.type)) {
+                            skill.type.forEach(type => allSkillTypes.add(type));
+                        }
+                    });
+                }
+            });
+            
+            return Array.from(allSkillTypes)
+                .sort((a, b) => getSkillTypeDescription(a).localeCompare(getSkillTypeDescription(b)))
+                .map(type => ({ value: type, label: getSkillTypeDescription(type) }));
+        }
+    },
     releaseDate: { name: 'Release Date', hasOptions: false }
 };
 
@@ -167,20 +196,22 @@ function passesAdvancedFilters(card) {
 
 // ===== SKILL TYPE COUNT UTILITY =====
 
-// NEW: Get skill type count for a card based on current filters
-function getSkillTypeCount(card) {
+// UPDATED: Get skill type count for a card based on specified skill types (for sorting)
+function getSkillTypeCount(card, skillTypesToCount = null) {
     let count = 0;
-    const includeSkillTypes = advancedFilters.includeSkillTypes || [];
+    
+    // If no specific types provided, use filter types or count all
+    const typesToCount = skillTypesToCount || advancedFilters.includeSkillTypes || [];
     
     // Count hint skills
     if (card.hints?.hint_skills) {
         card.hints.hint_skills.forEach(skill => {
-            if (includeSkillTypes.length === 0) {
+            if (typesToCount.length === 0) {
                 // No filter - count all skills
                 count++;
             } else if (skill.type && Array.isArray(skill.type)) {
                 // Check if skill has any matching types
-                const hasMatchingType = skill.type.some(type => includeSkillTypes.includes(type));
+                const hasMatchingType = skill.type.some(type => typesToCount.includes(type));
                 if (hasMatchingType) count++;
             }
         });
@@ -189,12 +220,12 @@ function getSkillTypeCount(card) {
     // Count event skills
     if (card.event_skills) {
         card.event_skills.forEach(skill => {
-            if (includeSkillTypes.length === 0) {
+            if (typesToCount.length === 0) {
                 // No filter - count all skills
                 count++;
             } else if (skill.type && Array.isArray(skill.type)) {
                 // Check if skill has any matching types
-                const hasMatchingType = skill.type.some(type => includeSkillTypes.includes(type));
+                const hasMatchingType = skill.type.some(type => typesToCount.includes(type));
                 if (hasMatchingType) count++;
             }
         });
@@ -276,9 +307,16 @@ function compareCardsBySortCriteria(a, b, sort) {
             valueB = b.event_skills?.length || 0;
             break;
             
-        case 'skillTypeCount': // NEW: Skill Type Count sorting
-            valueA = getSkillTypeCount(a);
-            valueB = getSkillTypeCount(b);
+        case 'skillTypeCount': // UPDATED: Now uses specific skill type from sort option
+            if (!sort.option) {
+                // No specific skill type selected - count all skills
+                valueA = getSkillTypeCount(a, []);
+                valueB = getSkillTypeCount(b, []);
+            } else {
+                // Count skills of specific type
+                valueA = getSkillTypeCount(a, [sort.option]);
+                valueB = getSkillTypeCount(b, [sort.option]);
+            }
             break;
             
         case 'releaseDate':
@@ -621,7 +659,7 @@ window.FilterSort = {
     clearAllFilters,
     initializeAdvancedFilters,
     sortCategories,
-    getSkillTypeCount // NEW: Export the skill type count function
+    getSkillTypeCount // Export the skill type count function
 };
 
 // Export individual functions to global scope for backward compatibility

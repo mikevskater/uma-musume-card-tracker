@@ -195,26 +195,43 @@ function buildFilterChips() {
     return chips;
 }
 
-// Add basic filter chips
+// UPDATED: Add basic filter chips - individual chips for each selected value
 function addBasicFilterChips(chips) {
+    // UPDATED: Individual rarity chips
     const selectedRarities = getSelectedValues('rarityFilter');
-    if (selectedRarities.length > 0) {
+    selectedRarities.forEach(rarityValue => {
+        const rarityLabel = ['', 'R', 'SR', 'SSR'][rarityValue];
         chips.push({
-            type: 'rarity',
-            label: `Rarity: ${selectedRarities.map(r => ['', 'R', 'SR', 'SSR'][r]).join(', ')}`,
-            remove: () => clearMultiSelect('rarityFilter')
+            type: `rarity-${rarityValue}`,
+            label: `Rarity: ${rarityLabel}`,
+            remove: () => {
+                // Remove just this rarity
+                const checkbox = document.querySelector(`#rarityFilter input[value="${rarityValue}"]`);
+                if (checkbox) {
+                    checkbox.checked = false;
+                    updateMultiSelectText('rarityFilter', 'All Rarities');
+                }
+            }
         });
-    }
+    });
     
+    // UPDATED: Individual type chips
     const selectedTypes = getSelectedValues('typeFilter');
-    if (selectedTypes.length > 0) {
-        const typeLabels = selectedTypes.map(type => getTypeDisplayName(type));
+    selectedTypes.forEach(typeValue => {
+        const typeLabel = getTypeDisplayName(typeValue);
         chips.push({
-            type: 'type',
-            label: `Type: ${typeLabels.join(', ')}`,
-            remove: () => clearMultiSelect('typeFilter')
+            type: `type-${typeValue}`,
+            label: `Type: ${typeLabel}`,
+            remove: () => {
+                // Remove just this type
+                const checkbox = document.querySelector(`#typeFilter input[value="${typeValue}"]`);
+                if (checkbox) {
+                    checkbox.checked = false;
+                    updateMultiSelectText('typeFilter', 'All Types');
+                }
+            }
         });
-    }
+    });
     
     const ownedFilter = document.getElementById('ownedFilter').value;
     if (ownedFilter) {
@@ -244,7 +261,7 @@ function addBasicFilterChips(chips) {
     }
 }
 
-// Add advanced filter chips
+// ENHANCED: Add advanced filter chips - individual chips for each selected value
 function addAdvancedFilterChips(chips) {
     // Effect filters
     Object.entries(advancedFilters.effects).forEach(([effectId, filter]) => {
@@ -252,7 +269,7 @@ function addAdvancedFilterChips(chips) {
         if (effect) {
             const symbol = effect.symbol === 'percent' ? '%' : '';
             chips.push({
-                type: 'effect',
+                type: `effect-${effectId}`,
                 label: `${effect.name_en} ≥ ${filter.min}${symbol}`,
                 remove: () => {
                     delete advancedFilters.effects[effectId];
@@ -263,56 +280,77 @@ function addAdvancedFilterChips(chips) {
         }
     });
     
-    // Skill filters
-    if (advancedFilters.hintSkills.length > 0) {
+    // UPDATED: Individual hint skill chips
+    advancedFilters.hintSkills.forEach(skillId => {
         chips.push({
-            type: 'hintSkills',
-            label: `Hint Skills: ${advancedFilters.hintSkills.length} selected`,
+            type: `hintSkill-${skillId}`,
+            label: `Hint Skill: ${getSkillName(skillId)}`,
             remove: () => {
-                advancedFilters.hintSkills = [];
-                document.querySelectorAll('#hintSkillDropdown input').forEach(input => input.checked = false);
-                updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
+                const index = advancedFilters.hintSkills.indexOf(skillId);
+                if (index !== -1) {
+                    advancedFilters.hintSkills.splice(index, 1);
+                    // Update checkbox
+                    const checkbox = document.querySelector(`#hintSkillDropdown input[value="${skillId}"]`);
+                    if (checkbox) checkbox.checked = false;
+                    updateMultiSelectText('hintSkillFilter', 'Any Hint Skills');
+                }
             }
         });
-    }
+    });
     
-    if (advancedFilters.eventSkills.length > 0) {
+    // UPDATED: Individual event skill chips
+    advancedFilters.eventSkills.forEach(skillId => {
         chips.push({
-            type: 'eventSkills',
-            label: `Event Skills: ${advancedFilters.eventSkills.length} selected`,
+            type: `eventSkill-${skillId}`,
+            label: `Event Skill: ${getSkillName(skillId)}`,
             remove: () => {
-                advancedFilters.eventSkills = [];
-                document.querySelectorAll('#eventSkillDropdown input').forEach(input => input.checked = false);
-                updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
+                const index = advancedFilters.eventSkills.indexOf(skillId);
+                if (index !== -1) {
+                    advancedFilters.eventSkills.splice(index, 1);
+                    // Update checkbox
+                    const checkbox = document.querySelector(`#eventSkillDropdown input[value="${skillId}"]`);
+                    if (checkbox) checkbox.checked = false;
+                    updateMultiSelectText('eventSkillFilter', 'Any Event Skills');
+                }
             }
         });
-    }
+    });
     
-    if (advancedFilters.includeSkillTypes.length > 0) {
-        const typeNames = advancedFilters.includeSkillTypes.map(typeId => getSkillTypeDescription(typeId));
+    // UPDATED: Individual include skill type chips
+    advancedFilters.includeSkillTypes.forEach(typeId => {
         chips.push({
-            type: 'includeSkillTypes',
-            label: `Include Types: ${typeNames.join(', ')}`,
+            type: `includeSkillType-${typeId}`,
+            label: `Include Type: ${getSkillTypeDescription(typeId)}`,
             remove: () => {
-                advancedFilters.includeSkillTypes = [];
-                document.querySelectorAll('#includeSkillTypeDropdown input').forEach(input => input.checked = false);
-                updateMultiSelectText('includeSkillTypeFilter', 'Any Skill Types');
+                const index = advancedFilters.includeSkillTypes.indexOf(typeId);
+                if (index !== -1) {
+                    advancedFilters.includeSkillTypes.splice(index, 1);
+                    // Update checkbox
+                    const checkbox = document.querySelector(`#includeSkillTypeDropdown input[value="${typeId}"]`);
+                    if (checkbox) checkbox.checked = false;
+                    updateMultiSelectText('includeSkillTypeFilter', 'Any Skill Types');
+                }
             }
         });
-    }
+    });
     
-    if (advancedFilters.excludeSkillTypes.length > 0) {
-        const typeNames = advancedFilters.excludeSkillTypes.map(typeId => getSkillTypeDescription(typeId));
+    // UPDATED: Individual exclude skill type chips
+    advancedFilters.excludeSkillTypes.forEach(typeId => {
         chips.push({
-            type: 'excludeSkillTypes',
-            label: `Exclude Types: ${typeNames.join(', ')}`,
+            type: `excludeSkillType-${typeId}`,
+            label: `Exclude Type: ${getSkillTypeDescription(typeId)}`,
             remove: () => {
-                advancedFilters.excludeSkillTypes = [];
-                document.querySelectorAll('#excludeSkillTypeDropdown input').forEach(input => input.checked = false);
-                updateMultiSelectText('excludeSkillTypeFilter', 'No Exclusions');
+                const index = advancedFilters.excludeSkillTypes.indexOf(typeId);
+                if (index !== -1) {
+                    advancedFilters.excludeSkillTypes.splice(index, 1);
+                    // Update checkbox
+                    const checkbox = document.querySelector(`#excludeSkillTypeDropdown input[value="${typeId}"]`);
+                    if (checkbox) checkbox.checked = false;
+                    updateMultiSelectText('excludeSkillTypeFilter', 'No Exclusions');
+                }
             }
         });
-    }
+    });
 }
 
 // Remove individual filter chip
