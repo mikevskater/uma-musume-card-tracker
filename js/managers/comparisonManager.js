@@ -397,7 +397,7 @@ function buildComparisonData(cards) {
     // Basic information section
     data.sections.push(buildBasicInfoSection(cards));
     
-    // Effects section
+    // Effects section - NOW COLLAPSIBLE
     data.sections.push(buildEffectsSection(cards));
     
     // Hint skills section (if any cards have hint skills)
@@ -438,11 +438,12 @@ function buildBasicInfoSection(cards) {
     return section;
 }
 
-// Build effects section
+// Build effects section - UPDATED: Now collapsible but expanded by default
 function buildEffectsSection(cards) {
     const section = {
         name: 'Effects',
-        collapsible: false,
+        collapsible: true,    // CHANGED: Now collapsible
+        collapsed: false,     // NEW: Expanded by default
         rows: []
     };
     

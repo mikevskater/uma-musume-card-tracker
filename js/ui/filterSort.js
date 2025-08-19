@@ -22,6 +22,7 @@ const sortCategories = {
     type: { name: 'Type', hasOptions: false },
     hintSkillCount: { name: 'Hint Skills', hasOptions: false },
     eventSkillCount: { name: 'Event Skills', hasOptions: false },
+    skillTypeCount: { name: 'Skill Type Count', hasOptions: false }, // NEW: Added Skill Type Count
     releaseDate: { name: 'Release Date', hasOptions: false }
 };
 
@@ -164,6 +165,44 @@ function passesAdvancedFilters(card) {
     return true;
 }
 
+// ===== SKILL TYPE COUNT UTILITY =====
+
+// NEW: Get skill type count for a card based on current filters
+function getSkillTypeCount(card) {
+    let count = 0;
+    const includeSkillTypes = advancedFilters.includeSkillTypes || [];
+    
+    // Count hint skills
+    if (card.hints?.hint_skills) {
+        card.hints.hint_skills.forEach(skill => {
+            if (includeSkillTypes.length === 0) {
+                // No filter - count all skills
+                count++;
+            } else if (skill.type && Array.isArray(skill.type)) {
+                // Check if skill has any matching types
+                const hasMatchingType = skill.type.some(type => includeSkillTypes.includes(type));
+                if (hasMatchingType) count++;
+            }
+        });
+    }
+    
+    // Count event skills
+    if (card.event_skills) {
+        card.event_skills.forEach(skill => {
+            if (includeSkillTypes.length === 0) {
+                // No filter - count all skills
+                count++;
+            } else if (skill.type && Array.isArray(skill.type)) {
+                // Check if skill has any matching types
+                const hasMatchingType = skill.type.some(type => includeSkillTypes.includes(type));
+                if (hasMatchingType) count++;
+            }
+        });
+    }
+    
+    return count;
+}
+
 // ===== SORTING =====
 
 // Apply sorting based on current sort configuration
@@ -235,6 +274,11 @@ function compareCardsBySortCriteria(a, b, sort) {
         case 'eventSkillCount':
             valueA = a.event_skills?.length || 0;
             valueB = b.event_skills?.length || 0;
+            break;
+            
+        case 'skillTypeCount': // NEW: Skill Type Count sorting
+            valueA = getSkillTypeCount(a);
+            valueB = getSkillTypeCount(b);
             break;
             
         case 'releaseDate':
@@ -576,7 +620,8 @@ window.FilterSort = {
     clearAdvancedFilters,
     clearAllFilters,
     initializeAdvancedFilters,
-    sortCategories
+    sortCategories,
+    getSkillTypeCount // NEW: Export the skill type count function
 };
 
 // Export individual functions to global scope for backward compatibility
