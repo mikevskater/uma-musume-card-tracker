@@ -1,5 +1,5 @@
-// Comparison Manager Module
-// Handles card selection and comparison functionality
+// Comparison Manager Module (ENHANCED)
+// Handles card selection and comparison functionality with form control management
 
 // ===== COMPARISON STATE =====
 
@@ -8,7 +8,7 @@
 
 // ===== COMPARISON MODE MANAGEMENT =====
 
-// Toggle comparison mode
+// Toggle comparison mode (ENHANCED with form control management and smart container visibility)
 function toggleComparisonMode(enabled) {
     comparisonMode = enabled;
     
@@ -24,31 +24,105 @@ function toggleComparisonMode(enabled) {
         document.querySelectorAll('#cardTableBody tr').forEach(row => {
             row.classList.add('comparison-mode');
         });
+        
+        // ENHANCED: Disable form controls to prevent accidental changes
+        disableFormControlsForComparison(true);
+        
     } else {
         mainContent.classList.remove('has-selection');
-        selectionContainer.style.display = 'none';
+        
+        // FIXED: Keep selection container visible if cards are selected
+        if (selectedCards.length === 0) {
+            selectionContainer.style.display = 'none';
+        } else {
+            selectionContainer.style.display = 'block';
+        }
         
         // Remove visual indicators from table rows
         document.querySelectorAll('#cardTableBody tr').forEach(row => {
             row.classList.remove('comparison-mode');
         });
+        
+        // ENHANCED: Re-enable form controls
+        disableFormControlsForComparison(false);
     }
     
-    // Re-render table to update click handlers
+    // Re-render table to update click handlers and control states
     renderCards(currentFilteredCards);
     renderSelectionContainer();
 }
 
+// ENHANCED: Helper function to disable/enable form controls in comparison mode
+function disableFormControlsForComparison(disable) {
+    const formControls = document.querySelectorAll(
+        '.ownership-checkbox input[type="checkbox"], .level-input, .lb-select'
+    );
+    
+    formControls.forEach(control => {
+        // Set disabled state
+        control.disabled = disable;
+        
+        // Add visual feedback to parent cells
+        const parentCell = control.closest('td');
+        if (parentCell) {
+            if (disable) {
+                parentCell.classList.add('comparison-mode-disabled');
+            } else {
+                parentCell.classList.remove('comparison-mode-disabled');
+            }
+        }
+        
+        // Update cursor style
+        if (disable) {
+            control.style.cursor = 'not-allowed';
+        } else {
+            control.style.cursor = control.type === 'checkbox' ? 'pointer' : 'default';
+        }
+    });
+    
+    // Update click handling for disabled controls
+    if (disable) {
+        // Add event listeners to prevent clicks on disabled controls
+        formControls.forEach(control => {
+            control.addEventListener('click', preventDisabledControlClick, { capture: true });
+        });
+    } else {
+        // Remove the event listeners
+        formControls.forEach(control => {
+            control.removeEventListener('click', preventDisabledControlClick, { capture: true });
+        });
+    }
+}
+
+// ENHANCED: Prevent clicks on disabled controls and show feedback
+function preventDisabledControlClick(event) {
+    if (event.target.disabled && comparisonMode) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Show temporary feedback
+        showToast('Controls are disabled in comparison mode. Toggle off comparison mode to make changes.', 'warning');
+    }
+}
+
 // ===== CARD SELECTION MANAGEMENT =====
 
-// Toggle card selection
+// Toggle card selection (ENHANCED with smart container visibility)
 function toggleCardSelection(cardId) {
     const index = selectedCards.indexOf(cardId);
     
     if (index === -1) {
         selectedCards.push(cardId);
+        // Show selection container when first card is added
+        if (selectedCards.length === 1) {
+            document.getElementById('selectionContainer').style.display = 'block';
+        }
     } else {
         selectedCards.splice(index, 1);
+        // Hide container if no cards and comparison mode is off
+        if (selectedCards.length === 0 && !comparisonMode) {
+            document.getElementById('selectionContainer').style.display = 'none';
+        }
     }
     
     updateCardSelectionStates();
@@ -60,7 +134,7 @@ function toggleCardSelection(cardId) {
     }
 }
 
-// Remove card from selection
+// Remove card from selection (ENHANCED with smart container visibility)
 function removeCardFromSelection(cardId) {
     const index = selectedCards.indexOf(cardId);
     if (index !== -1) {
@@ -68,13 +142,19 @@ function removeCardFromSelection(cardId) {
         updateCardSelectionStates();
         renderSelectionContainer();
         
-        if (selectedCards.length === 0 && showComparison) {
-            hideComparison();
+        // ENHANCED: Hide selection container if no cards and comparison mode is off
+        if (selectedCards.length === 0) {
+            if (showComparison) {
+                hideComparison();
+            }
+            if (!comparisonMode) {
+                document.getElementById('selectionContainer').style.display = 'none';
+            }
         }
     }
 }
 
-// Clear all selected cards
+// Clear all selected cards (ENHANCED with smart container visibility)
 function clearAllSelectedCards() {
     selectedCards = [];
     updateCardSelectionStates();
@@ -82,6 +162,11 @@ function clearAllSelectedCards() {
     
     if (showComparison) {
         hideComparison();
+    }
+    
+    // ENHANCED: Hide selection container if comparison mode is off
+    if (!comparisonMode) {
+        document.getElementById('selectionContainer').style.display = 'none';
     }
 }
 
@@ -249,7 +334,7 @@ function createComparisonDataRow(row, section, sectionIndex) {
     return tr;
 }
 
-// Create comparison value cell
+// Create comparison value cell (ENHANCED with proper skill-only highlighting)
 function createComparisonValueCell(cellData, row, isSkillFilterHighlighted = false) {
     let cellClass = 'has-value';
     let cellContent = '';
@@ -280,13 +365,14 @@ function createComparisonValueCell(cellData, row, isSkillFilterHighlighted = fal
             if (cellData.value) {
                 cellClass = 'has-skill';
                 cellContent = '✓';
-                // Add filter highlighting to cells with matching skills
+                // FIXED: Only add filter highlighting to cells with skills
                 if (isSkillFilterHighlighted) {
                     cellClass += ' skill-cell-highlighted';
                 }
             } else {
                 cellClass = 'no-skill';
                 cellContent = '✗';
+                // FIXED: Don't highlight empty skill cells - they get standard styling
             }
             break;
         default:
@@ -409,7 +495,7 @@ function buildEffectsSection(cards) {
     return section;
 }
 
-// Build hint skills section with filter highlighting
+// Build hint skills section with filter highlighting (ENHANCED with individual skill highlighting)
 function buildHintSkillsSection(cards) {
     const section = {
         name: 'Hint Skills',
@@ -439,22 +525,29 @@ function buildHintSkillsSection(cards) {
         // Check if this skill matches current filters
         const skillTypes = skillTypeMap.get(skillId) || [];
         const filterCheck = checkSkillTypeFilters(skillTypes);
+        
+        // ENHANCED: Check both skill type filters AND individual skill filters
         const skillTypeFilterMatch = (advancedFilters.includeSkillTypes?.length > 0 || 
                                      advancedFilters.excludeSkillTypes?.length > 0) &&
                                     filterCheck.hasIncludeMatch && !filterCheck.hasExcludeMatch;
+        
+        const individualSkillMatch = advancedFilters.hintSkills?.includes(skillId);
+        
+        // Highlight if either skill types match OR individual skill is selected
+        const shouldHighlight = skillTypeFilterMatch || individualSkillMatch;
         
         section.rows.push({
             label: getSkillName(skillId),
             type: 'skill',
             values: values,
-            skillTypeFilterMatch: skillTypeFilterMatch
+            skillTypeFilterMatch: shouldHighlight
         });
     });
     
     return section;
 }
 
-// Build event skills section with filter highlighting
+// Build event skills section with filter highlighting (ENHANCED with individual skill highlighting)
 function buildEventSkillsSection(cards) {
     const section = {
         name: 'Event Skills',
@@ -484,15 +577,22 @@ function buildEventSkillsSection(cards) {
         // Check if this skill matches current filters
         const skillTypes = skillTypeMap.get(skillId) || [];
         const filterCheck = checkSkillTypeFilters(skillTypes);
+        
+        // ENHANCED: Check both skill type filters AND individual skill filters
         const skillTypeFilterMatch = (advancedFilters.includeSkillTypes?.length > 0 || 
                                      advancedFilters.excludeSkillTypes?.length > 0) &&
                                     filterCheck.hasIncludeMatch && !filterCheck.hasExcludeMatch;
+        
+        const individualSkillMatch = advancedFilters.eventSkills?.includes(skillId);
+        
+        // Highlight if either skill types match OR individual skill is selected
+        const shouldHighlight = skillTypeFilterMatch || individualSkillMatch;
         
         section.rows.push({
             label: getSkillName(skillId),
             type: 'skill',
             values: values,
-            skillTypeFilterMatch: skillTypeFilterMatch
+            skillTypeFilterMatch: shouldHighlight
         });
     });
     
@@ -550,7 +650,9 @@ window.ComparisonManager = {
     hideComparison,
     clearComparison,
     renderComparisonTable,
-    buildComparisonData
+    buildComparisonData,
+    disableFormControlsForComparison,
+    preventDisabledControlClick
 };
 
 // Export individual functions to global scope for backward compatibility

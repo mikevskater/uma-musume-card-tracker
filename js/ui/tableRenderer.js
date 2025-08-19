@@ -1,5 +1,5 @@
-// Table Renderer Module
-// Handles card table rendering and display updates
+// Table Renderer Module (ENHANCED)
+// Handles card table rendering and display updates with comparison mode support
 
 // ===== TABLE RENDERING =====
 
@@ -17,7 +17,7 @@ function renderCards(cards = cardData) {
     });
 }
 
-// Create a single card table row
+// Create a single card table row (ENHANCED with comparison mode support)
 function createCardTableRow(card) {
     const cardId = card.support_id;
     const isOwned = isCardOwned(cardId);
@@ -52,19 +52,23 @@ function createCardTableRow(card) {
         getSkillName(skill.id)
     ).join('<br>') || 'None';
 
-    // Determine control states
+    // ENHANCED: Determine control states with comparison mode consideration
     const shouldDisableLevel = !isOwned && globalLimitBreakLevel === null ||
                               globalLimitBreakLevel !== null && 
-                              (globalLimitBreakOverrideOwned || !isOwned);
+                              (globalLimitBreakOverrideOwned || !isOwned) ||
+                              comparisonMode; // NEW: Disable in comparison mode
 
     const shouldDisableLB = !isOwned && globalLimitBreakLevel === null ||
                            globalLimitBreakLevel !== null && 
-                           (globalLimitBreakOverrideOwned || !isOwned);
+                           (globalLimitBreakOverrideOwned || !isOwned) ||
+                           comparisonMode; // NEW: Disable in comparison mode
+
+    const shouldDisableOwnership = comparisonMode; // NEW: Disable ownership checkbox in comparison mode
 
     // Build row HTML
     row.innerHTML = `
-        <td class="ownership-checkbox">
-            ${createOwnershipCheckbox(cardId, isOwned).outerHTML}
+        <td class="ownership-checkbox ${comparisonMode ? 'comparison-mode-disabled' : ''}">
+            ${createOwnershipCheckbox(cardId, isOwned, shouldDisableOwnership).outerHTML}
         </td>
         <td>
             ${createCardIcon(cardId, card.char_name).outerHTML}
@@ -72,7 +76,7 @@ function createCardTableRow(card) {
         <td class="card-name">${card.char_name || 'Unknown Card'}</td>
         <td>${createRarityBadge(card.rarity).outerHTML}</td>
         <td>${createTypeBadge(card.type).outerHTML}</td>
-        <td>
+        <td class="${comparisonMode ? 'comparison-mode-disabled' : ''}">
             ${createLevelInput(
                 cardId, 
                 effectiveLevel, 
@@ -80,7 +84,7 @@ function createCardTableRow(card) {
                 shouldDisableLevel
             ).outerHTML}
         </td>
-        <td>
+        <td class="${comparisonMode ? 'comparison-mode-disabled' : ''}">
             ${createLimitBreakSelect(cardId, displayLimitBreak, card.rarity, shouldDisableLB).outerHTML}
         </td>
         <td class="effects-summary">${mainEffectsDisplay}</td>

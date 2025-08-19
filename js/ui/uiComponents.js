@@ -1,5 +1,5 @@
-// UI Components and Builders
-// Reusable functions for creating consistent UI elements
+// UI Components and Builders (ENHANCED)
+// Reusable functions for creating consistent UI elements with comparison mode support
 
 // ===== DOM UTILITIES =====
 
@@ -199,14 +199,23 @@ function createLimitBreakSelect(cardId, currentLB, rarity, disabled = false) {
     });
 }
 
-// Create ownership checkbox
-function createOwnershipCheckbox(cardId, isOwned) {
-    return createElement('input', {
+// ENHANCED: Create ownership checkbox with comparison mode support
+function createOwnershipCheckbox(cardId, isOwned, disabled = false) {
+    const checkbox = createElement('input', {
         type: 'checkbox',
         checked: isOwned,
         'data-card-id': cardId,
-        onclick: 'event.stopPropagation()'
+        onclick: 'event.stopPropagation()',
+        disabled: disabled
     });
+    
+    // Add comparison mode styling if disabled due to comparison mode
+    if (disabled && comparisonMode) {
+        checkbox.style.cursor = 'not-allowed';
+        checkbox.title = 'Disabled in comparison mode';
+    }
+    
+    return checkbox;
 }
 
 // ===== MODAL COMPONENTS =====
@@ -477,16 +486,24 @@ function checkSkillTypeFilters(skillTypes) {
     };
 }
 
-// Create skill item for modal display with filter highlighting
+// Create skill item for modal display with filter highlighting (ENHANCED with individual skill highlighting)
 function createSkillItem(skill, isHintSkill = true) {
     const skillInfo = skillsData[skill.id];
     const skillName = skillInfo?.name_en || skillInfo?.enname || skill.name_en || `Skill ${skill.id}`;
     
-    // Check filter matches
+    // Check filter matches for skill types
     const filterCheck = checkSkillTypeFilters(skill.type || []);
-    const shouldHighlight = (advancedFilters.includeSkillTypes?.length > 0 || 
-                           advancedFilters.excludeSkillTypes?.length > 0) &&
-                          filterCheck.hasIncludeMatch && !filterCheck.hasExcludeMatch;
+    const skillTypeHighlight = (advancedFilters.includeSkillTypes?.length > 0 || 
+                               advancedFilters.excludeSkillTypes?.length > 0) &&
+                              filterCheck.hasIncludeMatch && !filterCheck.hasExcludeMatch;
+    
+    // ENHANCED: Check individual skill highlighting
+    const individualSkillHighlight = isHintSkill ? 
+        advancedFilters.hintSkills?.includes(skill.id) :
+        advancedFilters.eventSkills?.includes(skill.id);
+    
+    // Highlight if either skill types match OR individual skill is selected
+    const shouldHighlight = skillTypeHighlight || individualSkillHighlight;
     
     // Create type spans with highlighting for matching types
     let typeSpans = (skill.type || []).map(type => {
@@ -506,6 +523,11 @@ function createSkillItem(skill, isHintSkill = true) {
     
     if (!isHintSkill && skill.rarity) {
         typeSpans += `<span class="skill-type">Rarity ${skill.rarity}</span>`;
+    }
+    
+    // ENHANCED: Add individual skill highlighting badge if selected
+    if (individualSkillHighlight) {
+        typeSpans += `<span class="skill-type skill-type-highlighted-include">Selected</span>`;
     }
     
     const itemClassName = `skill-item ${shouldHighlight ? 'skill-item-highlighted' : ''}`;

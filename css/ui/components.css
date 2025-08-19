@@ -133,6 +133,12 @@ input[type="checkbox"] {
     accent-color: var(--color-success);
 }
 
+/* ENHANCED: Comparison mode disabled styling for checkboxes */
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 /* Level Input (Table) */
 .level-input {
     width: 60px;
@@ -181,6 +187,71 @@ input[type="checkbox"] {
     border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     height: var(--input-height);
+}
+
+/* =================================================================
+   COMPARISON MODE DISABLED STYLING (NEW)
+   ================================================================= */
+
+/* Visual feedback for disabled controls in comparison mode */
+.comparison-mode-disabled {
+    position: relative;
+    opacity: 0.6;
+    transition: all var(--transition-normal);
+}
+
+.comparison-mode-disabled::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(52, 152, 219, 0.1) 0%, 
+        rgba(52, 152, 219, 0.05) 50%, 
+        rgba(52, 152, 219, 0.1) 100%);
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Ensure disabled controls are clearly non-interactive */
+.comparison-mode-disabled input,
+.comparison-mode-disabled select {
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+/* Special styling for ownership checkbox cells */
+.ownership-checkbox.comparison-mode-disabled {
+    background-color: rgba(52, 152, 219, 0.03);
+    border-radius: var(--radius-sm);
+}
+
+/* Hover state for disabled cells (shows why they're disabled) */
+.comparison-mode-disabled:hover::before {
+    content: 'Disabled in comparison mode';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-gray-800);
+    color: var(--color-white);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    z-index: var(--z-toast);
+    opacity: 0;
+    animation: tooltip-fade-in 0.2s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes tooltip-fade-in {
+    to {
+        opacity: 1;
+    }
 }
 
 /* =================================================================
@@ -418,7 +489,7 @@ input[type="checkbox"] {
 }
 
 /* =================================================================
-   SKILL TYPE HIGHLIGHTING (NEW)
+   SKILL TYPE HIGHLIGHTING (ENHANCED)
    ================================================================= */
 
 /* Skill Item Highlighting */
