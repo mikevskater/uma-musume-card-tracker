@@ -1,6 +1,6 @@
-# Uma Musume Card Tracker
+# Uma Musume Support Card Tracker
 
-Uma Musume Card Tracker is a web-based tool designed to help players of Uma Musume: Pretty Derby efficiently manage, search, and analyze their support cards. With a focus on usability and comprehensive data, this tracker provides a powerful interface for both casual and advanced players.
+Uma Musume Support Card Tracker is a web-based tool designed to help players of Uma Musume: Pretty Derby efficiently manage, search, and analyze their support cards. With a focus on usability and comprehensive data, this tracker provides a powerful interface for both casual and advanced players.
 
 ## Getting Started
 

@@ -78,9 +78,9 @@ function isEffectLocked(effectArray, level) {
 
 // Limit break requirements by rarity
 const limitBreaks = {
-    1: [1, 25, 30, 35, 40],  // R
-    2: [1, 30, 35, 40, 45],  // SR
-    3: [1, 35, 40, 45, 50]   // SSR
+    1: [20, 25, 30, 35, 40],  // R
+    2: [25, 30, 35, 40, 45],  // SR
+    3: [30, 35, 40, 45, 50]   // SSR
 };
 
 // Calculate limit break level based on card level and rarity
