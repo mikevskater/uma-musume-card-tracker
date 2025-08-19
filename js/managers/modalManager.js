@@ -1,11 +1,132 @@
 // Modal Manager Module
-// Handles card detail modal functionality and help system
+// Handles card detail modal functionality and help system with What's New
 
 // ===== MODAL STATE =====
 
 // Global modal navigation state
 let currentModalCardIndex = -1;
 let currentHelpSection = 'welcome';
+
+// ===== VERSION MANAGEMENT SYSTEM =====
+
+// Version tracking constants
+const APP_VERSION = '1.1.0';
+const VERSION_STORAGE_KEY = 'uma_last_seen_version';
+const AUTO_SHOW_STORAGE_KEY = 'uma_auto_show_whatsnew';
+
+// Version comparison utility
+function compareVersions(version1, version2) {
+    const parts1 = version1.split('.').map(Number);
+    const parts2 = version2.split('.').map(Number);
+    
+    for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+        const part1 = parts1[i] || 0;
+        const part2 = parts2[i] || 0;
+        
+        if (part1 > part2) return 1;
+        if (part1 < part2) return -1;
+    }
+    return 0;
+}
+
+// Check if version is major update (first number different)
+function isMajorUpdate(oldVersion, newVersion) {
+    const oldMajor = parseInt(oldVersion.split('.')[0]) || 0;
+    const newMajor = parseInt(newVersion.split('.')[0]) || 0;
+    return newMajor > oldMajor;
+}
+
+// Check if version is feature update (second number different)
+function isFeatureUpdate(oldVersion, newVersion) {
+    const oldParts = oldVersion.split('.').map(Number);
+    const newParts = newVersion.split('.').map(Number);
+    return newParts[1] > (oldParts[1] || 0);
+}
+
+// Get last seen version from localStorage
+function getLastSeenVersion() {
+    return localStorage.getItem(VERSION_STORAGE_KEY) || '0.0.0';
+}
+
+// Update last seen version
+function updateLastSeenVersion(version = APP_VERSION) {
+    localStorage.setItem(VERSION_STORAGE_KEY, version);
+    updateNewContentIndicator();
+}
+
+// Check if auto-show is enabled
+function isAutoShowEnabled() {
+    const stored = localStorage.getItem(AUTO_SHOW_STORAGE_KEY);
+    return stored !== 'false'; // Default to true
+}
+
+// Set auto-show preference
+function setAutoShowPreference(enabled) {
+    localStorage.setItem(AUTO_SHOW_STORAGE_KEY, enabled.toString());
+}
+
+// Check if there's new content since last visit
+function hasNewContent() {
+    const lastSeen = getLastSeenVersion();
+    return compareVersions(APP_VERSION, lastSeen) > 0;
+}
+
+// Update new content indicator in navigation
+function updateNewContentIndicator() {
+    const badge = document.getElementById('newContentBadge');
+    const navItem = document.getElementById('whatsNewNavItem');
+    
+    if (badge && navItem) {
+        if (hasNewContent()) {
+            badge.style.display = 'inline';
+            navItem.classList.add('has-new-content');
+        } else {
+            badge.style.display = 'none';
+            navItem.classList.remove('has-new-content');
+        }
+    }
+}
+
+// Initialize version system
+function initializeVersionSystem() {
+    // Update app version display
+    const versionElement = document.getElementById('appVersion');
+    if (versionElement) {
+        versionElement.textContent = APP_VERSION;
+    }
+    
+    // Update new content indicator
+    updateNewContentIndicator();
+    
+    // Auto-show What's New if needed
+    checkAutoShowWhatsNew();
+    
+    console.log(`📋 Version system initialized: v${APP_VERSION}`);
+}
+
+// Check if we should auto-show What's New
+function checkAutoShowWhatsNew() {
+    if (!isAutoShowEnabled()) return;
+    
+    const lastSeen = getLastSeenVersion();
+    const isNewUser = lastSeen === '0.0.0';
+    
+    // Don't auto-show for completely new users
+    if (isNewUser) {
+        updateLastSeenVersion();
+        return;
+    }
+    
+    // Auto-show for major or feature updates
+    if (isMajorUpdate(lastSeen, APP_VERSION) || isFeatureUpdate(lastSeen, APP_VERSION)) {
+        // Delay to avoid interfering with app initialization
+        setTimeout(() => {
+            openHelpModal('whatsnew').catch(error => {
+                console.error('Failed to auto-open What\'s New:', error);
+            });
+        }, 2000);
+    }
+}
 
 // ===== MODAL LIFECYCLE =====
 
@@ -61,16 +182,21 @@ function hideModal() {
 
 // ===== HELP MODAL SYSTEM =====
 
-// Open help modal
-async function openHelpModal() {
+// Open help modal (ENHANCED with optional section parameter)
+async function openHelpModal(initialSection = 'welcome') {
     const modal = document.getElementById('helpModal');
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     
-    // Render initial help content (now async)
-    await renderHelpContent(currentHelpSection);
+    // Navigate to specified section
+    if (initialSection !== currentHelpSection) {
+        await navigateToHelpSection(initialSection);
+    } else {
+        // Render current section content
+        await renderHelpContent(currentHelpSection);
+    }
     
-    console.log('📖 Help modal opened');
+    console.log(`📖 Help modal opened (section: ${initialSection})`);
 }
 
 // Close help modal
@@ -82,7 +208,7 @@ function closeHelpModal() {
     console.log('📖 Help modal closed');
 }
 
-// Navigate to help section
+// Navigate to help section (ENHANCED with What's New handling)
 async function navigateToHelpSection(sectionId) {
     currentHelpSection = sectionId;
     
@@ -94,6 +220,11 @@ async function navigateToHelpSection(sectionId) {
     const activeNavItem = document.querySelector(`[data-section="${sectionId}"]`);
     if (activeNavItem) {
         activeNavItem.classList.add('active');
+    }
+    
+    // ENHANCED: Mark What's New as seen when visited
+    if (sectionId === 'whatsnew') {
+        updateLastSeenVersion();
     }
     
     // Render new content (now async)
@@ -125,6 +256,11 @@ async function renderHelpContent(sectionId) {
         try {
             const content = await loadHelpSectionContent(sectionId);
             sectionElement.innerHTML = content;
+            
+            // ENHANCED: Add version-specific enhancements for What's New
+            if (sectionId === 'whatsnew') {
+                enhanceWhatsNewContent(sectionElement);
+            }
         } catch (error) {
             console.error(`Failed to render help section ${sectionId}:`, error);
             sectionElement.innerHTML = generateFallbackContent(sectionId);
@@ -168,7 +304,44 @@ async function loadHelpSectionContent(sectionId) {
     }
 }
 
-// Generate fallback content if file loading fails
+// ENHANCED: Add What's New specific enhancements
+function enhanceWhatsNewContent(sectionElement) {
+    // Add auto-show preference toggle
+    const autoShowToggle = sectionElement.querySelector('#autoShowToggle');
+    if (autoShowToggle) {
+        autoShowToggle.checked = isAutoShowEnabled();
+        autoShowToggle.addEventListener('change', (e) => {
+            setAutoShowPreference(e.target.checked);
+            showToast(
+                e.target.checked ? 
+                'Auto-show enabled for major updates' : 
+                'Auto-show disabled',
+                'success'
+            );
+        });
+    }
+    
+    // Mark version entries as new/old based on last seen version
+    const lastSeen = getLastSeenVersion();
+    const versionEntries = sectionElement.querySelectorAll('.version-entry');
+    
+    versionEntries.forEach(entry => {
+        const versionNumber = entry.getAttribute('data-version');
+        if (versionNumber && compareVersions(versionNumber, lastSeen) > 0) {
+            entry.classList.add('version-new');
+        } else {
+            entry.classList.add('version-seen');
+        }
+    });
+    
+    // Add current version highlight
+    const currentVersionEntry = sectionElement.querySelector(`[data-version="${APP_VERSION}"]`);
+    if (currentVersionEntry) {
+        currentVersionEntry.classList.add('version-current');
+    }
+}
+
+// Generate fallback content if file loading fails (ENHANCED)
 function generateFallbackContent(sectionId) {
     const fallbackContent = {
         welcome: `
@@ -182,7 +355,22 @@ function generateFallbackContent(sectionId) {
         sorting: `<h3>Sorting</h3><p>Help content for sorting could not be loaded.</p>`,
         comparison: `<h3>Comparison</h3><p>Help content for comparison could not be loaded.</p>`,
         collection: `<h3>Collection</h3><p>Help content for collection could not be loaded.</p>`,
-        tips: `<h3>Tips & Tricks</h3><p>Help content for tips could not be loaded.</p>`
+        tips: `<h3>Tips & Tricks</h3><p>Help content for tips could not be loaded.</p>`,
+        whatsnew: `
+            <h3>What's New</h3>
+            <p>What's New content could not be loaded from the server.</p>
+            <div class="help-warning">
+                <strong>⚠️ Content Unavailable:</strong> The changelog content could not be loaded. Please check that help/whatsnew.html exists.
+            </div>
+            <div class="version-entry version-current" data-version="${APP_VERSION}">
+                <h4>Version ${APP_VERSION} - Current</h4>
+                <div class="version-date">Today</div>
+                <div class="version-changes">
+                    <span class="update-type update-feature">Feature</span>
+                    <p>Added What's New system (fallback content displayed)</p>
+                </div>
+            </div>
+        `
     };
     
     return fallbackContent[sectionId] || `<h3>Section Not Found</h3><p>Content for section "${sectionId}" could not be loaded.</p>`;
@@ -671,7 +859,17 @@ window.ModalManager = {
     openHelpModal,
     closeHelpModal,
     navigateToHelpSection,
-    renderHelpContent
+    renderHelpContent,
+    // NEW: Version system functions
+    initializeVersionSystem,
+    getLastSeenVersion,
+    updateLastSeenVersion,
+    hasNewContent,
+    isAutoShowEnabled,
+    setAutoShowPreference,
+    updateNewContentIndicator,
+    checkAutoShowWhatsNew,
+    APP_VERSION
 };
 
 // Export individual functions to global scope for backward compatibility

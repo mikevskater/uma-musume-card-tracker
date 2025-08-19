@@ -1,4 +1,4 @@
-// Main Application Controller (Refactored with Dark Mode Support & Help System)
+// Main Application Controller (Refactored with Dark Mode Support & Help System & What's New)
 // Simplified initialization and coordination
 
 // ===== GLOBAL STATE =====
@@ -45,8 +45,11 @@ async function initializeApplication() {
     try {
         console.log('🎯 Starting Uma Musume Support Card Tracker...');
         
-        // ENHANCED: Initialize UI systems first (includes theme and help)
+        // ENHANCED: Initialize UI systems first (includes theme, help, and version systems)
         initializeUIComponents();
+        
+        // NEW: Initialize version system early for What's New features
+        initializeVersionSystem();
         
         // Load card data
         const dataLoaded = await loadData();
@@ -144,10 +147,12 @@ function initializeMultiSort() {
 
 // ===== APPLICATION STATE MANAGEMENT =====
 
-// Log application ready status
+// Log application ready status (ENHANCED with version info)
 function logApplicationReady() {
     const currentTheme = getCurrentTheme();
+    const appVersion = APP_VERSION || 'Unknown';
     console.log('🎯 Uma Musume Support Card Tracker Ready!');
+    console.log(`📋 Version: ${appVersion}`);
     console.log('📊 Features loaded:');
     console.log('   ✅ Card collection tracking');
     console.log('   ✅ Multi-layer sorting & filtering');
@@ -157,6 +162,7 @@ function logApplicationReady() {
     console.log('   ✅ Real-time level updates');
     console.log(`   🌙 Dark mode system (${currentTheme} mode active)`);
     console.log('   📖 Help & tutorial system');
+    console.log('   📋 What\'s New changelog system'); // NEW
 }
 
 // Show application error
@@ -169,7 +175,7 @@ function showApplicationError(error) {
 
 // ===== HELP SYSTEM INTEGRATION =====
 
-// Initialize help system event listeners
+// Initialize help system event listeners (ENHANCED with What's New support)
 function initializeHelpEventListeners() {
     // Help toggle button
     const helpToggle = document.getElementById('helpToggle');
@@ -240,10 +246,31 @@ function initializeHelpEventListeners() {
     console.log('📖 Help system event listeners initialized');
 }
 
+// ===== VERSION SYSTEM INTEGRATION =====
+
+// NEW: Initialize version system integration
+function initializeVersionSystemIntegration() {
+    // Set up periodic check for new content indicator updates
+    // This ensures the badge stays current if the page is left open for a long time
+    setInterval(() => {
+        updateNewContentIndicator();
+    }, 300000); // Check every 5 minutes
+    
+    // Listen for localStorage changes in other tabs (cross-tab synchronization)
+    window.addEventListener('storage', (e) => {
+        if (e.key === VERSION_STORAGE_KEY) {
+            updateNewContentIndicator();
+        }
+    });
+    
+    console.log('📋 Version system integration initialized');
+}
+
 // ===== ERROR HANDLING =====
 
-// Enhanced error handler for debugging
+// Enhanced error handler for debugging (ENHANCED with version info)
 window.addEventListener('error', (event) => {
+    const appVersion = APP_VERSION || 'Unknown';
     console.error('🚨 Global error caught:', {
         message: event.error?.message || event.message,
         filename: event.filename,
@@ -251,19 +278,24 @@ window.addEventListener('error', (event) => {
         colno: event.colno,
         stack: event.error?.stack,
         timestamp: new Date().toISOString(),
-        theme: getCurrentTheme(), // Include theme info for debugging
-        helpSystemActive: document.getElementById('helpModal')?.style.display === 'block'
+        version: appVersion, // NEW: Include version info
+        theme: getCurrentTheme(),
+        helpSystemActive: document.getElementById('helpModal')?.style.display === 'block',
+        lastSeenVersion: getLastSeenVersion() // NEW: Include version tracking info
     });
 });
 
-// Enhanced unhandled promise rejection handler
+// Enhanced unhandled promise rejection handler (ENHANCED with version info)
 window.addEventListener('unhandledrejection', (event) => {
+    const appVersion = APP_VERSION || 'Unknown';
     console.error('🚨 Unhandled promise rejection:', {
         reason: event.reason,
         promise: event.promise,
         timestamp: new Date().toISOString(),
-        theme: getCurrentTheme(), // Include theme info for debugging
-        helpSystemActive: document.getElementById('helpModal')?.style.display === 'block'
+        version: appVersion, // NEW: Include version info
+        theme: getCurrentTheme(),
+        helpSystemActive: document.getElementById('helpModal')?.style.display === 'block',
+        lastSeenVersion: getLastSeenVersion() // NEW: Include version tracking info
     });
 });
 
@@ -320,9 +352,9 @@ function initializeAccessibilityFeatures() {
     
     // Store focus when help modal opens
     const originalOpenHelpModal = window.openHelpModal;
-    window.openHelpModal = function() {
+    window.openHelpModal = function(section) {
         lastFocusedElement = document.activeElement;
-        originalOpenHelpModal();
+        originalOpenHelpModal(section);
         // Focus the first navigation item
         setTimeout(() => {
             const firstNavItem = document.querySelector('.help-nav-item');
@@ -352,7 +384,7 @@ function initializeAccessibilityFeatures() {
     console.log('♿ Accessibility features initialized');
 }
 
-// Announce to screen readers
+// Announce to screen readers (ENHANCED with version info)
 function announceToScreenReader(message) {
     const announcement = document.getElementById('aria-announcements');
     if (announcement) {
@@ -362,7 +394,7 @@ function announceToScreenReader(message) {
 
 // ===== STARTUP =====
 
-// Load application when page loads
+// Load application when page loads (ENHANCED with version system)
 document.addEventListener('DOMContentLoaded', () => {
     console.log('📄 DOM loaded, initializing application...');
     
@@ -371,19 +403,23 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize help system after main app
         initializeHelpEventListeners();
         
+        // NEW: Initialize version system integration
+        initializeVersionSystemIntegration();
+        
         // Initialize accessibility features
         initializeAccessibilityFeatures();
         
-        // Announce app ready to screen readers
+        // Announce app ready to screen readers (with version info)
         setTimeout(() => {
-            announceToScreenReader('Uma Musume Support Card Tracker loaded and ready');
+            const appVersion = APP_VERSION || 'Unknown';
+            announceToScreenReader(`Uma Musume Support Card Tracker version ${appVersion} loaded and ready`);
         }, 1000);
     });
 });
 
 // ===== PERFORMANCE MONITORING =====
 
-// Monitor performance for large datasets
+// Monitor performance for large datasets (ENHANCED with version tracking)
 function monitorPerformance() {
     if (window.performance && window.performance.mark) {
         // Mark key performance points
@@ -406,7 +442,8 @@ function monitorPerformance() {
             if (filterMeasures.length > 0) {
                 const avgFilterTime = filterMeasures.reduce((sum, m) => sum + m.duration, 0) / filterMeasures.length;
                 if (avgFilterTime > 100) { // Log if filtering takes > 100ms
-                    console.warn(`⚠️ Filter performance: ${avgFilterTime.toFixed(2)}ms average`);
+                    const appVersion = APP_VERSION || 'Unknown';
+                    console.warn(`⚠️ Filter performance: ${avgFilterTime.toFixed(2)}ms average (v${appVersion})`);
                 }
             }
         }, 30000); // Check every 30 seconds
@@ -425,6 +462,7 @@ window.App = {
     initializeAdvancedFilters,
     initializeMultiSort,
     initializeHelpEventListeners,
+    initializeVersionSystemIntegration, // NEW
     initializeAccessibilityFeatures,
     announceToScreenReader
 };

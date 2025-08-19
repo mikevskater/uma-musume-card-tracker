@@ -22,6 +22,10 @@
         <header>
             <h1>Uma Musume Support Card Tracker</h1>
             <p>Manage and track your support card collection</p>
+            <!-- NEW: Version display -->
+            <div class="version-info">
+                <span class="app-version">v<span id="appVersion">1.1.0</span></span>
+            </div>
         </header>
 
         <div id="loading" class="loading">Loading card data...</div>
@@ -354,6 +358,11 @@
                             <li><button class="help-nav-item" data-section="comparison">Comparison</button></li>
                             <li><button class="help-nav-item" data-section="collection">Collection</button></li>
                             <li><button class="help-nav-item" data-section="tips">Tips & Tricks</button></li>
+                            <!-- NEW: What's New navigation item with indicator -->
+                            <li><button class="help-nav-item" data-section="whatsnew" id="whatsNewNavItem">
+                                What's New
+                                <span class="new-content-badge" id="newContentBadge" style="display: none;">●</span>
+                            </button></li>
                         </ul>
                     </nav>
                     <main class="help-content" id="helpContent">
