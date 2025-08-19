@@ -12,8 +12,8 @@
 /* CSS Custom Properties - Design Tokens with Dark Mode Support */
 :root {
     /* Colors - Primary Palette */
-    --color-primary: #2c3e50;
-    --color-primary-light: #34495e;
+    --color-primary: #4e5c69;
+    --color-primary-light: #767f88;
     --color-primary-dark: #1a252f;
     
     --color-secondary: #3498db;
