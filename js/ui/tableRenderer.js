@@ -24,7 +24,7 @@ function createCardTableRow(card) {
     const isSelected = selectedCards.includes(cardId);
     
     const row = createElement('tr', {
-        className: `${isOwned ? 'owned' : 'unowned'} ${isSelected ? 'selected' : ''}`,
+        className: `${isOwned ? 'owned' : 'unowned'}${isSelected ? ' selected' : ''}`,
         style: 'cursor: pointer',
         'data-card-id': cardId
     });
@@ -67,7 +67,7 @@ function createCardTableRow(card) {
 
     // Build row HTML
     row.innerHTML = `
-        <td class="ownership-checkbox ${comparisonMode ? 'comparison-mode-disabled' : ''}">
+        <td class="ownership-checkbox${comparisonMode ? ' comparison-mode-disabled' : ''}">
             ${createOwnershipCheckbox(cardId, isOwned, shouldDisableOwnership).outerHTML}
         </td>
         <td>

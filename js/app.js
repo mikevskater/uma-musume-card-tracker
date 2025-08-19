@@ -174,13 +174,21 @@ function initializeHelpEventListeners() {
     // Help toggle button
     const helpToggle = document.getElementById('helpToggle');
     if (helpToggle) {
-        helpToggle.addEventListener('click', openHelpModal);
+        helpToggle.addEventListener('click', () => {
+            openHelpModal().catch(error => {
+                console.error('Failed to open help modal:', error);
+                showToast('Failed to load help content', 'error');
+            });
+        });
         
         // Keyboard support
         helpToggle.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                openHelpModal();
+                openHelpModal().catch(error => {
+                    console.error('Failed to open help modal:', error);
+                    showToast('Failed to load help content', 'error');
+                });
             }
         });
     }
@@ -202,7 +210,10 @@ function initializeHelpEventListeners() {
         if (e.target.classList.contains('help-nav-item')) {
             const sectionId = e.target.getAttribute('data-section');
             if (sectionId) {
-                navigateToHelpSection(sectionId);
+                navigateToHelpSection(sectionId).catch(error => {
+                    console.error('Failed to navigate to help section:', error);
+                    showToast('Failed to load help section', 'error');
+                });
             }
         }
     });
@@ -212,7 +223,10 @@ function initializeHelpEventListeners() {
         // F1 key to open help
         if (e.key === 'F1') {
             e.preventDefault();
-            openHelpModal();
+            openHelpModal().catch(error => {
+                console.error('Failed to open help modal:', error);
+                showToast('Failed to load help content', 'error');
+            });
         }
         
         // ESC to close help modal

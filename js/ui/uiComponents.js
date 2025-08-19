@@ -115,13 +115,21 @@ function updateThemeToggleState(theme) {
 function initializeHelpSystem() {
     const helpToggle = document.getElementById('helpToggle');
     if (helpToggle) {
-        helpToggle.addEventListener('click', openHelpModal);
+        helpToggle.addEventListener('click', () => {
+            openHelpModal().catch(error => {
+                console.error('Failed to open help modal:', error);
+                showToast('Failed to load help content', 'error');
+            });
+        });
         
         // Add keyboard support
         helpToggle.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                openHelpModal();
+                openHelpModal().catch(error => {
+                    console.error('Failed to open help modal:', error);
+                    showToast('Failed to load help content', 'error');
+                });
             }
         });
         
@@ -155,7 +163,10 @@ function setupHelpModalEvents() {
         if (e.target.classList.contains('help-nav-item')) {
             const sectionId = e.target.getAttribute('data-section');
             if (sectionId) {
-                navigateToHelpSection(sectionId);
+                navigateToHelpSection(sectionId).catch(error => {
+                    console.error('Failed to navigate to help section:', error);
+                    showToast('Failed to load help section', 'error');
+                });
             }
         }
     });
