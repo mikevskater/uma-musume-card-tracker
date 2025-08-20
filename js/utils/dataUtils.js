@@ -5,58 +5,128 @@
 
 // Calculate effect value at specific level with caching
 const effectValueCache = new Map();
+const EFFECT_MILESTONES = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
+
+/**
+ * Calculate effect value at a specific level with proper interpolation
+ * @param {Array} effectArray - Effect data [effectId, val1, val5, val10, ...]
+ * @param {number} level - Target level (1-50)
+ * @returns {number} Calculated effect value
+ */
 function calculateEffectValue(effectArray, level) {
-    if (!effectArray || effectArray.length < 2) return 0;
-    
-    const cacheKey = `${effectArray[0]}-${level}`;
-    if (effectValueCache.has(cacheKey)) {
-        return effectValueCache.get(cacheKey);
+    if (!effectArray || effectArray.length < 2) {
+        return 0;
     }
     
-    const [effectId, ...values] = effectArray;
-    const levelMap = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+    // Clamp level to valid range
+    level = Math.max(1, Math.min(50, level));
     
-    // Find the appropriate values to interpolate between
-    let prevIndex = 0;
-    let prevLevel = 1;
-    let prevValue = values[0];
+    // Extract effect values (skip first element which is effect ID)
+    const values = effectArray.slice(1);
     
-    for (let i = 0; i < levelMap.length; i++) {
-        if (values[i] !== -1 && levelMap[i] <= level) {
-            prevIndex = i;
-            prevLevel = levelMap[i];
-            prevValue = values[i];
-        }
+    // Find exact milestone match first
+    const exactMilestoneIndex = EFFECT_MILESTONES.indexOf(level);
+    if (exactMilestoneIndex !== -1 && values[exactMilestoneIndex] !== -1) {
+        return values[exactMilestoneIndex];
     }
     
-    // Find next valid value
-    let nextLevel = prevLevel;
-    let nextValue = prevValue;
+    // Find surrounding milestones for interpolation
+    const { lowerMilestone, upperMilestone } = findSurroundingMilestones(effectArray, level);
     
-    for (let i = prevIndex + 1; i < levelMap.length; i++) {
-        if (values[i] !== -1) {
-            nextLevel = levelMap[i];
-            nextValue = values[i];
+    // Get corresponding array indices
+    const lowerIndex = EFFECT_MILESTONES.indexOf(lowerMilestone.level);
+    const upperIndex = EFFECT_MILESTONES.indexOf(upperMilestone.level);
+    
+    // Validate indices and values
+    if (lowerIndex === -1 || upperIndex === -1 || 
+        lowerMilestone.value === -1 || upperMilestone.value === -1) {
+        console.warn(`Invalid interpolation data for level ${level}:`, {
+            lowerMilestone, upperMilestone, lowerIndex, upperIndex
+        });
+        return 0;
+    }
+    
+    // Perform linear interpolation
+    const interpolatedValue = linearInterpolate(
+        lowerMilestone.level, lowerMilestone.value,
+        upperMilestone.level, upperMilestone.value,
+        level
+    );
+    
+    // Round to reasonable precision (2 decimal places)
+    return Math.floor(interpolatedValue);
+}
+
+/**
+ * Find the closest non-(-1) milestones surrounding the target level
+ * @param {Array} effectArray - Effect data [effectId, val1, val5, val10, ...]
+ * @param {number} targetLevel - Target level to interpolate for
+ * @returns {Object} {lowerMilestone: {level, value}, upperMilestone: {level, value}}
+ */
+function findSurroundingMilestones(effectArray, targetLevel) {
+    const values = effectArray.slice(1); // Remove effect ID
+    
+    let lowerMilestone = null;
+    let upperMilestone = null;
+    
+    // Find the lower bound (closest milestone <= targetLevel with non-(-1) value)
+    for (let i = EFFECT_MILESTONES.length - 1; i >= 0; i--) {
+        const milestoneLevel = EFFECT_MILESTONES[i];
+        const milestoneValue = values[i];
+        
+        if (milestoneLevel <= targetLevel && milestoneValue !== -1) {
+            lowerMilestone = { level: milestoneLevel, value: milestoneValue };
             break;
         }
     }
     
-    // Calculate result
-    let result;
-    if (level === prevLevel) {
-        result = prevValue;
-    } else if (level === nextLevel) {
-        result = nextValue;
-    } else if (nextLevel > prevLevel) {
-        const ratio = (level - prevLevel) / (nextLevel - prevLevel);
-        result = Math.round(prevValue + (nextValue - prevValue) * ratio);
-    } else {
-        result = prevValue;
+    // Find the upper bound (closest milestone >= targetLevel with non-(-1) value)
+    for (let i = 0; i < EFFECT_MILESTONES.length; i++) {
+        const milestoneLevel = EFFECT_MILESTONES[i];
+        const milestoneValue = values[i];
+        
+        if (milestoneLevel >= targetLevel && milestoneValue !== -1) {
+            upperMilestone = { level: milestoneLevel, value: milestoneValue };
+            break;
+        }
     }
     
-    effectValueCache.set(cacheKey, result);
-    return result;
+    // Handle edge cases
+    if (!lowerMilestone && upperMilestone) {
+        // Target is before first valid milestone - extrapolate from 0
+        lowerMilestone = { level: 0, value: 0 };
+    } else if (lowerMilestone && !upperMilestone) {
+        // Target is after last valid milestone - use last value
+        upperMilestone = lowerMilestone;
+    } else if (!lowerMilestone && !upperMilestone) {
+        // No valid milestones found
+        console.warn(`No valid milestones found for level ${targetLevel}`);
+        return { 
+            lowerMilestone: { level: 0, value: 0 }, 
+            upperMilestone: { level: 50, value: 0 } 
+        };
+    }
+    
+    return { lowerMilestone, upperMilestone };
+}
+
+/**
+ * Perform linear interpolation between two points
+ * @param {number} x1 - Lower level
+ * @param {number} y1 - Lower value  
+ * @param {number} x2 - Upper level
+ * @param {number} y2 - Upper value
+ * @param {number} x - Target level
+ * @returns {number} Interpolated value
+ */
+function linearInterpolate(x1, y1, x2, y2, x) {
+    if (x1 === x2) {
+        return y1; // Avoid division by zero
+    }
+    
+    const ratio = (x - x1) / (x2 - x1);
+    return y1 + ratio * (y2 - y1);
 }
 
 // Check if effect is locked at current level
