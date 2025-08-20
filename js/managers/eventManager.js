@@ -182,6 +182,9 @@ function initializeTableEvents() {
 
 // Update row state after ownership change
 function updateRowState(row, cardId, owned) {
+    console.log(`🔄 Updating row state for card ${cardId}, owned: ${owned}`);
+    
+    // Update row classes
     row.className = owned ? 'owned' : 'unowned';
     if (selectedCards.includes(cardId)) {
         row.classList.add('selected');
@@ -189,27 +192,52 @@ function updateRowState(row, cardId, owned) {
     
     const levelInput = row.querySelector('.level-input');
     const lbSelect = row.querySelector('.lb-select');
+    const ownershipCheckbox = row.querySelector('input[type="checkbox"]');
     
+    // Update ownership checkbox
+    if (ownershipCheckbox) {
+        ownershipCheckbox.checked = owned;
+    }
+    
+    // Calculate disabled states for table elements
     const shouldDisableLevel = !owned && globalLimitBreakLevel === null ||
                               globalLimitBreakLevel !== null && 
                               (globalLimitBreakOverrideOwned || !owned);
+    
     const shouldDisableLB = !owned && globalLimitBreakLevel === null ||
                            globalLimitBreakLevel !== null && 
                            (globalLimitBreakOverrideOwned || !owned);
     
-    levelInput.disabled = shouldDisableLevel;
-    lbSelect.disabled = shouldDisableLB;
-    
-    if (owned) {
-        levelInput.value = getOwnedCardLevel(cardId);
-        lbSelect.value = getOwnedCardLimitBreak(cardId);
-    } else {
-        const card = cardData.find(c => c.support_id === cardId);
-        levelInput.value = getEffectiveLevel(card);
-        lbSelect.value = 2; // Default LB
+    // Update level input
+    if (levelInput) {
+        levelInput.disabled = shouldDisableLevel;
+        
+        if (owned) {
+            levelInput.value = getOwnedCardLevel(cardId);
+        } else {
+            const card = cardData.find(c => c.support_id === cardId);
+            levelInput.value = getEffectiveLevel(card);
+        }
+        
+        updateCardDisplay(levelInput);
     }
     
-    updateCardDisplay(levelInput);
+    // Update LB select
+    if (lbSelect) {
+        lbSelect.disabled = shouldDisableLB;
+        
+        if (owned) {
+            lbSelect.value = getOwnedCardLimitBreak(cardId);
+        } else {
+            lbSelect.value = 2; // Default LB
+        }
+    }
+    
+    console.log(`   Row state updated:`, {
+        owned,
+        levelDisabled: shouldDisableLevel,
+        lbDisabled: shouldDisableLB
+    });
 }
 
 // ===== SORT LAYER EVENT HANDLERS =====
@@ -323,90 +351,297 @@ function handleModalKeyNavigation(e) {
 
 // Setup modal form event listeners (called when modal is opened)
 function setupModalFormEvents(card, cardId) {
+    console.log(`🔧 Setting up modal form events for card ${cardId}`);
+    
     // Ownership toggle
     const ownershipToggle = document.getElementById('modalOwnershipToggle');
     if (ownershipToggle) {
-        ownershipToggle.addEventListener('change', (e) => {
+        // Remove existing event listeners by cloning
+        const newOwnershipToggle = ownershipToggle.cloneNode(true);
+        ownershipToggle.parentNode.replaceChild(newOwnershipToggle, ownershipToggle);
+        
+        newOwnershipToggle.addEventListener('change', (e) => {
+            console.log(`🔧 Modal ownership change: Card ${cardId}, owned ${e.target.checked}`);
             handleModalOwnershipChange(e, cardId, card);
         });
+        
+        console.log('   ✅ Ownership toggle event bound');
     }
     
     // Level input
     const levelInput = document.getElementById('modalLevelInput');
     if (levelInput) {
-        levelInput.addEventListener('change', (e) => {
+        // Remove existing event listeners by cloning
+        const newLevelInput = levelInput.cloneNode(true);
+        levelInput.parentNode.replaceChild(newLevelInput, levelInput);
+        
+        newLevelInput.addEventListener('change', (e) => {
+            console.log(`🔧 Modal level change triggered: Card ${cardId}, value ${e.target.value}`);
             handleModalLevelChange(e, cardId);
         });
+        
+        // Also bind to 'input' event for real-time updates
+        newLevelInput.addEventListener('input', (e) => {
+            // Only update display, don't save until 'change'
+            const level = parseInt(e.target.value);
+            if (!isNaN(level)) {
+                updateModalDisplay(level);
+            }
+        });
+        
+        console.log('   ✅ Level input events bound');
+    } else {
+        console.warn('   ❌ Modal level input not found');
     }
     
     // Limit break select
     const lbSelect = document.getElementById('modalLimitBreakSelect');
     if (lbSelect) {
-        lbSelect.addEventListener('change', (e) => {
+        // Remove existing event listeners by cloning
+        const newLBSelect = lbSelect.cloneNode(true);
+        lbSelect.parentNode.replaceChild(newLBSelect, lbSelect);
+        
+        newLBSelect.addEventListener('change', (e) => {
+            console.log(`🔧 Modal LB change triggered: Card ${cardId}, value ${e.target.value}`);
             handleModalLimitBreakChange(e, cardId);
         });
+        
+        console.log('   ✅ LB select event bound');
+    } else {
+        console.warn('   ❌ Modal LB select not found');
     }
 }
 
 // Handle modal ownership change
 function handleModalOwnershipChange(e, cardId, card) {
     const owned = e.target.checked;
+    
+    console.log(`🎯 Modal ownership change: Card ${cardId}, owned ${owned}`);
+    
+    // Update ownership status
     setCardOwnership(cardId, owned);
     
     // Update ownership status display
     const statusElement = document.querySelector('.ownership-status');
-    statusElement.className = `ownership-status ${owned ? 'owned' : 'unowned'}`;
-    statusElement.textContent = owned ? '✓ Owned' : '✗ Not Owned';
+    if (statusElement) {
+        statusElement.className = `ownership-status ${owned ? 'owned' : 'unowned'}`;
+        statusElement.textContent = owned ? '✓ Owned' : '✗ Not Owned';
+    }
     
-    // Update level input state
+    // FIXED: Get modal form elements
     const modalLevelInput = document.getElementById('modalLevelInput');
-    const shouldDisableLevel = !owned && globalLimitBreakLevel === null ||
+    const modalLBSelect = document.getElementById('modalLimitBreakSelect');
+    
+    console.log(`   Modal elements found:`, {
+        levelInput: !!modalLevelInput,
+        lbSelect: !!modalLBSelect
+    });
+    
+    // ENHANCED: Recalculate disabled states based on new ownership
+    const shouldDisable = !owned && globalLimitBreakLevel === null ||
                               globalLimitBreakLevel !== null && 
                               (globalLimitBreakOverrideOwned || !owned);
-    modalLevelInput.disabled = shouldDisableLevel;
     
-    if (owned) {
-        modalLevelInput.value = getOwnedCardLevel(cardId);
-        updateModalDisplay(getOwnedCardLevel(cardId));
-    } else {
-        modalLevelInput.value = getEffectiveLevel(card);
-        updateModalDisplay(getEffectiveLevel(card));
+    console.log(`   Calculated disabled states:`, {
+        shouldDisable,
+        globalLimitBreakLevel,
+        globalLimitBreakOverrideOwned
+    });
+    
+    // FIXED: Update level input state and value
+    if (modalLevelInput) {
+        const oldDisabled = modalLevelInput.disabled;
+        modalLevelInput.disabled = shouldDisable;
+        
+        console.log(`   Level input disabled: ${oldDisabled} → ${shouldDisable}`);
+        
+        if (owned) {
+            // Set to owned card level or default
+            const ownedLevel = getOwnedCardLevel(cardId);
+            modalLevelInput.value = ownedLevel;
+            console.log(`   Set level input to owned level: ${ownedLevel}`);
+        } else {
+            // Set to effective level for unowned card
+            const effectiveLevel = getEffectiveLevel(card);
+            modalLevelInput.value = effectiveLevel;
+            console.log(`   Set level input to effective level: ${effectiveLevel}`);
+        }
+        
+        updateModalDisplay(parseInt(modalLevelInput.value));
     }
     
-    // Update table display
-    debouncedFilterAndSort();
-}
-
-// Handle modal level change
-function handleModalLevelChange(e, cardId) {
-    const newLevel = parseInt(e.target.value);
-    updateModalDisplay(newLevel);
-    
-    // Update owned card level and table input
-    if (isCardOwned(cardId) && 
-        (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
-        setOwnedCardLevel(cardId, newLevel);
+    // FIXED: Update limit break select state and value
+    if (modalLBSelect) {
+        const oldDisabled = modalLBSelect.disabled;
+        modalLBSelect.disabled = shouldDisable;
         
-        const tableInput = document.querySelector(`input[data-card-id="${cardId}"]`);
-        if (tableInput) {
-            tableInput.value = newLevel;
-            updateCardDisplay(tableInput);
+        console.log(`   LB select disabled: ${oldDisabled} → ${shouldDisable} ⭐`);
+        
+        if (owned) {
+            // Set to owned card LB or default
+            const ownedLB = getOwnedCardLimitBreak(cardId);
+            modalLBSelect.value = ownedLB;
+            console.log(`   Set LB select to owned LB: ${ownedLB}`);
+            
+            // Update level input max constraint
+            if (modalLevelInput) {
+                const maxLevel = limitBreaks[card.rarity][ownedLB];
+                modalLevelInput.max = maxLevel;
+                console.log(`   Updated level input max to: ${maxLevel}`);
+            }
+        } else {
+            // Set to default LB for unowned card
+            modalLBSelect.value = 2;
+            console.log(`   Set LB select to default: 2`);
+            
+            // Update level input max constraint
+            if (modalLevelInput) {
+                const maxLevel = limitBreaks[card.rarity][2];
+                modalLevelInput.max = maxLevel;
+                console.log(`   Updated level input max to: ${maxLevel}`);
+            }
         }
     }
+    
+    // ENHANCED: Update table display to match
+    const tableRow = document.querySelector(`tr[data-card-id="${cardId}"]`);
+    if (tableRow) {
+        updateRowState(tableRow, cardId, owned);
+        console.log(`   ✅ Updated table row state`);
+    }
+    
+    // ENHANCED: Trigger filter refresh to update display
+    debouncedFilterAndSort();
+    
+    console.log(`   🎉 Ownership change complete`);
 }
 
-// Handle modal limit break change
+// Level validation and clamping function
+function validateAndClampLevel(cardId, proposedLevel, currentLimitBreak) {
+    const card = cardData.find(c => c.support_id === cardId);
+    if (!card) return proposedLevel;
+    
+    const maxLevel = limitBreaks[card.rarity][currentLimitBreak];
+    const clampedLevel = Math.min(Math.max(1, proposedLevel), maxLevel);
+    
+    if (clampedLevel !== proposedLevel) {
+        console.log(`🔧 Level validation: Card ${cardId}, ${proposedLevel} → ${clampedLevel} (max for LB ${currentLimitBreak})`);
+    }
+    
+    return clampedLevel;
+}
+
+// Get maximum level for a card at specific limit break
+function getMaxLevelForLimitBreak(cardId, limitBreakLevel) {
+    const card = cardData.find(c => c.support_id === cardId);
+    if (!card) return 1;
+    
+    return limitBreaks[card.rarity][limitBreakLevel];
+}
+
+// Check if a level is valid for a card's limit break
+function isLevelValidForLimitBreak(cardId, level, limitBreakLevel) {
+    const maxLevel = getMaxLevelForLimitBreak(cardId, limitBreakLevel);
+    return level >= 1 && level <= maxLevel;
+}
+
+// Get safe level when changing limit break (clamps if necessary)
+function getSafeLevelForNewLimitBreak(cardId, currentLevel, newLimitBreak) {
+    const maxLevel = getMaxLevelForLimitBreak(cardId, newLimitBreak);
+    return Math.min(currentLevel, maxLevel);
+}
+
+function updateTableRowFromModal(cardId, newLevel, newLimitBreak = null) {
+    // Use more specific selector for level input
+    const tableRow = document.querySelector(`tr[data-card-id="${cardId}"]`);
+    if (!tableRow) {
+        console.warn(`Table row not found for card ${cardId}`);
+        return false;
+    }
+    
+    // More specific selectors within the row
+    const tableLevelInput = tableRow.querySelector('.level-input');
+    const tableLBSelect = tableRow.querySelector('.lb-select');
+    
+    console.log(`🔄 Updating table row for card ${cardId}:`, {
+        newLevel,
+        newLimitBreak,
+        foundLevelInput: !!tableLevelInput,
+        foundLBSelect: !!tableLBSelect
+    });
+    
+    // Update level input
+    if (tableLevelInput && newLevel !== null && newLevel !== undefined) {
+        const oldValue = tableLevelInput.value;
+        tableLevelInput.value = newLevel;
+        
+        console.log(`   Level input: ${oldValue} → ${newLevel}`);
+        
+        // Trigger the update display function
+        updateCardDisplay(tableLevelInput);
+    }
+    
+    // Update limit break select if provided
+    if (tableLBSelect && newLimitBreak !== null && newLimitBreak !== undefined) {
+        const oldValue = tableLBSelect.value;
+        tableLBSelect.value = newLimitBreak;
+        
+        console.log(`   LB select: ${oldValue} → ${newLimitBreak}`);
+    }
+    
+    return true;
+}
+
+// Enhanced modal level change handler with better sync
+function handleModalLevelChange(e, cardId) {
+    const proposedLevel = parseInt(e.target.value);
+    
+    console.log(`🎯 Modal level change: Card ${cardId}, proposed level ${proposedLevel}`);
+    
+    // Validate and clamp level
+    const currentLB = getOwnedCardLimitBreak(cardId) || 2;
+    const validLevel = validateAndClampLevel(cardId, proposedLevel, currentLB);
+    
+    // Update modal input value if it was clamped
+    if (validLevel !== proposedLevel) {
+        e.target.value = validLevel;
+        showToast(`Level clamped to ${validLevel} (max for LB ${currentLB})`, 'warning');
+        console.log(`   Level clamped: ${proposedLevel} → ${validLevel}`);
+    }
+    
+    // Update modal display
+    updateModalDisplay(validLevel);
+    
+    // Update owned card level and sync table
+    if (isCardOwned(cardId) && 
+        (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
+        
+        // Save the new level
+        setOwnedCardLevel(cardId, validLevel);
+        console.log(`   Saved level ${validLevel} for card ${cardId}`);
+        
+        // Use enhanced table update function
+        const syncSuccess = updateTableRowFromModal(cardId, validLevel);
+        console.log(`   Table sync: ${syncSuccess ? '✅ Success' : '❌ Failed'}`);
+    }
+}
+
+// Enhanced modal limit break change handler with better sync
 function handleModalLimitBreakChange(e, cardId) {
     const newLimitBreak = parseInt(e.target.value);
     
+    console.log(`🎯 Modal LB change: Card ${cardId}, new LB ${newLimitBreak}`);
+    
     if (isCardOwned(cardId) && 
         (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
         
-        // Use the setOwnedCardLimitBreak function
+        // Use enhanced setOwnedCardLimitBreak with clamping
         const clampResult = setOwnedCardLimitBreak(cardId, newLimitBreak);
         
         if (clampResult) {
             const { newLevel, levelChanged, newMaxLevel } = clampResult;
+            
+            console.log(`   LB change result:`, clampResult);
             
             // Update modal level input constraints and value
             const modalLevelInput = document.getElementById('modalLevelInput');
@@ -423,10 +658,9 @@ function handleModalLimitBreakChange(e, cardId) {
                 }
             }
             
-            // Update corresponding table row
-            updateTableRowAfterLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel);
-            
-            console.log(`🔄 Modal LB change: Card ${cardId} → LB ${newLimitBreak}, Level ${newLevel}`);
+            // Use enhanced table update function
+            const syncSuccess = updateTableRowFromModal(cardId, newLevel, newLimitBreak);
+            console.log(`   Table sync: ${syncSuccess ? '✅ Success' : '❌ Failed'}`);
         }
     }
 }
@@ -435,7 +669,7 @@ function handleTableLimitBreakChange(cardId, newLimitBreak, tableRow) {
     if (isCardOwned(cardId) && 
         (globalLimitBreakLevel === null || !globalLimitBreakOverrideOwned)) {
         
-        // ENHANCED: Use the enhanced setOwnedCardLimitBreak function
+        // Use the setOwnedCardLimitBreak function
         const clampResult = setOwnedCardLimitBreak(cardId, newLimitBreak);
         
         if (clampResult) {
@@ -446,7 +680,7 @@ function handleTableLimitBreakChange(cardId, newLimitBreak, tableRow) {
             if (levelInput) {
                 levelInput.max = newMaxLevel;
                 
-                // ENHANCED: Update level if it was clamped
+                // Update level if it was clamped
                 if (levelChanged) {
                     levelInput.value = newLevel;
                     updateCardDisplay(levelInput);
@@ -456,7 +690,7 @@ function handleTableLimitBreakChange(cardId, newLimitBreak, tableRow) {
                 }
             }
             
-            // ENHANCED: Update modal if open for this card
+            // Update modal if open for this card
             if (currentModalCard && currentModalCard.support_id === cardId) {
                 updateModalAfterTableLimitBreakChange(cardId, newLimitBreak, newLevel, newMaxLevel);
             }
@@ -664,14 +898,6 @@ function initializeSortingEvents() {
     }
 }
 
-// ===== EFFECT FILTER EVENT HANDLERS =====
-
-// Initialize effect filter events (called when filters are built)
-function initializeEffectFilterEvents() {
-    // This function is now handled by attachEffectFilterListeners in filterSort.js
-    // Remove the delegated listener approach as it wasn't working properly
-}
-
 // ===== INITIALIZATION =====
 
 // Initialize all event handlers
@@ -683,7 +909,6 @@ function initializeAllEvents() {
     initializeFilterEvents();
     initializeDataManagementEvents();
     initializeSortingEvents();
-    initializeEffectFilterEvents();
 }
 
 // ===== EXPORTS =====
