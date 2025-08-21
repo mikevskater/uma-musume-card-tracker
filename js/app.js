@@ -82,10 +82,7 @@ async function initializeInterface() {
         initializeAdvancedFilters();
         renderMultiSort();
         initializeAllEvents();
-        
-        // Setup column sorting
-        setupColumnSorting();
-        
+                
         // Initial render
         filterAndSortCards();
         
@@ -109,16 +106,6 @@ function getMultiSelectIds() {
         'includeSkillTypeFilter', 
         'excludeSkillTypeFilter'
     ];
-}
-
-// Setup column sorting event listeners
-function setupColumnSorting() {
-    document.querySelectorAll('th.sortable').forEach(th => {
-        th.addEventListener('click', () => {
-            const column = th.dataset.sort;
-            handleSort(column);
-        });
-    });
 }
 
 // ===== ADVANCED FILTER INITIALIZATION =====
