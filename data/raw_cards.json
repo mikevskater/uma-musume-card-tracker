@@ -12278,6 +12278,7 @@
                 "release": "2021-05-17",
                 "release_ko": "2022-09-05",
                 "release_zh_tw": "2022-09-19",
+                "release_en": "2025-08-20",
                 "effects": [
                     [
                         1,
@@ -12493,6 +12494,7 @@
                 "release": "2021-05-17",
                 "release_ko": "2022-09-05",
                 "release_zh_tw": "2022-09-19",
+                "release_en": "2025-08-20",
                 "effects": [
                     [
                         1,
@@ -26981,7 +26983,7 @@
                                 "lng",
                                 "l_1"
                             ],
-                            "name_en": "",
+                            "name_en": "Enthusiastic",
                             "iconid": 20011
                         },
                         {
@@ -26990,7 +26992,7 @@
                                 "l_1",
                                 "lng"
                             ],
-                            "name_en": "",
+                            "name_en": "Unwavering Heart",
                             "iconid": 20011
                         }
                     ],
@@ -33882,6 +33884,7 @@
                 "release": "2021-05-17",
                 "release_ko": "2022-09-05",
                 "release_zh_tw": "2022-09-19",
+                "release_en": "2025-08-20",
                 "effects": [
                     [
                         1,
@@ -58909,6 +58912,7 @@
                 "release": "2021-05-17",
                 "release_ko": "2022-09-05",
                 "release_zh_tw": "2022-09-19",
+                "release_en": "2025-08-20",
                 "effects": [
                     [
                         1,
@@ -100985,6 +100989,7 @@
                 "type": "stamina",
                 "obtained": "gacha",
                 "release": "2024-04-30",
+                "release_ko": "2025-08-19",
                 "effects": [
                     [
                         1,
@@ -101262,6 +101267,7 @@
                 "type": "guts",
                 "obtained": "story_event",
                 "release": "2024-04-30",
+                "release_ko": "2025-08-19",
                 "effects": [
                     [
                         1,
@@ -101529,6 +101535,7 @@
                 "type": "intelligence",
                 "obtained": "gacha",
                 "release": "2024-04-30",
+                "release_ko": "2025-08-19",
                 "effects": [
                     [
                         1,
@@ -119576,7 +119583,7 @@
                                 "lng",
                                 "l_1"
                             ],
-                            "name_en": "",
+                            "name_en": "Enthusiastic",
                             "iconid": 20011
                         },
                         {
@@ -119585,7 +119592,7 @@
                                 "l_1",
                                 "lng"
                             ],
-                            "name_en": "",
+                            "name_en": "Unwavering Heart",
                             "iconid": 20011
                         }
                     ],
@@ -119617,7 +119624,7 @@
                             "lng",
                             "l_1"
                         ],
-                        "name_en": "",
+                        "name_en": "Energetic",
                         "rarity": 2,
                         "iconid": 20012
                     },
@@ -119907,7 +119914,7 @@
                                 "cha",
                                 "l_1"
                             ],
-                            "name_en": "",
+                            "name_en": "Chasing the Shadow",
                             "iconid": 20011
                         },
                         {
@@ -119916,7 +119923,7 @@
                                 "cha",
                                 "l_3"
                             ],
-                            "name_en": "",
+                            "name_en": "Give Chase",
                             "iconid": 20011
                         }
                     ],
@@ -119948,7 +119955,7 @@
                             "cha",
                             "l_1"
                         ],
-                        "name_en": "",
+                        "name_en": "Afterimage",
                         "rarity": 2,
                         "iconid": 20012
                     },
