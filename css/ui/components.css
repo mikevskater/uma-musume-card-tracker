@@ -277,131 +277,21 @@ input[type="checkbox"]:disabled {
     height: var(--card-icon-size);
     border: 2px solid var(--border-primary);
     border-radius: var(--radius-md);
-    display: block;
-    margin: 0 auto;
     object-fit: cover;
-    object-position: center;
-    transition: transform var(--transition-normal), border-color var(--transition-theme);
+    background-color: var(--bg-muted);
+    transition: border-color var(--transition-theme);
 }
 
-.card-icon:hover {
-    transform: scale(1.05);
+/* Card Names */
+.card-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-normal);
 }
 
-.card-icon-fallback {
-    width: var(--card-icon-size);
-    height: var(--card-icon-size);
-    background-color: var(--bg-tertiary);
-    border: 2px solid var(--border-primary);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin: 0 auto;
-}
-
-/* Card Images (Modal) */
-.card-image {
-    width: var(--card-image-width);
-    height: var(--card-image-height);
-    border-radius: var(--radius-xl);
-    object-fit: cover;
-    object-position: center;
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-    position: relative;
-}
-
-.card-image:hover {
-    transform: scale(1.02);
-}
-
-.card-image-fallback {
-    width: var(--card-image-width);
-    height: var(--card-image-height);
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-    border: 2px solid var(--border-primary);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Rarity Borders for Card Images */
-.card-image.rarity-1 {
-    border: 3px solid #c0c0c0;
-    box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.5),
-        inset 0 -1px 0 rgba(0,0,0,0.3),
-        var(--shadow-lg),
-        0 0 0 1px rgba(192,192,192,0.3);
-}
-
-.card-image.rarity-2 {
-    border: 3px solid var(--color-rarity-sr);
-    box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.6),
-        inset 0 -1px 0 rgba(0,0,0,0.4),
-        0 2px 12px rgba(243, 156, 18, 0.4),
-        0 0 0 1px rgba(243, 156, 18, 0.5),
-        0 0 20px rgba(243, 156, 18, 0.2);
-}
-
-.card-image.rarity-3 {
-    border: 3px solid transparent;
-    background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                linear-gradient(45deg, 
-                    #ff0000, #ff7f00, #ffff00, #00ff00, 
-                    #0000ff, #4b0082, #9400d3, #ff0000
-                ) border-box;
-    box-shadow: 
-        inset 0 2px 0 rgba(255,255,255,0.7),
-        inset 0 -2px 0 rgba(0,0,0,0.5),
-        var(--shadow-xl),
-        0 0 30px rgba(255,255,255,0.5);
-    animation: rainbow-border 3s linear infinite;
-}
-
-@keyframes rainbow-border {
-    0% {
-        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                    linear-gradient(45deg, 
-                        #ff0000, #ff7f00, #ffff00, #00ff00, 
-                        #0000ff, #4b0082, #9400d3, #ff0000
-                    ) border-box;
-    }
-    25% {
-        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                    linear-gradient(135deg, 
-                        #ff7f00, #ffff00, #00ff00, #0000ff, 
-                        #4b0082, #9400d3, #ff0000, #ff7f00
-                    ) border-box;
-    }
-    50% {
-        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                    linear-gradient(225deg, 
-                        #ffff00, #00ff00, #0000ff, #4b0082, 
-                        #9400d3, #ff0000, #ff7f00, #ffff00
-                    ) border-box;
-    }
-    75% {
-        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                    linear-gradient(315deg, 
-                        #00ff00, #0000ff, #4b0082, #9400d3, 
-                        #ff0000, #ff7f00, #ffff00, #00ff00
-                    ) border-box;
-    }
-    100% {
-        background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
-                    linear-gradient(45deg, 
-                        #ff0000, #ff7f00, #ffff00, #00ff00, 
-                        #0000ff, #4b0082, #9400d3, #ff0000
-                    ) border-box;
-    }
+.card-name:hover {
+    color: var(--color-secondary);
 }
 
 /* =================================================================
@@ -411,35 +301,24 @@ input[type="checkbox"]:disabled {
 /* Rarity Badges */
 .rarity {
     padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-pill);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    text-align: center;
-    display: inline-block;
-    min-width: 30px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
     color: var(--color-white);
 }
 
-.rarity-1 { 
-    background-color: var(--color-rarity-r); 
-}
-
-.rarity-2 { 
-    background-color: var(--color-rarity-sr); 
-}
-
-.rarity-3 { 
-    background-color: var(--color-rarity-ssr); 
-}
+.rarity-1 { background-color: var(--color-gray-500); }
+.rarity-2 { background-color: var(--color-success); }
+.rarity-3 { background-color: var(--color-warning); }
 
 /* Type Badges */
 .type {
     padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
-    display: inline-block;
 }
 
 .type-speed { 
@@ -587,7 +466,7 @@ input[type="checkbox"]:disabled {
 }
 
 /* =================================================================
-   TOOLTIPS
+   ENHANCED TOOLTIPS (Updated to match unlock tooltip quality)
    ================================================================= */
 
 .tooltip {
@@ -597,58 +476,65 @@ input[type="checkbox"]:disabled {
     justify-content: center;
     width: 16px;
     height: 16px;
-    background-color: var(--text-muted);
-    color: var(--bg-primary);
-    border-radius: var(--radius-round);
-    font-size: var(--font-size-xs);
+    border-radius: 50%;
+    background-color: var(--color-warning);
+    color: var(--color-white);
+    font-size: 10px;
     font-weight: var(--font-weight-bold);
     cursor: help;
+    transition: all var(--transition-normal);
     flex-shrink: 0;
-    transition: background-color var(--transition-normal);
 }
 
 .tooltip:hover {
-    background-color: var(--text-secondary);
+    background-color: var(--color-primary);
+    transform: scale(1.1);
 }
 
+/* Enhanced tooltip content styling */
 .tooltip::before {
     content: attr(data-tooltip);
-    position: absolute;
-    bottom: 130%;
+    position: fixed;
+    bottom: 125%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-5px);
     background-color: var(--bg-accent);
     color: var(--text-primary);
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
-    white-space: nowrap;
+    white-space: normal;
     opacity: 0;
     visibility: hidden;
-    transition: opacity var(--transition-slow), visibility var(--transition-slow);
-    z-index: var(--z-toast);
+    transition: opacity var(--transition-slow), 
+                visibility var(--transition-slow),
+                transform var(--transition-slow);
+    z-index: 9999;
     pointer-events: none;
-    max-width: 200px;
-    white-space: normal;
-    line-height: var(--line-height-normal);
-    text-align: center;
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--color-warning);
     box-shadow: var(--shadow-lg);
+    max-width: 200px;
+    min-width: 140px;
+    text-align: center;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .tooltip::after {
     content: '';
-    position: absolute;
-    bottom: 120%;
+    position: fixed;
+    bottom: 115%;
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-top-color: var(--bg-accent);
+    border-top-color: var(--color-warning);
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-slow), visibility var(--transition-slow);
     pointer-events: none;
+    z-index: 9999;
 }
 
 .tooltip:hover::before,
@@ -656,6 +542,127 @@ input[type="checkbox"]:disabled {
     opacity: 1;
     visibility: visible;
 }
+
+.tooltip:hover::before {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Small tooltip variant */
+.tooltip-small {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+    margin-left: 2px;
+}
+
+.tooltip-small::before {
+    position: fixed;
+    font-size: var(--font-size-xs);
+    padding: var(--space-xs) var(--space-sm);
+    max-width: 180px;
+    min-width: 120px;
+    white-space: normal;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    z-index: 9999;
+}
+
+.tooltip-small::after {
+    position: fixed;
+    z-index: 9999;
+}
+
+/* =================================================================
+   TOOLTIP POSITIONING VARIATIONS
+   ================================================================= */
+
+/* Right-aligned tooltip (for left edge elements) */
+.tooltip.tooltip-right::before {
+    left: 0;
+    transform: translateY(-5px);
+}
+
+.tooltip.tooltip-right::after {
+    left: 10px;
+    transform: none;
+}
+
+/* Left-aligned tooltip (for right edge elements) */
+.tooltip.tooltip-left::before {
+    right: 0;
+    left: auto;
+    transform: translateY(-5px);
+}
+
+.tooltip.tooltip-left::after {
+    right: 10px;
+    left: auto;
+    transform: none;
+}
+
+/* Top tooltip (when element is near bottom of screen) */
+.tooltip.tooltip-top::before {
+    bottom: auto;
+    top: 125%;
+    transform: translateX(-50%) translateY(5px);
+}
+
+.tooltip.tooltip-top::after {
+    bottom: auto;
+    top: 115%;
+    border-top-color: transparent;
+    border-bottom-color: var(--color-warning);
+}
+
+.tooltip.tooltip-top:hover::before {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Escape parent container clipping */
+.tooltip::before,
+.tooltip::after,
+.tooltip-small::before,
+.tooltip-small::after {
+    /* Ensure tooltips escape any parent overflow clipping */
+    position: fixed !important;
+}
+
+/* =================================================================
+   DYNAMIC POSITIONING UTILITY CLASSES
+   ================================================================= */
+
+/* 
+   These classes can be dynamically applied via JavaScript to ensure 
+   tooltips stay on screen. Recommended JavaScript implementation:
+
+   function positionTooltip(tooltipElement) {
+       const rect = tooltipElement.getBoundingClientRect();
+       const viewportWidth = window.innerWidth;
+       const viewportHeight = window.innerHeight;
+       
+       // Reset classes
+       tooltipElement.classList.remove('tooltip-left', 'tooltip-right', 'tooltip-top');
+       
+       // Check horizontal positioning
+       if (rect.left < 10) {
+           tooltipElement.classList.add('tooltip-right');
+       } else if (rect.right > viewportWidth - 10) {
+           tooltipElement.classList.add('tooltip-left');
+       }
+       
+       // Check vertical positioning  
+       if (rect.top < 60) {
+           tooltipElement.classList.add('tooltip-top');
+       }
+   }
+   
+   // Apply on hover/focus
+   document.querySelectorAll('.tooltip, .tooltip-small').forEach(tooltip => {
+       tooltip.addEventListener('mouseenter', () => positionTooltip(tooltip));
+       tooltip.addEventListener('focus', () => positionTooltip(tooltip));
+   });
+*/
 
 /* =================================================================
    UNLOCK LEVEL TOOLTIPS
@@ -726,7 +733,7 @@ input[type="checkbox"]:disabled {
 .unlock-tooltip::before,
 .unlock-tooltip-small::before {
     content: attr(data-tooltip);
-    position: absolute;
+    position: fixed;
     bottom: 125%;
     left: 50%;
     transform: translateX(-50%);
@@ -736,22 +743,26 @@ input[type="checkbox"]:disabled {
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
-    white-space: nowrap;
+    white-space: normal;
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-slow), visibility var(--transition-slow);
-    z-index: var(--z-toast);
+    z-index: 9999;
     pointer-events: none;
     border: 1px solid var(--color-warning);
     box-shadow: var(--shadow-lg);
+    max-width: 200px;
     min-width: 140px;
     text-align: center;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .unlock-tooltip::after,
 .unlock-tooltip-small::after {
     content: '';
-    position: absolute;
+    position: fixed;
     bottom: 115%;
     left: 50%;
     transform: translateX(-50%);
@@ -761,6 +772,7 @@ input[type="checkbox"]:disabled {
     visibility: hidden;
     transition: opacity var(--transition-slow), visibility var(--transition-slow);
     pointer-events: none;
+    z-index: 9999;
 }
 
 .unlock-tooltip:hover::before,
@@ -823,55 +835,22 @@ input[type="checkbox"]:disabled {
 }
 
 /* =================================================================
-   RESPONSIVE ADJUSTMENTS
-   ================================================================= */
-
-@media (max-width: 768px) {
-    .unlock-tooltip::before,
-    .unlock-tooltip-small::before {
-        font-size: var(--font-size-xs);
-        padding: var(--space-xs) var(--space-sm);
-        min-width: 120px;
-    }
-    
-    .unlock-tooltip,
-    .unlock-tooltip-small {
-        width: 12px;
-        height: 12px;
-        font-size: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .unlock-tooltip::before,
-    .unlock-tooltip-small::before {
-        bottom: 130%;
-        max-width: 100px;
-        white-space: normal;
-        line-height: 1.2;
-    }
-    
-    /* Stack tooltips instead of inline on very small screens */
-    .locked-effect-with-tooltip,
-    .locked-with-tooltip,
-    .comparison-locked-effect {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
-}
-
-/* =================================================================
-   ACCESSIBILITY ENHANCEMENTS
+   ACCESSIBILITY ENHANCEMENTS FOR ALL TOOLTIPS
    ================================================================= */
 
 /* Focus states for keyboard navigation */
+.tooltip:focus,
+.tooltip-small:focus,
 .unlock-tooltip:focus,
 .unlock-tooltip-small:focus {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
 
+.tooltip:focus::before,
+.tooltip:focus::after,
+.tooltip-small:focus::before,
+.tooltip-small:focus::after,
 .unlock-tooltip:focus::before,
 .unlock-tooltip:focus::after,
 .unlock-tooltip-small:focus::before,
@@ -882,11 +861,15 @@ input[type="checkbox"]:disabled {
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
+    .tooltip,
+    .tooltip-small,
     .unlock-tooltip,
     .unlock-tooltip-small {
         border: 2px solid var(--text-primary);
     }
     
+    .tooltip::before,
+    .tooltip-small::before,
     .unlock-tooltip::before,
     .unlock-tooltip-small::before {
         border: 2px solid var(--text-primary);
@@ -896,16 +879,24 @@ input[type="checkbox"]:disabled {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
+    .tooltip,
+    .tooltip-small,
     .unlock-tooltip,
     .unlock-tooltip-small {
         transition: none;
     }
     
+    .tooltip:hover,
+    .tooltip-small:hover,
     .unlock-tooltip:hover,
     .unlock-tooltip-small:hover {
         transform: none;
     }
     
+    .tooltip::before,
+    .tooltip::after,
+    .tooltip-small::before,
+    .tooltip-small::after,
     .unlock-tooltip::before,
     .unlock-tooltip::after,
     .unlock-tooltip-small::before,
@@ -915,9 +906,81 @@ input[type="checkbox"]:disabled {
 }
 
 /* =================================================================
-   DARK THEME ADJUSTMENTS
+   RESPONSIVE ADJUSTMENTS FOR ALL TOOLTIPS
    ================================================================= */
 
+@media (max-width: 768px) {
+    .tooltip::before,
+    .tooltip-small::before,
+    .unlock-tooltip::before,
+    .unlock-tooltip-small::before {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs) var(--space-sm);
+        max-width: 150px;
+        min-width: 100px;
+    }
+    
+    .tooltip,
+    .tooltip-small,
+    .unlock-tooltip,
+    .unlock-tooltip-small {
+        width: 12px;
+        height: 12px;
+        font-size: 8px;
+    }
+    
+    .tooltip-small,
+    .unlock-tooltip-small {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tooltip::before,
+    .tooltip-small::before,
+    .unlock-tooltip::before,
+    .unlock-tooltip-small::before {
+        bottom: 130%;
+        max-width: 120px;
+        min-width: 80px;
+        white-space: normal;
+        line-height: 1.3;
+        font-size: var(--font-size-xs);
+    }
+    
+    /* Stack tooltips instead of inline on very small screens */
+    .locked-effect-with-tooltip,
+    .locked-with-tooltip,
+    .comparison-locked-effect {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    
+    /* Adjust positioning variations for mobile */
+    .tooltip.tooltip-right::before,
+    .tooltip.tooltip-left::before {
+        max-width: 100px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    
+    .tooltip.tooltip-right::after,
+    .tooltip.tooltip-left::after {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+}
+
+/* =================================================================
+   DARK THEME ADJUSTMENTS FOR ALL TOOLTIPS
+   ================================================================= */
+
+[data-theme="dark"] .tooltip::before,
+[data-theme="dark"] .tooltip-small::before,
 [data-theme="dark"] .unlock-tooltip::before,
 [data-theme="dark"] .unlock-tooltip-small::before {
     background-color: var(--bg-secondary);
@@ -925,6 +988,8 @@ input[type="checkbox"]:disabled {
     color: var(--text-primary);
 }
 
+[data-theme="dark"] .tooltip::after,
+[data-theme="dark"] .tooltip-small::after,
 [data-theme="dark"] .unlock-tooltip::after,
 [data-theme="dark"] .unlock-tooltip-small::after {
     border-top-color: var(--color-warning);
@@ -947,6 +1012,8 @@ input[type="checkbox"]:disabled {
 }
 
 /* Tooltip fade-in animation */
+.tooltip::before,
+.tooltip-small::before,
 .unlock-tooltip::before,
 .unlock-tooltip-small::before {
     transform: translateX(-50%) translateY(-5px);
@@ -955,11 +1022,46 @@ input[type="checkbox"]:disabled {
                 transform var(--transition-slow);
 }
 
+.tooltip:hover::before,
+.tooltip-small:hover::before,
 .unlock-tooltip:hover::before,
 .unlock-tooltip-small:hover::before {
     transform: translateX(-50%) translateY(0);
 }
 
+/* =================================================================
+   CONTAINER CLIPPING PREVENTION
+   ================================================================= */
+
+/* Ensure sidebar and other containers don't clip tooltips */
+.sidebar,
+.main-content,
+.selection-container,
+.controls {
+    /* Allow tooltips to escape container bounds */
+    overflow: visible !important;
+}
+
+/* However, maintain scrolling for content areas */
+.sidebar {
+    overflow-y: auto !important;
+    overflow-x: visible !important;
+}
+
+/* Ensure tooltips render above all content */
+.tooltip::before,
+.tooltip::after,
+.tooltip-small::before,
+.tooltip-small::after,
+.unlock-tooltip::before,
+.unlock-tooltip::after,
+.unlock-tooltip-small::before,
+.unlock-tooltip-small::after {
+    /* Maximum z-index to appear above everything */
+    z-index: 2147483647 !important;
+    /* Force new stacking context */
+    isolation: isolate;
+}
 
 /* =================================================================
    TOAST NOTIFICATIONS
@@ -995,7 +1097,6 @@ input[type="checkbox"]:disabled {
 [data-theme="dark"] .toast.warning {
     color: var(--color-white);
 }
-
 
 /* Disabled state styling */
 .level-input:disabled + .level-display-overlay {
