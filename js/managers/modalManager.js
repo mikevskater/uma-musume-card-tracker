@@ -10,7 +10,7 @@ let currentHelpSection = 'welcome';
 // ===== VERSION MANAGEMENT SYSTEM =====
 
 // Version tracking constants
-const APP_VERSION = '1.1.1';
+const APP_VERSION = '1.2.0';
 const VERSION_STORAGE_KEY = 'uma_last_seen_version';
 const AUTO_SHOW_STORAGE_KEY = 'uma_auto_show_whatsnew';
 
@@ -494,6 +494,37 @@ function createModalDetailHeader(card, level, isOwned) {
     return header;
 }
 
+function updatePotentialIndicatorDisplay() {
+    if (!currentModalCard) return;
+    
+    const cardId = currentModalCard.support_id;
+    const isOwned = isCardOwned(cardId);
+    
+    // Find the potential indicator element
+    const potentialIndicator = document.querySelector('.potential-indicator');
+    if (!potentialIndicator) return;
+    
+    if (showMaxPotentialLevels && isOwned) {
+        const currentLevel = getOwnedCardLevel(cardId);
+        
+        // 🔧 FIX: Use effective limit break for modal display too
+        const effectiveLimitBreak = getEffectiveLimitBreak(cardId, isOwned);
+        const maxLevel = limitBreaks[currentModalCard.rarity][effectiveLimitBreak];
+        
+        if (currentLevel < maxLevel) {
+            const levelDiff = maxLevel - currentLevel;
+            potentialIndicator.innerHTML = `Max Potential: ${maxLevel} (+${levelDiff})`;
+            potentialIndicator.style.display = 'block';
+        } else {
+            potentialIndicator.innerHTML = `Max Potential: ${maxLevel} (MAX)`;
+            potentialIndicator.style.display = 'block';
+        }
+    } else {
+        potentialIndicator.style.display = 'none';
+    }
+}
+
+
 // Create level control panel
 function createLevelControlPanel(card, level, isOwned, limitBreakLevel) {
     const cardId = card.support_id;
@@ -511,7 +542,7 @@ function createLevelControlPanel(card, level, isOwned, limitBreakLevel) {
                 Owned
             </label>
             <span class="ownership-status ${isOwned ? 'owned' : 'unowned'}">
-                ${isOwned ? '✓ Owned' : '✗ Not Owned'}
+                ${isOwned ? '✅ Owned' : '❌ Not Owned'}
             </span>
         `
     });
@@ -560,12 +591,18 @@ function createLevelControlPanel(card, level, isOwned, limitBreakLevel) {
     });
     levelControls.appendChild(lbRow);
     
-    // Status display
+    // Status display with ENHANCED max potential toggle
     const statusRow = createElement('div', {
         className: 'level-status',
         innerHTML: `
             <span class="lb-indicator">Current: LB ${limitBreakLevel} Level ${level}</span>
-            ${showMaxPotentialLevels ? '<span class="potential-indicator">Showing Max Potential</span>' : ''}
+            <div class="modal-max-potential-controls">
+                <label class="max-potential-toggle">
+                    <input type="checkbox" id="modalMaxPotentialToggle" ${showMaxPotentialLevels ? 'checked' : ''}> 
+                    Show Max Potential
+                    <span class="tooltip" data-tooltip="Show effects at maximum level for current limit break">ℹ️</span>
+                </label>
+            </div>
         `
     });
     levelControls.appendChild(statusRow);
@@ -606,13 +643,15 @@ function createEffectsGrid(card, level) {
             textContent: 'No effects data available'
         }));
         return grid;
-    }
+    }    
+    const effectiveLevel = getEffectiveLevel(card);
     
     card.effects.forEach(effect => {
         if (!effect[0] || !effectsData[effect[0]]) return;
         
         const effectInfo = effectsData[effect[0]];
-        const effectItem = createEffectItem(effect, level, effectInfo, card);
+        // FIXED: Use effectiveLevel instead of level parameter
+        const effectItem = createEffectItem(effect, effectiveLevel, effectInfo, card);
         grid.appendChild(effectItem);
     });
     
@@ -790,12 +829,15 @@ function updateModalDisplay(level) {
         lbIndicator.textContent = `Current: LB ${currentLimitBreak} Level ${level}`;
     }
     
-    // Update effects grid
+    // Update effects grid using effective level calculation
     const effectsGrid = document.getElementById('effectsGrid');
     if (effectsGrid) {
         const newGrid = createEffectsGrid(currentModalCard, level);
         effectsGrid.innerHTML = newGrid.innerHTML;
     }
+    
+    // Update potential indicator display
+    updatePotentialIndicatorDisplay();
 }
 
 // ===== MODAL EVENT SETUP =====

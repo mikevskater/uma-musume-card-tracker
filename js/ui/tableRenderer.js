@@ -56,8 +56,10 @@ function createCardTableRow(card) {
     
     if (showMaxPotentialLevels && isOwned) {
         const currentLevel = getOwnedCardLevel(cardId);
-        const currentLimitBreak = getOwnedCardLimitBreak(cardId);
-        const maxLevel = limitBreaks[card.rarity][currentLimitBreak];
+        
+        // 🔧 FIX: Use effective limit break instead of owned limit break
+        const effectiveLimitBreak = getEffectiveLimitBreak(cardId, isOwned);
+        const maxLevel = limitBreaks[card.rarity][effectiveLimitBreak];
         
         if (currentLevel < maxLevel) {
             const levelDiff = maxLevel - currentLevel;
@@ -154,8 +156,10 @@ function updateCardDisplay(input) {
             }
             
             const currentLevel = getOwnedCardLevel(cardId);
-            const currentLimitBreak = getOwnedCardLimitBreak(cardId);
-            const maxLevel = limitBreaks[card.rarity][currentLimitBreak];
+            
+            // 🔧 FIX: Use effective limit break instead of owned limit break
+            const effectiveLimitBreak = getEffectiveLimitBreak(cardId, isOwned);
+            const maxLevel = limitBreaks[card.rarity][effectiveLimitBreak];
             
             if (currentLevel < maxLevel) {
                 const levelDiff = maxLevel - currentLevel;

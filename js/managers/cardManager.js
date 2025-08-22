@@ -150,6 +150,9 @@ function setGlobalLimitBreak(lbLevel) {
     
     // Update modal if open
     updateModalIfOpen();
+
+    // Update potential displays when global LB changes
+    updatePotentialIndicatorDisplay();
     
     // Trigger filter refresh to update effect ranges
     debouncedFilterAndSort();
@@ -165,6 +168,8 @@ function setGlobalLimitBreakOverride(override) {
     } else {
         debouncedFilterAndSort();
     }
+
+    updatePotentialIndicatorDisplay();
 }
 
 // Set show max potential levels setting
@@ -184,6 +189,9 @@ function setShowMaxPotentialLevels(showMax) {
     
     // Update modal if open
     updateModalIfOpen();
+    
+    // Update potential indicator in modal
+    updatePotentialIndicatorDisplay();
 
     const modalToggle = document.getElementById('modalMaxPotentialToggle');
     if (modalToggle) {
@@ -192,6 +200,17 @@ function setShowMaxPotentialLevels(showMax) {
     
     // Trigger filter refresh
     debouncedFilterAndSort();
+}
+
+function getEffectiveLimitBreak(cardId, isOwned) {
+    // Check for global override first
+    if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
+        return globalLimitBreakLevel; // ✅ Use override
+    } else if (isOwned) {
+        return getOwnedCardLimitBreak(cardId); // ✅ Use owned
+    } else {
+        return 2; // Default for unowned cards
+    }
 }
 
 // ===== LEVEL INPUT UPDATES =====
@@ -441,7 +460,8 @@ window.CardManager = {
     importOwnedCards,
     clearOwnedCards,
     loadData,
-    getCharName
+    getCharName,
+    getEffectiveLimitBreak
 };
 
 // Export individual functions to global scope for backward compatibility
