@@ -658,6 +658,310 @@ input[type="checkbox"]:disabled {
 }
 
 /* =================================================================
+   UNLOCK LEVEL TOOLTIPS
+   ================================================================= */
+
+/* Container for locked effects with tooltips */
+.locked-effect-with-tooltip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.locked-with-tooltip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.comparison-locked-effect {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+/* Unlock tooltip question mark icons */
+.unlock-tooltip {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-warning);
+    color: var(--color-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    cursor: help;
+    transition: all var(--transition-normal);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.unlock-tooltip-small {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--color-warning);
+    color: var(--color-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: var(--font-weight-bold);
+    cursor: help;
+    transition: all var(--transition-normal);
+    position: relative;
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+
+.unlock-tooltip:hover,
+.unlock-tooltip-small:hover {
+    background-color: var(--color-primary);
+    transform: scale(1.1);
+}
+
+/* Enhanced tooltip styling for unlock information */
+.unlock-tooltip::before,
+.unlock-tooltip-small::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bg-accent);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+    z-index: var(--z-toast);
+    pointer-events: none;
+    border: 1px solid var(--color-warning);
+    box-shadow: var(--shadow-lg);
+    min-width: 140px;
+    text-align: center;
+}
+
+.unlock-tooltip::after,
+.unlock-tooltip-small::after {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--color-warning);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+    pointer-events: none;
+}
+
+.unlock-tooltip:hover::before,
+.unlock-tooltip:hover::after,
+.unlock-tooltip-small:hover::before,
+.unlock-tooltip-small:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =================================================================
+   TABLE EFFECT ENHANCEMENTS
+   ================================================================= */
+
+/* Locked effects in table view */
+.table-effect-locked {
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.table-effect-locked .locked-with-tooltip {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-warning);
+}
+
+/* =================================================================
+   MODAL EFFECT ENHANCEMENTS
+   ================================================================= */
+
+/* Enhanced locked effect styling in modal */
+.effect-locked .locked-effect-with-tooltip {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-semibold);
+}
+
+.effect-locked .unlock-tooltip {
+    background-color: var(--text-muted);
+}
+
+.effect-locked .unlock-tooltip:hover {
+    background-color: var(--color-warning);
+}
+
+/* =================================================================
+   COMPARISON TABLE ENHANCEMENTS
+   ================================================================= */
+
+/* Locked effects in comparison table */
+.locked-value .comparison-locked-effect {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.locked-value .unlock-tooltip-small {
+    background-color: var(--text-muted);
+}
+
+.locked-value .unlock-tooltip-small:hover {
+    background-color: var(--color-warning);
+}
+
+/* =================================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================================= */
+
+@media (max-width: 768px) {
+    .unlock-tooltip::before,
+    .unlock-tooltip-small::before {
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs) var(--space-sm);
+        min-width: 120px;
+    }
+    
+    .unlock-tooltip,
+    .unlock-tooltip-small {
+        width: 12px;
+        height: 12px;
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .unlock-tooltip::before,
+    .unlock-tooltip-small::before {
+        bottom: 130%;
+        max-width: 100px;
+        white-space: normal;
+        line-height: 1.2;
+    }
+    
+    /* Stack tooltips instead of inline on very small screens */
+    .locked-effect-with-tooltip,
+    .locked-with-tooltip,
+    .comparison-locked-effect {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+}
+
+/* =================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ================================================================= */
+
+/* Focus states for keyboard navigation */
+.unlock-tooltip:focus,
+.unlock-tooltip-small:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.unlock-tooltip:focus::before,
+.unlock-tooltip:focus::after,
+.unlock-tooltip-small:focus::before,
+.unlock-tooltip-small:focus::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .unlock-tooltip,
+    .unlock-tooltip-small {
+        border: 2px solid var(--text-primary);
+    }
+    
+    .unlock-tooltip::before,
+    .unlock-tooltip-small::before {
+        border: 2px solid var(--text-primary);
+        background-color: var(--bg-primary);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .unlock-tooltip,
+    .unlock-tooltip-small {
+        transition: none;
+    }
+    
+    .unlock-tooltip:hover,
+    .unlock-tooltip-small:hover {
+        transform: none;
+    }
+    
+    .unlock-tooltip::before,
+    .unlock-tooltip::after,
+    .unlock-tooltip-small::before,
+    .unlock-tooltip-small::after {
+        transition: none;
+    }
+}
+
+/* =================================================================
+   DARK THEME ADJUSTMENTS
+   ================================================================= */
+
+[data-theme="dark"] .unlock-tooltip::before,
+[data-theme="dark"] .unlock-tooltip-small::before {
+    background-color: var(--bg-secondary);
+    border-color: var(--color-warning);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .unlock-tooltip::after,
+[data-theme="dark"] .unlock-tooltip-small::after {
+    border-top-color: var(--color-warning);
+}
+
+/* =================================================================
+   ANIMATION ENHANCEMENTS
+   ================================================================= */
+
+/* Subtle pulse animation for newly unlocked effects */
+@keyframes unlock-pulse {
+    0% { background-color: var(--color-warning); }
+    50% { background-color: var(--color-success); }
+    100% { background-color: var(--color-warning); }
+}
+
+.unlock-tooltip.newly-unlocked,
+.unlock-tooltip-small.newly-unlocked {
+    animation: unlock-pulse 2s ease-in-out 3;
+}
+
+/* Tooltip fade-in animation */
+.unlock-tooltip::before,
+.unlock-tooltip-small::before {
+    transform: translateX(-50%) translateY(-5px);
+    transition: opacity var(--transition-slow), 
+                visibility var(--transition-slow),
+                transform var(--transition-slow);
+}
+
+.unlock-tooltip:hover::before,
+.unlock-tooltip-small:hover::before {
+    transform: translateX(-50%) translateY(0);
+}
+
+
+/* =================================================================
    TOAST NOTIFICATIONS
    ================================================================= */
 

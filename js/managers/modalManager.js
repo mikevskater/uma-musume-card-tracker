@@ -10,7 +10,7 @@ let currentHelpSection = 'welcome';
 // ===== VERSION MANAGEMENT SYSTEM =====
 
 // Version tracking constants
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const VERSION_STORAGE_KEY = 'uma_last_seen_version';
 const AUTO_SHOW_STORAGE_KEY = 'uma_auto_show_whatsnew';
 
@@ -612,7 +612,7 @@ function createEffectsGrid(card, level) {
         if (!effect[0] || !effectsData[effect[0]]) return;
         
         const effectInfo = effectsData[effect[0]];
-        const effectItem = createEffectItem(effect, level, effectInfo);
+        const effectItem = createEffectItem(effect, level, effectInfo, card);
         grid.appendChild(effectItem);
     });
     

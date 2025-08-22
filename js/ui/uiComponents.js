@@ -719,17 +719,100 @@ function showToast(message, type = 'success') {
 
 // ===== EFFECT DISPLAY COMPONENTS =====
 
+/**
+ * Find the minimum level at which an effect unlocks
+ * @param {Array} effectArray - The effect array [id, value1, value2, ...]
+ * @param {Object} card - The card object (for rarity info)
+ * @returns {number|null} - The unlock level, or null if always unlocked
+ */
+function getEffectUnlockLevel(effectArray, card) {
+    if (!effectArray || effectArray.length < 2) return null;
+    
+    const rarity = card.rarity;
+    const maxLevel = limitBreaks[rarity][4]; // Max level at LB 4
+    
+    // Binary search to find the minimum level where effect is not locked
+    let left = 1;
+    let right = maxLevel;
+    let unlockLevel = null;
+    
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        
+        if (isEffectLocked(effectArray, mid)) {
+            left = mid + 1;
+        } else {
+            unlockLevel = mid;
+            right = mid - 1;
+        }
+    }
+    
+    return unlockLevel;
+}
+
+/**
+ * Get a more detailed unlock level information including limit break
+ * @param {Array} effectArray - The effect array
+ * @param {Object} card - The card object
+ * @returns {Object} - Unlock info with level and limit break
+ */
+function getEffectUnlockInfo(effectArray, card) {
+    const unlockLevel = getEffectUnlockLevel(effectArray, card);
+    if (!unlockLevel) return null;
+    
+    const rarity = card.rarity;
+    let requiredLimitBreak = 0;
+    
+    // Find which limit break is needed for this level
+    for (let lb = 0; lb <= 4; lb++) {
+        if (limitBreaks[rarity][lb] >= unlockLevel) {
+            requiredLimitBreak = lb;
+            break;
+        }
+    }
+    
+    return {
+        level: unlockLevel,
+        limitBreak: requiredLimitBreak,
+        isFirstLevel: unlockLevel === 1
+    };
+}
+
 // Create effect item for modal display
-function createEffectItem(effectArray, level, effectInfo) {
+function createEffectItem(effectArray, level, effectInfo, card) {
     const isLocked = isEffectLocked(effectArray, level);
     const value = isLocked ? 0 : calculateEffectValue(effectArray, level);
     const symbol = effectInfo.symbol === 'percent' ? '%' : '';
+    
+    let effectValueContent = '';
+    
+    if (isLocked) {
+        // Get unlock information
+        const unlockInfo = getEffectUnlockInfo(effectArray, card);
+        
+        if (unlockInfo) {
+            const tooltipText = unlockInfo.limitBreak > 0 
+                ? `Unlocks at Level ${unlockInfo.level} (Limit Break ${unlockInfo.limitBreak})`
+                : `Unlocks at Level ${unlockInfo.level}`;
+            
+            effectValueContent = `
+                <span class="locked-effect-with-tooltip">
+                    Locked
+                    <span class="tooltip unlock-tooltip" data-tooltip="${tooltipText}">❓</span>
+                </span>
+            `;
+        } else {
+            effectValueContent = 'Locked';
+        }
+    } else {
+        effectValueContent = `${value}${symbol}`;
+    }
     
     return createElement('div', {
         className: `effect-item ${isLocked ? 'effect-locked' : ''}`,
         innerHTML: `
             <div class="effect-name">${effectInfo.name_en}</div>
-            <div class="effect-value">${isLocked ? 'Locked' : `${value}${symbol}`}</div>
+            <div class="effect-value">${effectValueContent}</div>
             <div class="effect-description">${effectInfo.desc_en || ''}</div>
         `
     });
