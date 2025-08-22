@@ -461,3 +461,40 @@ td.ownership-checkbox input[type="checkbox"] {
     background-color: var(--bg-secondary);
     border-radius: var(--radius-lg);
 }
+
+.level-display-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.level-display-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--color-accent-primary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.level-diff {
+    color: var(--color-success);
+    font-weight: 700;
+    font-size: 0.875em;
+}
+
+.max-potential-indicator {
+    color: var(--color-accent-primary);
+    font-weight: 700;
+    font-size: 0.875em;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}

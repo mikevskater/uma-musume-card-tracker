@@ -29,58 +29,65 @@ function createCardTableRow(card) {
         'data-card-id': cardId
     });
     
-    // FIXED: Proper level and limit break calculation for form elements
+    // Calculate display values for form elements
     let displayLevel, displayLimitBreak;
     
-    // Determine what values to show in form elements
     if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
-        // Global override is active
         displayLimitBreak = globalLimitBreakLevel;
-        displayLevel = limitBreaks[card.rarity][globalLimitBreakLevel]; // Max level for global LB
+        displayLevel = limitBreaks[card.rarity][globalLimitBreakLevel];
     } else if (isOwned) {
-        // Owned card - use actual owned values
         displayLevel = getOwnedCardLevel(cardId);
         displayLimitBreak = getOwnedCardLimitBreak(cardId);
     } else {
-        // Unowned card - use defaults
-        displayLevel = limitBreaks[card.rarity][2]; // Default level for LB 2
-        displayLimitBreak = 2; // Default LB
+        displayLevel = limitBreaks[card.rarity][2];
+        displayLimitBreak = 2;
     }
     
-    // FIXED: For effect calculations (different from form display), use getEffectiveLevel
+    // Calculate effective level for effects
     const effectiveLevelForEffects = getEffectiveLevel(card);
     
-    // Create level display with potential indicator
-    const levelDisplay = showMaxPotentialLevels && isOwned ? 
-        `${effectiveLevelForEffects} <span class="max-potential-indicator">MAX</span>` : 
-        effectiveLevelForEffects;
+    // ENHANCED: Create level display with +X indicator for max potential
+    let levelDisplayContent;
+    const shouldDisableLevel = showMaxPotentialLevels || 
+                              comparisonMode || 
+                              (!isOwned && globalLimitBreakLevel === null) ||
+                              (globalLimitBreakLevel !== null && 
+                               (globalLimitBreakOverrideOwned || !isOwned));
     
-    // Get priority effects based on effective level (for effects display)
+    if (showMaxPotentialLevels && isOwned) {
+        const currentLevel = getOwnedCardLevel(cardId);
+        const currentLimitBreak = getOwnedCardLimitBreak(cardId);
+        const maxLevel = limitBreaks[card.rarity][currentLimitBreak];
+        
+        if (currentLevel < maxLevel) {
+            const levelDiff = maxLevel - currentLevel;
+            levelDisplayContent = `${maxLevel} <span class="level-diff">+${levelDiff}</span>`;
+        } else {
+            levelDisplayContent = `${maxLevel} <span class="max-potential-indicator">MAX</span>`;
+        }
+    } else {
+        levelDisplayContent = displayLevel.toString();
+    }
+    
+    // Get priority effects based on effective level
     const priorityEffects = getPriorityEffects(card, 4, effectiveLevelForEffects);
     const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
-
+    
     // Get hint skills (limit to 3)
     const hintSkills = card.hints?.hint_skills?.slice(0, 3).map(skill => 
         getSkillName(skill.id)
     ).join('<br>') || 'None';
-
-    // FIXED: Determine control states with proper logic
-    const shouldDisableOwnership = comparisonMode;
     
-    const shouldDisableLevel = comparisonMode || 
-                              (!isOwned && globalLimitBreakLevel === null) ||
-                              (globalLimitBreakLevel !== null && 
-                               (globalLimitBreakOverrideOwned || !isOwned));
-
+    // Control states
+    const shouldDisableOwnership = comparisonMode;
     const shouldDisableLB = comparisonMode || 
                            (!isOwned && globalLimitBreakLevel === null) ||
                            (globalLimitBreakLevel !== null && 
                             (globalLimitBreakOverrideOwned || !isOwned));
-
-    // FIXED: Use proper max level calculation for level input
+    
     const maxLevelForInput = limitBreaks[card.rarity][displayLimitBreak];
-
-    // Build row HTML with FIXED values
+    
+    // Build row HTML with enhanced level display
     row.innerHTML = `
         <td class="ownership-checkbox${comparisonMode ? ' comparison-mode-disabled' : ''}">
             ${createOwnershipCheckbox(cardId, isOwned, shouldDisableOwnership).outerHTML}
@@ -91,13 +98,18 @@ function createCardTableRow(card) {
         <td class="card-name">${card.char_name || 'Unknown Card'}</td>
         <td>${createRarityBadge(card.rarity).outerHTML}</td>
         <td>${createTypeBadge(card.type).outerHTML}</td>
-        <td class="${comparisonMode ? 'comparison-mode-disabled' : ''}">
-            ${createLevelInput(
-                cardId, 
-                displayLevel,  // FIXED: Use actual owned level or appropriate default
-                maxLevelForInput, 
-                shouldDisableLevel
-            ).outerHTML}
+        <td class="${comparisonMode ? 'comparison-mode-disabled' : ''} level-cell">
+            <div class="level-display-container">
+                <input type="number" class="level-input" 
+                       data-card-id="${cardId}" 
+                       value="${displayLevel}" 
+                       min="1" 
+                       max="${maxLevelForInput}" 
+                       ${shouldDisableLevel ? 'disabled' : ''}>
+                ${showMaxPotentialLevels && isOwned ? 
+                    `<div class="level-display-overlay">${levelDisplayContent}</div>` : 
+                    ''}
+            </div>
         </td>
         <td class="${comparisonMode ? 'comparison-mode-disabled' : ''}">
             ${createLimitBreakSelect(cardId, displayLimitBreak, card.rarity, shouldDisableLB).outerHTML}
@@ -121,45 +133,44 @@ function updateCardDisplay(input) {
     const row = input.closest('tr');
     const isOwned = isCardOwned(cardId);
     
-    // FIXED: Determine which level to use for effects calculation
+    // Calculate effective level for effects
     let effectiveLevelForEffects;
     if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
-        // Global override active - use the global level
         effectiveLevelForEffects = limitBreaks[card.rarity][globalLimitBreakLevel];
     } else if (isOwned) {
-        // Owned card - use the typed level
         effectiveLevelForEffects = typedLevel;
     } else {
-        // Unowned card - use typed level or default
         effectiveLevelForEffects = typedLevel;
     }
     
-    // Determine display LB for form sync
-    let displayLimitBreak;
-    if (globalLimitBreakLevel !== null && (globalLimitBreakOverrideOwned || !isOwned)) {
-        displayLimitBreak = globalLimitBreakLevel;
-    } else {
-        displayLimitBreak = isOwned ? getOwnedCardLimitBreak(cardId) : 2;
-    }
-    
-    // FIXED: Update limit break display to match calculated value
-    const lbSelect = row.querySelector('.lb-select');
-    if (lbSelect && lbSelect.value != displayLimitBreak) {
-        lbSelect.value = displayLimitBreak;
-    }
-    
-    // Recalculate and update priority effects using the effective level
-    const priorityEffects = getPriorityEffects(card, 4, effectiveLevelForEffects);
-    const mainEffectsDisplay = priorityEffects.join('<br>') || 'No effects';
-    row.children[7].innerHTML = mainEffectsDisplay;
-    
-    // Update modal if it's open for this card
-    if (currentModalCard && currentModalCard.support_id === cardId) {
-        const modalLevelInput = document.getElementById('modalLevelInput');
-        if (modalLevelInput && modalLevelInput.value != typedLevel) {
-            modalLevelInput.value = typedLevel;
-            updateModalDisplay(typedLevel);
+    // Update level display overlay for max potential mode
+    if (showMaxPotentialLevels && isOwned) {
+        const levelContainer = row.querySelector('.level-display-container');
+        if (levelContainer) {
+            let overlay = levelContainer.querySelector('.level-display-overlay');
+            if (!overlay) {
+                overlay = createElement('div', { className: 'level-display-overlay' });
+                levelContainer.appendChild(overlay);
+            }
+            
+            const currentLevel = getOwnedCardLevel(cardId);
+            const currentLimitBreak = getOwnedCardLimitBreak(cardId);
+            const maxLevel = limitBreaks[card.rarity][currentLimitBreak];
+            
+            if (currentLevel < maxLevel) {
+                const levelDiff = maxLevel - currentLevel;
+                overlay.innerHTML = `${maxLevel} <span class="level-diff">+${levelDiff}</span>`;
+            } else {
+                overlay.innerHTML = `${maxLevel} <span class="max-potential-indicator">MAX</span>`;
+            }
         }
+    }
+    
+    // Update effects display
+    const effectsCell = row.querySelector('.effects-summary');
+    if (effectsCell) {
+        const priorityEffects = getPriorityEffects(card, 4, effectiveLevelForEffects);
+        effectsCell.innerHTML = priorityEffects.join('<br>') || 'No effects';
     }
 }
 

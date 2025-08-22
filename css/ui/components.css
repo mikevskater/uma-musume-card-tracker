@@ -995,3 +995,20 @@ input[type="checkbox"]:disabled {
 [data-theme="dark"] .toast.warning {
     color: var(--color-white);
 }
+
+
+/* Disabled state styling */
+.level-input:disabled + .level-display-overlay {
+    background: var(--color-bg-disabled);
+    color: var(--color-text-disabled);
+    border-color: var(--color-border-disabled);
+}
+
+/* Table row enhancements for max potential mode */
+.table-max-potential-mode .level-input {
+    opacity: 0.7;
+}
+
+.table-max-potential-mode .level-display-overlay {
+    opacity: 1;
+}

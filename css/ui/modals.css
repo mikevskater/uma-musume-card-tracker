@@ -803,12 +803,38 @@
 }
 
 /* =================================================================
-   CONFIRMATION MODAL
-   ================================================================= */
+    CONFIRMATION MODAL
+    ================================================================= */
 
 .confirm-buttons {
     display: flex;
     justify-content: flex-end;
     gap: var(--space-lg);
     margin-top: var(--space-xl);
+}
+
+/* =================================================================
+   MAX POTENTIAL CONTROLS
+   ================================================================= */
+
+.modal-max-potential-controls {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.max-potential-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.max-potential-toggle input[type="checkbox"] {
+    margin: 0;
+}
+
+.level-cell {
+    min-width: 80px;
 }

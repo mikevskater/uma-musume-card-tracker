@@ -410,6 +410,51 @@ function setupModalFormEvents(card, cardId) {
     } else {
         console.warn('   ❌ Modal LB select not found');
     }
+
+    const modalMaxPotentialToggle = document.getElementById('modalMaxPotentialToggle');
+    if (modalMaxPotentialToggle) {
+        modalMaxPotentialToggle.addEventListener('change', (e) => {
+            const newValue = e.target.checked;
+            
+            // Update global setting (sync with main toggle)
+            setShowMaxPotentialLevels(newValue);
+            
+            // Update modal display immediately
+            updatePotentialIndicatorDisplay();
+            
+            // Refresh effects grid with new calculation
+            const effectsGrid = document.getElementById('effectsGrid');
+            if (effectsGrid) {
+                const newGrid = createEffectsGrid(currentModalCard, getOwnedCardLevel(cardId));
+                effectsGrid.innerHTML = newGrid.innerHTML;
+            }
+            
+            // Sync main toggle if it exists
+            const mainToggle = document.getElementById('showMaxPotential');
+            if (mainToggle) {
+                mainToggle.checked = newValue;
+            }
+        });
+    }
+    
+    const modalLevelInput = document.getElementById('modalLevelInput');
+    if (modalLevelInput) {
+        modalLevelInput.addEventListener('input', (e) => {
+            const newLevel = parseInt(e.target.value);
+            
+            // Update owned card level
+            if (isCardOwned(cardId)) {
+                setOwnedCardLevel(cardId, newLevel);
+            }
+            
+            // Update modal display with new effective level
+            updateModalDisplay(newLevel);
+            updatePotentialIndicatorDisplay();
+            
+            // Update table row if visible
+            updateTableRowFromModal(cardId, newLevel);
+        });
+    }
 }
 
 // Handle modal ownership change

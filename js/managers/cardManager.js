@@ -170,12 +170,25 @@ function setGlobalLimitBreakOverride(override) {
 // Set show max potential levels setting
 function setShowMaxPotentialLevels(showMax) {
     showMaxPotentialLevels = showMax;
+    const tableContainer = document.querySelector('.table-container');
+    if (tableContainer) {
+        if (showMax) {
+            tableContainer.classList.add('table-max-potential-mode');
+        } else {
+            tableContainer.classList.remove('table-max-potential-mode');
+        }
+    }
     
     // Update all level inputs and displays
     updateAllLevelInputs();
     
     // Update modal if open
     updateModalIfOpen();
+
+    const modalToggle = document.getElementById('modalMaxPotentialToggle');
+    if (modalToggle) {
+        modalToggle.checked = showMax;
+    }
     
     // Trigger filter refresh
     debouncedFilterAndSort();
@@ -211,11 +224,21 @@ function updateModalIfOpen() {
             const effectiveLevel = getEffectiveLevel(currentModalCard);
             modalLevelInput.value = effectiveLevel;
             
-            const shouldDisable = globalLimitBreakLevel !== null && 
-                                 (globalLimitBreakOverrideOwned || !isCardOwned(currentModalCard.support_id));
-            modalLevelInput.disabled = shouldDisable;
+            // Update modal toggle state
+            const modalToggle = document.getElementById('modalMaxPotentialToggle');
+            if (modalToggle) {
+                modalToggle.checked = showMaxPotentialLevels;
+            }
             
-            updateModalDisplay(effectiveLevel);
+            // Update potential indicator
+            updatePotentialIndicatorDisplay();
+            
+            // Refresh effects grid
+            const effectsGrid = document.getElementById('effectsGrid');
+            if (effectsGrid) {
+                const newGrid = createEffectsGrid(currentModalCard, effectiveLevel);
+                effectsGrid.innerHTML = newGrid.innerHTML;
+            }
         }
     }
 }
