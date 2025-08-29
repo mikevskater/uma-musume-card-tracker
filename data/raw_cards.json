@@ -12671,6 +12671,7 @@
                 "release": "2021-05-28",
                 "release_ko": "2022-09-15",
                 "release_zh_tw": "2022-09-30",
+                "release_en": "2025-08-28",
                 "effects": [
                     [
                         1,
@@ -12847,6 +12848,7 @@
                 "release": "2021-05-28",
                 "release_ko": "2022-09-15",
                 "release_zh_tw": "2022-09-30",
+                "release_en": "2025-08-28",
                 "effects": [
                     [
                         1,
@@ -21794,6 +21796,7 @@
                 "type": "stamina",
                 "obtained": "gacha",
                 "release": "2024-04-30",
+                "release_ko": "2025-08-19",
                 "effects": [
                     [
                         1,
@@ -23789,6 +23792,7 @@
                 "type": "guts",
                 "obtained": "gacha",
                 "release": "2024-04-30",
+                "release_ko": "2025-08-19",
                 "effects": [
                     [
                         1,
@@ -26993,6 +26997,718 @@
                                 "lng"
                             ],
                             "name_en": "Unwavering Heart",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 5,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 30,
+                            "hint_value": 5
+                        }
+                    ]
+                },
+                "event_skills": []
+            },
+            {
+                "url_name": "10132-stay-gold",
+                "support_id": 10132,
+                "char_id": 1135,
+                "char_name": "Stay Gold",
+                "name_jp": "ステイゴールド",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 1,
+                "type": "guts",
+                "obtained": "gacha",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        15,
+                        -1,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1
+                    ],
+                    [
+                        3,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        6,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        14,
+                        10,
+                        10,
+                        -1,
+                        15,
+                        15,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        35,
+                        -1,
+                        -1,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200332,
+                            "type": [
+                                "cor",
+                                "nac"
+                            ],
+                            "name_en": "Clever Cornerer ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201591,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Big Fan",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201601,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Groundwork",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 201651,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Slipstream",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202532,
+                            "type": [
+                                "mil",
+                                "l_1",
+                                "med"
+                            ],
+                            "name_en": "Graceful Step",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202602,
+                            "type": [
+                                "med"
+                            ],
+                            "name_en": "Ignition",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202722,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Unbreakable Mind",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203362,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Forward Step by Step",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203502,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Peerless",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203632,
+                            "type": [
+                                "med"
+                            ],
+                            "name_en": "Dream-Fulfilling Challenge",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203852,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Intrigued",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203862,
+                            "type": [
+                                "med",
+                                "l_0",
+                                "l_1"
+                            ],
+                            "name_en": "Carefree Step",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 4,
+                            "hint_value": 6
+                        }
+                    ]
+                },
+                "event_skills": []
+            },
+            {
+                "url_name": "10133-admire-groove",
+                "support_id": 10133,
+                "char_id": 1118,
+                "char_name": "Admire Groove",
+                "name_jp": "アドマイヤグルーヴ",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 1,
+                "type": "speed",
+                "obtained": "gacha",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        5,
+                        -1,
+                        -1,
+                        10,
+                        10,
+                        -1,
+                        -1,
+                        15,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        3,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        14,
+                        10,
+                        10,
+                        -1,
+                        15,
+                        15,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        35,
+                        -1,
+                        -1,
+                        -1,
+                        50,
+                        -1,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200192,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Autumn Girl ○",
+                            "iconid": 10011
+                        },
+                        {
+                            "id": 201102,
+                            "type": [
+                                "med",
+                                "str"
+                            ],
+                            "name_en": "Medium Distance Straights ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201112,
+                            "type": [
+                                "med",
+                                "cor"
+                            ],
+                            "name_en": "Medium Distance Corners ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201412,
+                            "type": [
+                                "btw",
+                                "slo"
+                            ],
+                            "name_en": "100K Horsepower",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202122,
+                            "type": [
+                                "btw"
+                            ],
+                            "name_en": "Fearless Heart",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203322,
+                            "type": [
+                                "btw",
+                                "slo"
+                            ],
+                            "name_en": "Descent",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 203432,
+                            "type": [
+                                "med",
+                                "l_3"
+                            ],
+                            "name_en": "Dynamic Motion",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203572,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Foothold",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203672,
+                            "type": [
+                                "btw",
+                                "l_1"
+                            ],
+                            "name_en": "Simmering Heat",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203832,
+                            "type": [
+                                "btw",
+                                "med"
+                            ],
+                            "name_en": "Aim for the Summit",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 203842,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Model Student",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 2
+                        }
+                    ]
+                },
+                "event_skills": []
+            },
+            {
+                "url_name": "10134-chrono-genesis",
+                "support_id": 10134,
+                "char_id": 1133,
+                "char_name": "Chrono Genesis",
+                "name_jp": "クロノジェネシス",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 1,
+                "type": "intelligence",
+                "obtained": "gacha",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        5,
+                        -1,
+                        -1,
+                        10,
+                        10,
+                        -1,
+                        -1,
+                        15,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        7,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        13,
+                        10,
+                        10,
+                        -1,
+                        15,
+                        15,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        14,
+                        10,
+                        10,
+                        -1,
+                        15,
+                        15,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        35,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        31,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1,
+                        3,
+                        -1,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200142,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Non-Core Distances ○",
+                            "iconid": 10021
+                        },
+                        {
+                            "id": 200482,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Crowded Calm",
+                            "iconid": 20021
+                        },
+                        {
+                            "id": 202472,
+                            "type": [
+                                "ldr",
+                                "btw"
+                            ],
+                            "name_en": "Tooth and Tail",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203052,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Unshakeable Faith",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203142,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Self-Restraint",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203232,
+                            "type": [
+                                "ldr",
+                                "l_0"
+                            ],
+                            "name_en": "Restless Step",
                             "iconid": 20011
                         }
                     ],
@@ -59165,6 +59881,7 @@
                 "release": "2021-05-28",
                 "release_ko": "2022-09-15",
                 "release_zh_tw": "2022-09-30",
+                "release_en": "2025-08-28",
                 "effects": [
                     [
                         1,
@@ -59389,6 +60106,7 @@
                 "release": "2021-05-28",
                 "release_ko": "2022-09-15",
                 "release_zh_tw": "2022-09-30",
+                "release_en": "2025-08-28",
                 "effects": [
                     [
                         1,
@@ -59668,6 +60386,7 @@
                 "release": "2021-05-28",
                 "release_ko": "2022-09-15",
                 "release_zh_tw": "2022-09-30",
+                "release_en": "2025-08-28",
                 "effects": [
                     [
                         1,
@@ -120227,6 +120946,951 @@
                             "value": 80,
                             "value_1": 5,
                             "value_2": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30264-stay-gold",
+                "support_id": 30264,
+                "char_id": 1135,
+                "char_name": "Stay Gold",
+                "name_jp": "ステイゴールド",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 3,
+                "type": "guts",
+                "obtained": "gacha",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        35
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        6,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        5,
+                        -1
+                    ],
+                    [
+                        14,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        15,
+                        30
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        10,
+                        15,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1,
+                        3
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        40,
+                        -1,
+                        -1,
+                        -1,
+                        50
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        60,
+                        -1,
+                        -1,
+                        -1,
+                        100
+                    ],
+                    [
+                        30,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1
+                    ],
+                    [
+                        32,
+                        10,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        25,
+                        25,
+                        -1,
+                        -1,
+                        50,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200332,
+                            "type": [
+                                "cor",
+                                "nac"
+                            ],
+                            "name_en": "Clever Cornerer ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201591,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Big Fan",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201601,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Groundwork",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 201651,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Slipstream",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202532,
+                            "type": [
+                                "mil",
+                                "l_1",
+                                "med"
+                            ],
+                            "name_en": "Graceful Step",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202602,
+                            "type": [
+                                "med"
+                            ],
+                            "name_en": "Ignition",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202722,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Unbreakable Mind",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203362,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Forward Step by Step",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203502,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Peerless",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203632,
+                            "type": [
+                                "med"
+                            ],
+                            "name_en": "Dream-Fulfilling Challenge",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203852,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Intrigued",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203862,
+                            "type": [
+                                "med",
+                                "l_0",
+                                "l_1"
+                            ],
+                            "name_en": "Carefree Step",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 4,
+                            "hint_value": 6
+                        }
+                    ]
+                },
+                "event_skills": [
+                    {
+                        "id": 203502,
+                        "type": [
+                            "l_1",
+                            "nac"
+                        ],
+                        "name_en": "Peerless",
+                        "rarity": 1,
+                        "iconid": 20011
+                    },
+                    {
+                        "id": 202721,
+                        "type": [
+                            "nac"
+                        ],
+                        "name_en": "Never Give Up",
+                        "rarity": 2,
+                        "iconid": 20012
+                    },
+                    {
+                        "id": 203851,
+                        "type": [
+                            "l_1",
+                            "nac"
+                        ],
+                        "name_en": "Curiosity",
+                        "rarity": 2,
+                        "iconid": 20012
+                    },
+                    {
+                        "id": 203861,
+                        "type": [
+                            "med",
+                            "l_0",
+                            "l_1"
+                        ],
+                        "name_en": "Freewheeling",
+                        "rarity": 2,
+                        "iconid": 20012
+                    }
+                ],
+                "unique": {
+                    "level": 1,
+                    "effects": [
+                        {
+                            "type": 120,
+                            "value": 1,
+                            "value_1": 80,
+                            "value_2": 1,
+                            "value_3": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30265-admire-groove",
+                "support_id": 30265,
+                "char_id": 1118,
+                "char_name": "Admire Groove",
+                "name_jp": "アドマイヤグルーヴ",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 3,
+                "type": "speed",
+                "obtained": "gacha",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        30
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        10,
+                        20
+                    ],
+                    [
+                        14,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        35
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        15,
+                        -1,
+                        -1,
+                        -1,
+                        20
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1,
+                        4
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        40,
+                        -1,
+                        -1,
+                        -1,
+                        60
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        60,
+                        -1,
+                        -1,
+                        -1,
+                        100
+                    ],
+                    [
+                        30,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        2
+                    ],
+                    [
+                        32,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        20,
+                        50,
+                        -1,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200192,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Autumn Girl ○",
+                            "iconid": 10011
+                        },
+                        {
+                            "id": 201102,
+                            "type": [
+                                "med",
+                                "str"
+                            ],
+                            "name_en": "Medium Distance Straights ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201112,
+                            "type": [
+                                "med",
+                                "cor"
+                            ],
+                            "name_en": "Medium Distance Corners ○",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 201412,
+                            "type": [
+                                "btw",
+                                "slo"
+                            ],
+                            "name_en": "100K Horsepower",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 202122,
+                            "type": [
+                                "btw"
+                            ],
+                            "name_en": "Fearless Heart",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203322,
+                            "type": [
+                                "btw",
+                                "slo"
+                            ],
+                            "name_en": "Descent",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 203432,
+                            "type": [
+                                "med",
+                                "l_3"
+                            ],
+                            "name_en": "Dynamic Motion",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203572,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Foothold",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203672,
+                            "type": [
+                                "btw",
+                                "l_1"
+                            ],
+                            "name_en": "Simmering Heat",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203832,
+                            "type": [
+                                "btw",
+                                "med"
+                            ],
+                            "name_en": "Aim for the Summit",
+                            "iconid": 20041
+                        },
+                        {
+                            "id": 203842,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Model Student",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 2
+                        }
+                    ]
+                },
+                "event_skills": [
+                    {
+                        "id": 202612,
+                        "type": [
+                            "btw",
+                            "l_0"
+                        ],
+                        "name_en": "Overflowing Passion",
+                        "rarity": 1,
+                        "iconid": 20011
+                    },
+                    {
+                        "id": 203831,
+                        "type": [
+                            "btw",
+                            "med"
+                        ],
+                        "name_en": "Natural Talent",
+                        "rarity": 2,
+                        "iconid": 20042
+                    },
+                    {
+                        "id": 203841,
+                        "type": [
+                            "med",
+                            "l_1"
+                        ],
+                        "name_en": "Brains and Beauty",
+                        "rarity": 2,
+                        "iconid": 20012
+                    }
+                ],
+                "unique": {
+                    "level": 1,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 3,
+                            "value_2": 1,
+                            "value_3": 5,
+                            "value_4": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30266-chrono-genesis",
+                "support_id": 30266,
+                "char_id": 1133,
+                "char_name": "Chrono Genesis",
+                "name_jp": "クロノジェネシス",
+                "name_ko": "",
+                "name_tw": "",
+                "rarity": 3,
+                "type": "intelligence",
+                "obtained": "limited_quest",
+                "release": "2025-08-24",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        30
+                    ],
+                    [
+                        7,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        5,
+                        -1
+                    ],
+                    [
+                        13,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        35
+                    ],
+                    [
+                        14,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        15,
+                        30
+                    ],
+                    [
+                        15,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        5,
+                        -1
+                    ],
+                    [
+                        16,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        10,
+                        -1
+                    ],
+                    [
+                        17,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        2,
+                        -1
+                    ],
+                    [
+                        18,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1
+                    ],
+                    [
+                        19,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        35,
+                        35,
+                        -1,
+                        -1,
+                        50,
+                        -1
+                    ],
+                    [
+                        31,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        3,
+                        -1,
+                        -1,
+                        -1,
+                        5
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        {
+                            "id": 200142,
+                            "type": [
+                                "nac"
+                            ],
+                            "name_en": "Non-Core Distances ○",
+                            "iconid": 10021
+                        },
+                        {
+                            "id": 200482,
+                            "type": [
+                                "l_1",
+                                "nac"
+                            ],
+                            "name_en": "Crowded Calm",
+                            "iconid": 20021
+                        },
+                        {
+                            "id": 202472,
+                            "type": [
+                                "ldr",
+                                "btw"
+                            ],
+                            "name_en": "Tooth and Tail",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203052,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Unshakeable Faith",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203142,
+                            "type": [
+                                "med",
+                                "l_1"
+                            ],
+                            "name_en": "Self-Restraint",
+                            "iconid": 20011
+                        },
+                        {
+                            "id": 203232,
+                            "type": [
+                                "ldr",
+                                "l_0"
+                            ],
+                            "name_en": "Restless Step",
+                            "iconid": 20011
+                        }
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 5,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 30,
+                            "hint_value": 5
+                        }
+                    ]
+                },
+                "event_skills": [
+                    {
+                        "id": 200721,
+                        "type": [
+                            "med",
+                            "l_1"
+                        ],
+                        "name_en": "Killer Tune",
+                        "rarity": 2,
+                        "iconid": 20012
+                    }
+                ],
+                "unique": {
+                    "level": 40,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 3,
+                            "value_2": 1,
+                            "value_3": 7,
+                            "value_4": 1
                         }
                     ]
                 }
