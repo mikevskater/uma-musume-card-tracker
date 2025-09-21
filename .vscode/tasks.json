@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Decode Unicode in Current File",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "${workspaceFolder}/decode_unicode.py",
+        "${file}"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}

@@ -377,6 +377,46 @@ async function loadData() {
         
         // Store card data
         cardData = cardsDataRaw.pageProps.supportData;
+        
+        for (let card of cardData) {
+            for (let i = 0; i < card.hints.hint_skills.length; i++) {
+                const hint = card.hints.hint_skills[i];
+                if (skillsData[hint]) {
+                    card.hints.hint_skills[i] = {
+                        "id": hint,
+                        "type": skillsData[hint].type,
+                        "name_en": skillsData[hint].name_en,
+                        "desc_en": skillsData[hint].desc_en
+                    };
+                } else {
+                    card.hints.hint_skills[i] = {
+                        "id": hint,
+                        "type": "unknown",
+                        "name_en": "Unknown Skill",
+                        "desc_en": "No description available."
+                    };
+                }
+            }
+
+            for (let i = 0; i < card.event_skills.length; i++) {
+                const event = card.event_skills[i];
+                if (skillsData[event]) {
+                    card.event_skills[i] = {
+                        "id": event,
+                        "type": skillsData[event].type,
+                        "name_en": skillsData[event].name_en,
+                        "desc_en": skillsData[event].desc_en
+                    };
+                } else {
+                    card.event_skills[i] = {
+                        "id": event,
+                        "type": "unknown",
+                        "name_en": "Unknown Event",
+                        "desc_en": "No description available."
+                    };
+                }
+            }
+        }
 
         console.log(`Loaded ${cardData.length} cards`);
         
