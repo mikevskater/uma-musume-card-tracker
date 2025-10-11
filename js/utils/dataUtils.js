@@ -189,8 +189,8 @@ function getEffectiveLevel(card) {
         }
     }
     
-    // Default to LB 2 for unowned cards
-    return limitBreaks[card.rarity][2];
+    // Default to LB 4 for unowned cards
+    return limitBreaks[card.rarity][4];
 }
 
 // ===== DATA FORMATTING =====

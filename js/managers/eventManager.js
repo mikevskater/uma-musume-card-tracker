@@ -229,7 +229,7 @@ function updateRowState(row, cardId, owned) {
         if (owned) {
             lbSelect.value = getOwnedCardLimitBreak(cardId);
         } else {
-            lbSelect.value = 2; // Default LB
+            lbSelect.value = 4; // Default LB
         }
     }
     
@@ -536,12 +536,12 @@ function handleModalOwnershipChange(e, cardId, card) {
             }
         } else {
             // Set to default LB for unowned card
-            modalLBSelect.value = 2;
-            console.log(`   Set LB select to default: 2`);
+            modalLBSelect.value = 4;
+            console.log(`   Set LB select to default: 4`);
             
             // Update level input max constraint
             if (modalLevelInput) {
-                const maxLevel = limitBreaks[card.rarity][2];
+                const maxLevel = limitBreaks[card.rarity][4];
                 modalLevelInput.max = maxLevel;
                 console.log(`   Updated level input max to: ${maxLevel}`);
             }

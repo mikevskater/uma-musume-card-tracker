@@ -46,8 +46,8 @@ function setCardOwnership(cardId, owned) {
             if (card) {
                 ownedCards[cardId] = {
                     owned: true,
-                    level: limitBreaks[card.rarity][2], // Default to LB 2 level
-                    limitBreak: 2, // Default to LB 2
+                    level: limitBreaks[card.rarity][4], // Default to LB 4 level
+                    limitBreak: 4, // Default to LB 4
                     dateObtained: Date.now()
                 };
             }

@@ -39,8 +39,8 @@ function createCardTableRow(card) {
         displayLevel = getOwnedCardLevel(cardId);
         displayLimitBreak = getOwnedCardLimitBreak(cardId);
     } else {
-        displayLevel = limitBreaks[card.rarity][2];
-        displayLimitBreak = 2;
+        displayLevel = limitBreaks[card.rarity][4];
+        displayLimitBreak = 4;
     }
     
     // Calculate effective level for effects
