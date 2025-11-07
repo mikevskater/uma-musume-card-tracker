@@ -2997,8 +2997,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    200432,
                     200692,
+                    200432,
                     201611
                 ]
             },
@@ -3108,8 +3108,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    200831,
                     200272,
+                    200831,
                     200941,
                     200442,
                     201621
@@ -8735,6 +8735,7 @@
                 "release": "2021-08-30",
                 "release_ko": "2022-12-19",
                 "release_zh_tw": "2023-01-02",
+                "release_en": "2025-11-06",
                 "effects": [
                     [
                         8,
@@ -8854,10 +8855,10 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    200372,
                     200462,
                     200272,
                     201641,
+                    200372,
                     201631
                 ]
             },
@@ -10798,8 +10799,8 @@
                 },
                 "event_skills": [
                     200283,
-                    202032,
                     200353,
+                    202032,
                     200521,
                     201591
                 ]
@@ -12055,8 +12056,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    201661,
                     200272,
+                    201661,
                     201522,
                     201532
                 ]
@@ -13739,8 +13740,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    202722,
                     201641,
+                    202722,
                     200362
                 ]
             },
@@ -15292,8 +15293,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    202802,
                     200282,
+                    202802,
                     200512
                 ]
             },
@@ -16115,8 +16116,8 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    201591,
                     200362,
+                    201591,
                     202792
                 ]
             },
@@ -18985,9 +18986,9 @@
                     "hint_others": []
                 },
                 "event_skills": [
+                    200382,
                     203652,
                     203651,
-                    200382,
                     203242
                 ]
             },
@@ -20551,7 +20552,7 @@
                     200582
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -20746,7 +20747,7 @@
                     200562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -20912,7 +20913,7 @@
                     200941
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -21111,7 +21112,7 @@
                     200502
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -21307,7 +21308,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -21501,7 +21502,7 @@
                     200752
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -21668,7 +21669,7 @@
                     200362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -21863,7 +21864,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -22029,7 +22030,7 @@
                     200432
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -22208,7 +22209,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -22376,7 +22377,7 @@
                     200342
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 6,
@@ -22569,7 +22570,7 @@
                     201542
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -22735,7 +22736,7 @@
                     200292
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -22931,7 +22932,7 @@
                     201212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -23138,7 +23139,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -23319,7 +23320,7 @@
                     200012
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -23491,7 +23492,7 @@
                     201322
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -23699,7 +23700,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -23886,7 +23887,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -24052,7 +24053,7 @@
                     200512
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -24185,14 +24186,14 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    200831,
                     200272,
+                    200831,
                     200941,
                     200442,
                     201621
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 27,
@@ -24364,7 +24365,7 @@
                     200482
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -24534,7 +24535,7 @@
                     201641
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -24731,7 +24732,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -24898,7 +24899,7 @@
                     200781
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 7,
@@ -25067,7 +25068,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 35,
                     "effects": [
                         {
                             "type": 8,
@@ -25261,7 +25262,7 @@
                     200372
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -25430,7 +25431,7 @@
                     201102
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -25622,7 +25623,7 @@
                     201591
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -25804,7 +25805,7 @@
                     200542
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -25969,7 +25970,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -26137,7 +26138,7 @@
                     200062
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -26302,7 +26303,7 @@
                     200212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -26481,7 +26482,7 @@
                     200881
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -26648,7 +26649,7 @@
                     201562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -26828,7 +26829,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 4,
@@ -26993,7 +26994,7 @@
                     200332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -27161,7 +27162,7 @@
                     201372
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -27344,7 +27345,7 @@
                     200492
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -27493,7 +27494,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -27662,7 +27663,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -27830,7 +27831,7 @@
                     200672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -27997,7 +27998,7 @@
                     200762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 35,
                     "effects": [
                         {
                             "type": 8,
@@ -28163,7 +28164,7 @@
                     201012
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -28335,7 +28336,7 @@
                     200552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 35,
                     "effects": [
                         {
                             "type": 8,
@@ -28517,7 +28518,7 @@
                     201452
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -28683,7 +28684,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 10,
@@ -28869,7 +28870,7 @@
                     200042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -29049,7 +29050,7 @@
                     201422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -29230,7 +29231,7 @@
                     201192
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -29386,7 +29387,7 @@
                     202042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -29541,7 +29542,7 @@
                     201402
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 6,
@@ -29720,7 +29721,7 @@
                     200722
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -29889,7 +29890,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -30074,7 +30075,7 @@
                     202042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -30256,7 +30257,7 @@
                     202422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -30440,7 +30441,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -30637,7 +30638,7 @@
                     200232
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -30834,7 +30835,7 @@
                     201542
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -30987,7 +30988,7 @@
                     200652
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -31174,7 +31175,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -31343,7 +31344,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -31540,7 +31541,7 @@
                     200022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -31728,7 +31729,7 @@
                     202262
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -31896,7 +31897,7 @@
                     200292
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -32090,7 +32091,7 @@
                     201182
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -32288,7 +32289,7 @@
                     200582
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -32482,7 +32483,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 4,
@@ -32662,7 +32663,7 @@
                     200831
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -32831,7 +32832,7 @@
                     200682
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -32997,7 +32998,7 @@
                     200502
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 1,
@@ -33206,7 +33207,7 @@
                     201552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -33387,7 +33388,7 @@
                     201562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -33554,7 +33555,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 10,
@@ -33740,7 +33741,7 @@
                     201272
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -33892,7 +33893,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 4,
@@ -34102,7 +34103,7 @@
                     202472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -34294,7 +34295,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 2,
@@ -34477,7 +34478,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -34684,7 +34685,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -34878,7 +34879,7 @@
                     202672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -35056,7 +35057,7 @@
                     201902
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -35235,7 +35236,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 30,
@@ -35442,7 +35443,7 @@
                     203142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -35612,7 +35613,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 3,
@@ -35791,7 +35792,7 @@
                     200152
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 8,
@@ -35985,7 +35986,7 @@
                     203222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -36180,7 +36181,7 @@
                     203122
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 4,
@@ -36363,7 +36364,7 @@
                     200732
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 25,
                     "effects": [
                         {
                             "type": 5,
@@ -36737,7 +36738,7 @@
                     203632
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 0,
                     "effects": [
                         {
                             "type": 30,
@@ -36917,7 +36918,7 @@
                     200762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 6,
@@ -37093,7 +37094,7 @@
                     200022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -37274,7 +37275,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -37456,7 +37457,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -37645,7 +37646,7 @@
                     200492
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -37827,7 +37828,7 @@
                     200292
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -38010,7 +38011,7 @@
                     200212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -38200,7 +38201,7 @@
                     201192
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -38401,7 +38402,7 @@
                     200482
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -38582,7 +38583,7 @@
                     200332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -38781,7 +38782,7 @@
                     200542
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -38984,7 +38985,7 @@
                     201392
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -39168,7 +39169,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -39351,7 +39352,7 @@
                     201422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 3,
@@ -39534,7 +39535,7 @@
                     200672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -39700,7 +39701,7 @@
                     200742
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -39893,7 +39894,7 @@
                     200552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -40092,7 +40093,7 @@
                     200362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -40256,7 +40257,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -40424,7 +40425,7 @@
                     200962
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -40557,13 +40558,13 @@
                     "hint_others": []
                 },
                 "event_skills": [
+                    200692,
                     200432,
                     200431,
-                    200692,
                     201611
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 27,
@@ -40749,7 +40750,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 4,
@@ -40934,7 +40935,7 @@
                     200152
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -41107,7 +41108,7 @@
                     200042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -41263,7 +41264,7 @@
                     200762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -41432,7 +41433,7 @@
                     200692
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -41630,7 +41631,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -41827,7 +41828,7 @@
                     200331
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -42014,7 +42015,7 @@
                     200851
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -42185,7 +42186,7 @@
                     200831
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -42370,7 +42371,7 @@
                     200342
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -42558,7 +42559,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -42724,7 +42725,7 @@
                     201392
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -42751,6 +42752,7 @@
                 "release": "2021-08-30",
                 "release_ko": "2022-12-19",
                 "release_zh_tw": "2023-01-02",
+                "release_en": "2025-11-06",
                 "effects": [
                     [
                         1,
@@ -42908,7 +42910,7 @@
                     200152
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 4,
@@ -42935,6 +42937,7 @@
                 "release": "2021-08-30",
                 "release_ko": "2022-12-19",
                 "release_zh_tw": "2023-01-02",
+                "release_en": "2025-11-06",
                 "effects": [
                     [
                         8,
@@ -43068,14 +43071,14 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    200371,
                     200462,
                     200272,
                     201641,
+                    200371,
                     201631
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 27,
@@ -43295,7 +43298,7 @@
                     200232
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -43479,7 +43482,7 @@
                     200172
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -43645,7 +43648,7 @@
                     200732
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 3,
@@ -43825,7 +43828,7 @@
                     200652
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -43991,7 +43994,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -44177,7 +44180,7 @@
                     200132
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -44363,7 +44366,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -44532,7 +44535,7 @@
                     201641
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 3,
@@ -44686,7 +44689,7 @@
                     201501
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -44862,7 +44865,7 @@
                     201392
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -45030,7 +45033,7 @@
                     200562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -45214,7 +45217,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -45388,13 +45391,13 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    201662,
                     200272,
+                    201662,
                     201522,
                     201532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 113,
@@ -45592,7 +45595,7 @@
                     200582
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -45789,7 +45792,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 7,
@@ -45957,7 +45960,7 @@
                     201192
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 3,
@@ -46132,7 +46135,7 @@
                     200512
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -46296,7 +46299,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 5,
@@ -46447,7 +46450,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -46611,7 +46614,7 @@
                     200432
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 4,
@@ -46767,7 +46770,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 6,
@@ -46932,7 +46935,7 @@
                     200752
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 7,
@@ -46959,6 +46962,7 @@
                 "release": "2021-08-24",
                 "release_ko": "2022-12-13",
                 "release_zh_tw": "2022-12-27",
+                "release_en": "2025-11-03",
                 "effects": [
                     [
                         1,
@@ -47103,7 +47107,7 @@
                     200022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -47287,7 +47291,7 @@
                     200781
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -47455,7 +47459,7 @@
                     200482
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -47625,7 +47629,7 @@
                     201102
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -47804,7 +47808,7 @@
                     200432
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -47989,7 +47993,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -48169,7 +48173,7 @@
                     201012
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -48366,7 +48370,7 @@
                     201641
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -48536,7 +48540,7 @@
                     200342
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -48720,7 +48724,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -48902,7 +48906,7 @@
                     200362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 5,
@@ -49058,7 +49062,7 @@
                     201212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 3,
@@ -49211,7 +49215,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 1,
@@ -49392,7 +49396,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 1,
@@ -49547,7 +49551,7 @@
                     200022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -49727,7 +49731,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 8,
@@ -49950,7 +49954,7 @@
                     201562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 2,
@@ -50132,7 +50136,7 @@
                     201322
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -50237,15 +50241,15 @@
                 },
                 "event_skills": [
                     200283,
-                    202031,
-                    202032,
                     200353,
+                    202032,
                     200521,
+                    202031,
                     201591
                 ],
                 "unique_desc": "Sasami Anshinzawa random events are more likely to occur",
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": []
                 }
             },
@@ -50422,7 +50426,7 @@
                     200352
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -50599,7 +50603,7 @@
                     201341
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -50785,7 +50789,7 @@
                     200672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 102,
@@ -50963,7 +50967,7 @@
                     201562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 8,
@@ -51161,7 +51165,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 103,
@@ -51341,7 +51345,7 @@
                     200722
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 104,
@@ -51490,7 +51494,7 @@
                     200742
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -51698,7 +51702,7 @@
                     200851
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 103,
@@ -51878,7 +51882,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -52059,7 +52063,7 @@
                     200232
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 105,
@@ -52266,7 +52270,7 @@
                     201372
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 106,
@@ -52445,7 +52449,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -52610,7 +52614,7 @@
                     200562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -52780,7 +52784,7 @@
                     200132
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 107,
@@ -52986,7 +52990,7 @@
                     201591
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 108,
@@ -53136,7 +53140,7 @@
                     200732
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 5,
@@ -53361,7 +53365,7 @@
                     202022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -53546,7 +53550,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 30,
@@ -53724,7 +53728,7 @@
                     200781
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 109,
@@ -53916,7 +53920,7 @@
                     200152
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -54099,7 +54103,7 @@
                     201542
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -54282,7 +54286,7 @@
                     200212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 110,
@@ -54475,7 +54479,7 @@
                     200831
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -54669,7 +54673,7 @@
                     201102
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -54881,7 +54885,7 @@
                     200762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 5,
@@ -55064,7 +55068,7 @@
                     200502
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -55263,7 +55267,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 111,
@@ -55476,7 +55480,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 112,
@@ -55644,7 +55648,7 @@
                     200172
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -55838,7 +55842,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -56033,7 +56037,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 109,
@@ -56202,7 +56206,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 106,
@@ -56400,7 +56404,7 @@
                     200752
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -56557,7 +56561,7 @@
                     200672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -56725,7 +56729,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 114,
@@ -56908,7 +56912,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 105,
@@ -57093,7 +57097,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -57288,7 +57292,7 @@
                     200222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -57437,7 +57441,7 @@
                     200881
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -57650,7 +57654,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -57815,7 +57819,7 @@
                     200432
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -58009,7 +58013,7 @@
                     200292
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -58194,7 +58198,7 @@
                     201641
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 111,
@@ -58389,7 +58393,7 @@
                     200502
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -58573,7 +58577,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -58787,7 +58791,7 @@
                     202412
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -58998,7 +59002,7 @@
                     200762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 113,
@@ -59206,7 +59210,7 @@
                     202491
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -59385,7 +59389,7 @@
                     200292
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -59582,7 +59586,7 @@
                     202042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -59791,7 +59795,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -59972,7 +59976,7 @@
                     200962
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 108,
@@ -60167,7 +60171,7 @@
                     200652
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -60364,7 +60368,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -60547,7 +60551,7 @@
                     201601
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -60716,7 +60720,7 @@
                     200222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -60905,7 +60909,7 @@
                     202552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -61123,7 +61127,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -61306,7 +61310,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -61472,7 +61476,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -61654,7 +61658,7 @@
                     200432
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 105,
@@ -61848,7 +61852,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -61999,7 +62003,7 @@
                     200781
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -62163,7 +62167,7 @@
                     201552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -62376,7 +62380,7 @@
                     200042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 115,
@@ -62583,7 +62587,7 @@
                     202422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -62784,7 +62788,7 @@
                     200562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 117,
@@ -62993,7 +62997,7 @@
                     202042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 113,
@@ -63185,7 +63189,7 @@
                     200492
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -63392,7 +63396,7 @@
                     200362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -63618,7 +63622,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -63831,7 +63835,7 @@
                     201422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -64027,7 +64031,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -64265,7 +64269,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -64475,7 +64479,7 @@
                     202332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -64671,7 +64675,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -64858,7 +64862,7 @@
                     202422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -65038,7 +65042,7 @@
                     200502
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -65196,12 +65200,12 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    202721,
                     201641,
+                    202721,
                     200362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 118,
@@ -65425,7 +65429,7 @@
                     200212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -65577,7 +65581,7 @@
                     200861
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -65744,7 +65748,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -65939,7 +65943,7 @@
                     200941
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -66134,7 +66138,7 @@
                     201552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -66303,7 +66307,7 @@
                     201272
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -66468,7 +66472,7 @@
                     200332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -66652,7 +66656,7 @@
                     200052
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -66832,7 +66836,7 @@
                     201402
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 114,
@@ -67030,7 +67034,7 @@
                     200512
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -67188,7 +67192,7 @@
                     200302
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -67426,7 +67430,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -67636,7 +67640,7 @@
                     202562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 103,
@@ -67843,7 +67847,7 @@
                     201072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -68041,7 +68045,7 @@
                     201112
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -68196,7 +68200,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -68408,7 +68412,7 @@
                     201382
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -68601,7 +68605,7 @@
                     202602
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -68827,7 +68831,7 @@
                     200851
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -69010,7 +69014,7 @@
                     200511
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -69193,7 +69197,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -69400,7 +69404,7 @@
                     201672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 113,
@@ -69620,7 +69624,7 @@
                     201392
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -69815,7 +69819,7 @@
                     200672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -69995,7 +69999,7 @@
                     202672
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -70148,7 +70152,7 @@
                     202172
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -70332,7 +70336,7 @@
                     202522
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 120,
@@ -70491,12 +70495,12 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    202801,
                     200282,
+                    202801,
                     200512
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 119,
@@ -70649,7 +70653,7 @@
                     200711
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -70811,7 +70815,7 @@
                     202602
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -70975,7 +70979,7 @@
                     202562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -71153,7 +71157,7 @@
                     201382
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -71336,7 +71340,7 @@
                     202762
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -71533,7 +71537,7 @@
                     201042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -71727,7 +71731,7 @@
                     202042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -71937,7 +71941,7 @@
                     202412
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -72102,7 +72106,7 @@
                     200132
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -72311,7 +72315,7 @@
                     202622
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -72505,7 +72509,7 @@
                     202072
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -72702,7 +72706,7 @@
                     201702
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -72927,7 +72931,7 @@
                     201212
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -73125,7 +73129,7 @@
                     200492
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -73306,7 +73310,7 @@
                     202422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -73528,7 +73532,7 @@
                     201192
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -73693,7 +73697,7 @@
                     200682
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -73886,7 +73890,7 @@
                     201382
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -74074,12 +74078,12 @@
                     "hint_others": []
                 },
                 "event_skills": [
-                    201592,
                     200362,
+                    201592,
                     202792
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 121,
@@ -74272,7 +74276,7 @@
                     203031
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 109,
@@ -74466,7 +74470,7 @@
                     202472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -74690,7 +74694,7 @@
                     200552
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -74929,7 +74933,7 @@
                     202262
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -75134,7 +75138,7 @@
                     202332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -75295,7 +75299,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 11,
@@ -75523,7 +75527,7 @@
                     200332
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -75760,7 +75764,7 @@
                     202532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -75929,7 +75933,7 @@
                     202612
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -76119,7 +76123,7 @@
                     202712
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -76360,7 +76364,7 @@
                     200582
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -76584,7 +76588,7 @@
                     200582
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -76777,7 +76781,7 @@
                     200222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -76967,7 +76971,7 @@
                     200851
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -77191,7 +77195,7 @@
                     202842
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -77404,7 +77408,7 @@
                     200941
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -77625,7 +77629,7 @@
                     201641
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -77820,7 +77824,7 @@
                     201393
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -78028,7 +78032,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -78240,7 +78244,7 @@
                     200562
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -78450,7 +78454,7 @@
                     200222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -78672,7 +78676,7 @@
                     200162
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 116,
@@ -78909,7 +78913,7 @@
                     201322
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -79071,7 +79075,7 @@
                     200142
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -79287,7 +79291,7 @@
                     201172
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -79511,7 +79515,7 @@
                     200232
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -79708,7 +79712,7 @@
                     200881
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -79874,7 +79878,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -80102,7 +80106,7 @@
                     201591
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -80317,7 +80321,7 @@
                     201012
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -80555,7 +80559,7 @@
                     200781
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -80761,7 +80765,7 @@
                     200462
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -80924,7 +80928,7 @@
                     202422
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -81093,7 +81097,7 @@
                     203501
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -81306,7 +81310,7 @@
                     202742
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -81513,7 +81517,7 @@
                     201032
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -81750,7 +81754,7 @@
                     200742
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -81961,7 +81965,7 @@
                     200492
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -82201,7 +82205,7 @@
                     202902
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -82381,7 +82385,7 @@
                     200222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -82619,7 +82623,7 @@
                     203362
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -82847,7 +82851,7 @@
                     201682
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -83070,7 +83074,7 @@
                     202612
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 103,
@@ -83237,7 +83241,7 @@
                     202842
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -83452,7 +83456,7 @@
                     200022
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -83661,7 +83665,7 @@
                     201042
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -83885,7 +83889,7 @@
                     203222
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -84077,7 +84081,7 @@
                     201411
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -84303,7 +84307,7 @@
                     200482
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 113,
@@ -84472,13 +84476,13 @@
                     "hint_others": []
                 },
                 "event_skills": [
+                    200382,
                     203652,
                     203651,
-                    200382,
                     203242
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 122,
@@ -84699,7 +84703,7 @@
                     200472
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -84875,7 +84879,7 @@
                     201323
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -85068,7 +85072,7 @@
                     200532
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -85306,7 +85310,7 @@
                     200751
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -85529,7 +85533,7 @@
                     202602
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 30,
                     "effects": [
                         {
                             "type": 101,
@@ -85708,7 +85712,7 @@
                     201382
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -86354,7 +86358,7 @@
                     200721
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 40,
                     "effects": [
                         {
                             "type": 101,
@@ -88102,7 +88106,7 @@
                     203122
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 0,
                     "effects": [
                         {
                             "type": 101,
@@ -88316,7 +88320,7 @@
                     201312
                 ],
                 "unique": {
-                    "level": 1,
+                    "level": 0,
                     "effects": [
                         {
                             "type": 101,
@@ -88487,7 +88491,7 @@
                 },
                 "event_skills": [],
                 "unique": {
-                    "level": 1,
+                    "level": 0,
                     "effects": [
                         {
                             "type": 101,
