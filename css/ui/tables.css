@@ -288,6 +288,80 @@ td.ownership-checkbox input[type="checkbox"] {
 }
 
 /* =================================================================
+   DIFFERENCE HIGHLIGHTING (ENHANCED)
+   Shows how far each card's value is from the highest
+   ================================================================= */
+
+/* Difference value cells with subtle gradient background */
+.comparison-data-table .difference-value {
+    position: relative;
+    /* Subtle dynamic red gradient based on --diff-intensity (0-1) */
+    background-color: rgba(
+        calc(200 + (20 * var(--diff-intensity, 0))),
+        calc(80 + (20 * var(--diff-intensity, 0))),
+        calc(90 + (10 * var(--diff-intensity, 0))),
+        calc(0.03 + (0.09 * var(--diff-intensity, 0)))
+    );
+}
+
+/* Fallback for browsers that don't support calc in rgba */
+.comparison-data-table .difference-value[data-intensity="0"] {
+    background-color: rgba(200, 80, 90, 0.03);
+}
+.comparison-data-table .difference-value[data-intensity="25"] {
+    background-color: rgba(205, 85, 93, 0.05);
+}
+.comparison-data-table .difference-value[data-intensity="50"] {
+    background-color: rgba(210, 90, 95, 0.07);
+}
+.comparison-data-table .difference-value[data-intensity="75"] {
+    background-color: rgba(215, 95, 98, 0.09);
+}
+.comparison-data-table .difference-value[data-intensity="100"] {
+    background-color: rgba(220, 100, 100, 0.12);
+}
+
+/* Common styles for all difference indicators */
+.difference-indicator {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    margin-left: var(--space-xs);
+    vertical-align: middle;
+}
+
+/* Lead indicator for highest value (green, shows +X ahead of 2nd place) */
+.lead-indicator {
+    background-color: var(--color-success);
+    color: white;
+}
+
+/* Behind indicator (red gradient based on intensity) */
+.behind-indicator {
+    background-color: rgba(220, 53, 69, calc(0.6 + (0.4 * var(--diff-intensity, 0))));
+    color: white;
+}
+
+/* Fallback intensity classes for behind indicators */
+.comparison-data-table [data-intensity="0"] .behind-indicator {
+    background-color: rgba(220, 53, 69, 0.6);
+}
+.comparison-data-table [data-intensity="25"] .behind-indicator {
+    background-color: rgba(220, 53, 69, 0.7);
+}
+.comparison-data-table [data-intensity="50"] .behind-indicator {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+.comparison-data-table [data-intensity="75"] .behind-indicator {
+    background-color: rgba(220, 53, 69, 0.9);
+}
+.comparison-data-table [data-intensity="100"] .behind-indicator {
+    background-color: rgba(220, 53, 69, 1);
+}
+
+/* =================================================================
    SKILL TYPE FILTER HIGHLIGHTING (ENHANCED)
    ================================================================= */
 

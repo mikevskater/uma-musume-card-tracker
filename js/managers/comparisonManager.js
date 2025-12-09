@@ -334,11 +334,12 @@ function createComparisonDataRow(row, section, sectionIndex) {
     return tr;
 }
 
-// Create comparison value cell (ENHANCED with proper skill-only highlighting)
+// Create comparison value cell (ENHANCED with proper skill-only highlighting and difference indicators)
 function createComparisonValueCell(cellData, row, isSkillFilterHighlighted = false) {
     let cellClass = 'has-value';
     let cellContent = '';
-    
+    let dataAttributes = {};
+
     switch(row.type) {
         case 'level':
             cellContent = cellData.value;
@@ -355,10 +356,20 @@ function createComparisonValueCell(cellData, row, isSkillFilterHighlighted = fal
                 cellContent = 'Locked';
             } else if (cellData.isHighest) {
                 cellClass = 'highest-value';
-                cellContent = `${cellData.value}${row.symbol || ''}`;
+                // Show lead over second place if there is one
+                const leadIndicator = cellData.leadOverSecond > 0
+                    ? `<span class="difference-indicator lead-indicator">+${cellData.leadOverSecond}${row.symbol || ''}</span>`
+                    : '';
+                cellContent = `${cellData.value}${row.symbol || ''}${leadIndicator}`;
             } else {
-                cellClass = 'has-value';
-                cellContent = `${cellData.value}${row.symbol || ''}`;
+                // Show difference from highest with color gradient
+                cellClass = 'has-value difference-value';
+                const diffIndicator = cellData.difference < 0
+                    ? `<span class="difference-indicator behind-indicator">${cellData.difference}${row.symbol || ''}</span>`
+                    : '';
+                cellContent = `${cellData.value}${row.symbol || ''}${diffIndicator}`;
+                // Set intensity for CSS gradient (0-100)
+                dataAttributes['data-intensity'] = Math.round(cellData.differenceIntensity * 100);
             }
             break;
         case 'skill':
@@ -378,11 +389,23 @@ function createComparisonValueCell(cellData, row, isSkillFilterHighlighted = fal
         default:
             cellContent = cellData.value;
     }
-    
-    return createElement('td', {
+
+    const cell = createElement('td', {
         className: cellClass,
         innerHTML: cellContent
     });
+
+    // Apply data attributes for CSS styling
+    Object.entries(dataAttributes).forEach(([key, value]) => {
+        cell.setAttribute(key, value);
+    });
+
+    // Apply inline style for gradient intensity (CSS custom property)
+    if (dataAttributes['data-intensity'] !== undefined) {
+        cell.style.setProperty('--diff-intensity', dataAttributes['data-intensity'] / 100);
+    }
+
+    return cell;
 }
 
 // ===== COMPARISON DATA BUILDING =====
@@ -439,6 +462,7 @@ function buildBasicInfoSection(cards) {
 }
 
 // Build effects section - UPDATED: Now collapsible but expanded by default
+// ENHANCED: Added difference highlighting with color gradient
 function buildEffectsSection(cards) {
     const section = {
         name: 'Effects',
@@ -446,7 +470,7 @@ function buildEffectsSection(cards) {
         collapsed: false,     // NEW: Expanded by default
         rows: []
     };
-    
+
     // Collect all effects from selected cards
     const allEffectIds = new Set();
     cards.forEach(card => {
@@ -458,8 +482,8 @@ function buildEffectsSection(cards) {
             });
         }
     });
-    
-    // Build effects rows with highlighting
+
+    // Build effects rows with highlighting and difference calculation
     Array.from(allEffectIds).forEach(effectId => {
         const effectInfo = effectsData[effectId];
         if (effectInfo && effectInfo.name_en) {
@@ -476,23 +500,47 @@ function buildEffectsSection(cards) {
                 }
                 return { value: 0, locked: false, hasEffect: false };
             });
-            
-            // Find highest value for highlighting
-            const validValues = values.filter(v => v.hasEffect && !v.locked).map(v => v.value);
-            const highestValue = validValues.length > 0 ? Math.max(...validValues) : 0;
-            
+
+            // Find highest and second highest values for difference highlighting
+            const validValues = values
+                .filter(v => v.hasEffect && !v.locked)
+                .map(v => v.value)
+                .sort((a, b) => b - a); // Sort descending
+
+            const highestValue = validValues.length > 0 ? validValues[0] : 0;
+            const secondHighestValue = validValues.length > 1 ? validValues[1] : 0;
+
+            // Calculate the range for color gradient (difference between highest and lowest)
+            const lowestValidValue = validValues.length > 0 ? validValues[validValues.length - 1] : 0;
+            const valueRange = highestValue - lowestValidValue;
+
             section.rows.push({
                 label: effectInfo.name_en,
                 type: 'effect',
                 symbol: effectInfo.symbol === 'percent' ? '%' : '',
-                values: values.map(v => ({
-                    ...v,
-                    isHighest: v.hasEffect && !v.locked && v.value === highestValue && v.value > 0
-                }))
+                values: values.map(v => {
+                    const isHighest = v.hasEffect && !v.locked && v.value === highestValue && v.value > 0;
+                    const difference = v.hasEffect && !v.locked ? v.value - highestValue : 0;
+                    const leadOverSecond = isHighest ? highestValue - secondHighestValue : 0;
+
+                    // Calculate intensity for color gradient (0 = closest to highest, 1 = furthest)
+                    let differenceIntensity = 0;
+                    if (valueRange > 0 && v.hasEffect && !v.locked && !isHighest) {
+                        differenceIntensity = (highestValue - v.value) / valueRange;
+                    }
+
+                    return {
+                        ...v,
+                        isHighest,
+                        difference,           // Negative value showing how far behind
+                        leadOverSecond,       // Positive value for highest card
+                        differenceIntensity   // 0-1 for color gradient
+                    };
+                })
             });
         }
     });
-    
+
     return section;
 }
 
