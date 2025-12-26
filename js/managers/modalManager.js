@@ -10,7 +10,7 @@ let currentHelpSection = 'welcome';
 // ===== VERSION MANAGEMENT SYSTEM =====
 
 // Version tracking constants
-const APP_VERSION = '1.2.7';
+const APP_VERSION = '1.2.9';
 const VERSION_STORAGE_KEY = 'uma_last_seen_version';
 const AUTO_SHOW_STORAGE_KEY = 'uma_auto_show_whatsnew';
 
