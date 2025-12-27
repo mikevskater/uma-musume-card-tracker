@@ -268,7 +268,8 @@ function initializeSortEvents() {
     addDelegatedListener('.sort-category-select', 'change', function(e) {
         const index = parseInt(this.dataset.index);
         const category = this.value;
-        updateSortLayer(index, { category, option: null });
+        const direction = getDefaultSortDirection(category);
+        updateSortLayer(index, { category, option: null, direction });
     }, container);
     
     // Option select changes

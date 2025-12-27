@@ -188,7 +188,10 @@ function setupHelpModalEvents() {
 // Create element with attributes and content
 function createElement(tag, attributes = {}, content = '') {
     const element = document.createElement(tag);
-    
+
+    // Boolean attributes that need setAttribute for proper HTML serialization
+    const booleanAttrs = ['selected', 'disabled', 'checked', 'readonly', 'required'];
+
     Object.entries(attributes).forEach(([key, value]) => {
         if (key === 'className') {
             element.className = value;
@@ -198,6 +201,8 @@ function createElement(tag, attributes = {}, content = '') {
             element.textContent = value;
         } else if (key.startsWith('data-')) {
             element.setAttribute(key, value);
+        } else if (booleanAttrs.includes(key)) {
+            if (value) element.setAttribute(key, key);
         } else {
             element[key] = value;
         }

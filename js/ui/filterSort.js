@@ -7,24 +7,28 @@
 let filterDebounceTimer = null;
 
 // Sort categories configuration
+// defaultDirection: 'asc' for string-based (A→Z), 'desc' for value-based (highest first)
 const sortCategories = {
-    effect: { 
-        name: 'Effect', 
+    effect: {
+        name: 'Effect',
         hasOptions: true,
+        defaultDirection: 'desc',
         getOptions: () => Object.values(effectsData)
             .filter(effect => effect.name_en)
             .sort((a, b) => a.name_en.localeCompare(b.name_en))
             .map(effect => ({ value: effect.id, label: effect.name_en }))
     },
-    level: { name: 'Level', hasOptions: false },
-    ownership: { name: 'Ownership', hasOptions: false },
-    rarity: { name: 'Rarity', hasOptions: false },
-    type: { name: 'Type', hasOptions: false },
-    hintSkillCount: { name: 'Hint Skills', hasOptions: false },
-    eventSkillCount: { name: 'Event Skills', hasOptions: false },
-    skillTypeCount: { 
-        name: 'Skill Type Count', 
-        hasOptions: true, // CHANGED: Now has options
+    name: { name: 'Name', hasOptions: false, defaultDirection: 'asc' },
+    level: { name: 'Level', hasOptions: false, defaultDirection: 'desc' },
+    ownership: { name: 'Ownership', hasOptions: false, defaultDirection: 'desc' },
+    rarity: { name: 'Rarity', hasOptions: false, defaultDirection: 'desc' },
+    type: { name: 'Type', hasOptions: false, defaultDirection: 'asc' },
+    hintSkillCount: { name: 'Hint Skills', hasOptions: false, defaultDirection: 'desc' },
+    eventSkillCount: { name: 'Event Skills', hasOptions: false, defaultDirection: 'desc' },
+    skillTypeCount: {
+        name: 'Skill Type Count',
+        hasOptions: true,
+        defaultDirection: 'desc',
         getOptions: () => {
             // Get all unique skill types from cards
             const allSkillTypes = new Set();
@@ -46,14 +50,19 @@ const sortCategories = {
                     });
                 }
             });
-            
+
             return Array.from(allSkillTypes)
                 .sort((a, b) => getSkillTypeDescription(a).localeCompare(getSkillTypeDescription(b)))
                 .map(type => ({ value: type, label: getSkillTypeDescription(type) }));
         }
     },
-    releaseDate: { name: 'Release Date', hasOptions: false }
+    releaseDate: { name: 'Release Date', hasOptions: false, defaultDirection: 'desc' }
 };
+
+// Get default direction for a category
+function getDefaultSortDirection(category) {
+    return sortCategories[category]?.defaultDirection || 'desc';
+}
 
 // ===== DEBOUNCED FILTERING =====
 
@@ -253,12 +262,22 @@ function applySorting(cards) {
 
 // Multi-layer sort function
 function sortCardsByMultipleCriteria(cards) {
+    // Check if user has rarity in their sort layers
+    const hasRaritySort = multiSort.some(sort => sort.category === 'rarity');
+
     return cards.sort((a, b) => {
         for (const sort of multiSort) {
             const comparison = compareCardsBySortCriteria(a, b, sort);
             if (comparison !== 0) return comparison;
         }
-        return 0; // Maintain original order if all criteria are equal
+
+        // Hidden default: sort by rarity (SSR first) if not already in sort layers
+        if (!hasRaritySort) {
+            const rarityComparison = b.rarity - a.rarity; // Descending: SSR (3) > SR (2) > R (1)
+            if (rarityComparison !== 0) return rarityComparison;
+        }
+
+        return 0;
     });
 }
 
@@ -292,6 +311,11 @@ function compareCardsBySortCriteria(a, b, sort) {
             valueB = b.rarity;
             break;
             
+        case 'name':
+            valueA = (a.char_name || 'Unknown Card').toLowerCase();
+            valueB = (b.char_name || 'Unknown Card').toLowerCase();
+            break;
+
         case 'type':
             valueA = a.type.toLowerCase();
             valueB = b.type.toLowerCase();
@@ -341,11 +365,12 @@ function compareCardsBySortCriteria(a, b, sort) {
 function sortCards(cards, column, direction) {
     return cards.sort((a, b) => {
         let valueA, valueB;
-        
+
         switch (column) {
             case 'name':
-                valueA = (a.char_name || 'Unknown Card').toLowerCase();
-                valueB = (b.char_name || 'Unknown Card').toLowerCase();
+                // Replace special characters with spaces for sorting (matches game behavior)
+                valueA = (a.char_name || 'Unknown Card').toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+                valueB = (b.char_name || 'Unknown Card').toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
                 break;
             case 'rarity':
                 valueA = a.rarity;
@@ -362,12 +387,20 @@ function sortCards(cards, column, direction) {
             default:
                 return 0;
         }
-        
+
+        let comparison;
         if (direction === 'asc') {
-            return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+            comparison = valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
         } else {
-            return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
+            comparison = valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
         }
+
+        // Hidden default: sort by rarity (SSR first) when primary values are equal
+        if (comparison === 0 && column !== 'rarity') {
+            return b.rarity - a.rarity; // Descending: SSR (3) > SR (2) > R (1)
+        }
+
+        return comparison;
     });
 }
 
@@ -414,10 +447,11 @@ function clearColumnSortIndicators() {
 
 // Add sort layer
 function addSortLayer() {
+    const defaultCategory = 'name';
     multiSort.push({
-        category: 'effect',
+        category: defaultCategory,
         option: null,
-        direction: 'desc'
+        direction: getDefaultSortDirection(defaultCategory)
     });
     renderMultiSort();
     debouncedFilterAndSort();
@@ -659,7 +693,8 @@ window.FilterSort = {
     clearAllFilters,
     initializeAdvancedFilters,
     sortCategories,
-    getSkillTypeCount // Export the skill type count function
+    getSkillTypeCount,
+    getDefaultSortDirection
 };
 
 // Export individual functions to global scope for backward compatibility
