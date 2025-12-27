@@ -474,7 +474,6 @@ function createModalDetailHeader(card, level, isOwned) {
         className: 'card-basic-info',
         innerHTML: `
             <h3>${card.char_name || 'Unknown Card'}</h3>
-            <div class="character-name">Card Name: ${card.name_en || 'Not Available'}</div>
             <div class="card-badges">
                 ${createRarityBadge(card.rarity).outerHTML}
                 ${createTypeBadge(card.type).outerHTML}
