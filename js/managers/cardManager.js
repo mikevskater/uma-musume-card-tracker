@@ -280,9 +280,9 @@ function exportOwnedCards() {
             level: ownership.level,
             limitBreak: ownership.limitBreak,
             dateObtained: new Date(dateValue).toISOString().split('T')[0],
-            charName: encodeURIComponent(card?.char_name || 'Unknown'),
+            charName: card?.char_name || 'Unknown',
             rarity: rarityMap[card?.rarity] || 'Unknown',
-            type: encodeURIComponent(card?.type || 'Unknown')
+            type: card?.type || 'Unknown'
         };
     }
 
