@@ -12,6 +12,50 @@
 </div>
 
 <div class="changelog">
+    <!-- Version 1.3.0 - Sorting & Export Improvements -->
+    <div class="version-entry" data-version="1.3.0">
+        <div class="version-header">
+            <h4>Version 1.3.0</h4>
+            <div class="version-date">December 27, 2025</div>
+        </div>
+        <div class="version-changes">
+            <div class="update-group">
+                <span class="update-type update-feature">New Feature</span>
+                <h5>Enhanced Sorting System</h5>
+                <ul>
+                    <li><strong>Name Sorting:</strong> Added "Name" as a multi-sort layer option</li>
+                    <li><strong>Smart Sort Directions:</strong> Sort layers now default to the most useful direction:
+                        <ul>
+                            <li>Ascending (A→Z) for Name and Type</li>
+                            <li>Descending (highest first) for Effect, Level, Rarity, Skills, etc.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Hidden Rarity Tiebreaker:</strong> Cards with equal values are automatically sorted by rarity (SSR → SR → R) unless you add Rarity as a sort layer</li>
+                    <li><strong>Game-Accurate Name Sorting:</strong> Special characters in names (like "T.M. Opera O") now sort correctly to match in-game behavior</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Enhanced Collection Export</h5>
+                <ul>
+                    <li><strong>Richer Export Data:</strong> JSON exports now include character name, rarity (SSR/SR/R), and card type</li>
+                    <li><strong>Readable Dates:</strong> Date obtained is now exported as YYYY-MM-DD format for easier reading and editing</li>
+                    <li><strong>Owned Cards Only:</strong> Export now only includes cards you actually own</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-bugfix">Bug Fix</span>
+                <h5>UI Cleanup</h5>
+                <ul>
+                    <li><strong>Removed Redundant Display:</strong> Removed "Card Name: Not Available" text from card detail modal</li>
+                    <li><strong>Sort Layer Dropdown Fix:</strong> Sort category dropdown now properly shows selected value and updates title</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Version 1.2.9 - Added new cards -->
     <div class="version-entry" data-version="1.2.9">
         <div class="version-header">
