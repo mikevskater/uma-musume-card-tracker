@@ -266,10 +266,30 @@ function updateModalIfOpen() {
 
 // Export owned cards data
 function exportOwnedCards() {
+    // Build export data with card details
+    const rarityMap = { 1: 'R', 2: 'SR', 3: 'SSR' };
+    const exportCards = {};
+
+    for (const [cardId, ownership] of Object.entries(ownedCards)) {
+        if (!ownership.owned) continue;
+
+        const card = cardData.find(c => c.support_id == cardId);
+        const dateValue = ownership.dateObtained || Date.now();
+        exportCards[cardId] = {
+            owned: ownership.owned,
+            level: ownership.level,
+            limitBreak: ownership.limitBreak,
+            dateObtained: new Date(dateValue).toISOString().split('T')[0],
+            charName: encodeURIComponent(card?.char_name || 'Unknown'),
+            rarity: rarityMap[card?.rarity] || 'Unknown',
+            type: encodeURIComponent(card?.type || 'Unknown')
+        };
+    }
+
     const exportData = {
-        version: '1.0',
+        version: '2.0',
         exportDate: new Date().toISOString(),
-        ownedCards: ownedCards
+        ownedCards: exportCards
     };
     
     const dataStr = JSON.stringify(exportData, null, 2);
@@ -295,11 +315,24 @@ function importOwnedCards(file) {
     reader.onload = function(e) {
         try {
             const importData = JSON.parse(e.target.result);
-            
+
             // Validate import data structure
             validateImportData(importData);
-            
-            ownedCards = importData.ownedCards;
+
+            // Normalize imported data (strip extra fields, convert date strings to timestamps)
+            const normalizedCards = {};
+            for (const [cardId, cardData] of Object.entries(importData.ownedCards)) {
+                normalizedCards[cardId] = {
+                    owned: cardData.owned,
+                    level: cardData.level,
+                    limitBreak: cardData.limitBreak,
+                    dateObtained: typeof cardData.dateObtained === 'string'
+                        ? new Date(cardData.dateObtained).getTime()
+                        : cardData.dateObtained
+                };
+            }
+
+            ownedCards = normalizedCards;
             saveOwnedCards();
             
             // Refresh the display
