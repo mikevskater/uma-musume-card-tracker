@@ -13902,6 +13902,7 @@
                 "obtained": "gacha",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -16137,6 +16138,7 @@
                 "type": "power",
                 "obtained": "gacha",
                 "release": "2024-09-10",
+                "release_ko": "2025-12-30",
                 "effects": [
                     [
                         1,
@@ -16284,8 +16286,8 @@
                 "char_id": 1124,
                 "char_name": "Bubble Gum Fellow",
                 "name_jp": "バブルガムフェロー",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "버블검 펠로",
+                "name_tw": "泡泡糖小子",
                 "rarity": 1,
                 "type": "speed",
                 "obtained": "gacha",
@@ -16908,8 +16910,8 @@
                 "char_id": 1128,
                 "char_name": "Blast Onepiece",
                 "name_jp": "ブラストワンピース",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "블래스트 원피스",
+                "name_tw": "疾風裝束",
                 "rarity": 1,
                 "type": "guts",
                 "obtained": "gacha",
@@ -17271,6 +17273,7 @@
                 "obtained": "gacha",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -17908,8 +17911,8 @@
                 "char_id": 1129,
                 "char_name": "Almond Eye",
                 "name_jp": "アーモンドアイ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "아몬드 아이",
+                "name_tw": "杏目",
                 "rarity": 1,
                 "type": "speed",
                 "obtained": "gacha",
@@ -18076,8 +18079,8 @@
                 "char_id": 1130,
                 "char_name": "Lucky Lilac",
                 "name_jp": "ラッキーライラック",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "럭키 라일락",
+                "name_tw": "幸運歐丁香",
                 "rarity": 1,
                 "type": "intelligence",
                 "obtained": "gacha",
@@ -18227,8 +18230,8 @@
                 "char_id": 1131,
                 "char_name": "Gran Alegria",
                 "name_jp": "グランアレグリア",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "그란 알레그리아",
+                "name_tw": "放聲歡呼",
                 "rarity": 1,
                 "type": "power",
                 "obtained": "gacha",
@@ -18536,8 +18539,8 @@
                 "char_id": 1134,
                 "char_name":"Curren Bouquetd'or",
                 "name_jp": "カレンブーケドール",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "카렌 부케도르",
+                "name_tw": "機伶金花",
                 "rarity": 1,
                 "type": "stamina",
                 "obtained": "gacha",
@@ -19003,8 +19006,8 @@
                 "char_id": 1113,
                 "char_name": "Fusaichi Pandora",
                 "name_jp": "フサイチパンドラ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "후사이치 판도라",
+                "name_tw": "房一潘朵拉",
                 "rarity": 1,
                 "type": "speed",
                 "obtained": "gacha",
@@ -19644,8 +19647,8 @@
                 "char_id": 1133,
                 "char_name": "Chrono Genesis",
                 "name_jp": "クロノジェネシス",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "크로노 제네시스",
+                "name_tw": "時代創世",
                 "rarity": 1,
                 "type": "intelligence",
                 "obtained": "gacha",
@@ -20382,8 +20385,8 @@
                 "char_id": 1127,
                 "char_name": "Fenomeno",
                 "name_jp": "フェノーメノ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "페노메노",
+                "name_tw": "超常駿驥",
                 "rarity": 1,
                 "type": "stamina",
                 "obtained": "gacha",
@@ -27365,6 +27368,7 @@
                 "release": "2021-11-19",
                 "release_ko": "2023-03-10",
                 "release_zh_tw": "2023-03-24",
+                "release_en": "2025-12-28",
                 "effects": [
                     [
                         1,
@@ -34498,6 +34502,7 @@
                 "obtained": "gacha",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -34681,6 +34686,7 @@
                 "type": "intelligence",
                 "obtained": "gacha",
                 "release": "2024-09-10",
+                "release_ko": "2025-12-30",
                 "effects": [
                     [
                         1,
@@ -35076,8 +35082,8 @@
                 "char_id": 1124,
                 "char_name": "Bubble Gum Fellow",
                 "name_jp": "バブルガムフェロー",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "버블검 펠로",
+                "name_tw": "泡泡糖小子",
                 "rarity": 2,
                 "type": "speed",
                 "obtained": "gacha",
@@ -35433,8 +35439,8 @@
                 "char_id": 1130,
                 "char_name": "Lucky Lilac",
                 "name_jp": "ラッキーライラック",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "럭키 라일락",
+                "name_tw": "幸運歐丁香",
                 "rarity": 2,
                 "type": "intelligence",
                 "obtained": "gacha",
@@ -36183,8 +36189,8 @@
                 "char_id": 1134,
                 "char_name":"Curren Bouquetd'or",
                 "name_jp": "カレンブーケドール",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "카렌 부케도르",
+                "name_tw": "機伶金花",
                 "rarity": 2,
                 "type": "stamina",
                 "obtained": "gacha",
@@ -37284,6 +37290,201 @@
                         },
                         {
                             "type": 11,
+                            "value": 20
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "20094-satono-diamond",
+                "support_id": 20094,
+                "char_id": 1067,
+                "char_name": "Satono Diamond",
+                "name_jp": "サトノダイヤモンド",
+                "name_ko": "사토노 다이아몬드",
+                "name_tw": "里見光鑽",
+                "rarity": 2,
+                "type": "stamina",
+                "obtained": "gacha",
+                "release": "2026-01-08",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        20,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        10,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        -1
+                    ],
+                    [
+                        14,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        10,
+                        -1,
+                        20,
+                        -1,
+                        -1
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1,
+                        3,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        40,
+                        -1,
+                        -1,
+                        -1,
+                        50,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        5,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        35,
+                        -1,
+                        -1
+                    ],
+                    [
+                        30,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        200202,
+                        201402,
+                        201422,
+                        202082,
+                        202092,
+                        202662,
+                        203312,
+                        203622,
+                        203742
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 2,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 4,
+                            "hint_value": 2
+                        }
+                    ]
+                },
+                "event_skills": [
+                    203512,
+                    200851
+                ],
+                "unique": {
+                    "level": 0,
+                    "effects": [
+                        {
+                            "type": 4,
+                            "value": 1
+                        },
+                        {
+                            "type": 19,
                             "value": 20
                         }
                     ]
@@ -49017,6 +49218,7 @@
                 "release": "2021-11-19",
                 "release_ko": "2023-03-10",
                 "release_zh_tw": "2023-03-24",
+                "release_en": "2025-12-28",
                 "effects": [
                     [
                         1,
@@ -49201,6 +49403,7 @@
                 "release": "2021-11-29",
                 "release_ko": "2023-03-20",
                 "release_zh_tw": "2023-04-03",
+                "release_en": "2026-01-05",
                 "effects": [
                     [
                         1,
@@ -49383,6 +49586,7 @@
                 "release": "2021-11-29",
                 "release_ko": "2023-03-20",
                 "release_zh_tw": "2023-04-03",
+                "release_en": "2026-01-05",
                 "effects": [
                     [
                         1,
@@ -49539,6 +49743,7 @@
                 "release": "2021-11-29",
                 "release_ko": "2023-03-20",
                 "release_zh_tw": "2023-04-03",
+                "release_en": "2026-01-05",
                 "effects": [
                     [
                         1,
@@ -75619,6 +75824,7 @@
                 "obtained": "promo",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -76011,6 +76217,7 @@
                 "obtained": "gacha",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -76251,6 +76458,7 @@
                 "obtained": "limited_quest",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -76608,6 +76816,8 @@
                 "type": "intelligence",
                 "obtained": "gacha",
                 "release": "2024-08-30",
+                "release_ko": "2025-12-19",
+                "release_zh_tw": "2026-01-02",
                 "effects": [
                     [
                         1,
@@ -76849,6 +77059,8 @@
                 "type": "guts",
                 "obtained": "gacha",
                 "release": "2024-08-30",
+                "release_ko": "2025-12-19",
+                "release_zh_tw": "2026-01-02",
                 "effects": [
                     [
                         1,
@@ -77075,6 +77287,8 @@
                 "type": "intelligence",
                 "obtained": "story_event",
                 "release": "2024-08-30",
+                "release_ko": "2025-12-19",
+                "release_zh_tw": "2026-01-02",
                 "effects": [
                     [
                         1,
@@ -77267,6 +77481,7 @@
                 "obtained": "promo",
                 "release": "2024-08-24",
                 "release_ko": "2025-12-13",
+                "release_zh_tw": "2025-12-27",
                 "effects": [
                     [
                         1,
@@ -77459,6 +77674,7 @@
                 "type": "power",
                 "obtained": "gacha",
                 "release": "2024-09-10",
+                "release_ko": "2025-12-30",
                 "effects": [
                     [
                         1,
@@ -79557,8 +79773,8 @@
                 "char_id": 1128,
                 "char_name": "Blast Onepiece",
                 "name_jp": "ブラストワンピース",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "블래스트 원피스",
+                "name_tw": "疾風裝束",
                 "rarity": 3,
                 "type": "guts",
                 "obtained": "gacha",
@@ -81410,8 +81626,8 @@
                 "char_id": 9047,
                 "char_name": "Embodiment of Legends",
                 "name_jp": "伝説の体現者",
-                "name_ko": "伝説の体現者",
-                "name_tw": "伝説の体現者",
+                "name_ko": "전설을 구현한 자",
+                "name_tw": "體現傳說之人",
                 "rarity": 3,
                 "type": "group",
                 "obtained": "gacha",
@@ -81579,8 +81795,8 @@
                 "char_id": 1129,
                 "char_name": "Almond Eye",
                 "name_jp": "アーモンドアイ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "아몬드 아이",
+                "name_tw": "杏目",
                 "rarity": 3,
                 "type": "speed",
                 "obtained": "gacha",
@@ -81792,8 +82008,8 @@
                 "char_id": 1131,
                 "char_name": "Gran Alegria",
                 "name_jp": "グランアレグリア",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "그란 알레그리아",
+                "name_tw": "放聲歡呼",
                 "rarity": 3,
                 "type": "power",
                 "obtained": "limited_quest",
@@ -85183,8 +85399,8 @@
                 "char_id": 1113,
                 "char_name": "Fusaichi Pandora",
                 "name_jp": "フサイチパンドラ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "후사이치 판도라",
+                "name_tw": "房一潘朵拉",
                 "rarity": 3,
                 "type": "speed",
                 "obtained": "shop",
@@ -86635,8 +86851,8 @@
                 "char_id": 1133,
                 "char_name": "Chrono Genesis",
                 "name_jp": "クロノジェネシス",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "크로노 제네시스",
+                "name_tw": "時代創世",
                 "rarity": 3,
                 "type": "intelligence",
                 "obtained": "limited_quest",
@@ -88334,8 +88550,8 @@
                 "char_id": 1134,
                 "char_name":"Curren Bouquetd'or",
                 "name_jp": "カレンブーケドール",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "카렌 부케도르",
+                "name_tw": "機伶金花",
                 "rarity": 3,
                 "type": "stamina",
                 "obtained": "gacha",
@@ -89384,8 +89600,8 @@
                 "char_id": 1127,
                 "char_name": "Fenomeno",
                 "name_jp": "フェノーメノ",
-                "name_ko": "",
-                "name_tw": "",
+                "name_ko": "페노메노",
+                "name_tw": "超常駿驥",
                 "rarity": 3,
                 "type": "stamina",
                 "obtained": "gacha",
@@ -89963,6 +90179,831 @@
                             "type": 101,
                             "value": 80,
                             "value_1": 6,
+                            "value_2": 1,
+                            "value_3": 30,
+                            "value_4": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30282-air-groove",
+                "support_id": 30282,
+                "char_id": 1018,
+                "char_name": "Air Groove",
+                "name_jp": "エアグルーヴ",
+                "name_ko": "에어 그루브",
+                "name_tw": "氣槽",
+                "rarity": 3,
+                "type": "speed",
+                "obtained": "gacha",
+                "release": "2025-12-26",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        35
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        30,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        20
+                    ],
+                    [
+                        11,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        10,
+                        25,
+                        -1,
+                        -1
+                    ],
+                    [
+                        14,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        30
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        10
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        10,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        -1,
+                        4
+                    ],
+                    [
+                        18,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        60,
+                        -1,
+                        -1,
+                        -1,
+                        100
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        75,
+                        -1,
+                        -1,
+                        -1,
+                        120
+                    ],
+                    [
+                        30,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        2
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        200022,
+                        201102,
+                        201112,
+                        201702,
+                        202092,
+                        202472,
+                        202652,
+                        202712,
+                        203312,
+                        203432,
+                        204032,
+                        204042,
+                        204112
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 6
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 2
+                        }
+                    ]
+                },
+                "event_skills": [
+                    203632,
+                    203422,
+                    203332,
+                    202711,
+                    204031,
+                    204041,
+                    200502
+                ],
+                "unique": {
+                    "level": 0,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 5,
+                            "value_2": 1,
+                            "value_3": 8,
+                            "value_4": 5
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30283-fine-motion",
+                "support_id": 30283,
+                "char_id": 1022,
+                "char_name": "Fine Motion",
+                "name_jp": "ファインモーション",
+                "name_ko": "파인 모션",
+                "name_tw": "美妙姿勢",
+                "rarity": 3,
+                "type": "power",
+                "obtained": "gacha",
+                "release": "2025-12-26",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        40
+                    ],
+                    [
+                        2,
+                        1,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        30,
+                        30,
+                        -1,
+                        -1,
+                        40,
+                        -1
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15
+                    ],
+                    [
+                        14,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        15,
+                        30
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        5,
+                        -1,
+                        -1
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        10,
+                        15,
+                        -1,
+                        -1
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        2
+                    ],
+                    [
+                        18,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        60,
+                        -1,
+                        -1,
+                        -1,
+                        100
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        60,
+                        -1,
+                        -1,
+                        -1,
+                        100
+                    ],
+                    [
+                        30,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        2
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        200202,
+                        200362,
+                        201342,
+                        202172,
+                        202702,
+                        202742,
+                        202762,
+                        202982,
+                        203032,
+                        203222,
+                        204052,
+                        204072,
+                        204082,
+                        204162
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 2,
+                            "hint_value": 2
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 6
+                        }
+                    ]
+                },
+                "event_skills": [
+                    203032,
+                    202761,
+                    204071,
+                    204072,
+                    210101,
+                    210262,
+                    200332
+                ],
+                "unique": {
+                    "level": 0,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 5,
+                            "value_2": 1,
+                            "value_3": 33,
+                            "value_4": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30284-bubble-gum-fellow",
+                "support_id": 30284,
+                "char_id": 1124,
+                "char_name": "Bubble Gum Fellow",
+                "name_jp": "バブルガムフェロー",
+                "name_ko": "버블검 펠로",
+                "name_tw": "泡泡糖小子",
+                "rarity": 3,
+                "type": "guts",
+                "obtained": "story_event",
+                "release": "2025-12-26",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        30
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        20,
+                        40,
+                        -1,
+                        -1
+                    ],
+                    [
+                        14,
+                        10,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        25,
+                        -1
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        5,
+                        10
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        1,
+                        10,
+                        15
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        2,
+                        2,
+                        -1,
+                        -1,
+                        2,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        30,
+                        30,
+                        -1,
+                        -1,
+                        40,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        5,
+                        -1,
+                        -1,
+                        35,
+                        35,
+                        -1,
+                        -1,
+                        50,
+                        -1
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        200282,
+                        200342,
+                        201532,
+                        201601,
+                        202372,
+                        202412,
+                        202472,
+                        203222
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 4,
+                            "hint_value": 6
+                        }
+                    ]
+                },
+                "event_skills": [
+                    201313,
+                    201902
+                ],
+                "unique": {
+                    "level": 0,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 6,
+                            "value_2": 1,
+                            "value_3": 30,
+                            "value_4": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "url_name": "30285-king-halo",
+                "support_id": 30285,
+                "char_id": 1061,
+                "char_name": "King Halo",
+                "name_jp": "キングヘイロー",
+                "name_ko": "킹 헤일로",
+                "name_tw": "帝王光輝",
+                "rarity": 3,
+                "type": "guts",
+                "obtained": "gacha",
+                "release": "2026-01-08",
+                "effects": [
+                    [
+                        1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        35
+                    ],
+                    [
+                        2,
+                        10,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        20,
+                        20,
+                        -1,
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    [
+                        6,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        -1,
+                        1,
+                        1,
+                        -1,
+                        -1,
+                        1,
+                        2
+                    ],
+                    [
+                        8,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15
+                    ],
+                    [
+                        9,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        10,
+                        25,
+                        -1,
+                        -1
+                    ],
+                    [
+                        12,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        15,
+                        30
+                    ],
+                    [
+                        14,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        25,
+                        -1,
+                        -1,
+                        -1,
+                        30
+                    ],
+                    [
+                        15,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        5,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        10
+                    ],
+                    [
+                        16,
+                        1,
+                        -1,
+                        1,
+                        -1,
+                        -1,
+                        10,
+                        10,
+                        -1,
+                        -1,
+                        -1,
+                        15
+                    ],
+                    [
+                        17,
+                        1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        2,
+                        -1,
+                        -1,
+                        3,
+                        -1
+                    ],
+                    [
+                        18,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        50,
+                        -1,
+                        -1,
+                        80,
+                        -1
+                    ],
+                    [
+                        19,
+                        5,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        50,
+                        -1,
+                        -1,
+                        -1,
+                        80
+                    ]
+                ],
+                "hints": {
+                    "hint_skills": [
+                        200592,
+                        200602,
+                        201382,
+                        201412,
+                        202402,
+                        202622,
+                        203152,
+                        203332,
+                        203362,
+                        203542,
+                        203852,
+                        204132
+                    ],
+                    "hint_others": [
+                        {
+                            "hint_type": 1,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 3,
+                            "hint_value": 1
+                        },
+                        {
+                            "hint_type": 4,
+                            "hint_value": 6
+                        }
+                    ]
+                },
+                "event_skills": [
+                    203592,
+                    202621,
+                    204131,
+                    200512
+                ],
+                "unique": {
+                    "level": 0,
+                    "effects": [
+                        {
+                            "type": 101,
+                            "value": 80,
+                            "value_1": 5,
                             "value_2": 1,
                             "value_3": 30,
                             "value_4": 1
