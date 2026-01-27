@@ -16768,6 +16768,8 @@
                 "type": "intelligence",
                 "obtained": "gacha",
                 "release": "2024-09-20",
+                "release_ko": "2026-01-09",
+                "release_zh_tw": "2026-01-23",
                 "effects": [
                     [
                         1,
@@ -18849,7 +18851,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    200602
+                ]
             },
             {
                 "url_name": "10128-tucker-bryne",
@@ -19163,7 +19167,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    203172
+                ]
             },
             {
                 "url_name": "10131-win-variation",
@@ -19316,7 +19322,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    201182
+                ]
             },
             {
                 "url_name": "10132-stay-gold",
@@ -19502,7 +19510,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    200362
+                ]
             },
             {
                 "url_name": "10133-admire-groove",
@@ -19641,7 +19651,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    202082
+                ]
             },
             {
                 "url_name": "10134-chrono-genesis",
@@ -19803,7 +19815,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    203112
+                ]
             },
             {
                 "url_name": "10135-calstone-light-o",
@@ -19944,7 +19958,10 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    200362,
+                    202992
+                ]
             },
             {
                 "url_name": "10136-durandal",
@@ -20096,7 +20113,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    203582
+                ]
             },
             {
                 "url_name": "10137-sakura-chitose-o",
@@ -20261,7 +20280,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    202102
+                ]
             },
             {
                 "url_name": "10138-kiyoko-hoshina",
@@ -20379,7 +20400,11 @@
                     "hint_skills": [],
                     "hint_others": []
                 },
-                "event_skills": []
+                "event_skills": [
+                    202802,
+                    201661,
+                    202792
+                ]
             },
             {
                 "url_name": "10139-fenomeno",
@@ -20546,7 +20571,9 @@
                         }
                     ]
                 },
-                "event_skills": []
+                "event_skills": [
+                    202772
+                ]
             },
             {
                 "url_name": "20001-fuji-kiseki",
@@ -36923,7 +36950,8 @@
                     ]
                 },
                 "event_skills": [
-                    203632
+                    203632,
+                    202102
                 ],
                 "unique": {
                     "level": 0,
@@ -50083,6 +50111,7 @@
                 "release": "2021-12-22",
                 "release_ko": "2023-04-12",
                 "release_zh_tw": "2023-04-26",
+                "release_en": "2026-01-22",
                 "effects": [
                     [
                         1,
@@ -76631,6 +76660,8 @@
                 "type": "intelligence",
                 "obtained": "shop",
                 "release": "2024-09-20",
+                "release_ko": "2026-01-09",
+                "release_zh_tw": "2026-01-23",
                 "effects": [
                     [
                         1,
@@ -77905,6 +77936,7 @@
                 "type": "guts",
                 "obtained": "gacha",
                 "release": "2024-09-30",
+                "release_ko": "2026-01-19",
                 "effects": [
                     [
                         1,
@@ -78117,6 +78149,7 @@
                 "type": "speed",
                 "obtained": "gacha",
                 "release": "2024-09-30",
+                "release_ko": "2026-01-19",
                 "effects": [
                     [
                         1,
@@ -78339,6 +78372,7 @@
                 "type": "guts",
                 "obtained": "story_event",
                 "release": "2024-09-30",
+                "release_ko": "2026-01-19",
                 "effects": [
                     [
                         1,
@@ -84763,7 +84797,8 @@
                     ]
                 },
                 "event_skills": [
-                    201411
+                    201411,
+                    200602
                 ],
                 "unique": {
                     "level": 40,
@@ -85561,7 +85596,8 @@
                     ]
                 },
                 "event_skills": [
-                    201323
+                    201323,
+                    203172
                 ],
                 "unique": {
                     "level": 40,
@@ -85992,7 +86028,8 @@
                 "event_skills": [
                     203502,
                     203731,
-                    200751
+                    200751,
+                    201182
                 ],
                 "unique": {
                     "level": 30,
@@ -86624,7 +86661,8 @@
                     203502,
                     202721,
                     203851,
-                    203861
+                    203861,
+                    200362
                 ],
                 "unique": {
                     "level": 1,
@@ -86835,7 +86873,8 @@
                 "event_skills": [
                     202612,
                     203831,
-                    203841
+                    203841,
+                    202082
                 ],
                 "unique": {
                     "level": 1,
@@ -87040,7 +87079,8 @@
                     ]
                 },
                 "event_skills": [
-                    200721
+                    200721,
+                    203112
                 ],
                 "unique": {
                     "level": 40,
@@ -87267,7 +87307,9 @@
                 },
                 "event_skills": [
                     202041,
-                    203881
+                    203881,
+                    200362,
+                    202992
                 ],
                 "unique": {
                     "level": 1,
@@ -87492,7 +87534,8 @@
                     203762,
                     201453,
                     202401,
-                    203761
+                    203761,
+                    203582
                 ],
                 "unique": {
                     "level": 1,
@@ -89174,7 +89217,11 @@
                     "hint_skills": [],
                     "hint_others": []
                 },
-                "event_skills": [],
+                "event_skills": [
+                    202802,
+                    201662,
+                    202792
+                ],
                 "unique": {
                     "level": 0,
                     "effects": [
@@ -89796,7 +89843,8 @@
                 "event_skills": [
                     203412,
                     202011,
-                    202771
+                    202771,
+                    202772
                 ],
                 "unique": {
                     "level": 0,
