@@ -34,8 +34,15 @@
             </div>
         </header>
 
+        <nav class="app-tab-nav" id="appTabNav" role="tablist" aria-label="Main navigation" style="display: none;">
+            <button class="app-tab active" data-tab="collection" role="tab" aria-selected="true" aria-controls="tabPanelCollection">Collection Manager</button>
+            <button class="app-tab" data-tab="deckbuilder" role="tab" aria-selected="false" aria-controls="tabPanelDeckBuilder">MaNT Deck Builder</button>
+        </nav>
+
         <div id="loading" class="loading">Loading card data...</div>
         <div id="error" class="error" style="display: none;"></div>
+
+        <div class="app-tab-panel active" id="tabPanelCollection" data-tab="collection" role="tabpanel" aria-labelledby="tab-collection">
 
         <!-- Card Comparison Section (Above Everything) -->
         <div id="comparisonSection" class="comparison-section" style="display: none;">
@@ -338,6 +345,15 @@
                 </div>
             </div>
         </div>
+
+        </div><!-- end tabPanelCollection -->
+
+        <div class="app-tab-panel" id="tabPanelDeckBuilder" data-tab="deckbuilder" role="tabpanel" aria-labelledby="tab-deckbuilder">
+            <div class="deck-builder-container" id="deckBuilderContainer">
+                <!-- Populated by deckBuilderRenderer.js -->
+            </div>
+        </div>
+
     </div>
 
     <!-- Card Detail Modal -->
@@ -420,6 +436,8 @@
     <script src="js/managers/cardManager.js"></script>
     <script src="js/ui/quickAddRenderer.js"></script>
     <script src="js/managers/quickAddManager.js"></script>
+    <script src="js/ui/deckBuilderRenderer.js"></script>
+    <script src="js/managers/deckBuilderManager.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

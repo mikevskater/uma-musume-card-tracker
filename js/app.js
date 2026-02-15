@@ -72,10 +72,11 @@ async function initializeApplication() {
 // Initialize interface components
 async function initializeInterface() {
     try {
-        // Hide loading, show main layout
+        // Hide loading, show main layout and tab nav
         document.getElementById('loading').style.display = 'none';
         document.querySelector('.main-layout').style.display = 'flex';
         document.getElementById('selectionModeSection').style.display = 'block';
+        document.getElementById('appTabNav').style.display = '';
 
         // Initialize all components
         initializeMultiSelectEvents(getMultiSelectIds());

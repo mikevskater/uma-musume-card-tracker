@@ -59,6 +59,12 @@
 @import url('./ui/quickAdd.css');
 
 /* =================================================================
+   DECK BUILDER & TAB NAVIGATION
+   Deck builder UI, tab navigation, card picker, training breakdown.
+   ================================================================= */
+@import url('./ui/deckBuilder.css');
+
+/* =================================================================
    UTILITY CLASSES
    Spacing, typography, colors, display, position, border,
    shadow, opacity, cursor, transitions, and accessibility utilities.

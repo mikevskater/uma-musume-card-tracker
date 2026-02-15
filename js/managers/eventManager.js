@@ -902,6 +902,11 @@ function toggleAdvancedFilters() {
 
 // Initialize data management events
 function initializeDataManagementEvents() {
+    // Tab switching
+    document.querySelectorAll('.app-tab').forEach(tab => {
+        tab.addEventListener('click', () => switchAppTab(tab.dataset.tab));
+    });
+
     // Quick Add button
     const quickAddBtn = document.getElementById('quickAddBtn');
     if (quickAddBtn) {
