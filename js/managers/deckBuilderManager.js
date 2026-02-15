@@ -64,7 +64,10 @@ let deckBuilderState = {
     activeDeckId: null,
     pickerFilter: {
         types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
-        search: ''
+        search: '',
+        ssrOnly: false,
+        sortBy: 'effect_15',      // 'effect_{id}', 'name', 'rarity'
+        sortDirection: 'desc'
     },
     trainingLevel: 1,
     mood: 'very_good',
@@ -144,10 +147,8 @@ function removeDeckSlot(slotIndex) {
 function openCardPicker(slotIndex) {
     deckBuilderState.activeSlot = slotIndex;
     deckBuilderState.pickerOpen = true;
-    deckBuilderState.pickerFilter = {
-        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
-        search: ''
-    };
+    // Only clear search; preserve type, SSR, sort settings across opens
+    deckBuilderState.pickerFilter.search = '';
     renderCardPicker();
 }
 
@@ -155,16 +156,11 @@ function closeCardPicker() {
     deckBuilderState.pickerOpen = false;
     deckBuilderState.activeSlot = null;
 
-    const picker = document.getElementById('deckCardPicker');
     const overlay = document.getElementById('deckPickerOverlay');
 
-    if (picker) {
-        picker.classList.remove('open');
-        setTimeout(() => picker.remove(), 300);
-    }
     if (overlay) {
         overlay.classList.remove('open');
-        setTimeout(() => overlay.remove(), 300);
+        setTimeout(() => overlay.remove(), 200);
     }
 }
 
@@ -391,10 +387,14 @@ function debouncedSaveDeck() {
 
 function createNewDeck(name) {
     const deckId = 'deck_' + Date.now();
+    // Carry over current slots so unsaved card selections aren't lost
+    const carrySlots = deckBuilderState.slots.some(s => s !== null)
+        ? [...deckBuilderState.slots]
+        : [null, null, null, null, null, null];
     const newDeck = {
         id: deckId,
         name: name || 'New Deck',
-        slots: [null, null, null, null, null, null],
+        slots: carrySlots,
         lastModified: Date.now()
     };
 

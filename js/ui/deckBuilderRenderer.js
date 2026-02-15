@@ -170,9 +170,9 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
     });
     wrapper.appendChild(removeBtn);
 
-    // Image
+    // Image with rarity border
     const img = document.createElement('img');
-    img.className = 'deck-slot-image';
+    img.className = `deck-slot-image card-image rarity-${card.rarity}`;
     img.src = `support_card_images/${card.support_id}.png`;
     img.alt = card.char_name || 'Card';
     img.loading = 'lazy';
@@ -258,71 +258,117 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
 
 // ===== CARD PICKER =====
 
+// Sort options for the picker dropdown
+const PICKER_SORT_OPTIONS = [
+    { value: 'effect_15', label: 'Race Bonus' },
+    { value: 'effect_8',  label: 'Training Effectiveness' },
+    { value: 'effect_1',  label: 'Friendship Bonus' },
+    { value: 'effect_2',  label: 'Mood Effect' },
+    { value: 'effect_3',  label: 'Speed Bonus' },
+    { value: 'effect_4',  label: 'Stamina Bonus' },
+    { value: 'effect_5',  label: 'Power Bonus' },
+    { value: 'effect_6',  label: 'Guts Bonus' },
+    { value: 'effect_7',  label: 'Wit Bonus' },
+    { value: 'effect_30', label: 'Skill Point Bonus' },
+    { value: 'effect_19', label: 'Specialty Priority' },
+    { value: 'name',      label: 'Name' },
+    { value: 'rarity',    label: 'Rarity' }
+];
+
+// Priority effect IDs for card tile display (in order)
+const PICKER_DISPLAY_EFFECT_IDS = [15, 8, 1, 2, 3, 4, 5, 6, 7, 30, 19];
+
 function renderCardPicker() {
-    // Remove existing picker
-    const existingPicker = document.getElementById('deckCardPicker');
+    // Remove existing
     const existingOverlay = document.getElementById('deckPickerOverlay');
-    if (existingPicker) existingPicker.remove();
     if (existingOverlay) existingOverlay.remove();
 
-    // Create overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'deck-card-picker-overlay';
-    overlay.id = 'deckPickerOverlay';
-    overlay.addEventListener('click', closeCardPicker);
-
-    // Create picker panel
-    const picker = document.createElement('div');
-    picker.className = 'deck-card-picker';
-    picker.id = 'deckCardPicker';
-
+    const filter = deckBuilderState.pickerFilter;
     const isFriend = deckBuilderState.activeSlot === 5;
     const slotLabel = isFriend ? 'Friend Slot' : `Slot ${deckBuilderState.activeSlot + 1}`;
+    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+    const isAllTypes = filter.types.length === 6;
 
-    picker.innerHTML = `
-        <div class="picker-header">
-            <h3>Select Card — ${slotLabel}</h3>
-            <button class="picker-close" id="pickerCloseBtn">&times;</button>
-        </div>
-        <div class="picker-filters">
-            <div class="picker-type-filters" id="pickerTypeFilters">
-                <button class="picker-type-btn active" data-type="all">All</button>
-                <button class="picker-type-btn" data-type="speed">Speed</button>
-                <button class="picker-type-btn" data-type="stamina">Stamina</button>
-                <button class="picker-type-btn" data-type="power">Power</button>
-                <button class="picker-type-btn" data-type="guts">Guts</button>
-                <button class="picker-type-btn" data-type="intelligence">Wit</button>
-                <button class="picker-type-btn" data-type="friend">Friend</button>
+    // Create overlay (contains the modal)
+    const overlay = document.createElement('div');
+    overlay.className = 'picker-modal-overlay';
+    overlay.id = 'deckPickerOverlay';
+
+    // Build type button HTML with active states from persisted filter
+    const typeButtonsHtml = `
+        <button class="picker-type-btn${isAllTypes ? ' active' : ''}" data-type="all">All</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('speed') ? ' active' : ''}" data-type="speed">Speed</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('stamina') ? ' active' : ''}" data-type="stamina">Stamina</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('power') ? ' active' : ''}" data-type="power">Power</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('guts') ? ' active' : ''}" data-type="guts">Guts</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('intelligence') ? ' active' : ''}" data-type="intelligence">Wit</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('friend') ? ' active' : ''}" data-type="friend">Friend</button>
+    `;
+
+    // Build sort options HTML
+    const sortOptionsHtml = PICKER_SORT_OPTIONS.map(opt =>
+        `<option value="${opt.value}"${filter.sortBy === opt.value ? ' selected' : ''}>${opt.label}</option>`
+    ).join('');
+
+    const dirArrow = filter.sortDirection === 'desc' ? '\u2193' : '\u2191';
+    const dirLabel = filter.sortDirection === 'desc' ? 'Desc' : 'Asc';
+
+    overlay.innerHTML = `
+        <div class="picker-modal" id="pickerModal">
+            <div class="picker-header">
+                <h3>Select Card \u2014 ${slotLabel}</h3>
+                <button class="picker-close" id="pickerCloseBtn">&times;</button>
             </div>
-            <input class="picker-search" id="pickerSearch" type="text" placeholder="Search by card name...">
-        </div>
-        <div class="picker-card-list" id="pickerCardList">
-            <!-- Cards rendered here -->
+            <div class="picker-filters">
+                <div class="picker-type-filters" id="pickerTypeFilters">
+                    ${typeButtonsHtml}
+                </div>
+                <input class="picker-search" id="pickerSearch" type="text" placeholder="Search by card name...">
+                <div class="picker-filter-row">
+                    <label class="picker-ssr-toggle">
+                        <input type="checkbox" id="pickerSsrOnly"${filter.ssrOnly ? ' checked' : ''}>
+                        SSR Only
+                    </label>
+                    <div class="picker-sort-controls">
+                        <label class="picker-sort-label">Sort:</label>
+                        <select class="picker-sort-select" id="pickerSortBy">
+                            ${sortOptionsHtml}
+                        </select>
+                        <button class="picker-sort-dir-btn" id="pickerSortDir" title="Toggle sort direction">
+                            ${dirArrow} ${dirLabel}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="picker-card-grid" id="pickerCardGrid">
+                <!-- Cards rendered here -->
+            </div>
         </div>
     `;
 
     document.body.appendChild(overlay);
-    document.body.appendChild(picker);
 
-    // Wire events
+    // Wire close button
     document.getElementById('pickerCloseBtn').addEventListener('click', closeCardPicker);
+
+    // Click overlay backdrop to close (not the modal itself)
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeCardPicker();
+    });
 
     // Type filter buttons
     document.querySelectorAll('#pickerTypeFilters .picker-type-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const type = btn.dataset.type;
             const allBtn = document.querySelector('#pickerTypeFilters .picker-type-btn[data-type="all"]');
-            const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
 
             if (type === 'all') {
-                // "All" resets to showing everything
-                deckBuilderState.pickerFilter.types = [...allTypes];
+                filter.types = [...allTypes];
                 document.querySelectorAll('#pickerTypeFilters .picker-type-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.type === 'all');
                 });
             } else if (allBtn.classList.contains('active')) {
-                // Clicking a type while "All" is active: switch to only that type
-                deckBuilderState.pickerFilter.types = [type];
+                filter.types = [type];
                 allBtn.classList.remove('active');
                 document.querySelectorAll('#pickerTypeFilters .picker-type-btn').forEach(b => {
                     if (b.dataset.type !== 'all') {
@@ -330,18 +376,16 @@ function renderCardPicker() {
                     }
                 });
             } else {
-                // Toggle individual type on/off
-                const idx = deckBuilderState.pickerFilter.types.indexOf(type);
+                const idx = filter.types.indexOf(type);
                 if (idx >= 0) {
-                    deckBuilderState.pickerFilter.types.splice(idx, 1);
+                    filter.types.splice(idx, 1);
                 } else {
-                    deckBuilderState.pickerFilter.types.push(type);
+                    filter.types.push(type);
                 }
                 btn.classList.toggle('active');
 
-                // If none selected or all selected, reset to "All"
-                if (deckBuilderState.pickerFilter.types.length === 0 || deckBuilderState.pickerFilter.types.length === 6) {
-                    deckBuilderState.pickerFilter.types = [...allTypes];
+                if (filter.types.length === 0 || filter.types.length === 6) {
+                    filter.types = [...allTypes];
                     allBtn.classList.add('active');
                     document.querySelectorAll('#pickerTypeFilters .picker-type-btn').forEach(b => {
                         if (b.dataset.type !== 'all') b.classList.remove('active');
@@ -357,9 +401,31 @@ function renderCardPicker() {
     document.getElementById('pickerSearch').addEventListener('input', (e) => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            deckBuilderState.pickerFilter.search = e.target.value.trim().toLowerCase();
+            filter.search = e.target.value.trim().toLowerCase();
             renderPickerCards();
         }, 300);
+    });
+
+    // SSR Only checkbox
+    document.getElementById('pickerSsrOnly').addEventListener('change', (e) => {
+        filter.ssrOnly = e.target.checked;
+        renderPickerCards();
+    });
+
+    // Sort dropdown
+    document.getElementById('pickerSortBy').addEventListener('change', (e) => {
+        filter.sortBy = e.target.value;
+        renderPickerCards();
+    });
+
+    // Sort direction toggle
+    document.getElementById('pickerSortDir').addEventListener('click', () => {
+        filter.sortDirection = filter.sortDirection === 'desc' ? 'asc' : 'desc';
+        const btn = document.getElementById('pickerSortDir');
+        const arrow = filter.sortDirection === 'desc' ? '\u2193' : '\u2191';
+        const label = filter.sortDirection === 'desc' ? 'Desc' : 'Asc';
+        btn.textContent = `${arrow} ${label}`;
+        renderPickerCards();
     });
 
     // ESC to close
@@ -377,18 +443,62 @@ function renderCardPicker() {
     // Animate open
     requestAnimationFrame(() => {
         overlay.classList.add('open');
-        picker.classList.add('open');
     });
 }
 
+function getCardPickerEffects(card, level) {
+    if (!card.effects) return [];
+
+    const results = [];
+    const usedIds = new Set();
+
+    // Walk priority list first
+    for (const effectId of PICKER_DISPLAY_EFFECT_IDS) {
+        if (results.length >= 4) break;
+        const effectArray = card.effects.find(e => e[0] === effectId);
+        if (effectArray && !isEffectLocked(effectArray, level)) {
+            const value = calculateEffectValue(effectArray, level);
+            if (value > 0) {
+                const info = effectsData[effectId];
+                results.push({
+                    name: info?.name_en || `Effect ${effectId}`,
+                    value: value,
+                    symbol: info?.symbol === 'percent' ? '%' : ''
+                });
+                usedIds.add(effectId);
+            }
+        }
+    }
+
+    // Fill remaining with highest-value effects not in priority list
+    if (results.length < 4) {
+        const remaining = card.effects
+            .filter(e => e[0] && effectsData[e[0]] && !usedIds.has(e[0]) && !isEffectLocked(e, level))
+            .map(e => {
+                const val = calculateEffectValue(e, level);
+                const info = effectsData[e[0]];
+                return { name: info.name_en, value: val, symbol: info.symbol === 'percent' ? '%' : '', effectId: e[0] };
+            })
+            .filter(e => e.value > 0)
+            .sort((a, b) => b.value - a.value);
+
+        for (const eff of remaining) {
+            if (results.length >= 4) break;
+            results.push(eff);
+        }
+    }
+
+    return results;
+}
+
 function renderPickerCards() {
-    const list = document.getElementById('pickerCardList');
-    if (!list) return;
+    const grid = document.getElementById('pickerCardGrid');
+    if (!grid) return;
 
     const cards = getPickerCards();
 
     if (cards.length === 0) {
-        list.innerHTML = '<div class="picker-no-results">No cards match your filters.</div>';
+        grid.innerHTML = '<div class="picker-no-results">No cards match your filters.</div>';
         return;
     }
 
@@ -400,59 +510,97 @@ function renderPickerCards() {
         }
     });
 
-    list.innerHTML = '';
+    grid.innerHTML = '';
     cards.forEach(card => {
         const inDeck = deckCardIds.has(card.support_id);
-        const item = document.createElement('div');
-        item.className = `picker-card-item${inDeck ? ' in-deck' : ''}`;
-        item.setAttribute('tabindex', inDeck ? '-1' : '0');
+        const owned = isCardOwned(card.support_id);
+        const isFriendSlot = deckBuilderState.activeSlot === 5;
+
+        // Determine level/LB for display
+        let level, lb;
+        if (isFriendSlot) {
+            lb = 4;
+            level = limitBreaks[card.rarity][lb];
+        } else if (owned) {
+            level = getOwnedCardLevel(card.support_id);
+            lb = getOwnedCardLimitBreak(card.support_id);
+        } else {
+            lb = 4;
+            level = limitBreaks[card.rarity][lb];
+        }
+
+        const tile = document.createElement('div');
+        tile.className = `picker-card-tile${inDeck ? ' in-deck' : ''}`;
+        tile.setAttribute('tabindex', inDeck ? '-1' : '0');
+
+        // Top row: icon + info
+        const topRow = document.createElement('div');
+        topRow.className = 'picker-tile-top';
 
         const icon = document.createElement('img');
-        icon.className = 'picker-card-item-icon';
+        icon.className = 'picker-tile-icon';
         icon.src = `support_card_images/${card.support_id}_i.png`;
         icon.alt = card.char_name || '';
         icon.loading = 'lazy';
         icon.onerror = function() { this.style.display = 'none'; };
-        item.appendChild(icon);
+        topRow.appendChild(icon);
 
         const info = document.createElement('div');
-        info.className = 'picker-card-item-info';
+        info.className = 'picker-tile-info';
 
         const nameDiv = document.createElement('div');
-        nameDiv.className = 'picker-card-item-name';
+        nameDiv.className = 'picker-tile-name';
         nameDiv.textContent = card.char_name || 'Unknown';
+        nameDiv.title = card.char_name || '';
         info.appendChild(nameDiv);
 
-        const details = document.createElement('div');
-        details.className = 'picker-card-item-details';
-        details.appendChild(createRarityBadge(card.rarity));
-        details.appendChild(createTypeBadge(card.type));
+        const badges = document.createElement('div');
+        badges.className = 'picker-tile-badges';
+        badges.appendChild(createRarityBadge(card.rarity));
+        badges.appendChild(createTypeBadge(card.type));
+        info.appendChild(badges);
 
-        // Show level info
-        const levelSpan = document.createElement('span');
-        levelSpan.className = 'picker-card-item-level';
-        if (isCardOwned(card.support_id)) {
-            levelSpan.textContent = `Lv.${getOwnedCardLevel(card.support_id)} LB${getOwnedCardLimitBreak(card.support_id)}`;
+        const levelDiv = document.createElement('div');
+        levelDiv.className = 'picker-tile-level';
+        if (owned) {
+            levelDiv.textContent = `Lv.${level} LB${lb}`;
+        } else if (isFriendSlot) {
+            levelDiv.textContent = `Lv.${level} LB${lb}`;
         } else {
-            levelSpan.textContent = 'Not owned';
+            levelDiv.textContent = 'Not owned';
         }
-        details.appendChild(levelSpan);
+        info.appendChild(levelDiv);
 
         if (inDeck) {
             const badge = document.createElement('span');
             badge.className = 'picker-in-deck-badge';
             badge.textContent = 'In Deck';
-            details.appendChild(badge);
+            info.appendChild(badge);
         }
 
-        info.appendChild(details);
-        item.appendChild(info);
+        topRow.appendChild(info);
+        tile.appendChild(topRow);
 
+        // Effects section
+        const effects = getCardPickerEffects(card, level);
+        if (effects.length > 0) {
+            const effectsDiv = document.createElement('div');
+            effectsDiv.className = 'picker-tile-effects';
+            effects.forEach(eff => {
+                const row = document.createElement('div');
+                row.className = 'picker-tile-effect-row';
+                row.innerHTML = `<span class="picker-tile-effect-name">${eff.name}</span><span class="picker-tile-effect-value">${eff.value}${eff.symbol}</span>`;
+                effectsDiv.appendChild(row);
+            });
+            tile.appendChild(effectsDiv);
+        }
+
+        // Click handler
         if (!inDeck) {
-            item.addEventListener('click', () => {
+            tile.addEventListener('click', () => {
                 selectCardForSlot(deckBuilderState.activeSlot, card.support_id);
             });
-            item.addEventListener('keydown', (e) => {
+            tile.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     selectCardForSlot(deckBuilderState.activeSlot, card.support_id);
@@ -460,7 +608,7 @@ function renderPickerCards() {
             });
         }
 
-        list.appendChild(item);
+        grid.appendChild(tile);
     });
 }
 
@@ -474,6 +622,9 @@ function getPickerCards() {
 
         // SSR/SR only (exclude R for deck building)
         if (card.rarity < 2) return false;
+
+        // SSR Only filter
+        if (filter.ssrOnly && card.rarity !== 3) return false;
 
         // Type filter
         if (filter.types.length > 0 && !filter.types.includes(card.type)) return false;
@@ -495,8 +646,29 @@ function getPickerCards() {
         return true;
     });
 
-    // Sort: owned first, then by rarity desc, then name
+    // Sort based on filter settings
+    const { sortBy, sortDirection } = filter;
+    const dirMult = sortDirection === 'desc' ? -1 : 1;
+
     cards.sort((a, b) => {
+        let cmp = 0;
+
+        if (sortBy === 'name') {
+            cmp = (a.char_name || '').localeCompare(b.char_name || '');
+        } else if (sortBy === 'rarity') {
+            cmp = a.rarity - b.rarity;
+        } else if (sortBy.startsWith('effect_')) {
+            const effectId = parseInt(sortBy.split('_')[1]);
+            const aLevel = getPickerCardLevel(a, isFriend);
+            const bLevel = getPickerCardLevel(b, isFriend);
+            const aVal = getCardEffectValue(a, effectId, aLevel);
+            const bVal = getCardEffectValue(b, effectId, bLevel);
+            cmp = aVal - bVal;
+        }
+
+        if (cmp !== 0) return cmp * dirMult;
+
+        // Tiebreaker: owned first, then rarity desc, then name
         const aOwned = isCardOwned(a.support_id) ? 1 : 0;
         const bOwned = isCardOwned(b.support_id) ? 1 : 0;
         if (aOwned !== bOwned) return bOwned - aOwned;
@@ -505,6 +677,23 @@ function getPickerCards() {
     });
 
     return cards;
+}
+
+function getPickerCardLevel(card, isFriend) {
+    if (isFriend) {
+        return limitBreaks[card.rarity][4];
+    }
+    if (isCardOwned(card.support_id)) {
+        return getOwnedCardLevel(card.support_id);
+    }
+    return limitBreaks[card.rarity][4];
+}
+
+function getCardEffectValue(card, effectId, level) {
+    if (!card.effects) return 0;
+    const effectArray = card.effects.find(e => e[0] === effectId);
+    if (!effectArray || isEffectLocked(effectArray, level)) return 0;
+    return calculateEffectValue(effectArray, level);
 }
 
 // ===== DECK SUMMARY =====
