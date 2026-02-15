@@ -1,0 +1,116 @@
+<h3>Quick Add Cards</h3>
+
+<p>Rapidly register and update your card collection one card at a time in a focused full-screen interface.</p>
+
+<h4>Getting Started</h4>
+
+<div class="help-steps">
+    <div class="help-step">
+        <strong>Step 1:</strong> Click the <strong>"Quick Add Cards"</strong> button in the sidebar, located above the Filters section.
+        <img src="screenshots/quickadd-sidebar-button.png" alt="Sidebar showing the Quick Add Cards button" class="help-image">
+    </div>
+
+    <div class="help-step">
+        <strong>Step 2:</strong> Configure your filters on the setup screen to narrow down which cards to review.
+    </div>
+
+    <div class="help-step">
+        <strong>Step 3:</strong> Click <strong>"START"</strong> to begin the card-by-card flow.
+    </div>
+</div>
+
+<h4>Setup Screen</h4>
+
+<img src="screenshots/quickadd-setup-screen.png" alt="Quick Add setup screen" class="help-image">
+
+<p>The setup screen lets you configure exactly which cards to review:</p>
+
+<ul>
+    <li><strong>Region Toggle:</strong> <strong>Global</strong> (default) shows only globally released cards. <strong>JP</strong> shows all cards including JP-only releases.</li>
+    <li><strong>Card Type Filters:</strong> Tap type icons to toggle — Speed, Stamina, Power, Guts, Wit, Friend. Use <strong>Select All</strong> / <strong>Deselect All</strong> for quick bulk changes.</li>
+    <li><strong>Rarity Filters:</strong> Tap rarity icons — R, SR, SSR. Also supports Select All / Deselect All.</li>
+    <li><strong>Ownership Filter:</strong> Choose from All Cards, Owned Only, or Unowned Only.</li>
+    <li><strong>Sort Order:</strong> Alphabetical (with rarity tiebreak), By Type, By Rarity, or By Release Date.</li>
+    <li><strong>Card Count:</strong> Live preview showing how many cards match your current filters.</li>
+</ul>
+
+<img src="screenshots/quickadd-setup-filters.png" alt="Setup screen with some filters deselected" class="help-image">
+
+<div class="help-tip">
+    <strong>💡 Tip:</strong> Use the <strong>Unowned Only</strong> filter with <strong>Alphabetical</strong> sort to quickly register new cards you just pulled.
+</div>
+
+<h4>Card-by-Card View</h4>
+
+<p>After pressing Start, you enter the card-by-card review interface:</p>
+
+<img src="screenshots/quickadd-card-owned.png" alt="Card-by-card view with an owned card" class="help-image">
+
+<div class="help-grid">
+    <div class="help-grid-item">
+        <h5>🖼️ Card Image</h5>
+        <p>Large preview with a rarity-colored border (rainbow for SSR). Tap the arrows on either side to navigate.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>✅ Ownership Buttons</h5>
+        <p>Two large buttons: <strong>OWNED</strong> (green) and <strong>NOT OWNED</strong> (red). Tap to toggle the card's ownership status.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>⭐ Limit Break</h5>
+        <p>Button group [0]–[4] with max level shown under each. Disabled when the card is not owned.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>📊 Level</h5>
+        <p>Slider with -5, -1, +1, +5 step buttons and a number input. Disabled when the card is not owned.</p>
+    </div>
+</div>
+
+<img src="screenshots/quickadd-card-unowned.png" alt="Card-by-card view with an unowned card" class="help-image">
+
+<div class="help-tip">
+    <strong>💡 Tip:</strong> New owned cards default to LB 4 at max level. Adjust limit break and level as needed.
+</div>
+
+<h4>Progress & Navigation</h4>
+
+<img src="screenshots/quickadd-footer.png" alt="Footer with progress bar, card counter, and Skip Owned toggle" class="help-image">
+
+<ul>
+    <li><strong>Progress Bar:</strong> Shows your current position (e.g., "Card 5 of 120").</li>
+    <li><strong>Prev / Next Arrows:</strong> Navigate between cards. Wraps around from last to first and vice versa.</li>
+    <li><strong>Skip Owned Toggle:</strong> When enabled, prev/next navigation skips already-owned cards — useful for registering only new cards.</li>
+</ul>
+
+<h4>Keyboard Shortcuts</h4>
+
+<div class="help-grid">
+    <div class="help-grid-item">
+        <h5>Navigation</h5>
+        <span class="help-shortcut">←</span> <span class="help-shortcut">→</span> Previous / Next card<br>
+        <span class="help-shortcut">Esc</span> Cancel and revert all changes
+    </div>
+    <div class="help-grid-item">
+        <h5>Card Controls</h5>
+        <span class="help-shortcut">O</span> Toggle ownership<br>
+        <span class="help-shortcut">1</span>–<span class="help-shortcut">5</span> Set Limit Break 0–4<br>
+        <span class="help-shortcut">Ctrl+Z</span> Undo last change
+    </div>
+</div>
+
+<h4>Saving & Undo</h4>
+
+<img src="screenshots/quickadd-header-buttons.png" alt="Header bar with cancel and confirm buttons" class="help-image">
+
+<ul>
+    <li><strong>Undo</strong> button (or <span class="help-shortcut">Ctrl+Z</span>) reverts the last individual change — ownership, limit break, or level.</li>
+    <li><strong>Confirm</strong> (green ✓ button) — closes Quick Add and keeps all changes. Shows a summary toast with the number of cards modified.</li>
+    <li><strong>Cancel</strong> (red ✕ button or <span class="help-shortcut">Esc</span>) — reverts <em>all</em> changes made during the session and closes.</li>
+</ul>
+
+<div class="help-highlight">
+    <strong>💾 Auto-Save:</strong> All changes are saved to your browser immediately as you make them. The Confirm button simply closes the interface. The Cancel button reverts everything done during the current Quick Add session.
+</div>
+
+<div class="help-warning">
+    <strong>⚠️ Caution:</strong> Pressing Escape or the red ✕ will undo <em>all</em> changes from the current session, not just the last one. Use the Undo button or Ctrl+Z if you only want to revert a single change.
+</div>
