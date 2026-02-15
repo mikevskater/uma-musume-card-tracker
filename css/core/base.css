@@ -80,23 +80,23 @@
     --shadow-color-heavy: rgba(0, 0, 0, 0.2);
     
     /* Colors - Rarity System */
-    --color-rarity-r: #3498db;        /* R - Blue */
+    --color-rarity-r: #d4e7f3;        /* R - Blue */
     --color-rarity-sr: #f39c12;       /* SR - Gold */
-    --color-rarity-ssr: #e74c3c;      /* SSR - Red (base for rainbow) */
+    --color-rarity-ssr: #d388ff;      /* SSR - (base for rainbow) */
     
     /* Colors - Card Types */
-    --color-type-speed: #2ecc71;
-    --color-type-speed-bg: #e8f5e8;
-    --color-type-stamina: #f39c12;
-    --color-type-stamina-bg: #fff3cd;
-    --color-type-power: #dc3545;
-    --color-type-power-bg: #f8d7da;
-    --color-type-guts: #17a2b8;
-    --color-type-guts-bg: #d1ecf1;
-    --color-type-wisdom: #6c757d;
-    --color-type-wisdom-bg: #e2e3e5;
-    --color-type-friend: #8e44ad;
-    --color-type-friend-bg: #f0e6ff;
+    --color-type-speed: #38BDFF;
+    --color-type-speed-bg: #9ddeff;
+    --color-type-stamina: #FF7561;
+    --color-type-stamina-bg: #ffd2cb;
+    --color-type-power: #FFA714;
+    --color-type-power-bg: #ffdda3;
+    --color-type-guts: #FF72A6;
+    --color-type-guts-bg: #ffb5d0;
+    --color-type-wisdom: #0FC98D;
+    --color-type-wisdom-bg: #96d1be;
+    --color-type-friend: #FFFDE9;
+    --color-type-friend-bg: #FFB315;
     
     /* Spacing Scale */
     --space-xs: 0.25rem;      /* 4px */
@@ -134,6 +134,7 @@
     --radius-md: 4px;
     --radius-lg: 6px;
     --radius-xl: 8px;
+    --radius-card: 16px;
     --radius-2xl: 12px;
     --radius-round: 50%;
     --radius-pill: 20px;
@@ -222,17 +223,17 @@
     --color-info-text: #5bc0de;
     
     /* Dark Mode Card Type Backgrounds */
-    --color-type-speed-bg: #1a3329;
-    --color-type-stamina-bg: #3d321a;
-    --color-type-power-bg: #3d1a1a;
-    --color-type-guts-bg: #1a3239;
-    --color-type-wisdom-bg: #2a2a2a;
-    --color-type-friend-bg: #2d1a3d;
+    --color-type-speed-bg: #184861;
+    --color-type-stamina-bg: #812e22;
+    --color-type-power-bg: #7a530f;
+    --color-type-guts-bg: #81314e;
+    --color-type-wisdom-bg: #075a40;
+    --color-type-friend-bg: #534f1a;
     
     /* Dark Mode Primary Colors (slightly adjusted for better contrast) */
     --color-primary: #5f90c7;
     --color-primary-light: #7ea3cc;
-}
+} 
 
 /* Smooth transitions for theme switching */
 *,

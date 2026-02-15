@@ -902,6 +902,12 @@ function toggleAdvancedFilters() {
 
 // Initialize data management events
 function initializeDataManagementEvents() {
+    // Quick Add button
+    const quickAddBtn = document.getElementById('quickAddBtn');
+    if (quickAddBtn) {
+        quickAddBtn.addEventListener('click', openQuickAdd);
+    }
+
     const exportBtn = document.getElementById('exportBtn');
     if (exportBtn) {
         exportBtn.addEventListener('click', exportOwnedCards);

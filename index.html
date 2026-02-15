@@ -67,6 +67,14 @@
             <!-- Sidebar with filters -->
             <div class="sidebar">
                 <div id="controls" class="controls">
+                    <!-- Quick Add Cards -->
+                    <div class="data-management quick-add-sidebar">
+                        <h4>Quick Add</h4>
+                        <div class="data-management-buttons">
+                            <button id="quickAddBtn" class="btn btn-primary">Quick Add Cards</button>
+                        </div>
+                    </div>
+
                     <!-- Basic Filters -->
                     <div class="basic-filters">
                         <h3>Filters</h3>
@@ -397,6 +405,9 @@
         </div>
     </div>
 
+    <!-- Quick Add Overlay -->
+    <div id="quickAddOverlay" class="quick-add-overlay" aria-label="Quick Add Cards"></div>
+
     <!-- Refactored Modular Scripts -->
     <script src="js/utils/dataUtils.js"></script>
     <script src="js/ui/uiComponents.js"></script>
@@ -406,6 +417,8 @@
     <script src="js/managers/modalManager.js"></script>
     <script src="js/managers/comparisonManager.js"></script>
     <script src="js/managers/cardManager.js"></script>
+    <script src="js/ui/quickAddRenderer.js"></script>
+    <script src="js/managers/quickAddManager.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

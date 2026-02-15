@@ -52,6 +52,13 @@
 @import url('./ui/filters.css');
 
 /* =================================================================
+   QUICK ADD COMPONENTS
+   Full-screen Quick Add card registration flow with setup and
+   card-by-card view screens.
+   ================================================================= */
+@import url('./ui/quickAdd.css');
+
+/* =================================================================
    UTILITY CLASSES
    Spacing, typography, colors, display, position, border,
    shadow, opacity, cursor, transitions, and accessibility utilities.
