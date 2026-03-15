@@ -698,6 +698,63 @@
     font-weight: var(--font-weight-semibold);
 }
 
+/* Per-Training Effects Table in Summary */
+.deck-summary-training-wrapper {
+    overflow-x: auto;
+    margin-bottom: var(--space-xs);
+}
+
+.deck-summary-training-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.deck-summary-training-table th {
+    padding: var(--space-xs) var(--space-sm);
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-primary);
+    white-space: nowrap;
+    font-size: var(--font-size-xs);
+}
+
+.deck-summary-training-table th:first-child {
+    text-align: left;
+}
+
+.deck-summary-training-table td {
+    padding: var(--space-xs) var(--space-sm);
+    text-align: center;
+    border-bottom: 1px solid var(--border-primary);
+    white-space: nowrap;
+}
+
+.deck-summary-training-table td:first-child {
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+}
+
+.deck-summary-training-table tr:last-child td {
+    border-bottom: none;
+}
+
+.deck-summary-friendship {
+    text-align: right !important;
+    font-family: monospace;
+}
+
+.deck-summary-training-note {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: var(--space-xs);
+}
+
 /* ===== TRAINING CONTROLS ===== */
 
 .training-controls {

@@ -698,7 +698,7 @@ function getCardEffectValue(card, effectId, level) {
 
 // ===== DECK SUMMARY =====
 
-function renderDeckSummary(aggregated) {
+function renderDeckSummary(aggregated, perTraining) {
     const content = document.getElementById('deckSummaryContent');
     if (!content) return;
 
@@ -712,24 +712,16 @@ function renderDeckSummary(aggregated) {
 
     content.className = '';
 
-    // Effect ID mappings
+    // Deck-wide effects (correctly summed from all cards)
     const raceBonusVal = aggregated[15] || 0;
-    const trainingEffVal = aggregated[8] || 0;
-    const friendshipVal = aggregated[1] || 0;
-    const moodEffVal = aggregated[2] || 0;
-
-    const spdBonus = aggregated[3] || 0;
-    const staBonus = aggregated[4] || 0;
-    const powBonus = aggregated[5] || 0;
-    const gutBonus = aggregated[6] || 0;
-    const witBonus = aggregated[7] || 0;
-    const skillPtBonus = aggregated[30] || 0;
-
     const specPriority = aggregated[19] || 0;
     const failProt = aggregated[27] || 0;
     const energyReduce = aggregated[28] || 0;
     const eventRecovery = aggregated[25] || 0;
+    const hintLevel = aggregated[17] || 0;
+    const hintFreq = aggregated[18] || 0;
 
+    // Initial stats (one-time, deck-wide)
     const initSpd = aggregated[9] || 0;
     const initSta = aggregated[10] || 0;
     const initPow = aggregated[11] || 0;
@@ -739,57 +731,72 @@ function renderDeckSummary(aggregated) {
 
     const raceBonusClass = raceBonusVal >= 30 ? 'race-bonus-high' : 'race-bonus-low';
 
+    // Build per-training table rows
+    const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+    // Stat bonus effect IDs in column order: Spd(3), Sta(4), Pow(5), Gut(6), Wit(7), SkPt(30)
+    const statBonusColumns = [3, 4, 5, 6, 7, 30];
+    const statBonusLabels = ['Spd', 'Sta', 'Pow', 'Gut', 'Wit', 'SkPt'];
+
+    let perTrainingRows = '';
+    trainingTypes.forEach(type => {
+        const data = perTraining[type];
+        if (!data) return;
+
+        // Training type cell with dot
+        const typeCell = `<td>
+            <div class="training-type-cell">
+                <span class="training-type-dot ${type}"></span>
+                ${typeLabels[type]}
+            </div>
+        </td>`;
+
+        // Cards present dots
+        const cardDots = data.presentCardTypes.map(ct =>
+            `<span class="training-card-dot ${ct}"></span>`
+        ).join('');
+        const cardsCell = `<td><div class="training-cards-cell">${cardDots || '--'}</div></td>`;
+
+        // Training Effectiveness
+        const trainEffCell = data.trainingEff > 0
+            ? `<td class="training-value-positive">${data.trainingEff}%</td>`
+            : `<td class="training-value-zero">0%</td>`;
+
+        // Mood Effect
+        const moodEffCell = data.moodEffect > 0
+            ? `<td class="training-value-positive">${data.moodEffect}%</td>`
+            : `<td class="training-value-zero">0%</td>`;
+
+        // Stat bonus columns
+        const statCells = statBonusColumns.map((effectId, colIdx) => {
+            const isApplicable = data.applicableBonusIds.includes(effectId);
+            if (!isApplicable) {
+                return `<td class="training-value-zero">--</td>`;
+            }
+            const idx = STAT_BONUS_INDEX_MAP[effectId];
+            const val = idx !== undefined ? data.statBonuses[idx] : 0;
+            if (val > 0) {
+                return `<td class="training-value-positive">+${val}</td>`;
+            }
+            return `<td class="training-value-zero">0</td>`;
+        }).join('');
+
+        // Friendship multiplier
+        const friendVal = data.friendshipMultiplier;
+        const friendCell = friendVal > 1
+            ? `<td class="training-value-positive deck-summary-friendship">\u00d7${friendVal.toFixed(2)}</td>`
+            : `<td class="training-value-zero deck-summary-friendship">\u00d71.00</td>`;
+
+        perTrainingRows += `<tr>${typeCell}${cardsCell}${trainEffCell}${moodEffCell}${statCells}${friendCell}</tr>`;
+    });
+
     content.innerHTML = `
-        <div class="deck-summary-section-label">Key Training Effects</div>
+        <div class="deck-summary-section-label">Deck-Wide Effects (always active)</div>
         <div class="deck-summary-grid">
             <div class="deck-summary-item highlight ${raceBonusClass}">
                 <span class="deck-summary-item-label">Race Bonus</span>
                 <span class="deck-summary-item-value">${raceBonusVal}%</span>
             </div>
-            <div class="deck-summary-item highlight">
-                <span class="deck-summary-item-label">Training Eff.</span>
-                <span class="deck-summary-item-value">${trainingEffVal}%</span>
-            </div>
-            <div class="deck-summary-item highlight">
-                <span class="deck-summary-item-label">Friendship Bonus</span>
-                <span class="deck-summary-item-value">${friendshipVal}%</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Mood Effect</span>
-                <span class="deck-summary-item-value">${moodEffVal}%</span>
-            </div>
-        </div>
-
-        <div class="deck-summary-section-label">Stat Bonuses</div>
-        <div class="deck-summary-grid">
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Speed</span>
-                <span class="deck-summary-item-value">+${spdBonus}</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Stamina</span>
-                <span class="deck-summary-item-value">+${staBonus}</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Power</span>
-                <span class="deck-summary-item-value">+${powBonus}</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Guts</span>
-                <span class="deck-summary-item-value">+${gutBonus}</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Wit</span>
-                <span class="deck-summary-item-value">+${witBonus}</span>
-            </div>
-            <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Skill Pts</span>
-                <span class="deck-summary-item-value">+${skillPtBonus}</span>
-            </div>
-        </div>
-
-        <div class="deck-summary-section-label">Support Effects</div>
-        <div class="deck-summary-grid">
             <div class="deck-summary-item">
                 <span class="deck-summary-item-label">Spec. Priority</span>
                 <span class="deck-summary-item-value">${specPriority}</span>
@@ -806,32 +813,65 @@ function renderDeckSummary(aggregated) {
                 <span class="deck-summary-item-label">Event Recovery</span>
                 <span class="deck-summary-item-value">${eventRecovery}%</span>
             </div>
+            <div class="deck-summary-item">
+                <span class="deck-summary-item-label">Hint Level</span>
+                <span class="deck-summary-item-value">${hintLevel}</span>
+            </div>
+            <div class="deck-summary-item">
+                <span class="deck-summary-item-label">Hint Freq.</span>
+                <span class="deck-summary-item-value">${hintFreq}%</span>
+            </div>
         </div>
 
-        <div class="deck-summary-section-label">Initial Stats</div>
+        <div class="deck-summary-section-label">Per-Training Effects (from present cards only)</div>
+        <div class="deck-summary-training-wrapper">
+            <table class="deck-summary-training-table">
+                <thead>
+                    <tr>
+                        <th>Training</th>
+                        <th>Cards</th>
+                        <th>Train Eff</th>
+                        <th>Mood Eff</th>
+                        <th>${statBonusLabels[0]}</th>
+                        <th>${statBonusLabels[1]}</th>
+                        <th>${statBonusLabels[2]}</th>
+                        <th>${statBonusLabels[3]}</th>
+                        <th>${statBonusLabels[4]}</th>
+                        <th>${statBonusLabels[5]}</th>
+                        <th>Friend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${perTrainingRows}
+                </tbody>
+            </table>
+        </div>
+        <div class="deck-summary-training-note">Stat columns show bonuses added to base training. "--" = not applicable at that training. Friendship is combined multiplier.</div>
+
+        <div class="deck-summary-section-label">Initial Stats (one-time at scenario start)</div>
         <div class="deck-summary-grid">
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Speed</span>
+                <span class="deck-summary-item-label">Speed</span>
                 <span class="deck-summary-item-value">+${initSpd}</span>
             </div>
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Stamina</span>
+                <span class="deck-summary-item-label">Stamina</span>
                 <span class="deck-summary-item-value">+${initSta}</span>
             </div>
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Power</span>
+                <span class="deck-summary-item-label">Power</span>
                 <span class="deck-summary-item-value">+${initPow}</span>
             </div>
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Guts</span>
+                <span class="deck-summary-item-label">Guts</span>
                 <span class="deck-summary-item-value">+${initGut}</span>
             </div>
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Wit</span>
+                <span class="deck-summary-item-label">Wit</span>
                 <span class="deck-summary-item-value">+${initWit}</span>
             </div>
             <div class="deck-summary-item">
-                <span class="deck-summary-item-label">Init. Bond</span>
+                <span class="deck-summary-item-label">Bond</span>
                 <span class="deck-summary-item-value">+${initBond}</span>
             </div>
         </div>

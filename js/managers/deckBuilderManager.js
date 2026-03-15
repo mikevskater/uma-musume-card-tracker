@@ -268,13 +268,25 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
         });
     });
 
-    // Mood multiplier
-    const moodEffect = aggregated[2] || 0; // Mood Effect %
+    // Training Effectiveness and Mood Effect — only from present cards
+    let trainingEff = 0;
+    let moodEffect = 0;
+    presentSlots.forEach(slot => {
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card || !card.effects) return;
+        card.effects.forEach(effectArray => {
+            if (effectArray[0] === 8) {
+                const val = calculateEffectValue(effectArray, slot.level);
+                if (val > 0) trainingEff += val;
+            } else if (effectArray[0] === 2) {
+                const val = calculateEffectValue(effectArray, slot.level);
+                if (val > 0) moodEffect += val;
+            }
+        });
+    });
+
     const moodBase = MOOD_VALUES[mood] || 0;
     const moodMultiplier = 1 + moodBase * (1 + moodEffect / 100);
-
-    // Training Effectiveness
-    const trainingEff = aggregated[8] || 0;
     const trainingEffMultiplier = 1 + trainingEff / 100;
 
     // Support count multiplier
@@ -333,9 +345,66 @@ function calculateAllTraining() {
     return { aggregated, results };
 }
 
+function computePerTrainingEffects(slots) {
+    const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    const perTraining = {};
+
+    trainingTypes.forEach(trainingType => {
+        // Find present cards (same logic as calculateTrainingGains)
+        const presentSlots = [];
+        const presentCardTypes = [];
+        slots.forEach(slot => {
+            if (!slot) return;
+            const card = cardData.find(c => c.support_id === slot.cardId);
+            if (!card) return;
+            if (card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType) {
+                presentSlots.push(slot);
+                presentCardTypes.push(card.type);
+            }
+        });
+
+        // Stat bonuses from present cards
+        const statBonuses = [0, 0, 0, 0, 0, 0]; // spd, sta, pow, gut, wit, skillPt
+        const applicableBonusIds = STAT_BONUS_TRAINING_MAP[trainingType] || [];
+        let trainingEff = 0;
+        let moodEffect = 0;
+        let friendshipMultiplier = 1;
+
+        presentSlots.forEach(slot => {
+            const card = cardData.find(c => c.support_id === slot.cardId);
+            if (!card || !card.effects) return;
+            card.effects.forEach(eff => {
+                const id = eff[0];
+                const val = calculateEffectValue(eff, slot.level);
+                if (val <= 0) return;
+
+                if (id === 8) trainingEff += val;
+                else if (id === 2) moodEffect += val;
+                else if (id === 1) friendshipMultiplier *= (1 + val / 100);
+                else if (applicableBonusIds.includes(id) && STAT_BONUS_INDEX_MAP[id] !== undefined) {
+                    statBonuses[STAT_BONUS_INDEX_MAP[id]] += val;
+                }
+            });
+        });
+
+        perTraining[trainingType] = {
+            supportCount: presentSlots.length,
+            presentCardTypes,
+            statBonuses,
+            applicableBonusIds,
+            trainingEff,
+            moodEffect,
+            friendshipMultiplier
+        };
+    });
+
+    return perTraining;
+}
+
 function recalculateDeck() {
     const { aggregated, results } = calculateAllTraining();
-    renderDeckSummary(aggregated);
+    const perTraining = computePerTrainingEffects(deckBuilderState.slots);
+    renderDeckSummary(aggregated, perTraining);
     renderTrainingBreakdown(results);
     renderScenarioInfo(aggregated);
 }
@@ -557,6 +626,7 @@ window.DeckBuilderManager = {
     aggregateDeckEffects,
     calculateTrainingGains,
     calculateAllTraining,
+    computePerTrainingEffects,
     recalculateDeck,
     loadSavedDecks,
     saveDeckToStorage,
@@ -577,6 +647,7 @@ Object.assign(window, {
     closeCardPicker,
     selectCardForSlot,
     aggregateDeckEffects,
+    computePerTrainingEffects,
     recalculateDeck,
     loadSavedDecks,
     saveDeckToStorage,
