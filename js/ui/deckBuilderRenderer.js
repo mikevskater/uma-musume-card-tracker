@@ -1,11 +1,17 @@
 // Deck Builder Renderer
-// Handles all DOM rendering for the MaNT Deck Builder tab
+// Handles all DOM rendering for the Deck Builder tab
 
 // ===== SHELL RENDERING =====
 
 function renderDeckBuilderShell() {
     const container = document.getElementById('deckBuilderContainer');
     if (!container) return;
+
+    // Build scenario options from loaded data
+    const scenarios = getAvailableScenarios();
+    const scenarioOptions = scenarios.map(s =>
+        `<option value="${s.id}"${s.id === deckBuilderState.scenario ? ' selected' : ''}>${s.name}</option>`
+    ).join('');
 
     container.innerHTML = `
         <!-- Deck Header -->
@@ -38,6 +44,12 @@ function renderDeckBuilderShell() {
         <!-- Training Sim Controls -->
         <div class="training-controls" id="trainingControls">
             <div class="training-control-group">
+                <span class="training-control-label">Scenario:</span>
+                <select class="scenario-select" id="scenarioSelect">
+                    ${scenarioOptions}
+                </select>
+            </div>
+            <div class="training-control-group">
                 <span class="training-control-label">Facility Level:</span>
                 <div class="facility-level-btns" id="facilityLevelBtns">
                     <button class="facility-level-btn active" data-level="1">1</button>
@@ -69,9 +81,9 @@ function renderDeckBuilderShell() {
             <div class="training-breakdown-empty" id="trainingBreakdownContent">Add cards to see training calculations.</div>
         </div>
 
-        <!-- MaNT Scenario Tips -->
+        <!-- Scenario Info -->
         <div class="scenario-info" id="scenarioInfo">
-            <div class="scenario-info-title">MaNT (Make a New Track) Scenario Info</div>
+            <div class="scenario-info-title" id="scenarioInfoTitle">Scenario Info</div>
             <div id="scenarioInfoContent">
                 <!-- Rendered by renderScenarioInfo() -->
             </div>
@@ -114,7 +126,6 @@ function renderDeckSlots() {
             slotEl.appendChild(renderEmptySlot(isFriend));
         }
 
-        // Click to open picker (on empty part or entire slot)
         slotEl.addEventListener('click', (e) => {
             if (e.target.closest('.deck-slot-remove') || e.target.closest('.deck-slot-friend-controls')) return;
             openCardPicker(i);
@@ -143,7 +154,7 @@ function renderEmptySlot(isFriend) {
     const empty = document.createElement('div');
     empty.className = 'deck-slot-empty';
     if (isFriend) {
-        empty.style.paddingTop = '24px'; // Account for friend label
+        empty.style.paddingTop = '24px';
     }
     empty.innerHTML = `
         <div class="deck-slot-empty-icon">+</div>
@@ -207,7 +218,6 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         const controls = document.createElement('div');
         controls.className = 'deck-slot-friend-controls';
 
-        // LB select
         const lbLabel = document.createElement('label');
         lbLabel.textContent = 'Limit Break:';
         controls.appendChild(lbLabel);
@@ -229,7 +239,6 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         });
         controls.appendChild(lbSelect);
 
-        // Level input
         const lvLabel = document.createElement('label');
         lvLabel.textContent = 'Level:';
         controls.appendChild(lvLabel);
@@ -258,7 +267,6 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
 
 // ===== CARD PICKER =====
 
-// Sort options for the picker dropdown
 const PICKER_SORT_OPTIONS = [
     { value: 'effect_15', label: 'Race Bonus' },
     { value: 'effect_8',  label: 'Training Effectiveness' },
@@ -275,11 +283,9 @@ const PICKER_SORT_OPTIONS = [
     { value: 'rarity',    label: 'Rarity' }
 ];
 
-// Priority effect IDs for card tile display (in order)
 const PICKER_DISPLAY_EFFECT_IDS = [15, 8, 1, 2, 3, 4, 5, 6, 7, 30, 19];
 
 function renderCardPicker() {
-    // Remove existing
     const existingOverlay = document.getElementById('deckPickerOverlay');
     if (existingOverlay) existingOverlay.remove();
 
@@ -289,12 +295,10 @@ function renderCardPicker() {
     const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
     const isAllTypes = filter.types.length === 6;
 
-    // Create overlay (contains the modal)
     const overlay = document.createElement('div');
     overlay.className = 'picker-modal-overlay';
     overlay.id = 'deckPickerOverlay';
 
-    // Build type button HTML with active states from persisted filter
     const typeButtonsHtml = `
         <button class="picker-type-btn${isAllTypes ? ' active' : ''}" data-type="all">All</button>
         <button class="picker-type-btn${!isAllTypes && filter.types.includes('speed') ? ' active' : ''}" data-type="speed">Speed</button>
@@ -305,7 +309,6 @@ function renderCardPicker() {
         <button class="picker-type-btn${!isAllTypes && filter.types.includes('friend') ? ' active' : ''}" data-type="friend">Friend</button>
     `;
 
-    // Build sort options HTML
     const sortOptionsHtml = PICKER_SORT_OPTIONS.map(opt =>
         `<option value="${opt.value}"${filter.sortBy === opt.value ? ' selected' : ''}>${opt.label}</option>`
     ).join('');
@@ -348,15 +351,12 @@ function renderCardPicker() {
 
     document.body.appendChild(overlay);
 
-    // Wire close button
     document.getElementById('pickerCloseBtn').addEventListener('click', closeCardPicker);
 
-    // Click overlay backdrop to close (not the modal itself)
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) closeCardPicker();
     });
 
-    // Type filter buttons
     document.querySelectorAll('#pickerTypeFilters .picker-type-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const type = btn.dataset.type;
@@ -396,7 +396,6 @@ function renderCardPicker() {
         });
     });
 
-    // Search with debounce
     let searchTimeout;
     document.getElementById('pickerSearch').addEventListener('input', (e) => {
         clearTimeout(searchTimeout);
@@ -406,19 +405,16 @@ function renderCardPicker() {
         }, 300);
     });
 
-    // SSR Only checkbox
     document.getElementById('pickerSsrOnly').addEventListener('change', (e) => {
         filter.ssrOnly = e.target.checked;
         renderPickerCards();
     });
 
-    // Sort dropdown
     document.getElementById('pickerSortBy').addEventListener('change', (e) => {
         filter.sortBy = e.target.value;
         renderPickerCards();
     });
 
-    // Sort direction toggle
     document.getElementById('pickerSortDir').addEventListener('click', () => {
         filter.sortDirection = filter.sortDirection === 'desc' ? 'asc' : 'desc';
         const btn = document.getElementById('pickerSortDir');
@@ -428,7 +424,6 @@ function renderCardPicker() {
         renderPickerCards();
     });
 
-    // ESC to close
     const escHandler = (e) => {
         if (e.key === 'Escape') {
             closeCardPicker();
@@ -437,10 +432,8 @@ function renderCardPicker() {
     };
     document.addEventListener('keydown', escHandler);
 
-    // Render initial card list
     renderPickerCards();
 
-    // Animate open
     requestAnimationFrame(() => {
         overlay.classList.add('open');
     });
@@ -452,7 +445,6 @@ function getCardPickerEffects(card, level) {
     const results = [];
     const usedIds = new Set();
 
-    // Walk priority list first
     for (const effectId of PICKER_DISPLAY_EFFECT_IDS) {
         if (results.length >= 4) break;
         const effectArray = card.effects.find(e => e[0] === effectId);
@@ -461,7 +453,7 @@ function getCardPickerEffects(card, level) {
             if (value > 0) {
                 const info = effectsData[effectId];
                 results.push({
-                    name: info?.name_en || `Effect ${effectId}`,
+                    name: info?.name || `Effect ${effectId}`,
                     value: value,
                     symbol: info?.symbol === 'percent' ? '%' : ''
                 });
@@ -470,14 +462,13 @@ function getCardPickerEffects(card, level) {
         }
     }
 
-    // Fill remaining with highest-value effects not in priority list
     if (results.length < 4) {
         const remaining = card.effects
             .filter(e => e[0] && effectsData[e[0]] && !usedIds.has(e[0]) && !isEffectLocked(e, level))
             .map(e => {
                 const val = calculateEffectValue(e, level);
                 const info = effectsData[e[0]];
-                return { name: info.name_en, value: val, symbol: info.symbol === 'percent' ? '%' : '', effectId: e[0] };
+                return { name: info.name, value: val, symbol: info.symbol === 'percent' ? '%' : '', effectId: e[0] };
             })
             .filter(e => e.value > 0)
             .sort((a, b) => b.value - a.value);
@@ -502,7 +493,6 @@ function renderPickerCards() {
         return;
     }
 
-    // Get card IDs already in deck (for greying out)
     const deckCardIds = new Set();
     deckBuilderState.slots.forEach((slot, idx) => {
         if (slot && idx !== deckBuilderState.activeSlot) {
@@ -516,7 +506,6 @@ function renderPickerCards() {
         const owned = isCardOwned(card.support_id);
         const isFriendSlot = deckBuilderState.activeSlot === 5;
 
-        // Determine level/LB for display
         let level, lb;
         if (isFriendSlot) {
             lb = 4;
@@ -533,7 +522,6 @@ function renderPickerCards() {
         tile.className = `picker-card-tile${inDeck ? ' in-deck' : ''}`;
         tile.setAttribute('tabindex', inDeck ? '-1' : '0');
 
-        // Top row: icon + info
         const topRow = document.createElement('div');
         topRow.className = 'picker-tile-top';
 
@@ -581,7 +569,6 @@ function renderPickerCards() {
         topRow.appendChild(info);
         tile.appendChild(topRow);
 
-        // Effects section
         const effects = getCardPickerEffects(card, level);
         if (effects.length > 0) {
             const effectsDiv = document.createElement('div');
@@ -595,7 +582,6 @@ function renderPickerCards() {
             tile.appendChild(effectsDiv);
         }
 
-        // Click handler
         if (!inDeck) {
             tile.addEventListener('click', () => {
                 selectCardForSlot(deckBuilderState.activeSlot, card.support_id);
@@ -620,7 +606,7 @@ function getPickerCards() {
         // For non-friend slots, show only owned cards
         if (!isFriend && !isCardOwned(card.support_id)) return false;
 
-        // SSR/SR only (exclude R for deck building)
+        // Exclude R for deck building
         if (card.rarity < 2) return false;
 
         // SSR Only filter
@@ -633,20 +619,17 @@ function getPickerCards() {
         if (filter.search) {
             const search = filter.search;
             const nameMatch = (card.char_name || '').toLowerCase().includes(search) ||
-                              (card.name_en || '').toLowerCase().includes(search) ||
-                              (card.name_jp || '').toLowerCase().includes(search) ||
-                              (card.name_kr || '').toLowerCase().includes(search) ||
-                              (card.name_tw || '').toLowerCase().includes(search);
+                              (card.card_name || '').toLowerCase().includes(search);
             if (!nameMatch) return false;
         }
 
-        // Only released cards
-        if (!card.release_en) return false;
+        // Only released cards (EN)
+        if (!card.start_date) return false;
 
         return true;
     });
 
-    // Sort based on filter settings
+    // Sort
     const { sortBy, sortDirection } = filter;
     const dirMult = sortDirection === 'desc' ? -1 : 1;
 
@@ -668,7 +651,6 @@ function getPickerCards() {
 
         if (cmp !== 0) return cmp * dirMult;
 
-        // Tiebreaker: owned first, then rarity desc, then name
         const aOwned = isCardOwned(a.support_id) ? 1 : 0;
         const bOwned = isCardOwned(b.support_id) ? 1 : 0;
         if (aOwned !== bOwned) return bOwned - aOwned;
@@ -712,7 +694,7 @@ function renderDeckSummary(aggregated, perTraining) {
 
     content.className = '';
 
-    // Deck-wide effects (correctly summed from all cards)
+    // Deck-wide effects
     const raceBonusVal = aggregated[15] || 0;
     const specPriority = aggregated[19] || 0;
     const failProt = aggregated[27] || 0;
@@ -721,7 +703,7 @@ function renderDeckSummary(aggregated, perTraining) {
     const hintLevel = aggregated[17] || 0;
     const hintFreq = aggregated[18] || 0;
 
-    // Initial stats (one-time, deck-wide)
+    // Initial stats
     const initSpd = aggregated[9] || 0;
     const initSta = aggregated[10] || 0;
     const initPow = aggregated[11] || 0;
@@ -731,10 +713,9 @@ function renderDeckSummary(aggregated, perTraining) {
 
     const raceBonusClass = raceBonusVal >= 30 ? 'race-bonus-high' : 'race-bonus-low';
 
-    // Build per-training table rows
+    // Per-training table
     const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
     const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
-    // Stat bonus effect IDs in column order: Spd(3), Sta(4), Pow(5), Gut(6), Wit(7), SkPt(30)
     const statBonusColumns = [3, 4, 5, 6, 7, 30];
     const statBonusLabels = ['Spd', 'Sta', 'Pow', 'Gut', 'Wit', 'SkPt'];
 
@@ -743,7 +724,6 @@ function renderDeckSummary(aggregated, perTraining) {
         const data = perTraining[type];
         if (!data) return;
 
-        // Training type cell with dot
         const typeCell = `<td>
             <div class="training-type-cell">
                 <span class="training-type-dot ${type}"></span>
@@ -751,23 +731,19 @@ function renderDeckSummary(aggregated, perTraining) {
             </div>
         </td>`;
 
-        // Cards present dots
         const cardDots = data.presentCardTypes.map(ct =>
             `<span class="training-card-dot ${ct}"></span>`
         ).join('');
         const cardsCell = `<td><div class="training-cards-cell">${cardDots || '--'}</div></td>`;
 
-        // Training Effectiveness
         const trainEffCell = data.trainingEff > 0
             ? `<td class="training-value-positive">${data.trainingEff}%</td>`
             : `<td class="training-value-zero">0%</td>`;
 
-        // Mood Effect
         const moodEffCell = data.moodEffect > 0
             ? `<td class="training-value-positive">${data.moodEffect}%</td>`
             : `<td class="training-value-zero">0%</td>`;
 
-        // Stat bonus columns
         const statCells = statBonusColumns.map((effectId, colIdx) => {
             const isApplicable = data.applicableBonusIds.includes(effectId);
             if (!isApplicable) {
@@ -781,7 +757,6 @@ function renderDeckSummary(aggregated, perTraining) {
             return `<td class="training-value-zero">0</td>`;
         }).join('');
 
-        // Friendship multiplier
         const friendVal = data.friendshipMultiplier;
         const friendCell = friendVal > 1
             ? `<td class="training-value-positive deck-summary-friendship">\u00d7${friendVal.toFixed(2)}</td>`
@@ -875,6 +850,47 @@ function renderDeckSummary(aggregated, perTraining) {
                 <span class="deck-summary-item-value">+${initBond}</span>
             </div>
         </div>
+
+        ${renderRaceBonusSection(raceBonusVal)}
+    `;
+}
+
+function renderRaceBonusSection(raceBonusPct) {
+    if (raceBonusPct <= 0) return '';
+
+    // Race bonus tiers: G1/G2/G3 races give bonus tiers 1-5 for different reward items
+    // The primary stat reward uses tier 5 for 1st place
+    const tiers = [
+        { label: 'G1 / G2 / G3 (1st)', bonus: 5 },
+        { label: 'G1 / G2 / G3 (2nd-3rd)', bonus: 4 },
+        { label: 'G1 / G2 / G3 (4th-5th)', bonus: 3 },
+    ];
+
+    let rows = '';
+    tiers.forEach(tier => {
+        const perStat = calculateRaceBonusGain(tier.bonus, raceBonusPct);
+        const total = perStat * 5; // 5 stats
+        if (perStat > 0) {
+            rows += `
+                <div class="race-bonus-row">
+                    <span class="race-bonus-grade">${tier.label}</span>
+                    <span class="race-bonus-gain">+${perStat}/stat</span>
+                    <span class="race-bonus-total">(+${total} total)</span>
+                </div>
+            `;
+        }
+    });
+
+    if (!rows) {
+        rows = '<div class="race-bonus-row"><span class="race-bonus-grade">Race Bonus too low for stat gains at current level.</span></div>';
+    }
+
+    return `
+        <div class="deck-summary-section-label">Race Stat Gains (from ${raceBonusPct}% Race Bonus)</div>
+        <div class="race-bonus-gains">
+            ${rows}
+            <div class="race-bonus-note">Formula: floor(tier x Race Bonus% / 100) per stat. Pre-OP and below: no bonus.</div>
+        </div>
     `;
 }
 
@@ -919,21 +935,26 @@ function renderTrainingBreakdown(trainingResults) {
         const result = trainingResults[type];
         if (!result) return;
 
-        // Training type cell with color dot
+        // Clickable training name to open assignment modal
         const typeCell = `<td>
-            <div class="training-type-cell">
+            <div class="training-type-cell training-type-clickable" data-training="${type}" title="Click to assign cards">
                 <span class="training-type-dot ${type}"></span>
                 ${typeLabels[type]}
             </div>
         </td>`;
 
-        // Cards present dots
-        const cardDots = result.presentCards.map(ct =>
-            `<span class="training-card-dot ${ct}"></span>`
-        ).join('');
-        const cardsCell = `<td><div class="training-cards-cell">${cardDots || '--'}</div></td>`;
+        // Show card icons based on assignments (not just dots)
+        const assignments = deckBuilderState.trainingAssignments[type];
+        let cardIconsHtml = '';
+        deckBuilderState.slots.forEach((slot, idx) => {
+            if (!slot) return;
+            const card = cardData.find(c => c.support_id === slot.cardId);
+            if (!card) return;
+            const isPresent = assignments[idx];
+            cardIconsHtml += `<span class="training-card-dot ${card.type}${isPresent ? '' : ' excluded'}" title="${card.char_name}${isPresent ? '' : ' (excluded)'}"></span>`;
+        });
+        const cardsCell = `<td><div class="training-cards-cell">${cardIconsHtml || '--'}</div></td>`;
 
-        // Stat cells
         const stats = ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts'];
         const statCells = stats.map(stat => {
             const val = result[stat];
@@ -943,7 +964,6 @@ function renderTrainingBreakdown(trainingResults) {
             return `<td class="training-value-zero">--</td>`;
         }).join('');
 
-        // Energy cell
         let energyCell;
         if (result.energy > 0) {
             energyCell = `<td class="training-value-energy-positive">+${result.energy}</td>`;
@@ -957,7 +977,141 @@ function renderTrainingBreakdown(trainingResults) {
     });
 
     html += '</tbody></table></div>';
+    html += '<div class="training-breakdown-note">Click a training name to assign which cards are present.</div>';
     content.innerHTML = html;
+
+    // Wire click handlers for training type cells
+    content.querySelectorAll('.training-type-clickable').forEach(cell => {
+        cell.addEventListener('click', () => {
+            openTrainingAssignmentModal(cell.dataset.training);
+        });
+    });
+}
+
+// ===== TRAINING ASSIGNMENT MODAL =====
+
+function renderTrainingAssignmentModal(trainingType) {
+    const existingOverlay = document.getElementById('trainingAssignOverlay');
+    if (existingOverlay) existingOverlay.remove();
+
+    const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+    const label = typeLabels[trainingType] || trainingType;
+
+    // Copy current assignments for editing
+    const tempAssignments = [...deckBuilderState.trainingAssignments[trainingType]];
+
+    const overlay = document.createElement('div');
+    overlay.className = 'picker-modal-overlay';
+    overlay.id = 'trainingAssignOverlay';
+
+    const modal = document.createElement('div');
+    modal.className = 'training-assign-modal';
+
+    // Header
+    modal.innerHTML = `
+        <div class="training-assign-header">
+            <h3>
+                <span class="training-type-dot ${trainingType}"></span>
+                ${label} Training -- Card Assignment
+            </h3>
+            <div class="training-assign-hint">Click cards to toggle their presence at this training.</div>
+        </div>
+        <div class="training-assign-cards" id="trainingAssignCards"></div>
+        <div class="training-assign-actions">
+            <button class="btn btn-secondary" id="trainingAssignCancel">Cancel</button>
+            <button class="btn btn-secondary" id="trainingAssignReset">Reset All</button>
+            <button class="btn btn-primary" id="trainingAssignSave">Save</button>
+        </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    const cardsContainer = document.getElementById('trainingAssignCards');
+
+    function renderCards() {
+        cardsContainer.innerHTML = '';
+        deckBuilderState.slots.forEach((slot, idx) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'training-assign-card';
+
+            if (!slot) {
+                cardEl.classList.add('empty');
+                cardEl.innerHTML = `<div class="training-assign-card-empty">Empty Slot ${idx < 5 ? idx + 1 : 'F'}</div>`;
+                cardsContainer.appendChild(cardEl);
+                return;
+            }
+
+            const card = cardData.find(c => c.support_id === slot.cardId);
+            if (!card) return;
+
+            const isPresent = tempAssignments[idx];
+            if (!isPresent) cardEl.classList.add('excluded');
+
+            cardEl.innerHTML = `
+                <img class="training-assign-card-img card-image rarity-${card.rarity}"
+                     src="support_card_images/${card.support_id}.png"
+                     alt="${card.char_name}" loading="lazy"
+                     onerror="this.style.display='none'">
+                <div class="training-assign-card-info">
+                    <div class="training-assign-card-name">${card.char_name}</div>
+                    <div class="training-assign-card-meta">
+                        <span class="training-card-dot ${card.type}"></span>
+                        Lv.${slot.level}
+                    </div>
+                </div>
+                <div class="training-assign-status">${isPresent ? 'Present' : 'Excluded'}</div>
+            `;
+
+            cardEl.addEventListener('click', () => {
+                tempAssignments[idx] = !tempAssignments[idx];
+                renderCards();
+            });
+
+            cardsContainer.appendChild(cardEl);
+        });
+    }
+
+    renderCards();
+
+    // Cancel
+    document.getElementById('trainingAssignCancel').addEventListener('click', () => {
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+    });
+
+    // Reset
+    document.getElementById('trainingAssignReset').addEventListener('click', () => {
+        for (let i = 0; i < 6; i++) tempAssignments[i] = true;
+        renderCards();
+    });
+
+    // Save
+    document.getElementById('trainingAssignSave').addEventListener('click', () => {
+        saveTrainingAssignment(trainingType, tempAssignments);
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+    });
+
+    // ESC to close
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            overlay.classList.remove('open');
+            setTimeout(() => overlay.remove(), 200);
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    // Backdrop click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('open');
+            setTimeout(() => overlay.remove(), 200);
+        }
+    });
+
+    requestAnimationFrame(() => overlay.classList.add('open'));
 }
 
 // ===== SCENARIO INFO =====
@@ -966,50 +1120,127 @@ function renderScenarioInfo(aggregated) {
     const content = document.getElementById('scenarioInfoContent');
     if (!content) return;
 
+    const scenarioId = deckBuilderState.scenario || '1';
+    const scenario = scenarioData?.scenarios?.[scenarioId];
+    const scenarioName = scenario?.name || 'Unknown';
+    const turnCount = scenario?.turn_count || '?';
+
+    // Update title
+    const title = document.getElementById('scenarioInfoTitle');
+    if (title) title.textContent = `${scenarioName} Scenario Info`;
+
     const raceBonusVal = aggregated[15] || 0;
     const raceBonusClass = raceBonusVal >= 30 ? 'high' : (raceBonusVal > 0 ? 'low' : '');
+
+    // Build base training values display from loaded data
+    const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+
+    let baseValuesHtml = '';
+    trainingTypes.forEach(type => {
+        const base = getBaseTrainingValues(type, scenarioId);
+        if (!base) return;
+        const stats = [];
+        if (base.speed) stats.push(`Spd +${base.speed}`);
+        if (base.stamina) stats.push(`Sta +${base.stamina}`);
+        if (base.power) stats.push(`Pow +${base.power}`);
+        if (base.guts) stats.push(`Gut +${base.guts}`);
+        if (base.wisdom) stats.push(`Wit +${base.wisdom}`);
+        if (base.skill_pt) stats.push(`SkPt +${base.skill_pt}`);
+        const energyStr = base.energy >= 0 ? `+${base.energy}` : `${base.energy}`;
+        stats.push(`Energy ${energyStr}`);
+
+        baseValuesHtml += `
+            <div class="scenario-base-row">
+                <span class="training-type-dot ${type}"></span>
+                <span class="scenario-base-label">${typeLabels[type]}:</span>
+                <span class="scenario-base-values">${stats.join(', ')}</span>
+            </div>
+        `;
+    });
+
+    // Enhanced training for Trailblazer
+    let enhancedHtml = '';
+    if (scenario?.enhanced_training) {
+        enhancedHtml = '<div class="deck-summary-section-label">Enhanced Training (Trailblazer)</div>';
+        for (const [cmdId, baseType] of Object.entries(scenario.enhanced_training)) {
+            const base = getBaseTrainingValues(`${baseType}_enhanced`, scenarioId);
+            if (!base) continue;
+            const stats = [];
+            if (base.speed) stats.push(`Spd +${base.speed}`);
+            if (base.stamina) stats.push(`Sta +${base.stamina}`);
+            if (base.power) stats.push(`Pow +${base.power}`);
+            if (base.guts) stats.push(`Gut +${base.guts}`);
+            if (base.wisdom) stats.push(`Wit +${base.wisdom}`);
+            if (base.skill_pt) stats.push(`SkPt +${base.skill_pt}`);
+            const energyStr = base.energy >= 0 ? `+${base.energy}` : `${base.energy}`;
+            stats.push(`Energy ${energyStr}`);
+            const label = typeLabels[baseType] || baseType;
+
+            enhancedHtml += `
+                <div class="scenario-base-row enhanced">
+                    <span class="training-type-dot ${baseType}"></span>
+                    <span class="scenario-base-label">${label}+:</span>
+                    <span class="scenario-base-values">${stats.join(', ')}</span>
+                </div>
+            `;
+        }
+    }
+
+    // Strategy tips based on scenario
+    const tips = getScenarioTips(scenarioId);
 
     content.innerHTML = `
         <div class="scenario-race-bonus ${raceBonusClass}">
             Your Race Bonus: ${raceBonusVal}%
         </div>
 
-        <div class="deck-summary-section-label">Stat Caps</div>
-        <div class="scenario-stat-caps">
-            <div class="scenario-stat-cap">
-                <span class="scenario-stat-cap-label">Speed</span>
-                <span class="scenario-stat-cap-value">1200</span>
-            </div>
-            <div class="scenario-stat-cap">
-                <span class="scenario-stat-cap-label">Stamina</span>
-                <span class="scenario-stat-cap-value">1900</span>
-            </div>
-            <div class="scenario-stat-cap">
-                <span class="scenario-stat-cap-label">Power</span>
-                <span class="scenario-stat-cap-value">1200</span>
-            </div>
-            <div class="scenario-stat-cap">
-                <span class="scenario-stat-cap-label">Guts</span>
-                <span class="scenario-stat-cap-value">1200</span>
-            </div>
-            <div class="scenario-stat-cap">
-                <span class="scenario-stat-cap-label">Wisdom</span>
-                <span class="scenario-stat-cap-value">1500</span>
-            </div>
+        <div class="scenario-meta">
+            <span class="scenario-meta-item">Turns: ${turnCount}</span>
         </div>
+
+        <div class="deck-summary-section-label">Base Training Values (Facility Lv.1)</div>
+        <div class="scenario-base-values-grid">
+            ${baseValuesHtml}
+        </div>
+        ${enhancedHtml}
 
         <div class="deck-summary-section-label">Strategy Tips</div>
         <div class="scenario-tips">
             <ul>
-                <li><strong>Race Bonus is king</strong> — races are the primary progression source in MaNT, making Race Bonus the most impactful effect.</li>
-                <li><strong>Training Effectiveness</strong> stacks multiplicatively with other bonuses, providing the biggest overall training gains.</li>
-                <li><strong>Prioritize Stamina</strong> — the highest stat cap (1900) means you need efficient Stamina training.</li>
-                <li><strong>Shop Items</strong> — Megaphones (+20-60% training for 2-4 turns) and Ankle Weights (+50% single stat) amplify your deck's effects further.</li>
-                <li><strong>Friendship Training</strong> — try to fill your friendship gauge early and keep support cards at their preferred training for maximum gains.</li>
-                <li><strong>Energy management</strong> — Energy Cost Reduction and Event Recovery help sustain more training turns throughout the scenario.</li>
+                ${tips.map(tip => `<li>${tip}</li>`).join('')}
             </ul>
         </div>
     `;
+}
+
+function getScenarioTips(scenarioId) {
+    switch (scenarioId) {
+        case '1':
+            return [
+                '<strong>Race Bonus is king</strong> -- races are the primary progression source, making Race Bonus the most impactful effect.',
+                '<strong>Training Effectiveness</strong> stacks multiplicatively with other bonuses.',
+                '<strong>Friendship Training</strong> -- fill your friendship gauge early and keep support cards at their preferred training.',
+                '<strong>Energy management</strong> -- Energy Cost Reduction and Event Recovery help sustain more training turns.'
+            ];
+        case '2':
+            return [
+                '<strong>Lower base training values</strong> -- Aoharu has weaker base stats than URA, making support card bonuses even more important.',
+                '<strong>Team Race focus</strong> -- team races at specific turns give bonus stats; build your team members\' stats alongside yours.',
+                '<strong>Training Effectiveness matters more</strong> -- with lower bases, multiplicative bonuses have outsized impact.',
+                '<strong>Friendship Training</strong> -- fill your friendship gauge early for maximum stat gains.'
+            ];
+        case '4':
+            return [
+                '<strong>Enhanced Training</strong> -- Trailblazer unlocks boosted training commands (higher stats but more energy cost).',
+                '<strong>Race Bonus is king</strong> -- races are the primary progression source, making Race Bonus the most impactful effect.',
+                '<strong>Shop Items</strong> -- Megaphones (+20-60% training for 2-4 turns) and Ankle Weights (+50% single stat) amplify your deck\'s effects.',
+                '<strong>Energy management</strong> -- enhanced training costs more energy; Energy Cost Reduction and Event Recovery are critical.',
+                '<strong>Custom goal routes</strong> -- Trailblazer supports character-specific race routes for optimized progression.'
+            ];
+        default:
+            return ['Select a scenario to see strategy tips.'];
+    }
 }
 
 // ===== DECK SELECT RENDERING =====
@@ -1047,6 +1278,7 @@ window.DeckBuilderRenderer = {
     renderPickerCards,
     renderDeckSummary,
     renderTrainingBreakdown,
+    renderTrainingAssignmentModal,
     renderScenarioInfo,
     renderDeckSelect
 };

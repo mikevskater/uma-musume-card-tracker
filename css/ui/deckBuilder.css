@@ -999,29 +999,259 @@
     border-color: var(--color-warning);
 }
 
-.scenario-stat-caps {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+.scenario-select {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+.scenario-meta {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.scenario-meta-item {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-primary);
+}
+
+.scenario-base-values-grid {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-xs);
     margin-bottom: var(--space-md);
 }
 
-.scenario-stat-cap {
+.scenario-base-row {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
     padding: var(--space-xs) var(--space-sm);
     background: var(--bg-primary);
     border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
 }
 
-.scenario-stat-cap-label {
+.scenario-base-row.enhanced {
+    border-left: 3px solid var(--color-warning);
+}
+
+.scenario-base-label {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    min-width: 70px;
+}
+
+.scenario-base-values {
     color: var(--text-secondary);
 }
 
-.scenario-stat-cap-value {
-    font-weight: var(--font-weight-bold);
+/* ===== TRAINING ASSIGNMENT MODAL ===== */
+
+.training-type-clickable {
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    padding: 2px 4px;
+    transition: background var(--transition-fast);
+}
+
+.training-type-clickable:hover {
+    background: var(--bg-tertiary);
+}
+
+.training-card-dot.excluded {
+    opacity: 0.2;
+}
+
+.training-breakdown-note {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-xs);
+    font-style: italic;
+}
+
+.training-assign-modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.training-assign-header h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-xs) 0;
+    font-size: var(--font-size-md);
     color: var(--text-primary);
+}
+
+.training-assign-hint {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.training-assign-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.training-assign-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--bg-primary);
+    border: 2px solid var(--color-success);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.training-assign-card:hover {
+    background: var(--bg-tertiary);
+}
+
+.training-assign-card.excluded {
+    border-color: var(--border-primary);
+    opacity: 0.5;
+}
+
+.training-assign-card.empty {
+    border-color: var(--border-primary);
+    opacity: 0.3;
+    cursor: default;
+}
+
+.training-assign-card-img {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.training-assign-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.training-assign-card-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.training-assign-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.training-assign-card-empty {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    padding: var(--space-sm);
+}
+
+.training-assign-status {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+.training-assign-card:not(.excluded) .training-assign-status {
+    color: var(--color-success);
+    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+}
+
+.training-assign-card.excluded .training-assign-status {
+    color: var(--text-tertiary);
+    background: var(--bg-tertiary);
+}
+
+.training-assign-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+}
+
+.training-assign-actions .btn-primary {
+    background: var(--color-secondary);
+    color: white;
+    border: none;
+    padding: var(--space-xs) var(--space-lg);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: var(--font-weight-semibold);
+}
+
+.training-assign-actions .btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* ===== RACE BONUS GAINS ===== */
+
+.race-bonus-gains {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.race-bonus-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+}
+
+.race-bonus-grade {
+    min-width: 160px;
+    color: var(--text-secondary);
+}
+
+.race-bonus-gain {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-success);
+    min-width: 70px;
+}
+
+.race-bonus-total {
+    color: var(--text-tertiary);
+    font-size: var(--font-size-xs);
+}
+
+.race-bonus-note {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-xs);
+    font-style: italic;
 }
 
 .scenario-tips {

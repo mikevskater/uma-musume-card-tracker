@@ -211,17 +211,17 @@ function getTypeDisplayName(type) {
 
 // Get effect name with fallback
 function getEffectName(effectId) {
-    return effectsData[effectId]?.name_en || `Effect ${effectId}`;
+    return effectsData[effectId]?.name || `Effect ${effectId}`;
 }
 
 // Get skill name with fallback
 function getSkillName(skillId) {
-    return skillsData[skillId]?.name_en || skillsData[skillId]?.enname || `Skill ${skillId}`;
+    return skillsData[skillId]?.name || `Skill ${skillId}`;
 }
 
 // Get skill description
 function getSkillDescription(skillId) {
-    return skillsData[skillId]?.desc_en || skillsData[skillId]?.endesc || '';
+    return skillsData[skillId]?.description || '';
 }
 
 // Get skill type description
@@ -309,7 +309,7 @@ function calculateEffectRanges(cards) {
     const ranges = {};
     
     const availableEffects = Object.values(effectsData)
-        .filter(effect => effect.name_en)
+        .filter(effect => effect.name)
         .map(effect => effect.id);
     
     availableEffects.forEach(effectId => {
@@ -434,6 +434,22 @@ function formatEventEffects(effects) {
     }).join(', ');
 }
 
+// ===== DATE DISPLAY =====
+
+// Global launch date — cards released before this in JP show this date instead
+const GLOBAL_LAUNCH_DATE = '2025-06-26';
+
+/**
+ * Get display-friendly release date for a card.
+ * Cards released before Global launch show "Launch" instead of their JP date.
+ * Sorting still uses the true start_date for correct ordering.
+ */
+function getDisplayDate(card) {
+    if (!card.start_date) return 'Unreleased';
+    if (card.start_date < GLOBAL_LAUNCH_DATE) return GLOBAL_LAUNCH_DATE;
+    return card.start_date;
+}
+
 // ===== EXPORTS =====
 
 // Export all utility functions to global scope for compatibility
@@ -452,7 +468,9 @@ window.DataUtils = {
     calculateEffectRanges,
     calculateSkillCounts,
     formatEventEffects,
-    limitBreaks
+    limitBreaks,
+    getDisplayDate,
+    GLOBAL_LAUNCH_DATE
 };
 
 // Also export individual functions to global scope for backward compatibility

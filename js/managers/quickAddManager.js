@@ -166,8 +166,8 @@ function setQuickAddRegion(value) {
 
 function getQuickAddMatchingCards() {
     let cards = cardData.filter(card => {
-        // Region filter — global only shows cards with release_en
-        if (quickAddState.region === 'global' && !card.release_en) return false;
+        // Region filter — global only shows cards with start_date
+        if (quickAddState.region === 'global' && !card.start_date) return false;
 
         // Type filter
         if (!quickAddState.selectedTypes.includes(card.type)) return false;
@@ -189,10 +189,7 @@ function getQuickAddMatchingCards() {
 }
 
 function getQuickAddCardName(card) {
-    if (quickAddState.region === 'global') {
-        return card.name_en || card.char_name || '';
-    }
-    return card.char_name || card.name_en || '';
+    return card.char_name || '';
 }
 
 function sortQuickAddCards(cards) {

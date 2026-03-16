@@ -677,6 +677,17 @@
     gap: var(--space-lg);
 }
 
+.chain-events-heading {
+    margin: var(--space-lg) 0 var(--space-sm);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 .event-item {
     background-color: var(--bg-secondary);
     padding: var(--space-lg);

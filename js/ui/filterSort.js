@@ -14,9 +14,9 @@ const sortCategories = {
         hasOptions: true,
         defaultDirection: 'desc',
         getOptions: () => Object.values(effectsData)
-            .filter(effect => effect.name_en)
-            .sort((a, b) => a.name_en.localeCompare(b.name_en))
-            .map(effect => ({ value: effect.id, label: effect.name_en }))
+            .filter(effect => effect.name)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(effect => ({ value: effect.id, label: effect.name }))
     },
     name: { name: 'Name', hasOptions: false, defaultDirection: 'asc' },
     level: { name: 'Level', hasOptions: false, defaultDirection: 'desc' },
@@ -100,7 +100,7 @@ function filterAndSortCards() {
 
     // Calculate total available cards
     const totalAvailable = filters.showUnreleased ? cardData.length : 
-                          cardData.filter(card => card.release_en).length;
+                          cardData.filter(card => card.start_date).length;
 
     // Render results
     renderCards(filtered);
@@ -130,7 +130,7 @@ function passesAllFilters(card, filters) {
 // Check basic filters
 function passesBasicFilters(card, filters) {
     // Release status filter
-    if (!filters.showUnreleased && !card.release_en) return false;
+    if (!filters.showUnreleased && !card.start_date) return false;
     
     // Rarity filter
     if (filters.selectedRarities.length > 0 && 
@@ -141,9 +141,9 @@ function passesBasicFilters(card, filters) {
         !filters.selectedTypes.includes(card.type)) return false;
     
     // Name filter
-    if (filters.nameFilter && 
-        !(card.char_name || '').toLowerCase().includes(filters.nameFilter) && 
-        !(card.name_en || '').toLowerCase().includes(filters.nameFilter)) return false;
+    if (filters.nameFilter &&
+        !(card.char_name || '').toLowerCase().includes(filters.nameFilter) &&
+        !(card.card_name || '').toLowerCase().includes(filters.nameFilter)) return false;
     
     // Ownership filter
     if (filters.ownedFilter === 'owned' && !isCardOwned(card.support_id)) return false;
@@ -344,14 +344,14 @@ function compareCardsBySortCriteria(a, b, sort) {
             break;
             
         case 'releaseDate':
-            valueA = new Date(a.release_en || a.release || '2099-12-31');
-            valueB = new Date(b.release_en || b.release || '2099-12-31');
+            valueA = new Date(a.start_date || '2099-12-31');
+            valueB = new Date(b.start_date || '2099-12-31');
             break;
-            
+
         default:
             return 0;
     }
-    
+
     // Compare values
     let comparison = 0;
     if (valueA < valueB) comparison = -1;
@@ -381,8 +381,8 @@ function sortCards(cards, column, direction) {
                 valueB = b.type.toLowerCase();
                 break;
             case 'release':
-                valueA = new Date(a.release_en || a.release || '2099-12-31');
-                valueB = new Date(b.release_en || b.release || '2099-12-31');
+                valueA = new Date(a.start_date || '2099-12-31');
+                valueB = new Date(b.start_date || '2099-12-31');
                 break;
             default:
                 return 0;
@@ -497,8 +497,8 @@ function buildEffectFilters(effectRanges = {}) {
     const effectFiltersContainer = document.getElementById('effectFilters');
     
     const availableEffects = Object.values(effectsData)
-        .filter(effect => effect.name_en)
-        .sort((a, b) => a.name_en.localeCompare(b.name_en));
+        .filter(effect => effect.name)
+        .sort((a, b) => a.name.localeCompare(b.name));
     
     effectFiltersContainer.innerHTML = availableEffects.map(effect => {
         const symbol = effect.symbol === 'percent' ? '%' : '';
@@ -511,7 +511,7 @@ function buildEffectFilters(effectRanges = {}) {
         
         return `
             <div class="effect-filter-item">
-                <label>${effect.name_en}:</label>
+                <label>${effect.name}:</label>
                 <input type="number" 
                        class="effect-filter-input" 
                        data-effect-id="${effect.id}"

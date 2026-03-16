@@ -486,7 +486,7 @@ function buildEffectsSection(cards) {
     // Build effects rows with highlighting and difference calculation
     Array.from(allEffectIds).forEach(effectId => {
         const effectInfo = effectsData[effectId];
-        if (effectInfo && effectInfo.name_en) {
+        if (effectInfo && effectInfo.name) {
             const values = cards.map(card => {
                 const effectArray = card.effects?.find(effect => effect[0] == effectId);
                 const level = getEffectiveLevel(card);
@@ -515,7 +515,7 @@ function buildEffectsSection(cards) {
             const valueRange = highestValue - lowestValidValue;
 
             section.rows.push({
-                label: effectInfo.name_en,
+                label: effectInfo.name,
                 type: 'effect',
                 symbol: effectInfo.symbol === 'percent' ? '%' : '',
                 values: values.map(v => {

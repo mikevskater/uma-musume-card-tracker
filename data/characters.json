@@ -1,0 +1,4447 @@
+{
+  "100101": {
+    "name": "Special Week",
+    "character_id": 1001,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 88,
+        "power": 98,
+        "guts": 90,
+        "wisdom": 91
+      },
+      "4": {
+        "speed": 92,
+        "stamina": 98,
+        "power": 109,
+        "guts": 100,
+        "wisdom": 101
+      },
+      "5": {
+        "speed": 102,
+        "stamina": 108,
+        "power": 120,
+        "guts": 110,
+        "wisdom": 110
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "100102": {
+    "name": "Special Week",
+    "character_id": 1001,
+    "base_stats": {
+      "3": {
+        "speed": 77,
+        "stamina": 90,
+        "power": 103,
+        "guts": 98,
+        "wisdom": 82
+      },
+      "4": {
+        "speed": 86,
+        "stamina": 100,
+        "power": 114,
+        "guts": 109,
+        "wisdom": 91
+      },
+      "5": {
+        "speed": 94,
+        "stamina": 110,
+        "power": 125,
+        "guts": 119,
+        "wisdom": 102
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 10,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "100201": {
+    "name": "Silence Suzuka",
+    "character_id": 1002,
+    "base_stats": {
+      "3": {
+        "speed": 101,
+        "stamina": 84,
+        "power": 77,
+        "guts": 100,
+        "wisdom": 88
+      },
+      "4": {
+        "speed": 112,
+        "stamina": 93,
+        "power": 85,
+        "guts": 111,
+        "wisdom": 99
+      },
+      "5": {
+        "speed": 124,
+        "stamina": 102,
+        "power": 94,
+        "guts": 122,
+        "wisdom": 108
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "C",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "100301": {
+    "name": "Tokai Teio",
+    "character_id": 1003,
+    "base_stats": {
+      "3": {
+        "speed": 90,
+        "stamina": 89,
+        "power": 83,
+        "guts": 92,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 99,
+        "power": 92,
+        "guts": 102,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 109,
+        "power": 102,
+        "guts": 112,
+        "wisdom": 118
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "E",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "100302": {
+    "name": "Tokai Teio",
+    "character_id": 1003,
+    "base_stats": {
+      "3": {
+        "speed": 89,
+        "stamina": 102,
+        "power": 80,
+        "guts": 86,
+        "wisdom": 93
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 113,
+        "power": 89,
+        "guts": 96,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 125,
+        "power": 98,
+        "guts": 106,
+        "wisdom": 112
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "E",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "100401": {
+    "name": "Maruzensky",
+    "character_id": 1004,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 68,
+        "power": 86,
+        "guts": 100,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 76,
+        "power": 96,
+        "guts": 111,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 84,
+        "power": 105,
+        "guts": 122,
+        "wisdom": 121
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "B",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "E",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "100402": {
+    "name": "Maruzensky",
+    "character_id": 1004,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 69,
+        "power": 93,
+        "guts": 87,
+        "wisdom": 101
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 77,
+        "power": 104,
+        "guts": 97,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 85,
+        "power": 114,
+        "guts": 107,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "B",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "E",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 15
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "100501": {
+    "name": "Fuji Kiseki",
+    "character_id": 1005,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 88,
+        "power": 97,
+        "guts": 82,
+        "wisdom": 87
+      },
+      "4": {
+        "speed": 106,
+        "stamina": 98,
+        "power": 108,
+        "guts": 91,
+        "wisdom": 97
+      },
+      "5": {
+        "speed": 117,
+        "stamina": 107,
+        "power": 118,
+        "guts": 100,
+        "wisdom": 108
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "B",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "100601": {
+    "name": "Oguri Cap",
+    "character_id": 1006,
+    "base_stats": {
+      "3": {
+        "speed": 101,
+        "stamina": 66,
+        "power": 106,
+        "guts": 84,
+        "wisdom": 93
+      },
+      "4": {
+        "speed": 112,
+        "stamina": 74,
+        "power": 118,
+        "guts": 94,
+        "wisdom": 102
+      },
+      "5": {
+        "speed": 124,
+        "stamina": 81,
+        "power": 130,
+        "guts": 103,
+        "wisdom": 112
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "100602": {
+    "name": "Oguri Cap",
+    "character_id": 1006,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 91,
+        "power": 111,
+        "guts": 76,
+        "wisdom": 78
+      },
+      "4": {
+        "speed": 105,
+        "stamina": 101,
+        "power": 124,
+        "guts": 85,
+        "wisdom": 85
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 111,
+        "power": 136,
+        "guts": 93,
+        "wisdom": 95
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 15,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "100701": {
+    "name": "Gold Ship",
+    "character_id": 1007,
+    "base_stats": {
+      "2": {
+        "speed": 82,
+        "stamina": 96,
+        "power": 100,
+        "guts": 77,
+        "wisdom": 70
+      },
+      "3": {
+        "speed": 87,
+        "stamina": 101,
+        "power": 105,
+        "guts": 81,
+        "wisdom": 76
+      },
+      "4": {
+        "speed": 97,
+        "stamina": 113,
+        "power": 117,
+        "guts": 90,
+        "wisdom": 83
+      },
+      "5": {
+        "speed": 106,
+        "stamina": 124,
+        "power": 129,
+        "guts": 99,
+        "wisdom": 92
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "B",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 4
+  },
+  "100801": {
+    "name": "Vodka",
+    "character_id": 1008,
+    "base_stats": {
+      "2": {
+        "speed": 96,
+        "stamina": 61,
+        "power": 105,
+        "guts": 75,
+        "wisdom": 88
+      },
+      "3": {
+        "speed": 102,
+        "stamina": 64,
+        "power": 111,
+        "guts": 79,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 113,
+        "stamina": 72,
+        "power": 124,
+        "guts": 88,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 124,
+        "stamina": 79,
+        "power": 136,
+        "guts": 97,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "F"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 3
+  },
+  "100901": {
+    "name": "Daiwa Scarlet",
+    "character_id": 1009,
+    "base_stats": {
+      "2": {
+        "speed": 84,
+        "stamina": 77,
+        "power": 79,
+        "guts": 95,
+        "wisdom": 90
+      },
+      "3": {
+        "speed": 89,
+        "stamina": 81,
+        "power": 84,
+        "guts": 100,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 90,
+        "power": 93,
+        "guts": 111,
+        "wisdom": 107
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 99,
+        "power": 103,
+        "guts": 122,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 2
+  },
+  "101001": {
+    "name": "Taiki Shuttle",
+    "character_id": 1010,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 71,
+        "power": 98,
+        "guts": 93,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 79,
+        "power": 108,
+        "guts": 103,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 87,
+        "power": 119,
+        "guts": 113,
+        "wisdom": 113
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "A",
+        "medium": "E",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101101": {
+    "name": "Grass Wonder",
+    "character_id": 1011,
+    "base_stats": {
+      "2": {
+        "speed": 91,
+        "stamina": 70,
+        "power": 99,
+        "guts": 74,
+        "wisdom": 91
+      },
+      "3": {
+        "speed": 96,
+        "stamina": 74,
+        "power": 105,
+        "guts": 79,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 83,
+        "power": 117,
+        "guts": 87,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 91,
+        "power": 129,
+        "guts": 96,
+        "wisdom": 116
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "A",
+        "medium": "B",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 3
+  },
+  "101102": {
+    "name": "Grass Wonder",
+    "character_id": 1011,
+    "base_stats": {
+      "3": {
+        "speed": 91,
+        "stamina": 83,
+        "power": 97,
+        "guts": 79,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 101,
+        "stamina": 92,
+        "power": 108,
+        "guts": 88,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 111,
+        "stamina": 101,
+        "power": 119,
+        "guts": 96,
+        "wisdom": 123
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "A",
+        "medium": "B",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 15,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 15
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "101201": {
+    "name": "Hishi Amazon",
+    "character_id": 1012,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 84,
+        "power": 105,
+        "guts": 82,
+        "wisdom": 86
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 94,
+        "power": 117,
+        "guts": 91,
+        "wisdom": 95
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 103,
+        "power": 129,
+        "guts": 100,
+        "wisdom": 105
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "C",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
+  "101301": {
+    "name": "Mejiro McQueen",
+    "character_id": 1013,
+    "base_stats": {
+      "3": {
+        "speed": 71,
+        "stamina": 111,
+        "power": 71,
+        "guts": 103,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 79,
+        "stamina": 123,
+        "power": 79,
+        "guts": 114,
+        "wisdom": 105
+      },
+      "5": {
+        "speed": 87,
+        "stamina": 136,
+        "power": 87,
+        "guts": 125,
+        "wisdom": 115
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "D",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101302": {
+    "name": "Mejiro McQueen",
+    "character_id": 1013,
+    "base_stats": {
+      "3": {
+        "speed": 74,
+        "stamina": 110,
+        "power": 72,
+        "guts": 108,
+        "wisdom": 86
+      },
+      "4": {
+        "speed": 82,
+        "stamina": 122,
+        "power": 80,
+        "guts": 120,
+        "wisdom": 96
+      },
+      "5": {
+        "speed": 90,
+        "stamina": 134,
+        "power": 89,
+        "guts": 132,
+        "wisdom": 105
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "D",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101401": {
+    "name": "El Condor Pasa",
+    "character_id": 1014,
+    "base_stats": {
+      "2": {
+        "speed": 85,
+        "stamina": 76,
+        "power": 80,
+        "guts": 93,
+        "wisdom": 91
+      },
+      "3": {
+        "speed": 90,
+        "stamina": 80,
+        "power": 85,
+        "guts": 99,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 100,
+        "stamina": 89,
+        "power": 94,
+        "guts": 110,
+        "wisdom": 107
+      },
+      "5": {
+        "speed": 110,
+        "stamina": 98,
+        "power": 103,
+        "guts": 121,
+        "wisdom": 118
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 2,
+    "running_style": 2
+  },
+  "101402": {
+    "name": "El Condor Pasa",
+    "character_id": 1014,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 75,
+        "power": 91,
+        "guts": 97,
+        "wisdom": 87
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 83,
+        "power": 102,
+        "guts": 108,
+        "wisdom": 96
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 91,
+        "power": 112,
+        "guts": 119,
+        "wisdom": 106
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 0,
+      "power": 0,
+      "guts": 15,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "101501": {
+    "name": "T.M. Opera O",
+    "character_id": 1015,
+    "base_stats": {
+      "3": {
+        "speed": 75,
+        "stamina": 108,
+        "power": 75,
+        "guts": 102,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 83,
+        "stamina": 120,
+        "power": 83,
+        "guts": 113,
+        "wisdom": 101
+      },
+      "5": {
+        "speed": 91,
+        "stamina": 132,
+        "power": 91,
+        "guts": 125,
+        "wisdom": 111
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "E",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101502": {
+    "name": "T.M. Opera O",
+    "character_id": 1015,
+    "base_stats": {
+      "3": {
+        "speed": 87,
+        "stamina": 102,
+        "power": 74,
+        "guts": 88,
+        "wisdom": 99
+      },
+      "4": {
+        "speed": 96,
+        "stamina": 113,
+        "power": 83,
+        "guts": 98,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 106,
+        "stamina": 124,
+        "power": 91,
+        "guts": 107,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "E",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 14,
+      "stamina": 8,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 8
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101601": {
+    "name": "Narita Brian",
+    "character_id": 1016,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 89,
+        "power": 100,
+        "guts": 89,
+        "wisdom": 79
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 99,
+        "power": 111,
+        "guts": 98,
+        "wisdom": 89
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 109,
+        "power": 122,
+        "guts": 108,
+        "wisdom": 98
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "B",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 20,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101701": {
+    "name": "Symboli Rudolf",
+    "character_id": 1017,
+    "base_stats": {
+      "3": {
+        "speed": 86,
+        "stamina": 91,
+        "power": 83,
+        "guts": 96,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 96,
+        "stamina": 101,
+        "power": 92,
+        "guts": 107,
+        "wisdom": 104
+      },
+      "5": {
+        "speed": 106,
+        "stamina": 111,
+        "power": 101,
+        "guts": 118,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101702": {
+    "name": "Symboli Rudolf",
+    "character_id": 1017,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 87,
+        "power": 90,
+        "guts": 90,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 92,
+        "stamina": 97,
+        "power": 100,
+        "guts": 100,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 101,
+        "stamina": 107,
+        "power": 110,
+        "guts": 110,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 14,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 8
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101801": {
+    "name": "Air Groove",
+    "character_id": 1018,
+    "base_stats": {
+      "2": {
+        "speed": 86,
+        "stamina": 81,
+        "power": 81,
+        "guts": 86,
+        "wisdom": 91
+      },
+      "3": {
+        "speed": 91,
+        "stamina": 86,
+        "power": 86,
+        "guts": 92,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 101,
+        "stamina": 95,
+        "power": 95,
+        "guts": 102,
+        "wisdom": 107
+      },
+      "5": {
+        "speed": 111,
+        "stamina": 105,
+        "power": 105,
+        "guts": 112,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "B",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 2
+  },
+  "101802": {
+    "name": "Air Groove",
+    "character_id": 1018,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 82,
+        "power": 91,
+        "guts": 88,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 91,
+        "power": 101,
+        "guts": 98,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 100,
+        "power": 111,
+        "guts": 107,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "B",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101901": {
+    "name": "Agnes Digital",
+    "character_id": 1019,
+    "base_stats": {
+      "3": {
+        "speed": 85,
+        "stamina": 91,
+        "power": 83,
+        "guts": 100,
+        "wisdom": 91
+      },
+      "4": {
+        "speed": 95,
+        "stamina": 101,
+        "power": 92,
+        "guts": 111,
+        "wisdom": 101
+      },
+      "5": {
+        "speed": 104,
+        "stamina": 111,
+        "power": 101,
+        "guts": 122,
+        "wisdom": 112
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 8,
+      "power": 7,
+      "guts": 0,
+      "wisdom": 7
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "102001": {
+    "name": "Seiun Sky",
+    "character_id": 1020,
+    "base_stats": {
+      "3": {
+        "speed": 98,
+        "stamina": 98,
+        "power": 88,
+        "guts": 83,
+        "wisdom": 83
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 109,
+        "power": 98,
+        "guts": 92,
+        "wisdom": 92
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 120,
+        "power": 108,
+        "guts": 101,
+        "wisdom": 101
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "B",
+        "betweener": "D",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "102101": {
+    "name": "Tamamo Cross",
+    "character_id": 1021,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 95,
+        "power": 105,
+        "guts": 83,
+        "wisdom": 84
+      },
+      "4": {
+        "speed": 92,
+        "stamina": 105,
+        "power": 117,
+        "guts": 93,
+        "wisdom": 93
+      },
+      "5": {
+        "speed": 101,
+        "stamina": 116,
+        "power": 129,
+        "guts": 102,
+        "wisdom": 102
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "E",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
+  "102201": {
+    "name": "Fine Motion",
+    "character_id": 1022,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 84,
+        "power": 95,
+        "guts": 88,
+        "wisdom": 87
+      },
+      "4": {
+        "speed": 106,
+        "stamina": 93,
+        "power": 106,
+        "guts": 98,
+        "wisdom": 97
+      },
+      "5": {
+        "speed": 117,
+        "stamina": 102,
+        "power": 116,
+        "guts": 108,
+        "wisdom": 107
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 15,
+      "guts": 0,
+      "wisdom": 15
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "102301": {
+    "name": "Biwa Hayahide",
+    "character_id": 1023,
+    "base_stats": {
+      "3": {
+        "speed": 85,
+        "stamina": 93,
+        "power": 82,
+        "guts": 93,
+        "wisdom": 97
+      },
+      "4": {
+        "speed": 95,
+        "stamina": 104,
+        "power": 91,
+        "guts": 104,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 104,
+        "stamina": 114,
+        "power": 101,
+        "guts": 114,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "102302": {
+    "name": "Biwa Hayahide",
+    "character_id": 1023,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 99,
+        "power": 76,
+        "guts": 96,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 93,
+        "stamina": 110,
+        "power": 85,
+        "guts": 107,
+        "wisdom": 105
+      },
+      "5": {
+        "speed": 102,
+        "stamina": 121,
+        "power": 93,
+        "guts": 117,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 12,
+      "power": 12,
+      "guts": 0,
+      "wisdom": 6
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "102401": {
+    "name": "Mayano Top Gun",
+    "character_id": 1024,
+    "base_stats": {
+      "2": {
+        "speed": 73,
+        "stamina": 100,
+        "power": 67,
+        "guts": 95,
+        "wisdom": 90
+      },
+      "3": {
+        "speed": 77,
+        "stamina": 106,
+        "power": 71,
+        "guts": 101,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 86,
+        "stamina": 118,
+        "power": 79,
+        "guts": 112,
+        "wisdom": 105
+      },
+      "5": {
+        "speed": 94,
+        "stamina": 130,
+        "power": 86,
+        "guts": 123,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "D",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 1
+  },
+  "102402": {
+    "name": "Mayano Top Gun",
+    "character_id": 1024,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 100,
+        "power": 82,
+        "guts": 90,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 92,
+        "stamina": 112,
+        "power": 91,
+        "guts": 100,
+        "wisdom": 105
+      },
+      "5": {
+        "speed": 102,
+        "stamina": 123,
+        "power": 100,
+        "guts": 110,
+        "wisdom": 115
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "D",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "102501": {
+    "name": "Manhattan Cafe",
+    "character_id": 1025,
+    "base_stats": {
+      "3": {
+        "speed": 83,
+        "stamina": 98,
+        "power": 94,
+        "guts": 86,
+        "wisdom": 89
+      },
+      "4": {
+        "speed": 92,
+        "stamina": 109,
+        "power": 105,
+        "guts": 95,
+        "wisdom": 99
+      },
+      "5": {
+        "speed": 101,
+        "stamina": 120,
+        "power": 115,
+        "guts": 105,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "B",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "C",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 30,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "102601": {
+    "name": "Mihono Bourbon",
+    "character_id": 1026,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 72,
+        "power": 92,
+        "guts": 102,
+        "wisdom": 88
+      },
+      "4": {
+        "speed": 106,
+        "stamina": 80,
+        "power": 102,
+        "guts": 113,
+        "wisdom": 99
+      },
+      "5": {
+        "speed": 117,
+        "stamina": 88,
+        "power": 112,
+        "guts": 124,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "B",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "E",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "102602": {
+    "name": "Mihono Bourbon",
+    "character_id": 1026,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 68,
+        "power": 92,
+        "guts": 96,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 75,
+        "power": 102,
+        "guts": 106,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 123,
+        "stamina": 83,
+        "power": 112,
+        "guts": 117,
+        "wisdom": 115
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "B",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "E",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "102701": {
+    "name": "Mejiro Ryan",
+    "character_id": 1027,
+    "base_stats": {
+      "1": {
+        "speed": 87,
+        "stamina": 66,
+        "power": 95,
+        "guts": 71,
+        "wisdom": 81
+      },
+      "2": {
+        "speed": 93,
+        "stamina": 70,
+        "power": 101,
+        "guts": 76,
+        "wisdom": 85
+      },
+      "3": {
+        "speed": 98,
+        "stamina": 74,
+        "power": 106,
+        "guts": 80,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 83,
+        "power": 118,
+        "guts": 89,
+        "wisdom": 101
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 91,
+        "power": 130,
+        "guts": 98,
+        "wisdom": 111
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "102801": {
+    "name": "Hishi Akebono",
+    "character_id": 1028,
+    "base_stats": {
+      "3": {
+        "speed": 99,
+        "stamina": 60,
+        "power": 108,
+        "guts": 91,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 110,
+        "stamina": 67,
+        "power": 120,
+        "guts": 101,
+        "wisdom": 102
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 74,
+        "power": 132,
+        "guts": 111,
+        "wisdom": 113
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "B",
+        "medium": "F",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "103001": {
+    "name": "Rice Shower",
+    "character_id": 1030,
+    "base_stats": {
+      "3": {
+        "speed": 71,
+        "stamina": 117,
+        "power": 70,
+        "guts": 102,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 79,
+        "stamina": 130,
+        "power": 78,
+        "guts": 114,
+        "wisdom": 99
+      },
+      "5": {
+        "speed": 87,
+        "stamina": 143,
+        "power": 86,
+        "guts": 125,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 0,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "103002": {
+    "name": "Rice Shower",
+    "character_id": 1030,
+    "base_stats": {
+      "3": {
+        "speed": 76,
+        "stamina": 121,
+        "power": 67,
+        "guts": 97,
+        "wisdom": 89
+      },
+      "4": {
+        "speed": 85,
+        "stamina": 135,
+        "power": 75,
+        "guts": 107,
+        "wisdom": 98
+      },
+      "5": {
+        "speed": 93,
+        "stamina": 148,
+        "power": 82,
+        "guts": 118,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 15,
+      "power": 15,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "103201": {
+    "name": "Agnes Tachyon",
+    "character_id": 1032,
+    "base_stats": {
+      "1": {
+        "speed": 82,
+        "stamina": 76,
+        "power": 76,
+        "guts": 79,
+        "wisdom": 87
+      },
+      "2": {
+        "speed": 87,
+        "stamina": 81,
+        "power": 81,
+        "guts": 83,
+        "wisdom": 93
+      },
+      "3": {
+        "speed": 92,
+        "stamina": 85,
+        "power": 85,
+        "guts": 88,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 102,
+        "stamina": 95,
+        "power": 95,
+        "guts": 98,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 112,
+        "stamina": 104,
+        "power": 104,
+        "guts": 108,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "D",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 1,
+    "running_style": 2
+  },
+  "103301": {
+    "name": "Admire Vega",
+    "character_id": 1033,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 79,
+        "power": 108,
+        "guts": 69,
+        "wisdom": 98
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 88,
+        "power": 120,
+        "guts": 77,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 96,
+        "power": 132,
+        "guts": 85,
+        "wisdom": 119
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "G",
+        "betweener": "B",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
+  "103501": {
+    "name": "Winning Ticket",
+    "character_id": 1035,
+    "base_stats": {
+      "1": {
+        "speed": 87,
+        "stamina": 68,
+        "power": 91,
+        "guts": 74,
+        "wisdom": 80
+      },
+      "2": {
+        "speed": 93,
+        "stamina": 72,
+        "power": 97,
+        "guts": 78,
+        "wisdom": 85
+      },
+      "3": {
+        "speed": 98,
+        "stamina": 76,
+        "power": 102,
+        "guts": 83,
+        "wisdom": 91
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 85,
+        "power": 114,
+        "guts": 92,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 93,
+        "power": 125,
+        "guts": 101,
+        "wisdom": 111
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "103701": {
+    "name": "Eishin Flash",
+    "character_id": 1037,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 83,
+        "power": 93,
+        "guts": 82,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 92,
+        "power": 103,
+        "guts": 91,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 101,
+        "power": 113,
+        "guts": 100,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "103702": {
+    "name": "Eishin Flash",
+    "character_id": 1037,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 88,
+        "power": 84,
+        "guts": 82,
+        "wisdom": 102
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 97,
+        "power": 94,
+        "guts": 91,
+        "wisdom": 114
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 107,
+        "power": 103,
+        "guts": 100,
+        "wisdom": 125
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 8,
+      "power": 8,
+      "guts": 0,
+      "wisdom": 14
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "103801": {
+    "name": "Curren Chan",
+    "character_id": 1038,
+    "base_stats": {
+      "3": {
+        "speed": 97,
+        "stamina": 58,
+        "power": 107,
+        "guts": 91,
+        "wisdom": 97
+      },
+      "4": {
+        "speed": 108,
+        "stamina": 65,
+        "power": 118,
+        "guts": 101,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 119,
+        "stamina": 71,
+        "power": 130,
+        "guts": 111,
+        "wisdom": 119
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "D",
+        "medium": "G",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "103901": {
+    "name": "Kawakami Princess",
+    "character_id": 1039,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 71,
+        "power": 107,
+        "guts": 82,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 79,
+        "power": 119,
+        "guts": 91,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 87,
+        "power": 131,
+        "guts": 101,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "B",
+        "medium": "A",
+        "long": "F"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "C",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 10,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "104001": {
+    "name": "Gold City",
+    "character_id": 1040,
+    "base_stats": {
+      "3": {
+        "speed": 89,
+        "stamina": 92,
+        "power": 94,
+        "guts": 92,
+        "wisdom": 83
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 103,
+        "power": 104,
+        "guts": 102,
+        "wisdom": 92
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 113,
+        "power": 114,
+        "guts": 112,
+        "wisdom": 102
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "B",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 10,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "104002": {
+    "name": "Gold City",
+    "character_id": 1040,
+    "base_stats": {
+      "3": {
+        "speed": 86,
+        "stamina": 98,
+        "power": 86,
+        "guts": 98,
+        "wisdom": 82
+      },
+      "4": {
+        "speed": 95,
+        "stamina": 109,
+        "power": 95,
+        "guts": 108,
+        "wisdom": 93
+      },
+      "5": {
+        "speed": 105,
+        "stamina": 120,
+        "power": 105,
+        "guts": 119,
+        "wisdom": 101
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "B",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 0,
+      "power": 8,
+      "guts": 0,
+      "wisdom": 14
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "104101": {
+    "name": "Sakura Bakushin O",
+    "character_id": 1041,
+    "base_stats": {
+      "1": {
+        "speed": 87,
+        "stamina": 54,
+        "power": 93,
+        "guts": 85,
+        "wisdom": 81
+      },
+      "2": {
+        "speed": 93,
+        "stamina": 57,
+        "power": 99,
+        "guts": 90,
+        "wisdom": 86
+      },
+      "3": {
+        "speed": 98,
+        "stamina": 60,
+        "power": 105,
+        "guts": 95,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 67,
+        "power": 116,
+        "guts": 106,
+        "wisdom": 102
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 74,
+        "power": 128,
+        "guts": 116,
+        "wisdom": 112
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "B",
+        "medium": "G",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "F",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 1,
+    "running_style": 2
+  },
+  "104501": {
+    "name": "Super Creek",
+    "character_id": 1045,
+    "base_stats": {
+      "2": {
+        "speed": 65,
+        "stamina": 100,
+        "power": 71,
+        "guts": 100,
+        "wisdom": 89
+      },
+      "3": {
+        "speed": 69,
+        "stamina": 106,
+        "power": 75,
+        "guts": 106,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 76,
+        "stamina": 118,
+        "power": 84,
+        "guts": 118,
+        "wisdom": 104
+      },
+      "5": {
+        "speed": 84,
+        "stamina": 129,
+        "power": 92,
+        "guts": 129,
+        "wisdom": 116
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "G",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 2,
+    "running_style": 2
+  },
+  "104502": {
+    "name": "Super Creek",
+    "character_id": 1045,
+    "base_stats": {
+      "3": {
+        "speed": 74,
+        "stamina": 106,
+        "power": 75,
+        "guts": 98,
+        "wisdom": 97
+      },
+      "4": {
+        "speed": 82,
+        "stamina": 118,
+        "power": 84,
+        "guts": 108,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 90,
+        "stamina": 129,
+        "power": 92,
+        "guts": 119,
+        "wisdom": 120
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "G",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 14,
+      "stamina": 8,
+      "power": 0,
+      "guts": 8,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "104601": {
+    "name": "Smart Falcon",
+    "character_id": 1046,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 85,
+        "power": 85,
+        "guts": 100,
+        "wisdom": 86
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 95,
+        "power": 95,
+        "guts": 111,
+        "wisdom": 95
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 104,
+        "power": 104,
+        "guts": 122,
+        "wisdom": 105
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "D",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "E",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "104801": {
+    "name": "Tosen Jordan",
+    "character_id": 1048,
+    "base_stats": {
+      "3": {
+        "speed": 89,
+        "stamina": 98,
+        "power": 75,
+        "guts": 101,
+        "wisdom": 87
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 109,
+        "power": 83,
+        "guts": 112,
+        "wisdom": 97
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 120,
+        "power": 92,
+        "guts": 123,
+        "wisdom": 106
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "105001": {
+    "name": "Narita Taishin",
+    "character_id": 1050,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 82,
+        "power": 99,
+        "guts": 79,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 91,
+        "power": 110,
+        "guts": 88,
+        "wisdom": 104
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 100,
+        "power": 121,
+        "guts": 97,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "D",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "F",
+        "betweener": "B",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
+  "105201": {
+    "name": "Haru Urara",
+    "character_id": 1052,
+    "base_stats": {
+      "1": {
+        "speed": 83,
+        "stamina": 58,
+        "power": 89,
+        "guts": 86,
+        "wisdom": 84
+      },
+      "2": {
+        "speed": 89,
+        "stamina": 61,
+        "power": 95,
+        "guts": 92,
+        "wisdom": 88
+      },
+      "3": {
+        "speed": 94,
+        "stamina": 65,
+        "power": 100,
+        "guts": 97,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 72,
+        "power": 112,
+        "guts": 108,
+        "wisdom": 104
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 79,
+        "power": 123,
+        "guts": 119,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "B",
+        "medium": "G",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "G",
+        "betweener": "A",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "G",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 10,
+      "guts": 20,
+      "wisdom": 0
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "105202": {
+    "name": "Haru Urara",
+    "character_id": 1052,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 54,
+        "power": 106,
+        "guts": 98,
+        "wisdom": 98
+      },
+      "4": {
+        "speed": 105,
+        "stamina": 60,
+        "power": 118,
+        "guts": 109,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 66,
+        "power": 130,
+        "guts": 119,
+        "wisdom": 120
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "A",
+        "medium": "G",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "G",
+        "betweener": "A",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "G",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "105601": {
+    "name": "Matikanefukukitaru",
+    "character_id": 1056,
+    "base_stats": {
+      "1": {
+        "speed": 77,
+        "stamina": 81,
+        "power": 88,
+        "guts": 81,
+        "wisdom": 73
+      },
+      "2": {
+        "speed": 82,
+        "stamina": 86,
+        "power": 93,
+        "guts": 86,
+        "wisdom": 78
+      },
+      "3": {
+        "speed": 87,
+        "stamina": 91,
+        "power": 99,
+        "guts": 91,
+        "wisdom": 82
+      },
+      "4": {
+        "speed": 97,
+        "stamina": 101,
+        "power": 110,
+        "guts": 101,
+        "wisdom": 91
+      },
+      "5": {
+        "speed": 106,
+        "stamina": 111,
+        "power": 121,
+        "guts": 111,
+        "wisdom": 101
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "105602": {
+    "name": "Matikanefukukitaru",
+    "character_id": 1056,
+    "base_stats": {
+      "3": {
+        "speed": 87,
+        "stamina": 100,
+        "power": 94,
+        "guts": 94,
+        "wisdom": 75
+      },
+      "4": {
+        "speed": 96,
+        "stamina": 111,
+        "power": 104,
+        "guts": 104,
+        "wisdom": 85
+      },
+      "5": {
+        "speed": 106,
+        "stamina": 122,
+        "power": 115,
+        "guts": 115,
+        "wisdom": 92
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "105801": {
+    "name": "Meisho Doto",
+    "character_id": 1058,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 95,
+        "power": 85,
+        "guts": 96,
+        "wisdom": 81
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 105,
+        "power": 95,
+        "guts": 107,
+        "wisdom": 90
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 116,
+        "power": 104,
+        "guts": 118,
+        "wisdom": 99
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "B",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "105901": {
+    "name": "Mejiro Dober",
+    "character_id": 1059,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 85,
+        "power": 97,
+        "guts": 75,
+        "wisdom": 97
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 95,
+        "power": 108,
+        "guts": 83,
+        "wisdom": 107
+      },
+      "5": {
+        "speed": 117,
+        "stamina": 104,
+        "power": 119,
+        "guts": 92,
+        "wisdom": 118
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "F"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "106001": {
+    "name": "Nice Nature",
+    "character_id": 1060,
+    "base_stats": {
+      "1": {
+        "speed": 86,
+        "stamina": 72,
+        "power": 89,
+        "guts": 69,
+        "wisdom": 84
+      },
+      "2": {
+        "speed": 91,
+        "stamina": 76,
+        "power": 95,
+        "guts": 74,
+        "wisdom": 89
+      },
+      "3": {
+        "speed": 97,
+        "stamina": 81,
+        "power": 100,
+        "guts": 78,
+        "wisdom": 94
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 90,
+        "power": 112,
+        "guts": 87,
+        "wisdom": 104
+      },
+      "5": {
+        "speed": 118,
+        "stamina": 99,
+        "power": 123,
+        "guts": 96,
+        "wisdom": 114
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "106101": {
+    "name": "King Halo",
+    "character_id": 1061,
+    "base_stats": {
+      "1": {
+        "speed": 87,
+        "stamina": 60,
+        "power": 93,
+        "guts": 73,
+        "wisdom": 87
+      },
+      "2": {
+        "speed": 93,
+        "stamina": 63,
+        "power": 98,
+        "guts": 77,
+        "wisdom": 94
+      },
+      "3": {
+        "speed": 98,
+        "stamina": 67,
+        "power": 104,
+        "guts": 82,
+        "wisdom": 99
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 74,
+        "power": 116,
+        "guts": 91,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 82,
+        "power": 127,
+        "guts": 100,
+        "wisdom": 121
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "B",
+        "medium": "B",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 1,
+    "running_style": 3
+  },
+  "106201": {
+    "name": "Matikanetannhauser",
+    "character_id": 1062,
+    "base_stats": {
+      "2": {
+        "speed": 79,
+        "stamina": 91,
+        "power": 82,
+        "guts": 88,
+        "wisdom": 85
+      },
+      "3": {
+        "speed": 84,
+        "stamina": 96,
+        "power": 87,
+        "guts": 93,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 93,
+        "stamina": 107,
+        "power": 97,
+        "guts": 103,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 103,
+        "stamina": 117,
+        "power": 106,
+        "guts": 114,
+        "wisdom": 110
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "D",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 20,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 2,
+    "running_style": 3
+  },
+  "106801": {
+    "name": "Kitasan Black",
+    "character_id": 1068,
+    "base_stats": {
+      "3": {
+        "speed": 97,
+        "stamina": 100,
+        "power": 79,
+        "guts": 86,
+        "wisdom": 88
+      },
+      "4": {
+        "speed": 108,
+        "stamina": 111,
+        "power": 88,
+        "guts": 96,
+        "wisdom": 97
+      },
+      "5": {
+        "speed": 119,
+        "stamina": 122,
+        "power": 97,
+        "guts": 105,
+        "wisdom": 107
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "B",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "106901": {
+    "name": "Sakura Chiyono O",
+    "character_id": 1069,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 96,
+        "power": 78,
+        "guts": 93,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 107,
+        "power": 87,
+        "guts": 103,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 114,
+        "stamina": 117,
+        "power": 95,
+        "guts": 114,
+        "wisdom": 110
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "F",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "107101": {
+    "name": "Mejiro Ardan",
+    "character_id": 1071,
+    "base_stats": {
+      "3": {
+        "speed": 92,
+        "stamina": 89,
+        "power": 89,
+        "guts": 80,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 102,
+        "stamina": 99,
+        "power": 99,
+        "guts": 89,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 109,
+        "power": 109,
+        "guts": 98,
+        "wisdom": 121
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "B",
+        "medium": "A",
+        "long": "D"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "D",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  }
+}

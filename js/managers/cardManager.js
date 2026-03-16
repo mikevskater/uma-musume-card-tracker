@@ -388,16 +388,17 @@ async function loadData() {
         console.log('Loading data files...');
         
         const responses = await Promise.all([
-            fetch('data/raw_cards.json'),
-            fetch('data/raw_effects.json'),
-            fetch('data/raw_skills.json'),
-            fetch('data/raw_skillTypes.json'),
-            fetch('data/raw_events.json'),
-            fetch('data/raw_eventsChain.json'),
-            fetch('data/raw_eventsSpecial.json')
+            fetch('data/cards.json'),
+            fetch('data/effects.json'),
+            fetch('data/skills.json'),
+            fetch('data/skill_types.json'),
+            fetch('data/events.json'),
+            fetch('data/training_values.json'),
+            fetch('data/scenario_data.json')
         ]);
 
-        const [cardsDataRaw, effects, skills, skillTypes, events, eventsChain, eventsSpecial] = 
+        const [cardsDataRaw, effects, skills, skillTypes, events,
+               trainingValuesRaw, scenarioDataRaw] =
             await Promise.all(responses.map(res => res.json()));
 
         console.log('Data loaded successfully');
@@ -406,10 +407,12 @@ async function loadData() {
         processEffectsData(effects);
         processSkillsData(skills);
         processSkillTypesData(skillTypes);
-        processEventsData(events, eventsChain, eventsSpecial);
+        processEventsData(events);
+        trainingData = trainingValuesRaw;
+        scenarioData = scenarioDataRaw;
         
-        // Store card data
-        cardData = cardsDataRaw.pageProps.supportData;
+        // Store card data (flat array, no wrapper)
+        cardData = cardsDataRaw;
         
         for (let card of cardData) {
             for (let i = 0; i < card.hints.hint_skills.length; i++) {
@@ -418,15 +421,15 @@ async function loadData() {
                     card.hints.hint_skills[i] = {
                         "id": hint,
                         "type": skillsData[hint].type,
-                        "name_en": skillsData[hint].name_en,
-                        "desc_en": skillsData[hint].desc_en
+                        "name": skillsData[hint].name,
+                        "description": skillsData[hint].description
                     };
                 } else {
                     card.hints.hint_skills[i] = {
                         "id": hint,
                         "type": "unknown",
-                        "name_en": "Unknown Skill",
-                        "desc_en": "No description available."
+                        "name": "Unknown Skill",
+                        "description": "No description available."
                     };
                 }
             }
@@ -437,15 +440,15 @@ async function loadData() {
                     card.event_skills[i] = {
                         "id": event,
                         "type": skillsData[event].type,
-                        "name_en": skillsData[event].name_en,
-                        "desc_en": skillsData[event].desc_en
+                        "name": skillsData[event].name,
+                        "description": skillsData[event].description
                     };
                 } else {
                     card.event_skills[i] = {
                         "id": event,
                         "type": "unknown",
-                        "name_en": "Unknown Event",
-                        "desc_en": "No description available."
+                        "name": "Unknown Event",
+                        "description": "No description available."
                     };
                 }
             }
@@ -488,13 +491,9 @@ function processSkillTypesData(skillTypes) {
     });
 }
 
-// Process events data
-function processEventsData(events, eventsChain, eventsSpecial) {
-    eventsData = {
-        regular: events,
-        chain: eventsChain,
-        special: eventsSpecial
-    };
+// Process events data — flat array of character entries
+function processEventsData(events) {
+    eventsData = events;
 }
 
 // ===== ERROR HANDLING =====

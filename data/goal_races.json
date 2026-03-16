@@ -1,0 +1,4350 @@
+{
+  "0": {
+    "name": "Chara 0",
+    "routes": {
+      "4": {
+        "scenario": "Trailblazer",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 48,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 72,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 74,
+            "sort_order": 5,
+            "target_type": 3,
+            "condition_id": 40001
+          },
+          {
+            "turn": 76,
+            "sort_order": 6,
+            "target_type": 3,
+            "condition_id": 40002
+          },
+          {
+            "turn": 78,
+            "sort_order": 7,
+            "target_type": 3,
+            "condition_id": 40003
+          }
+        ]
+      }
+    }
+  },
+  "1001": {
+    "name": "Special Week",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 27,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 181
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 56,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 70,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 8,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1002": {
+    "name": "Silence Suzuka",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 27,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 42,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 84
+          },
+          {
+            "turn": 53,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 11
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 67,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 86
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1003": {
+    "name": "Tokai Teio",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1065
+          },
+          {
+            "turn": 26,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 195
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 70,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1004": {
+    "name": "Maruzensky",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 676
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 30,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 1074
+          },
+          {
+            "turn": 31,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 59,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1005": {
+    "name": "Fuji Kiseki",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1091
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 31,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 33,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 34,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 46,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 2
+          },
+          {
+            "turn": 59,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1006": {
+    "name": "Oguri Cap",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1070
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 33,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 46,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 100
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1007": {
+    "name": "Gold Ship",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1068
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1008": {
+    "name": "Vodka",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1066
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 623
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 185
+          },
+          {
+            "turn": 31,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 48,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 57,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 5
+          },
+          {
+            "turn": 59,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 68,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1009": {
+    "name": "Daiwa Scarlet",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 29,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 185
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 45,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1010": {
+    "name": "Taiki Shuttle",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 846
+          },
+          {
+            "turn": 25,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 178
+          },
+          {
+            "turn": 33,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 36,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 189
+          },
+          {
+            "turn": 46,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 59,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 66,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1011": {
+    "name": "Grass Wonder",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 685
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 46,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 67,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 86
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1012": {
+    "name": "Hishi Amazon",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1090
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 623
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 59,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 70,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1013": {
+    "name": "Mejiro McQueen",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 42,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 84
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 56,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 1071
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 8,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1014": {
+    "name": "El Condor Pasa",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 846
+          },
+          {
+            "turn": 27,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 183
+          },
+          {
+            "turn": 33,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 43,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 86
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 70,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1015": {
+    "name": "T.M. Opera O",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 28,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1016": {
+    "name": "Narita Brian",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1078
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 1089
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 12
+          },
+          {
+            "turn": 56,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 1079
+          },
+          {
+            "turn": 56,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 1083
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 1080
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 1084
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 1081
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 1085
+          },
+          {
+            "turn": 72,
+            "sort_order": 11,
+            "target_type": 1,
+            "condition_id": 1082
+          },
+          {
+            "turn": 72,
+            "sort_order": 11,
+            "target_type": 1,
+            "condition_id": 1086
+          },
+          {
+            "turn": 74,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 14,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1017": {
+    "name": "Symboli Rudolf",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 931
+          },
+          {
+            "turn": 19,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 632
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1018": {
+    "name": "Air Groove",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1068
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 623
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 64,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 82
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1019": {
+    "name": "Agnes Digital",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 846
+          },
+          {
+            "turn": 28,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 198
+          },
+          {
+            "turn": 33,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 37,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 1023
+          },
+          {
+            "turn": 46,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 100
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 8,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1020": {
+    "name": "Seiun Sky",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 689
+          },
+          {
+            "turn": 25,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1021": {
+    "name": "Tamamo Cross",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 29,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 49,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 300
+          },
+          {
+            "turn": 54,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 12
+          },
+          {
+            "turn": 56,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1022": {
+    "name": "Fine Motion",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 45,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 64,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 82
+          },
+          {
+            "turn": 68,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 69,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1023": {
+    "name": "Biwa Hayahide",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1070
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 1076
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1024": {
+    "name": "Mayano Top Gun",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 37,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 44,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 12
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1025": {
+    "name": "Manhattan Cafe",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 851
+          },
+          {
+            "turn": 26,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 42,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 177
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 70,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1026": {
+    "name": "Mihono Bourbon",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1075
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 30,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 171
+          },
+          {
+            "turn": 31,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1027": {
+    "name": "Mejiro Ryan",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 851
+          },
+          {
+            "turn": 25,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 193
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 1071
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1028": {
+    "name": "Hishi Akebono",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1094
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 37,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 42,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 89
+          },
+          {
+            "turn": 46,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 2
+          },
+          {
+            "turn": 59,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 66,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1030": {
+    "name": "Rice Shower",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 931
+          },
+          {
+            "turn": 30,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 171
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 54,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 13
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 1071
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1032": {
+    "name": "Agnes Tachyon",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 29,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 33,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 164
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1033": {
+    "name": "Admire Vega",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1035": {
+    "name": "Winning Ticket",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 689
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 31,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1037": {
+    "name": "Eishin Flash",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 25,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 1093
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 46,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1038": {
+    "name": "Curren Chan",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1077
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 29,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 170
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 210
+          },
+          {
+            "turn": 36,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 96
+          },
+          {
+            "turn": 42,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 53,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 28
+          },
+          {
+            "turn": 54,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 2
+          },
+          {
+            "turn": 66,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1039": {
+    "name": "Kawakami Princess",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1070
+          },
+          {
+            "turn": 31,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 45,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 53,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 11
+          },
+          {
+            "turn": 57,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 5
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 69,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1040": {
+    "name": "Gold City",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1092
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 623
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1041": {
+    "name": "Sakura Bakushin O",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 676
+          },
+          {
+            "turn": 21,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 626
+          },
+          {
+            "turn": 30,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 171
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 210
+          },
+          {
+            "turn": 42,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 2
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 96
+          },
+          {
+            "turn": 61,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 97
+          },
+          {
+            "turn": 65,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 83
+          },
+          {
+            "turn": 66,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 70,
+            "sort_order": 11,
+            "target_type": 1,
+            "condition_id": 78
+          },
+          {
+            "turn": 74,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 14,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1045": {
+    "name": "Super Creek",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 28,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 199
+          },
+          {
+            "turn": 44,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1046": {
+    "name": "Smart Falcon",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 846
+          },
+          {
+            "turn": 25,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 700
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 37,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 1023
+          },
+          {
+            "turn": 45,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 1026
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 1027
+          },
+          {
+            "turn": 52,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 1
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 1022
+          },
+          {
+            "turn": 69,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 1026
+          },
+          {
+            "turn": 71,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 80
+          },
+          {
+            "turn": 72,
+            "sort_order": 11,
+            "target_type": 1,
+            "condition_id": 1027
+          },
+          {
+            "turn": 74,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 14,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1048": {
+    "name": "Tosen Jordan",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 45,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 90
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1050": {
+    "name": "Narita Taishin",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1068
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 13
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 1076
+          },
+          {
+            "turn": 68,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1052": {
+    "name": "Haru Urara",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 831
+          },
+          {
+            "turn": 37,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 45,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 48,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 50,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 22
+          },
+          {
+            "turn": 52,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 1
+          },
+          {
+            "turn": 63,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 106
+          },
+          {
+            "turn": 69,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 1025
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1056": {
+    "name": "Matikanefukukitaru",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1069
+          },
+          {
+            "turn": 29,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 169
+          },
+          {
+            "turn": 30,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 171
+          },
+          {
+            "turn": 30,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 188
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 53,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 11
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 63,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 104
+          },
+          {
+            "turn": 61,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 100
+          },
+          {
+            "turn": 64,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 82
+          },
+          {
+            "turn": 72,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1058": {
+    "name": "Meisho Doto",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 31,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 44,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 49,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 6
+          },
+          {
+            "turn": 53,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 11
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1059": {
+    "name": "Mejiro Dober",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1091
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 623
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 162
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 165
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 167
+          },
+          {
+            "turn": 48,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 67,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 88
+          },
+          {
+            "turn": 69,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 77
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1060": {
+    "name": "Nice Nature",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 26,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 195
+          },
+          {
+            "turn": 39,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 104
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 1073
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 71,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 118
+          },
+          {
+            "turn": 72,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1061": {
+    "name": "King Halo",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1066
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 625
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 2
+          },
+          {
+            "turn": 59,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 66,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 75
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1062": {
+    "name": "Matikanetannhauser",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1065
+          },
+          {
+            "turn": 24,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 100
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 52,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 25
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 70,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1068": {
+    "name": "Kitasan Black",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 851
+          },
+          {
+            "turn": 30,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 42,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 177
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 60,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 70,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 72,
+            "sort_order": 11,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 14,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1069": {
+    "name": "Sakura Chiyono O",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1078
+          },
+          {
+            "turn": 23,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 624
+          },
+          {
+            "turn": 31,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 1095
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 59,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 73
+          },
+          {
+            "turn": 60,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 68,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 70,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 79
+          },
+          {
+            "turn": 74,
+            "sort_order": 9,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
+  "1071": {
+    "name": "Mejiro Ardan",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1096
+          },
+          {
+            "turn": 30,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 0
+          },
+          {
+            "turn": 32,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 174
+          },
+          {
+            "turn": 34,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 44,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 1097
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 60,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 74
+          },
+          {
+            "turn": 67,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 86
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 1098
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 1099
+          },
+          {
+            "turn": 74,
+            "sort_order": 10,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  }
+}

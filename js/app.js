@@ -9,6 +9,8 @@ let effectsData = {};
 let skillsData = {};
 let skillTypesData = {};
 let eventsData = {};
+let trainingData = {};
+let scenarioData = {};
 let ownedCards = {};
 
 // Modal state

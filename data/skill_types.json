@@ -1,0 +1,86 @@
+[
+  {
+    "id": "corner",
+    "string": "corner"
+  },
+  {
+    "id": "debuff",
+    "string": "debuff"
+  },
+  {
+    "id": "dirt",
+    "string": "dirt"
+  },
+  {
+    "id": "end_closer",
+    "string": "end_closer"
+  },
+  {
+    "id": "final_corner",
+    "string": "final_corner"
+  },
+  {
+    "id": "final_leg",
+    "string": "final_leg"
+  },
+  {
+    "id": "final_straight",
+    "string": "final_straight"
+  },
+  {
+    "id": "front_runner",
+    "string": "front_runner"
+  },
+  {
+    "id": "last_spurt",
+    "string": "last_spurt"
+  },
+  {
+    "id": "late_surger",
+    "string": "late_surger"
+  },
+  {
+    "id": "long",
+    "string": "long"
+  },
+  {
+    "id": "medium",
+    "string": "medium"
+  },
+  {
+    "id": "middle_leg",
+    "string": "middle_leg"
+  },
+  {
+    "id": "mile",
+    "string": "mile"
+  },
+  {
+    "id": "no_condition",
+    "string": "no_condition"
+  },
+  {
+    "id": "opening_leg",
+    "string": "opening_leg"
+  },
+  {
+    "id": "pace_chaser",
+    "string": "pace_chaser"
+  },
+  {
+    "id": "short",
+    "string": "short"
+  },
+  {
+    "id": "straight",
+    "string": "straight"
+  },
+  {
+    "id": "turf",
+    "string": "turf"
+  },
+  {
+    "id": "uphill_or_downhill",
+    "string": "uphill_or_downhill"
+  }
+]

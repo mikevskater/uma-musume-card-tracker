@@ -816,9 +816,9 @@ function createEffectItem(effectArray, level, effectInfo, card) {
     return createElement('div', {
         className: `effect-item ${isLocked ? 'effect-locked' : ''}`,
         innerHTML: `
-            <div class="effect-name">${effectInfo.name_en}</div>
+            <div class="effect-name">${effectInfo.name}</div>
             <div class="effect-value">${effectValueContent}</div>
-            <div class="effect-description">${effectInfo.desc_en || ''}</div>
+            <div class="effect-description">${effectInfo.description || ''}</div>
         `
     });
 }
@@ -854,7 +854,7 @@ function checkSkillTypeFilters(skillTypes) {
 // Create skill item for modal display with filter highlighting (ENHANCED with individual skill highlighting)
 function createSkillItem(skill, isHintSkill = true) {
     const skillInfo = skillsData[skill.id];
-    const skillName = skillInfo?.name_en || skillInfo?.enname || skill.name_en || `Skill ${skill.id}`;
+    const skillName = skillInfo?.name || skill.name || `Skill ${skill.id}`;
     
     // Check filter matches for skill types
     const filterCheck = checkSkillTypeFilters(skill.type || []);
@@ -923,7 +923,7 @@ function getSortOptionLabel(category, option) {
     
     switch (category) {
         case 'effect':
-            return effectsData[option]?.name_en || `Effect ${option}`;
+            return effectsData[option]?.name || `Effect ${option}`;
         case 'skillTypeCount':
             return getSkillTypeDescription(option);
         default:

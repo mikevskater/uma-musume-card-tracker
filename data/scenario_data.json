@@ -1,0 +1,1767 @@
+{
+  "scenarios": {
+    "1": {
+      "name": "URA",
+      "turn_count": 78,
+      "turn_set_id": 1,
+      "hint_rate": 0,
+      "chara_program_change_flag": 0
+    },
+    "2": {
+      "name": "Aoharu",
+      "turn_count": 78,
+      "turn_set_id": 2,
+      "hint_rate": 0,
+      "chara_program_change_flag": 0,
+      "aoharu_schedule": [
+        {
+          "id": 0,
+          "turn_num": 24,
+          "notice_turns": [
+            14,
+            19,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 1,
+          "turn_num": 36,
+          "notice_turns": [
+            26,
+            31,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 2,
+          "turn_num": 48,
+          "notice_turns": [
+            38,
+            43,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 3,
+          "turn_num": 60,
+          "notice_turns": [
+            50,
+            55,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 4,
+          "turn_num": 72,
+          "notice_turns": [
+            62,
+            67,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "team_rank_bonuses": [
+        {
+          "id": 1,
+          "team_rank_threshold": 6,
+          "add_status": 50
+        },
+        {
+          "id": 2,
+          "team_rank_threshold": 11,
+          "add_status": 30
+        },
+        {
+          "id": 3,
+          "team_rank_threshold": 16,
+          "add_status": 20
+        },
+        {
+          "id": 4,
+          "team_rank_threshold": 21,
+          "add_status": 10
+        },
+        {
+          "id": 5,
+          "team_rank_threshold": 26,
+          "add_status": 0
+        },
+        {
+          "id": 6,
+          "team_rank_threshold": 99999,
+          "add_status": 0
+        }
+      ]
+    },
+    "4": {
+      "name": "Trailblazer",
+      "turn_count": 78,
+      "turn_set_id": 4,
+      "hint_rate": 0,
+      "chara_program_change_flag": 1,
+      "enhanced_training": {
+        "601": "speed",
+        "602": "stamina",
+        "603": "power",
+        "604": "guts",
+        "605": "intelligence"
+      }
+    }
+  },
+  "turn_schedules": {
+    "1": [
+      {
+        "turn": 1,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 2,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 3,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 4,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 5,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 6,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 7,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 8,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 9,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 10,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 11,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 12,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 13,
+        "year": 1,
+        "month": 7,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 14,
+        "year": 1,
+        "month": 7,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 15,
+        "year": 1,
+        "month": 8,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 16,
+        "year": 1,
+        "month": 8,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 17,
+        "year": 1,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 18,
+        "year": 1,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 19,
+        "year": 1,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 20,
+        "year": 1,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 21,
+        "year": 1,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 22,
+        "year": 1,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 23,
+        "year": 1,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 24,
+        "year": 1,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 25,
+        "year": 2,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 26,
+        "year": 2,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 27,
+        "year": 2,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 28,
+        "year": 2,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 29,
+        "year": 2,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 30,
+        "year": 2,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 31,
+        "year": 2,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 32,
+        "year": 2,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 33,
+        "year": 2,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 34,
+        "year": 2,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 35,
+        "year": 2,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 36,
+        "year": 2,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 37,
+        "year": 2,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 38,
+        "year": 2,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 39,
+        "year": 2,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 40,
+        "year": 2,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 41,
+        "year": 2,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 42,
+        "year": 2,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 43,
+        "year": 2,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 44,
+        "year": 2,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 45,
+        "year": 2,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 46,
+        "year": 2,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 47,
+        "year": 2,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 48,
+        "year": 2,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 49,
+        "year": 3,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 50,
+        "year": 3,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 51,
+        "year": 3,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 52,
+        "year": 3,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 53,
+        "year": 3,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 54,
+        "year": 3,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 55,
+        "year": 3,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 56,
+        "year": 3,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 57,
+        "year": 3,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 58,
+        "year": 3,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 59,
+        "year": 3,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 60,
+        "year": 3,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 61,
+        "year": 3,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 62,
+        "year": 3,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 63,
+        "year": 3,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 64,
+        "year": 3,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 65,
+        "year": 3,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 66,
+        "year": 3,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 67,
+        "year": 3,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 68,
+        "year": 3,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 69,
+        "year": 3,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 70,
+        "year": 3,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 71,
+        "year": 3,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 72,
+        "year": 3,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 73,
+        "year": 4,
+        "month": 1,
+        "half": 1,
+        "period": 3
+      },
+      {
+        "turn": 74,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 75,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 76,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 77,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 78,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      }
+    ],
+    "2": [
+      {
+        "turn": 1,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 2,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 3,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 4,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 5,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 6,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 7,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 8,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 9,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 10,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 11,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 12,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 13,
+        "year": 1,
+        "month": 7,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 14,
+        "year": 1,
+        "month": 7,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 15,
+        "year": 1,
+        "month": 8,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 16,
+        "year": 1,
+        "month": 8,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 17,
+        "year": 1,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 18,
+        "year": 1,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 19,
+        "year": 1,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 20,
+        "year": 1,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 21,
+        "year": 1,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 22,
+        "year": 1,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 23,
+        "year": 1,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 24,
+        "year": 1,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 25,
+        "year": 2,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 26,
+        "year": 2,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 27,
+        "year": 2,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 28,
+        "year": 2,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 29,
+        "year": 2,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 30,
+        "year": 2,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 31,
+        "year": 2,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 32,
+        "year": 2,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 33,
+        "year": 2,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 34,
+        "year": 2,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 35,
+        "year": 2,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 36,
+        "year": 2,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 37,
+        "year": 2,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 38,
+        "year": 2,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 39,
+        "year": 2,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 40,
+        "year": 2,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 41,
+        "year": 2,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 42,
+        "year": 2,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 43,
+        "year": 2,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 44,
+        "year": 2,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 45,
+        "year": 2,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 46,
+        "year": 2,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 47,
+        "year": 2,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 48,
+        "year": 2,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 49,
+        "year": 3,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 50,
+        "year": 3,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 51,
+        "year": 3,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 52,
+        "year": 3,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 53,
+        "year": 3,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 54,
+        "year": 3,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 55,
+        "year": 3,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 56,
+        "year": 3,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 57,
+        "year": 3,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 58,
+        "year": 3,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 59,
+        "year": 3,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 60,
+        "year": 3,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 61,
+        "year": 3,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 62,
+        "year": 3,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 63,
+        "year": 3,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 64,
+        "year": 3,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 65,
+        "year": 3,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 66,
+        "year": 3,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 67,
+        "year": 3,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 68,
+        "year": 3,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 69,
+        "year": 3,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 70,
+        "year": 3,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 71,
+        "year": 3,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 72,
+        "year": 3,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 73,
+        "year": 4,
+        "month": 1,
+        "half": 1,
+        "period": 3
+      },
+      {
+        "turn": 74,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 75,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 76,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 77,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 78,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      }
+    ],
+    "4": [
+      {
+        "turn": 1,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 2,
+        "year": 1,
+        "month": 4,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 3,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 4,
+        "year": 1,
+        "month": 4,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 5,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 6,
+        "year": 1,
+        "month": 5,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 7,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 8,
+        "year": 1,
+        "month": 5,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 9,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 10,
+        "year": 1,
+        "month": 6,
+        "half": 1,
+        "period": 1
+      },
+      {
+        "turn": 11,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 12,
+        "year": 1,
+        "month": 6,
+        "half": 2,
+        "period": 1
+      },
+      {
+        "turn": 13,
+        "year": 1,
+        "month": 7,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 14,
+        "year": 1,
+        "month": 7,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 15,
+        "year": 1,
+        "month": 8,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 16,
+        "year": 1,
+        "month": 8,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 17,
+        "year": 1,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 18,
+        "year": 1,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 19,
+        "year": 1,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 20,
+        "year": 1,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 21,
+        "year": 1,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 22,
+        "year": 1,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 23,
+        "year": 1,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 24,
+        "year": 1,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 25,
+        "year": 2,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 26,
+        "year": 2,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 27,
+        "year": 2,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 28,
+        "year": 2,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 29,
+        "year": 2,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 30,
+        "year": 2,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 31,
+        "year": 2,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 32,
+        "year": 2,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 33,
+        "year": 2,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 34,
+        "year": 2,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 35,
+        "year": 2,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 36,
+        "year": 2,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 37,
+        "year": 2,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 38,
+        "year": 2,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 39,
+        "year": 2,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 40,
+        "year": 2,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 41,
+        "year": 2,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 42,
+        "year": 2,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 43,
+        "year": 2,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 44,
+        "year": 2,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 45,
+        "year": 2,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 46,
+        "year": 2,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 47,
+        "year": 2,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 48,
+        "year": 2,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 49,
+        "year": 3,
+        "month": 1,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 50,
+        "year": 3,
+        "month": 1,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 51,
+        "year": 3,
+        "month": 2,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 52,
+        "year": 3,
+        "month": 2,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 53,
+        "year": 3,
+        "month": 3,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 54,
+        "year": 3,
+        "month": 3,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 55,
+        "year": 3,
+        "month": 4,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 56,
+        "year": 3,
+        "month": 4,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 57,
+        "year": 3,
+        "month": 5,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 58,
+        "year": 3,
+        "month": 5,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 59,
+        "year": 3,
+        "month": 6,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 60,
+        "year": 3,
+        "month": 6,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 61,
+        "year": 3,
+        "month": 7,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 62,
+        "year": 3,
+        "month": 7,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 63,
+        "year": 3,
+        "month": 8,
+        "half": 1,
+        "period": 2
+      },
+      {
+        "turn": 64,
+        "year": 3,
+        "month": 8,
+        "half": 2,
+        "period": 2
+      },
+      {
+        "turn": 65,
+        "year": 3,
+        "month": 9,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 66,
+        "year": 3,
+        "month": 9,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 67,
+        "year": 3,
+        "month": 10,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 68,
+        "year": 3,
+        "month": 10,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 69,
+        "year": 3,
+        "month": 11,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 70,
+        "year": 3,
+        "month": 11,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 71,
+        "year": 3,
+        "month": 12,
+        "half": 1,
+        "period": 0
+      },
+      {
+        "turn": 72,
+        "year": 3,
+        "month": 12,
+        "half": 2,
+        "period": 0
+      },
+      {
+        "turn": 73,
+        "year": 4,
+        "month": 1,
+        "half": 1,
+        "period": 3
+      },
+      {
+        "turn": 74,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 75,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 76,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 77,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      },
+      {
+        "turn": 78,
+        "year": 4,
+        "month": 1,
+        "half": 2,
+        "period": 3
+      }
+    ]
+  }
+}

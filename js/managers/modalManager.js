@@ -479,8 +479,7 @@ function createModalDetailHeader(card, level, isOwned) {
                 ${createTypeBadge(card.type).outerHTML}
             </div>
             <div class="release-info">
-                Global Release: ${card.release_en || 'Not Released'}<br>
-                ${card.release ? `Original Release: ${card.release}<br>` : ''}
+                Release: ${getDisplayDate(card)}<br>
                 Obtained: ${card.obtained || 'Unknown'}
             </div>
         `
@@ -707,96 +706,84 @@ function createCharacterEventsGrid(card) {
     const grid = createElement('div', {
         className: 'events-list'
     });
-    
-    // Look for events by character ID
-    let characterEvents = [];
-    
-    // Check regular events
-    if (eventsData.regular) {
-        const charEvents = eventsData.regular.find(eventGroup => eventGroup[0] === card.char_id);
-        if (charEvents && charEvents[1]) {
-            characterEvents = characterEvents.concat(charEvents[1]);
-        }
-    }
-    
-    // Check special events
-    if (eventsData.special) {
-        const specialEvents = eventsData.special.find(eventGroup => eventGroup[0] === card.char_id);
-        if (specialEvents && specialEvents[1]) {
-            characterEvents = characterEvents.concat(specialEvents[1]);
-        }
-    }
-    
-    if (characterEvents.length === 0) {
+
+    // Find character entry in events data
+    const charEntry = Array.isArray(eventsData)
+        ? eventsData.find(e => e.char_id === card.char_id)
+        : null;
+
+    const characterEvents = charEntry ? charEntry.events || [] : [];
+    const chainEvents = charEntry && charEntry.chain_events
+        ? charEntry.chain_events[String(card.support_id)] || []
+        : [];
+
+    if (characterEvents.length === 0 && chainEvents.length === 0) {
         grid.appendChild(createElement('div', {
             className: 'no-data',
             textContent: 'No character events found'
         }));
         return grid;
     }
-    
-    // Limit to first 5 events
-    characterEvents.slice(0, 5).forEach(event => {
-        const eventItem = createEventItem(event);
-        grid.appendChild(eventItem);
+
+    // Character events
+    characterEvents.forEach(event => {
+        grid.appendChild(createEventItem(event));
     });
-    
+
+    // Chain events (card-specific)
+    if (chainEvents.length > 0) {
+        const separator = createElement('h5', {
+            className: 'chain-events-heading',
+            textContent: 'Card Events'
+        });
+        grid.appendChild(separator);
+
+        chainEvents.forEach(event => {
+            grid.appendChild(createEventItem(event));
+        });
+    }
+
     return grid;
 }
 
 // Create event item
 function createEventItem(event) {
-    // Extract English title from localization arrays
-    let eventTitle = 'Unknown Event';
-    
-    if (Array.isArray(event) && event.length > 2) {
-        for (let i = 2; i < event.length; i++) {
-            if (Array.isArray(event[i]) && event[i].length >= 2 && event[i][0] === 103) {
-                eventTitle = event[i][1];
-                break;
-            }
-        }
-    }
-    
-    // Fallback to Japanese title if no English title found
-    if (eventTitle === 'Unknown Event' && event[0]) {
-        eventTitle = event[0];
-    }
-    
-    const choices = event[1] || [];
-    
+    // Use EN title with JP fallback
+    const eventTitle = event.title_en || event.title_jp || 'Unknown Event';
+    const choices = event.choices || [];
+
     const item = createElement('div', {
         className: 'event-item'
     });
-    
+
     const title = createElement('div', {
         className: 'event-title',
         textContent: eventTitle
     });
     item.appendChild(title);
-    
+
     const choicesDiv = createElement('div', {
         className: 'event-choices'
     });
-    
+
     choices.forEach((choice, index) => {
         const optionLabel = getEventOptionLabel(index, choices.length);
-        
+
         const choiceDiv = createElement('div', {
             className: 'event-choice',
             innerHTML: `
                 ${optionLabel ? `<strong>${optionLabel}:</strong> ` : ''}
                 <div class="choice-effects">
-                    ${formatEventEffects(choice[1] || [])}
+                    ${formatEventEffects(choice.effects || [])}
                 </div>
             `
         });
-        
+
         choicesDiv.appendChild(choiceDiv);
     });
-    
+
     item.appendChild(choicesDiv);
-    
+
     return item;
 }
 

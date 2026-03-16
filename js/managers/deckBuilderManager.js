@@ -1,40 +1,30 @@
 // Deck Builder Manager
-// State management, calculations, save/load for MaNT Deck Builder
+// State management, calculations, save/load for Deck Builder
 
 // ===== CONSTANTS =====
 
 const DECK_STORAGE_KEY = 'uma_deck_builder_decks';
 
-// Base training values (Facility Level 1): [speed, stamina, power, guts, wit, skillPts, energy]
-const BASE_TRAINING_VALUES = {
-    speed:        [10, 0, 3, 0, 0, 2, -21],
-    stamina:      [0, 9, 0, 3, 0, 2, -19],
-    power:        [0, 3, 8, 0, 0, 2, -20],
-    guts:         [4, 0, 2, 8, 0, 2, -22],
-    intelligence: [2, 0, 0, 0, 9, 10, 5]
-};
+// Stat name mapping: training data key -> result array index
+const STAT_KEYS = ['speed', 'stamina', 'power', 'guts', 'wisdom', 'skill_pt'];
+const STAT_DISPLAY_KEYS = ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts'];
 
-// Which stat bonus effect IDs apply at which training type
-// Effect IDs: 3=Speed, 4=Stamina, 5=Power, 6=Guts, 7=Wit, 30=SkillPt
-const STAT_BONUS_TRAINING_MAP = {
-    speed:        [3, 5, 30],       // Speed Bonus, Power Bonus, SkillPt
-    stamina:      [4, 6, 30],       // Stamina Bonus, Guts Bonus, SkillPt
-    power:        [4, 5, 30],       // Stamina Bonus, Power Bonus, SkillPt
-    guts:         [3, 5, 6, 30],    // Speed, Power, Guts, SkillPt
-    intelligence: [3, 7, 30]        // Speed Bonus, Wit Bonus, SkillPt
-};
-
-// Which stat index each bonus applies to in the training values array
+// Effect ID -> stat index mapping for stat bonuses
 const STAT_BONUS_INDEX_MAP = {
-    3: 0,   // Speed Bonus → speed column
-    4: 1,   // Stamina Bonus → stamina column
-    5: 2,   // Power Bonus → power column
-    6: 3,   // Guts Bonus → guts column
-    7: 4,   // Wit Bonus → wit column
-    30: 5   // Skill Pt Bonus → skillPts column
+    3: 0,   // Speed Bonus -> speed
+    4: 1,   // Stamina Bonus -> stamina
+    5: 2,   // Power Bonus -> power
+    6: 3,   // Guts Bonus -> guts
+    7: 4,   // Wit Bonus -> wisdom
+    30: 5   // Skill Pt Bonus -> skill_pt
 };
 
-// Card type → which training they appear at
+// Reverse: stat key -> effect ID
+const STAT_TO_EFFECT_ID = {
+    speed: 3, stamina: 4, power: 5, guts: 6, wisdom: 7, skill_pt: 30
+};
+
+// Card type -> which training they appear at
 const CARD_TYPE_TRAINING_MAP = {
     speed: 'speed',
     stamina: 'stamina',
@@ -66,29 +56,89 @@ let deckBuilderState = {
         types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
         search: '',
         ssrOnly: false,
-        sortBy: 'effect_15',      // 'effect_{id}', 'name', 'rarity'
+        sortBy: 'effect_15',
         sortDirection: 'desc'
     },
+    scenario: '1',      // Default to URA; '1'=URA, '2'=Aoharu, '4'=Trailblazer
     trainingLevel: 1,
     mood: 'very_good',
-    friendshipTraining: true
+    friendshipTraining: true,
+    // Per-training card assignments: which slot indices are present at each training
+    // Default: all cards present at all trainings (user toggles to exclude)
+    trainingAssignments: {
+        speed: [true, true, true, true, true, true],
+        stamina: [true, true, true, true, true, true],
+        power: [true, true, true, true, true, true],
+        guts: [true, true, true, true, true, true],
+        intelligence: [true, true, true, true, true, true]
+    }
 };
+
+// ===== DATA-DRIVEN TRAINING LOOKUPS =====
+
+/**
+ * Get base training values for a training type at facility level 1 from loaded data.
+ * Returns {speed, stamina, power, guts, wisdom, skill_pt, energy} or null.
+ */
+function getBaseTrainingValues(trainingType, scenarioId) {
+    const scenario = trainingData?.scenarios?.[scenarioId];
+    if (!scenario) return null;
+
+    const training = scenario.training[trainingType];
+    if (!training || !training['1']) return null;
+
+    const base = training['1'];
+    return {
+        speed: base.speed || 0,
+        stamina: base.stamina || 0,
+        power: base.power || 0,
+        guts: base.guts || 0,
+        wisdom: base.wisdom || 0,
+        skill_pt: base.skill_pt || 0,
+        energy: base.energy || 0
+    };
+}
+
+/**
+ * Derive which stat bonus effect IDs apply at a given training type.
+ * A stat bonus applies if the base training has a non-zero value for that stat.
+ */
+function getApplicableBonusIds(trainingType, scenarioId) {
+    const base = getBaseTrainingValues(trainingType, scenarioId);
+    if (!base) return [];
+
+    const ids = [];
+    for (const [statKey, effectId] of Object.entries(STAT_TO_EFFECT_ID)) {
+        if (base[statKey] > 0) {
+            ids.push(effectId);
+        }
+    }
+    // Skill point bonus always applies
+    if (!ids.includes(30)) ids.push(30);
+    return ids;
+}
+
+/**
+ * Get available scenario options from loaded data.
+ */
+function getAvailableScenarios() {
+    if (!scenarioData?.scenarios) return [];
+    return Object.entries(scenarioData.scenarios).map(([id, data]) => ({
+        id,
+        name: data.name,
+        turnCount: data.turn_count
+    }));
+}
 
 // ===== INITIALIZATION =====
 
 function initializeDeckBuilder() {
     if (deckBuilderState.initialized) return;
 
-    // Load saved decks
     loadSavedDecks();
-
-    // Render the shell
     renderDeckBuilderShell();
-
-    // Wire deck header events
     initializeDeckBuilderEvents();
 
-    // Restore last active deck
     if (deckBuilderState.savedDecks.length > 0) {
         const lastDeckId = deckBuilderState.activeDeckId || deckBuilderState.savedDecks[0].id;
         switchToDeck(lastDeckId);
@@ -97,24 +147,21 @@ function initializeDeckBuilder() {
     renderDeckSelect();
 
     deckBuilderState.initialized = true;
-    console.log('🏗️ Deck Builder initialized');
+    console.log('Deck Builder initialized');
 }
 
 // ===== TAB SWITCHING =====
 
 function switchAppTab(tabId) {
-    // Update nav buttons
     document.querySelectorAll('.app-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === tabId);
         btn.setAttribute('aria-selected', btn.dataset.tab === tabId ? 'true' : 'false');
     });
 
-    // Show/hide panels
     document.querySelectorAll('.app-tab-panel').forEach(panel => {
         panel.classList.toggle('active', panel.dataset.tab === tabId);
     });
 
-    // Initialize deck builder on first switch
     if (tabId === 'deckbuilder' && !deckBuilderState.initialized) {
         initializeDeckBuilder();
     }
@@ -130,6 +177,9 @@ function setDeckSlot(slotIndex, cardId, level, lb) {
         isFriend: slotIndex === 5
     };
 
+    // Reset training assignments for this slot (default: present everywhere)
+    resetSlotAssignments(slotIndex, true);
+
     renderDeckSlots();
     recalculateDeck();
     debouncedSaveDeck();
@@ -137,6 +187,7 @@ function setDeckSlot(slotIndex, cardId, level, lb) {
 
 function removeDeckSlot(slotIndex) {
     deckBuilderState.slots[slotIndex] = null;
+    resetSlotAssignments(slotIndex, false);
     renderDeckSlots();
     recalculateDeck();
     debouncedSaveDeck();
@@ -147,7 +198,6 @@ function removeDeckSlot(slotIndex) {
 function openCardPicker(slotIndex) {
     deckBuilderState.activeSlot = slotIndex;
     deckBuilderState.pickerOpen = true;
-    // Only clear search; preserve type, SSR, sort settings across opens
     deckBuilderState.pickerFilter.search = '';
     renderCardPicker();
 }
@@ -172,15 +222,12 @@ function selectCardForSlot(slotIndex, cardId) {
     let level, lb;
 
     if (isFriend) {
-        // Friend slot: default to max (LB4)
         lb = 4;
         level = limitBreaks[card.rarity][lb];
     } else if (isCardOwned(cardId)) {
-        // Owned: use owned level/LB
         level = getOwnedCardLevel(cardId);
         lb = getOwnedCardLimitBreak(cardId);
     } else {
-        // Shouldn't happen for non-friend slots, but fallback
         lb = 4;
         level = limitBreaks[card.rarity][lb];
     }
@@ -218,40 +265,45 @@ function aggregateDeckEffects(slots) {
 // ===== TRAINING CALCULATIONS =====
 
 function calculateTrainingGains(trainingType, slots, aggregated, options) {
-    const { trainingLevel, mood, friendshipTraining } = options;
+    const { trainingLevel, mood, friendshipTraining, scenario } = options;
+    const scenarioId = scenario || '1';
 
-    const baseValues = BASE_TRAINING_VALUES[trainingType];
+    const baseValues = getBaseTrainingValues(trainingType, scenarioId);
     if (!baseValues) return null;
+
+    // Build base array: [speed, stamina, power, guts, wisdom, skill_pt]
+    const base = [
+        baseValues.speed, baseValues.stamina, baseValues.power,
+        baseValues.guts, baseValues.wisdom, baseValues.skill_pt
+    ];
+    const energy = baseValues.energy;
 
     // Facility level adds to primary stat base
     const primaryStatIndex = ['speed', 'stamina', 'power', 'guts', 'intelligence'].indexOf(trainingType);
-    const base = [...baseValues];
-    base[primaryStatIndex] += (trainingLevel - 1);
+    if (primaryStatIndex >= 0) {
+        base[primaryStatIndex] += (trainingLevel - 1);
+    }
 
-    // Find which cards are present at this training
+    // Find which cards are present at this training (from user assignments)
+    const assignments = deckBuilderState.trainingAssignments[trainingType];
     const presentCards = [];
     const presentSlots = [];
 
     slots.forEach((slot, idx) => {
         if (!slot) return;
+        if (!assignments[idx]) return; // User excluded this card from this training
         const card = cardData.find(c => c.support_id === slot.cardId);
         if (!card) return;
 
-        if (card.type === 'friend') {
-            // Friend cards can appear at any training (simplified)
-            presentCards.push(card.type);
-            presentSlots.push(slot);
-        } else if (CARD_TYPE_TRAINING_MAP[card.type] === trainingType) {
-            presentCards.push(card.type);
-            presentSlots.push(slot);
-        }
+        presentCards.push(card.type);
+        presentSlots.push(slot);
     });
 
     const supportCount = presentCards.length;
 
     // Calculate stat bonuses from present cards only
-    const statBonuses = [0, 0, 0, 0, 0, 0]; // speed, stamina, power, guts, wit, skillPts
-    const applicableBonusIds = STAT_BONUS_TRAINING_MAP[trainingType] || [];
+    const statBonuses = [0, 0, 0, 0, 0, 0];
+    const applicableBonusIds = getApplicableBonusIds(trainingType, scenarioId);
 
     presentSlots.forEach(slot => {
         const card = cardData.find(c => c.support_id === slot.cardId);
@@ -268,7 +320,7 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
         });
     });
 
-    // Training Effectiveness and Mood Effect — only from present cards
+    // Training Effectiveness and Mood Effect -- only from present cards
     let trainingEff = 0;
     let moodEffect = 0;
     presentSlots.forEach(slot => {
@@ -293,14 +345,21 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
     const supportMultiplier = 1 + 0.05 * supportCount;
 
     // Friendship multiplier (product of individual friendship bonuses)
+    // Only cards at their MATCHING training type (or friend cards) contribute friendship bonus.
+    // e.g. a stamina card assigned to speed training gives support count + stat bonuses,
+    // but NOT friendship bonus — that only activates at stamina training.
     let friendshipMultiplier = 1;
     if (friendshipTraining && supportCount > 0) {
         presentSlots.forEach(slot => {
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card || !card.effects) return;
 
+            // Friendship only from type-matching or friend cards
+            const isMatchingType = card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
+            if (!isMatchingType) return;
+
             card.effects.forEach(effectArray => {
-                if (effectArray[0] === 1) { // Friendship Bonus
+                if (effectArray[0] === 1) {
                     const val = calculateEffectValue(effectArray, slot.level);
                     if (val > 0) {
                         friendshipMultiplier *= (1 + val / 100);
@@ -312,15 +371,15 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
 
     // Calculate final stat gains
     const result = {
-        speed: 0, stamina: 0, power: 0, guts: 0, wit: 0, skillPts: 0, energy: base[6],
+        speed: 0, stamina: 0, power: 0, guts: 0, wit: 0, skillPts: 0, energy: energy,
         presentCards: presentCards
     };
 
-    const statKeys = ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts'];
+    const resultKeys = ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts'];
     for (let i = 0; i < 6; i++) {
         const statBase = base[i] + statBonuses[i];
         if (statBase > 0) {
-            result[statKeys[i]] = Math.floor(
+            result[resultKeys[i]] = Math.floor(
                 statBase * moodMultiplier * trainingEffMultiplier * supportMultiplier * friendshipMultiplier
             );
         }
@@ -334,7 +393,8 @@ function calculateAllTraining() {
     const options = {
         trainingLevel: deckBuilderState.trainingLevel,
         mood: deckBuilderState.mood,
-        friendshipTraining: deckBuilderState.friendshipTraining
+        friendshipTraining: deckBuilderState.friendshipTraining,
+        scenario: deckBuilderState.scenario
     };
 
     const results = {};
@@ -347,25 +407,24 @@ function calculateAllTraining() {
 
 function computePerTrainingEffects(slots) {
     const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    const scenarioId = deckBuilderState.scenario || '1';
     const perTraining = {};
 
     trainingTypes.forEach(trainingType => {
-        // Find present cards (same logic as calculateTrainingGains)
+        const assignments = deckBuilderState.trainingAssignments[trainingType];
         const presentSlots = [];
         const presentCardTypes = [];
-        slots.forEach(slot => {
+        slots.forEach((slot, idx) => {
             if (!slot) return;
+            if (!assignments[idx]) return;
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card) return;
-            if (card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType) {
-                presentSlots.push(slot);
-                presentCardTypes.push(card.type);
-            }
+            presentSlots.push(slot);
+            presentCardTypes.push(card.type);
         });
 
-        // Stat bonuses from present cards
-        const statBonuses = [0, 0, 0, 0, 0, 0]; // spd, sta, pow, gut, wit, skillPt
-        const applicableBonusIds = STAT_BONUS_TRAINING_MAP[trainingType] || [];
+        const statBonuses = [0, 0, 0, 0, 0, 0];
+        const applicableBonusIds = getApplicableBonusIds(trainingType, scenarioId);
         let trainingEff = 0;
         let moodEffect = 0;
         let friendshipMultiplier = 1;
@@ -373,6 +432,7 @@ function computePerTrainingEffects(slots) {
         presentSlots.forEach(slot => {
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card || !card.effects) return;
+            const isMatchingType = card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
             card.effects.forEach(eff => {
                 const id = eff[0];
                 const val = calculateEffectValue(eff, slot.level);
@@ -380,7 +440,7 @@ function computePerTrainingEffects(slots) {
 
                 if (id === 8) trainingEff += val;
                 else if (id === 2) moodEffect += val;
-                else if (id === 1) friendshipMultiplier *= (1 + val / 100);
+                else if (id === 1 && isMatchingType) friendshipMultiplier *= (1 + val / 100);
                 else if (applicableBonusIds.includes(id) && STAT_BONUS_INDEX_MAP[id] !== undefined) {
                     statBonuses[STAT_BONUS_INDEX_MAP[id]] += val;
                 }
@@ -409,6 +469,37 @@ function recalculateDeck() {
     renderScenarioInfo(aggregated);
 }
 
+// ===== TRAINING ASSIGNMENTS =====
+
+function resetSlotAssignments(slotIndex, present) {
+    const types = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    types.forEach(type => {
+        deckBuilderState.trainingAssignments[type][slotIndex] = present;
+    });
+}
+
+function resetAllAssignments() {
+    const types = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    types.forEach(type => {
+        deckBuilderState.trainingAssignments[type] = [true, true, true, true, true, true];
+    });
+}
+
+function openTrainingAssignmentModal(trainingType) {
+    renderTrainingAssignmentModal(trainingType);
+}
+
+function saveTrainingAssignment(trainingType, assignments) {
+    deckBuilderState.trainingAssignments[trainingType] = [...assignments];
+    recalculateDeck();
+}
+
+// Race bonus stat gain calculation
+// bonus_tier is from race reward data (0-5), race_bonus_pct is deck's total Race Bonus %
+function calculateRaceBonusGain(bonusTier, raceBonusPct) {
+    return Math.floor(bonusTier * raceBonusPct / 100);
+}
+
 // ===== SAVE/LOAD =====
 
 function loadSavedDecks() {
@@ -427,7 +518,6 @@ function loadSavedDecks() {
 
 function saveDeckToStorage() {
     try {
-        // Update current deck in savedDecks
         if (deckBuilderState.activeDeckId) {
             const deck = deckBuilderState.savedDecks.find(d => d.id === deckBuilderState.activeDeckId);
             if (deck) {
@@ -456,7 +546,6 @@ function debouncedSaveDeck() {
 
 function createNewDeck(name) {
     const deckId = 'deck_' + Date.now();
-    // Carry over current slots so unsaved card selections aren't lost
     const carrySlots = deckBuilderState.slots.some(s => s !== null)
         ? [...deckBuilderState.slots]
         : [null, null, null, null, null, null];
@@ -516,7 +605,6 @@ function switchToDeck(deckId) {
     const deck = deckBuilderState.savedDecks.find(d => d.id === deckId);
     if (!deck) return;
 
-    // Save current deck first
     if (deckBuilderState.activeDeckId && deckBuilderState.activeDeckId !== deckId) {
         saveDeckToStorage();
     }
@@ -524,6 +612,7 @@ function switchToDeck(deckId) {
     deckBuilderState.activeDeckId = deckId;
     deckBuilderState.deckName = deck.name;
     deckBuilderState.slots = deck.slots ? [...deck.slots] : [null, null, null, null, null, null];
+    resetAllAssignments();
 
     renderDeckSlots();
     recalculateDeck();
@@ -533,7 +622,6 @@ function switchToDeck(deckId) {
 // ===== DECK BUILDER EVENTS =====
 
 function initializeDeckBuilderEvents() {
-    // Deck header buttons
     const newBtn = document.getElementById('deckNewBtn');
     if (newBtn) {
         newBtn.addEventListener('click', () => {
@@ -571,7 +659,6 @@ function initializeDeckBuilderEvents() {
         });
     }
 
-    // Deck select dropdown
     const deckSelect = document.getElementById('deckSelect');
     if (deckSelect) {
         deckSelect.addEventListener('change', (e) => {
@@ -579,6 +666,15 @@ function initializeDeckBuilderEvents() {
             if (deckId !== 'default') {
                 switchToDeck(deckId);
             }
+        });
+    }
+
+    // Scenario selector
+    const scenarioSelect = document.getElementById('scenarioSelect');
+    if (scenarioSelect) {
+        scenarioSelect.addEventListener('change', (e) => {
+            deckBuilderState.scenario = e.target.value;
+            recalculateDeck();
         });
     }
 
@@ -634,6 +730,9 @@ window.DeckBuilderManager = {
     deleteDeck,
     renameDeck,
     switchToDeck,
+    getAvailableScenarios,
+    getBaseTrainingValues,
+    getApplicableBonusIds,
     DECK_STORAGE_KEY
 };
 
@@ -655,5 +754,13 @@ Object.assign(window, {
     deleteDeck,
     renameDeck,
     switchToDeck,
-    debouncedSaveDeck
+    debouncedSaveDeck,
+    getAvailableScenarios,
+    getBaseTrainingValues,
+    getApplicableBonusIds,
+    openTrainingAssignmentModal,
+    saveTrainingAssignment,
+    resetAllAssignments,
+    calculateRaceBonusGain,
+    STAT_BONUS_INDEX_MAP
 });

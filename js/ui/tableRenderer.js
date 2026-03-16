@@ -118,7 +118,7 @@ function createCardTableRow(card) {
         </td>
         <td class="effects-summary">${mainEffectsDisplay}</td>
         <td class="effects-summary">${hintSkills}</td>
-        <td>${card.release_en || 'Unreleased'}</td>
+        <td>${getDisplayDate(card)}</td>
     `;
     
     return row;
@@ -313,7 +313,7 @@ function addAdvancedFilterChips(chips) {
             const symbol = effect.symbol === 'percent' ? '%' : '';
             chips.push({
                 type: `effect-${effectId}`,
-                label: `${effect.name_en} ≥ ${filter.min}${symbol}`,
+                label: `${effect.name} ≥ ${filter.min}${symbol}`,
                 remove: () => {
                     delete advancedFilters.effects[effectId];
                     const input = document.querySelector(`[data-effect-id="${effectId}"]`);
