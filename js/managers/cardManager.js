@@ -394,11 +394,13 @@ async function loadData() {
             fetch('data/skill_types.json'),
             fetch('data/events.json'),
             fetch('data/training_values.json'),
-            fetch('data/scenario_data.json')
+            fetch('data/scenario_data.json'),
+            fetch('data/characters.json'),
+            fetch('data/training_config.json')
         ]);
 
         const [cardsDataRaw, effects, skills, skillTypes, events,
-               trainingValuesRaw, scenarioDataRaw] =
+               trainingValuesRaw, scenarioDataRaw, charactersRaw, trainingConfigRaw] =
             await Promise.all(responses.map(res => res.json()));
 
         console.log('Data loaded successfully');
@@ -410,6 +412,8 @@ async function loadData() {
         processEventsData(events);
         trainingData = trainingValuesRaw;
         scenarioData = scenarioDataRaw;
+        charactersData = charactersRaw;
+        trainingConfigData = trainingConfigRaw;
         
         // Store card data (flat array, no wrapper)
         cardData = cardsDataRaw;

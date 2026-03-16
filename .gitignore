@@ -1,3 +1,4 @@
 docs/
 *.py
 *.sql
+scripts/__pycache__/*

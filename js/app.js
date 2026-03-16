@@ -11,6 +11,8 @@ let skillTypesData = {};
 let eventsData = {};
 let trainingData = {};
 let scenarioData = {};
+let charactersData = {};
+let trainingConfigData = {};
 let ownedCards = {};
 
 // Modal state
@@ -463,6 +465,8 @@ window.effectsData = effectsData;
 window.skillsData = skillsData;
 window.skillTypesData = skillTypesData;
 window.eventsData = eventsData;
+window.charactersData = charactersData;
+window.trainingConfigData = trainingConfigData;
 window.ownedCards = ownedCards;
 window.currentModalCard = currentModalCard;
 window.currentFilteredCards = currentFilteredCards;

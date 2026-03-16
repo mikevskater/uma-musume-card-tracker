@@ -36,9 +36,14 @@ function renderDeckBuilderShell() {
         </div>
 
         <!-- Deck Effects Summary -->
-        <div class="deck-summary" id="deckSummary">
-            <div class="deck-summary-title">Deck Effects Summary</div>
-            <div class="deck-summary-empty" id="deckSummaryContent">Add cards to see aggregated effects.</div>
+        <div class="deck-summary deck-section collapsible" id="deckSummary">
+            <div class="deck-section-header" data-section="deckSummary">
+                <span class="deck-section-title">Deck Effects Summary</span>
+                <span class="deck-section-toggle"></span>
+            </div>
+            <div class="deck-section-body">
+                <div id="deckSummaryContent">Add cards to see aggregated effects.</div>
+            </div>
         </div>
 
         <!-- Training Sim Controls -->
@@ -47,6 +52,12 @@ function renderDeckBuilderShell() {
                 <span class="training-control-label">Scenario:</span>
                 <select class="scenario-select" id="scenarioSelect">
                     ${scenarioOptions}
+                </select>
+            </div>
+            <div class="training-control-group">
+                <span class="training-control-label">Character:</span>
+                <select class="scenario-select" id="characterSelect">
+                    <option value="">None (no growth rate)</option>
                 </select>
             </div>
             <div class="training-control-group">
@@ -76,19 +87,58 @@ function renderDeckBuilderShell() {
         </div>
 
         <!-- Training Breakdown -->
-        <div class="training-breakdown" id="trainingBreakdown">
-            <div class="training-breakdown-title">Training Breakdown</div>
-            <div class="training-breakdown-empty" id="trainingBreakdownContent">Add cards to see training calculations.</div>
+        <div class="training-breakdown deck-section collapsible" id="trainingBreakdown">
+            <div class="deck-section-header" data-section="trainingBreakdown">
+                <span class="deck-section-title">Training Breakdown</span>
+                <span class="deck-section-toggle"></span>
+            </div>
+            <div class="deck-section-body">
+                <div id="trainingBreakdownContent">Add cards to see training calculations.</div>
+            </div>
+        </div>
+
+        <!-- Character Info -->
+        <div class="deck-section collapsible" id="characterInfoSection" style="display:none">
+            <div class="deck-section-header" data-section="characterInfoSection">
+                <span class="deck-section-title">Character Info</span>
+                <span class="deck-section-toggle"></span>
+            </div>
+            <div class="deck-section-body" id="characterInfoContent"></div>
         </div>
 
         <!-- Scenario Info -->
-        <div class="scenario-info" id="scenarioInfo">
-            <div class="scenario-info-title" id="scenarioInfoTitle">Scenario Info</div>
-            <div id="scenarioInfoContent">
-                <!-- Rendered by renderScenarioInfo() -->
+        <div class="deck-section collapsible" id="scenarioInfo">
+            <div class="deck-section-header" data-section="scenarioInfo">
+                <span class="deck-section-title" id="scenarioInfoTitle">Scenario Info</span>
+                <span class="deck-section-toggle"></span>
             </div>
+            <div class="deck-section-body" id="scenarioInfoContent"></div>
+        </div>
+
+        <!-- Unique Effects -->
+        <div class="deck-section collapsible" id="uniqueEffectsSection" style="display:none">
+            <div class="deck-section-header" data-section="uniqueEffectsSection">
+                <span class="deck-section-title">Unique Effects</span>
+                <span class="deck-section-toggle"></span>
+            </div>
+            <div class="deck-section-body" id="uniqueEffectsContent"></div>
+        </div>
+
+        <!-- Deck Skills -->
+        <div class="deck-section collapsible" id="deckSkillsSection" style="display:none">
+            <div class="deck-section-header" data-section="deckSkillsSection">
+                <span class="deck-section-title">Deck Skills</span>
+                <span class="deck-section-toggle"></span>
+            </div>
+            <div class="deck-section-body" id="deckSkillsContent"></div>
         </div>
     `;
+
+    // Populate character selector
+    populateCharacterSelect();
+
+    // Initialize collapsible sections
+    initCollapsibleSections();
 
     // Initial renders
     renderDeckSlots();
@@ -858,45 +908,36 @@ function renderDeckSummary(aggregated, perTraining) {
 function renderRaceBonusSection(raceBonusPct) {
     if (raceBonusPct <= 0) return '';
 
-    // Race bonus tiers: G1/G2/G3 races give bonus tiers 1-5 for different reward items
-    // The primary stat reward uses tier 5 for 1st place
-    const tiers = [
-        { label: 'G1 / G2 / G3 (1st)', bonus: 5 },
-        { label: 'G1 / G2 / G3 (2nd-3rd)', bonus: 4 },
-        { label: 'G1 / G2 / G3 (4th-5th)', bonus: 3 },
-    ];
+    const scenarioId = deckBuilderState.scenario || '1';
+    const table = getRaceBonusTable(scenarioId);
 
     let rows = '';
-    tiers.forEach(tier => {
-        const perStat = calculateRaceBonusGain(tier.bonus, raceBonusPct);
-        const total = perStat * 5; // 5 stats
-        if (perStat > 0) {
-            rows += `
-                <div class="race-bonus-row">
-                    <span class="race-bonus-grade">${tier.label}</span>
-                    <span class="race-bonus-gain">+${perStat}/stat</span>
-                    <span class="race-bonus-total">(+${total} total)</span>
-                </div>
-            `;
-        }
+    table.forEach(race => {
+        const statGain = calculateRaceBonusGain(race.baseStats, raceBonusPct);
+        const skillGain = calculateRaceBonusGain(race.baseSkillPt, raceBonusPct);
+        const statLabel = race.allStats ? `+${statGain} \u00d75` : `+${statGain}`;
+        const noteStr = race.note ? ` <span class="race-bonus-note-inline">${race.note}</span>` : '';
+        rows += `
+            <div class="race-bonus-row">
+                <span class="race-bonus-grade">${race.label}</span>
+                <span class="race-bonus-gain">${statLabel}</span>
+                <span class="race-bonus-total">${skillGain} SP${noteStr}</span>
+            </div>
+        `;
     });
 
-    if (!rows) {
-        rows = '<div class="race-bonus-row"><span class="race-bonus-grade">Race Bonus too low for stat gains at current level.</span></div>';
-    }
-
     return `
-        <div class="deck-summary-section-label">Race Stat Gains (from ${raceBonusPct}% Race Bonus)</div>
+        <div class="deck-summary-section-label">Race Stat Gains (${raceBonusPct}% Race Bonus)</div>
         <div class="race-bonus-gains">
             ${rows}
-            <div class="race-bonus-note">Formula: floor(tier x Race Bonus% / 100) per stat. Pre-OP and below: no bonus.</div>
+            <div class="race-bonus-note">Formula: floor(base \u00d7 (1 + raceBonus / 100)). "All stats" races apply to all 5 stats; optional races boost 1 random stat.</div>
         </div>
     `;
 }
 
 // ===== TRAINING BREAKDOWN TABLE =====
 
-function renderTrainingBreakdown(trainingResults) {
+function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
     const content = document.getElementById('trainingBreakdownContent');
     if (!content) return;
 
@@ -912,6 +953,9 @@ function renderTrainingBreakdown(trainingResults) {
     const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
     const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
 
+    const hasEnergyReduction = aggregated && (aggregated[28] || 0) > 0;
+    const hasFailureRates = failureRates && Object.keys(failureRates).length > 0;
+
     let html = `
         <div class="training-table-wrapper">
             <table class="training-table">
@@ -926,6 +970,7 @@ function renderTrainingBreakdown(trainingResults) {
                         <th>Wit</th>
                         <th>Skill Pts</th>
                         <th>Energy</th>
+                        ${hasFailureRates ? '<th>Fail %</th>' : ''}
                     </tr>
                 </thead>
                 <tbody>
@@ -935,7 +980,6 @@ function renderTrainingBreakdown(trainingResults) {
         const result = trainingResults[type];
         if (!result) return;
 
-        // Clickable training name to open assignment modal
         const typeCell = `<td>
             <div class="training-type-cell training-type-clickable" data-training="${type}" title="Click to assign cards">
                 <span class="training-type-dot ${type}"></span>
@@ -943,7 +987,6 @@ function renderTrainingBreakdown(trainingResults) {
             </div>
         </td>`;
 
-        // Show card icons based on assignments (not just dots)
         const assignments = deckBuilderState.trainingAssignments[type];
         let cardIconsHtml = '';
         deckBuilderState.slots.forEach((slot, idx) => {
@@ -968,19 +1011,39 @@ function renderTrainingBreakdown(trainingResults) {
         if (result.energy > 0) {
             energyCell = `<td class="training-value-energy-positive">+${result.energy}</td>`;
         } else if (result.energy < 0) {
-            energyCell = `<td class="training-value-energy">${result.energy}</td>`;
+            const reduced = result.energyReduced;
+            if (reduced !== undefined && reduced !== result.energy) {
+                energyCell = `<td class="training-value-energy">${result.energy} <span class="energy-reduced">\u2192 ${reduced}</span></td>`;
+            } else {
+                energyCell = `<td class="training-value-energy">${result.energy}</td>`;
+            }
         } else {
             energyCell = `<td class="training-value-zero">0</td>`;
         }
 
-        html += `<tr>${typeCell}${cardsCell}${statCells}${energyCell}</tr>`;
+        let failCell = '';
+        if (hasFailureRates) {
+            const fr = failureRates[type];
+            if (fr) {
+                const baseStr = fr.baseRate.toFixed(1);
+                const effStr = fr.effectiveRate.toFixed(1);
+                if (fr.effectiveRate < fr.baseRate) {
+                    failCell = `<td class="training-value-energy">${baseStr}% <span class="energy-reduced">\u2192 ${effStr}%</span></td>`;
+                } else {
+                    failCell = `<td class="training-value-energy">${baseStr}%</td>`;
+                }
+            } else {
+                failCell = `<td class="training-value-zero">--</td>`;
+            }
+        }
+
+        html += `<tr>${typeCell}${cardsCell}${statCells}${energyCell}${failCell}</tr>`;
     });
 
     html += '</tbody></table></div>';
-    html += '<div class="training-breakdown-note">Click a training name to assign which cards are present.</div>';
+    html += '<div class="training-breakdown-note">Click a training name to assign which cards are present. Failure rates shown at current facility level with base energy \u2265 50.</div>';
     content.innerHTML = html;
 
-    // Wire click handlers for training type cells
     content.querySelectorAll('.training-type-clickable').forEach(cell => {
         cell.addEventListener('click', () => {
             openTrainingAssignmentModal(cell.dataset.training);
@@ -1114,6 +1177,273 @@ function renderTrainingAssignmentModal(trainingType) {
     requestAnimationFrame(() => overlay.classList.add('open'));
 }
 
+// ===== COLLAPSIBLE SECTIONS =====
+
+const COLLAPSED_STORAGE_KEY = 'uma_deck_collapsed';
+
+function initCollapsibleSections() {
+    const container = document.getElementById('deckBuilderContainer');
+    if (!container) return;
+
+    const collapsed = getCollapsedState();
+
+    container.addEventListener('click', (e) => {
+        const header = e.target.closest('.deck-section-header');
+        if (!header) return;
+        const sectionId = header.dataset.section;
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        section.classList.toggle('collapsed');
+        const state = getCollapsedState();
+        if (section.classList.contains('collapsed')) {
+            state[sectionId] = true;
+        } else {
+            delete state[sectionId];
+        }
+        saveCollapsedState(state);
+    });
+
+    // Apply persisted collapsed state
+    document.querySelectorAll('.deck-section.collapsible').forEach(section => {
+        if (collapsed[section.id]) {
+            section.classList.add('collapsed');
+        }
+    });
+}
+
+function getCollapsedState() {
+    try {
+        return JSON.parse(localStorage.getItem(COLLAPSED_STORAGE_KEY) || '{}');
+    } catch { return {}; }
+}
+
+function saveCollapsedState(state) {
+    try {
+        localStorage.setItem(COLLAPSED_STORAGE_KEY, JSON.stringify(state));
+    } catch {}
+}
+
+// ===== CHARACTER SELECT =====
+
+function populateCharacterSelect() {
+    const select = document.getElementById('characterSelect');
+    if (!select || !charactersData) return;
+
+    const entries = Object.entries(charactersData)
+        .sort((a, b) => a[1].name.localeCompare(b[1].name));
+
+    entries.forEach(([id, char]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = char.name;
+        if (id === deckBuilderState.selectedCharacter) opt.selected = true;
+        select.appendChild(opt);
+    });
+}
+
+// ===== CHARACTER INFO =====
+
+function renderCharacterInfoSection() {
+    const section = document.getElementById('characterInfoSection');
+    const content = document.getElementById('characterInfoContent');
+    if (!section || !content) return;
+
+    const charData = getSelectedCharacterData();
+    if (!charData) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = '';
+
+    const stats5 = charData.base_stats?.['5'];
+    const gr = charData.growth_rates;
+    const apt = charData.aptitudes;
+
+    let statsHtml = '';
+    if (stats5) {
+        const statKeys = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
+        const statLabels = ['Speed', 'Stamina', 'Power', 'Guts', 'Wisdom'];
+        statsHtml = `
+            <div class="deck-summary-section-label">Base Stats (5\u2605)</div>
+            <div class="deck-summary-grid">
+                ${statKeys.map((k, i) => `
+                    <div class="deck-summary-item">
+                        <span class="deck-summary-item-label">${statLabels[i]}</span>
+                        <span class="deck-summary-item-value">${stats5[k]}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    let growthHtml = '';
+    if (gr) {
+        const growthKeys = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
+        const growthLabels = ['Speed', 'Stamina', 'Power', 'Guts', 'Wisdom'];
+        const maxGrowth = Math.max(...growthKeys.map(k => gr[k] || 0), 1);
+        growthHtml = `
+            <div class="deck-summary-section-label">Growth Rates</div>
+            <div class="char-growth-bars">
+                ${growthKeys.map((k, i) => {
+                    const val = gr[k] || 0;
+                    const pct = Math.round(val / maxGrowth * 100);
+                    return `
+                        <div class="char-growth-row">
+                            <span class="char-growth-label">${growthLabels[i]}</span>
+                            <div class="char-growth-bar-track">
+                                <div class="char-growth-bar-fill ${k}" style="width:${pct}%"></div>
+                            </div>
+                            <span class="char-growth-value">${val}%</span>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    let aptHtml = '';
+    if (apt) {
+        const distKeys = ['short', 'mile', 'medium', 'long'];
+        const styleKeys = ['front_runner', 'stalker', 'betweener', 'stretch'];
+        const styleLabels = { front_runner: 'Front', stalker: 'Stalker', betweener: 'Between', stretch: 'Stretch' };
+        const groundKeys = ['turf', 'dirt'];
+
+        aptHtml = `
+            <div class="deck-summary-section-label">Aptitudes</div>
+            <div class="char-aptitude-grid">
+                <div class="char-aptitude-group">
+                    <div class="char-aptitude-group-label">Distance</div>
+                    ${distKeys.map(k => `
+                        <span class="char-aptitude-cell">
+                            <span class="char-aptitude-name">${k.charAt(0).toUpperCase() + k.slice(1)}</span>
+                            <span class="char-aptitude-grade grade-${(apt.distance?.[k] || 'G').toLowerCase()}">${apt.distance?.[k] || 'G'}</span>
+                        </span>
+                    `).join('')}
+                </div>
+                <div class="char-aptitude-group">
+                    <div class="char-aptitude-group-label">Style</div>
+                    ${styleKeys.map(k => `
+                        <span class="char-aptitude-cell">
+                            <span class="char-aptitude-name">${styleLabels[k]}</span>
+                            <span class="char-aptitude-grade grade-${(apt.running_style?.[k] || 'G').toLowerCase()}">${apt.running_style?.[k] || 'G'}</span>
+                        </span>
+                    `).join('')}
+                </div>
+                <div class="char-aptitude-group">
+                    <div class="char-aptitude-group-label">Ground</div>
+                    ${groundKeys.map(k => `
+                        <span class="char-aptitude-cell">
+                            <span class="char-aptitude-name">${k.charAt(0).toUpperCase() + k.slice(1)}</span>
+                            <span class="char-aptitude-grade grade-${(apt.ground?.[k] || 'G').toLowerCase()}">${apt.ground?.[k] || 'G'}</span>
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    content.innerHTML = statsHtml + growthHtml + aptHtml;
+}
+
+// ===== UNIQUE EFFECTS SECTION =====
+
+function renderUniqueEffectsSection(uniqueEffects) {
+    const section = document.getElementById('uniqueEffectsSection');
+    const content = document.getElementById('uniqueEffectsContent');
+    if (!section || !content) return;
+
+    if (!uniqueEffects || uniqueEffects.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = '';
+
+    const rows = uniqueEffects.map(ue => {
+        const badge = ue.active
+            ? '<span class="ue-badge active">Active</span>'
+            : `<span class="ue-badge locked">Locked (Lv.${ue.unlockLevel})</span>`;
+
+        const effectDetails = ue.effects.map(e => {
+            const name = getEffectName(e.type);
+            return `<span class="ue-effect-detail">${name} +${e.value}</span>`;
+        }).join('');
+
+        return `
+            <div class="ue-row ${ue.active ? '' : 'ue-locked'}">
+                <div class="ue-row-header">
+                    <span class="ue-card-name">${ue.cardName}</span>
+                    ${badge}
+                </div>
+                <div class="ue-name">${ue.name}</div>
+                <div class="ue-desc">${ue.description}</div>
+                <div class="ue-effects">${effectDetails}</div>
+            </div>
+        `;
+    }).join('');
+
+    content.innerHTML = rows;
+}
+
+// ===== DECK SKILLS SECTION =====
+
+function renderDeckSkillsSection(deckSkills) {
+    const section = document.getElementById('deckSkillsSection');
+    const content = document.getElementById('deckSkillsContent');
+    if (!section || !content) return;
+
+    if (!deckSkills || deckSkills.totalUnique === 0) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = '';
+
+    // Update title with count
+    const titleEl = section.querySelector('.deck-section-title');
+    if (titleEl) titleEl.textContent = `Deck Skills (${deckSkills.totalUnique} unique)`;
+
+    function renderSkillList(skills, label) {
+        if (skills.length === 0) return '';
+
+        // Group by first type tag
+        const grouped = {};
+        skills.forEach(skill => {
+            const typeTag = (skill.type && skill.type.length > 0) ? skill.type[0] : 'general';
+            if (!grouped[typeTag]) grouped[typeTag] = [];
+            grouped[typeTag].push(skill);
+        });
+
+        let html = `<div class="deck-summary-section-label">${label} (${skills.length})</div>`;
+        html += '<div class="ds-skill-groups">';
+
+        for (const [typeTag, group] of Object.entries(grouped).sort()) {
+            const typeLabel = getSkillTypeDescription(typeTag) || typeTag;
+            html += `<div class="ds-skill-group">`;
+            html += `<div class="ds-skill-group-label">${typeLabel}</div>`;
+            group.forEach(skill => {
+                const costStr = skill.cost != null ? `<span class="ds-skill-cost">${skill.cost} SP</span>` : '';
+                const sourceStr = skill.sources.length > 1
+                    ? `<span class="ds-skill-source">(${skill.sources.length} cards)</span>`
+                    : `<span class="ds-skill-source">${skill.sources[0]}</span>`;
+                html += `
+                    <div class="ds-skill-row" title="${skill.description}">
+                        <span class="ds-skill-name">${skill.name}</span>
+                        ${costStr}
+                        ${sourceStr}
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+        return html;
+    }
+
+    content.innerHTML =
+        renderSkillList(deckSkills.hintSkills, 'Hint Skills') +
+        renderSkillList(deckSkills.eventSkills, 'Event Skills');
+}
+
 // ===== SCENARIO INFO =====
 
 function renderScenarioInfo(aggregated) {
@@ -1132,13 +1462,14 @@ function renderScenarioInfo(aggregated) {
     const raceBonusVal = aggregated[15] || 0;
     const raceBonusClass = raceBonusVal >= 30 ? 'high' : (raceBonusVal > 0 ? 'low' : '');
 
-    // Build base training values display from loaded data
+    // Build base training values display from loaded data at current facility level
     const trainingTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
     const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+    const facilityLevel = deckBuilderState.trainingLevel || 1;
 
     let baseValuesHtml = '';
     trainingTypes.forEach(type => {
-        const base = getBaseTrainingValues(type, scenarioId);
+        const base = getBaseTrainingValues(type, scenarioId, facilityLevel);
         if (!base) return;
         const stats = [];
         if (base.speed) stats.push(`Spd +${base.speed}`);
@@ -1164,7 +1495,7 @@ function renderScenarioInfo(aggregated) {
     if (scenario?.enhanced_training) {
         enhancedHtml = '<div class="deck-summary-section-label">Enhanced Training (Trailblazer)</div>';
         for (const [cmdId, baseType] of Object.entries(scenario.enhanced_training)) {
-            const base = getBaseTrainingValues(`${baseType}_enhanced`, scenarioId);
+            const base = getBaseTrainingValues(`${baseType}_enhanced`, scenarioId, facilityLevel);
             if (!base) continue;
             const stats = [];
             if (base.speed) stats.push(`Spd +${base.speed}`);
@@ -1199,7 +1530,7 @@ function renderScenarioInfo(aggregated) {
             <span class="scenario-meta-item">Turns: ${turnCount}</span>
         </div>
 
-        <div class="deck-summary-section-label">Base Training Values (Facility Lv.1)</div>
+        <div class="deck-summary-section-label">Base Training Values (Facility Lv.${facilityLevel})</div>
         <div class="scenario-base-values-grid">
             ${baseValuesHtml}
         </div>
@@ -1280,7 +1611,12 @@ window.DeckBuilderRenderer = {
     renderTrainingBreakdown,
     renderTrainingAssignmentModal,
     renderScenarioInfo,
-    renderDeckSelect
+    renderDeckSelect,
+    renderUniqueEffectsSection,
+    renderDeckSkillsSection,
+    renderCharacterInfoSection,
+    populateCharacterSelect,
+    initCollapsibleSections
 };
 
 Object.assign(window, window.DeckBuilderRenderer);
