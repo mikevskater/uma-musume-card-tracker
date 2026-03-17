@@ -63,6 +63,7 @@
    Deck builder UI, tab navigation, card picker, training breakdown.
    ================================================================= */
 @import url('./ui/deckBuilder.css');
+@import url('./ui/deckFinder.css');
 
 /* =================================================================
    UTILITY CLASSES

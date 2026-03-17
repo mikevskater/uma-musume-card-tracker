@@ -688,6 +688,7 @@ function saveDeckToStorage() {
             if (deck) {
                 deck.slots = [...deckBuilderState.slots];
                 deck.name = deckBuilderState.deckName;
+                deck.selectedCharacter = deckBuilderState.selectedCharacter || null;
                 deck.lastModified = Date.now();
             }
         }
@@ -718,6 +719,7 @@ function createNewDeck(name) {
         id: deckId,
         name: name || 'New Deck',
         slots: carrySlots,
+        selectedCharacter: deckBuilderState.selectedCharacter || null,
         lastModified: Date.now()
     };
 
@@ -777,7 +779,14 @@ function switchToDeck(deckId) {
     deckBuilderState.activeDeckId = deckId;
     deckBuilderState.deckName = deck.name;
     deckBuilderState.slots = deck.slots ? [...deck.slots] : [null, null, null, null, null, null];
+    deckBuilderState.selectedCharacter = deck.selectedCharacter || null;
     resetAllAssignments();
+
+    // Update character dropdown to match restored state
+    const charSelect = document.getElementById('characterSelect');
+    if (charSelect) {
+        charSelect.value = deckBuilderState.selectedCharacter || '';
+    }
 
     renderDeckSlots();
     recalculateDeck();
@@ -808,6 +817,13 @@ function initializeDeckBuilderEvents() {
             if (name !== null && name.trim()) {
                 renameDeck(deckBuilderState.activeDeckId, name.trim());
             }
+        });
+    }
+
+    const findBestBtn = document.getElementById('deckFindBestBtn');
+    if (findBestBtn) {
+        findBestBtn.addEventListener('click', () => {
+            openDeckFinder();
         });
     }
 

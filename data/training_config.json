@@ -1882,5 +1882,78 @@
       110275,
       118185
     ]
+  },
+  "race_stat_rewards": {
+    "standard": {
+      "scenario_ids": [
+        "1",
+        "2"
+      ],
+      "races": [
+        {
+          "label": "Target Race",
+          "base_stats": 3,
+          "base_skill_pt": 45,
+          "all_stats": true,
+          "notes": "Story/goal races — awards all 5 stats"
+        },
+        {
+          "label": "G1 (optional)",
+          "base_stats": 10,
+          "base_skill_pt": 45,
+          "all_stats": false,
+          "notes": "1 random stat"
+        },
+        {
+          "label": "G2 / G3 (optional)",
+          "base_stats": 8,
+          "base_skill_pt": 35,
+          "all_stats": false,
+          "notes": "1 random stat"
+        },
+        {
+          "label": "OP / Pre-OP",
+          "base_stats": 5,
+          "base_skill_pt": 30,
+          "all_stats": false,
+          "notes": "1 random stat"
+        }
+      ]
+    },
+    "trailblazer": {
+      "scenario_ids": [
+        "4"
+      ],
+      "races": [
+        {
+          "label": "Twinkle Star",
+          "base_stats": 10,
+          "base_skill_pt": 30,
+          "all_stats": true,
+          "notes": "×5 stats = 50 total"
+        },
+        {
+          "label": "G1 (optional)",
+          "base_stats": 10,
+          "base_skill_pt": 35,
+          "all_stats": false,
+          "notes": "1 random stat"
+        },
+        {
+          "label": "G2 / G3 (optional)",
+          "base_stats": 8,
+          "base_skill_pt": 25,
+          "all_stats": false,
+          "notes": "1 random stat"
+        },
+        {
+          "label": "OP",
+          "base_stats": 5,
+          "base_skill_pt": 20,
+          "all_stats": false,
+          "notes": "1 random stat"
+        }
+      ]
+    }
   }
 }

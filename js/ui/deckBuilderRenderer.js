@@ -24,6 +24,7 @@ function renderDeckBuilderShell() {
                 <button class="btn btn-secondary" id="deckNewBtn">New</button>
                 <button class="btn btn-secondary" id="deckRenameBtn">Rename</button>
                 <button class="btn btn-danger" id="deckDeleteBtn">Delete</button>
+                <button class="btn btn-primary" id="deckFindBestBtn">Find Best Deck</button>
             </div>
         </div>
 
