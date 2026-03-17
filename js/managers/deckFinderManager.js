@@ -425,12 +425,12 @@ function groupCardsByType(pool) {
 
 // ===== PRE-COMPUTATION =====
 
-function precomputeCardEffects(pool, traineeData) {
+function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
     const cache = new Map();
     const skillLookup = getSkillIdLookup();
     pool.forEach(card => {
         const cardId = card.support_id;
-        const level = getCardFinderLevel(card);
+        const level = getCardFinderLevel(card, forceMaxLevel);
         const effects = {};
 
         if (card.effects) {
@@ -539,12 +539,55 @@ function buildRequiredSkillTypeMask(requiredTypes) {
     return mask;
 }
 
-function getCardFinderLevel(card) {
+function getCardFinderLevel(card, forceMax) {
+    if (forceMax) return limitBreaks[card.rarity][4];
     if (isCardOwned(card.support_id)) {
-        return getOwnedCardLevel(card.support_id);
+        const level = getOwnedCardLevel(card.support_id);
+        if (level !== null && level > 0) return level;
     }
-    // Default to max LB for unowned
+    // Default to max LB for unowned or missing level
     return limitBreaks[card.rarity][4];
+}
+
+function buildFriendPool(filters) {
+    let pool = [...cardData];
+
+    // Rarity filter (same as main pool)
+    const allowedRarities = [];
+    if (filters.rarity.ssr) allowedRarities.push(3);
+    if (filters.rarity.sr) allowedRarities.push(2);
+    if (filters.rarity.r) allowedRarities.push(1);
+    pool = pool.filter(c => allowedRarities.includes(c.rarity));
+
+    // Type filter
+    pool = pool.filter(c => filters.types[c.type]);
+
+    // Release filter
+    pool = pool.filter(c => c.start_date && c.start_date <= new Date().toISOString().split('T')[0]);
+
+    // Card exclusions (same as main pool)
+    if (filters.excludeCharacters.length > 0) {
+        const excludeNamesLower = new Set(filters.excludeCharacters.map(n => n.toLowerCase()));
+        pool = pool.filter(c => {
+            const names = [c.char_name, c.char_name_jp, c.char_name_kr, c.char_name_zhtw]
+                .filter(Boolean).map(n => n.toLowerCase());
+            return !names.some(n => excludeNamesLower.has(n));
+        });
+    }
+    if (filters.excludeCards.length > 0) {
+        const excludeSet = new Set(filters.excludeCards);
+        pool = pool.filter(c => !excludeSet.has(c.support_id));
+    }
+
+    // Trainee exclusion
+    if (filters.selectedTrainee && typeof charactersData !== 'undefined' && charactersData[filters.selectedTrainee]) {
+        const traineeCharId = charactersData[filters.selectedTrainee].character_id;
+        if (traineeCharId) {
+            pool = pool.filter(c => c.char_id !== traineeCharId);
+        }
+    }
+
+    return pool;
 }
 
 // ===== SKILL-APTITUDE SCORING =====
@@ -642,6 +685,30 @@ function isDistributionFeasible(dist, filters, maxTable) {
             if (count === 0) continue;
             maxPossible += getMaxEffectContribution(maxTable, type, effectId, count);
         }
+        if (maxPossible < threshold) return false;
+    }
+    return true;
+}
+
+function isDistributionFeasibleWithFriend(ownedDist, friendType, filters, maxTable, friendMaxTable) {
+    const checks = [
+        { threshold: filters.minRaceBonus, effectId: 15 },
+        { threshold: filters.minTrainingEff, effectId: 8 },
+        { threshold: filters.minFriendBonus, effectId: 1 },
+        { threshold: filters.minEnergyCost, effectId: 28 },
+        { threshold: filters.minEventRecovery, effectId: 25 }
+    ];
+
+    for (const { threshold, effectId } of checks) {
+        if (threshold <= 0) continue;
+        let maxPossible = 0;
+        // Owned contribution
+        for (const [type, count] of Object.entries(ownedDist)) {
+            if (count === 0) continue;
+            maxPossible += getMaxEffectContribution(maxTable, type, effectId, count);
+        }
+        // Friend contribution (best single card of friendType)
+        maxPossible += getMaxEffectContribution(friendMaxTable, friendType, effectId, 1);
         if (maxPossible < threshold) return false;
     }
     return true;
@@ -1037,6 +1104,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     const traineeData = resolveTraineeData(filters);
     deckFinderState.traineeData = traineeData;
 
+    const isOwnedMode = filters.cardPool === 'owned';
     const pool = buildCardPool(filters);
     if (pool.length === 0) {
         deckFinderState.searching = false;
@@ -1044,15 +1112,43 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         return;
     }
 
-    const cache = precomputeCardEffects(pool, traineeData);
-    deckFinderState.cardEffectCache = cache;
+    // For owned mode: owned cards at actual levels + friend pool at max level
+    // For all mode: all cards at max level for all 6 slots
+    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode);
     const groups = groupCardsByType(pool);
+
+    let friendCache = null;
+    let friendGroups = null;
+    if (isOwnedMode) {
+        const friendPool = buildFriendPool(filters);
+        friendCache = precomputeCardEffects(friendPool, traineeData, true);
+        friendGroups = groupCardsByType(friendPool);
+        presortCardGroups(friendGroups, filters, friendCache, traineeData);
+    }
+
+    // Merge both caches for the renderer.
+    // Owned entries keep their actual level. Friend-only entries (not owned) are added.
+    // For cards that exist in both, we store the friend version under a prefixed key
+    // so the renderer can look up the correct data based on whether it's the friend slot.
+    const displayCache = new Map(cache);
+    if (friendCache) {
+        friendCache.forEach((val, key) => {
+            // Always store friend version under prefixed key for friend-slot lookups
+            displayCache.set('friend_' + key, val);
+            // Only add to main key if not already in owned cache
+            if (!cache.has(key)) {
+                displayCache.set(key, val);
+            }
+        });
+    }
+    deckFinderState.cardEffectCache = displayCache;
 
     // Phase 1d: Pre-sort card groups by individual score descending
     presortCardGroups(groups, filters, cache, traineeData);
 
     // Phase 1b: Build max contribution table for pruning
     const maxTable = buildMaxContributionTable(groups, cache);
+    const friendMaxTable = friendGroups ? buildMaxContributionTable(friendGroups, friendCache) : null;
 
     const distributions = enumerateTypeDistributions(filters);
     if (distributions.length === 0) {
@@ -1062,14 +1158,36 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     }
 
     // Phase 1c: Filter infeasible distributions
+    // For owned mode, we generate "friend variants" — each distribution produces
+    // multiple variants where one slot of a specific type is filled by a friend card
     const validDists = [];
     let totalCombos = 0;
-    for (const dist of distributions) {
-        if (!isDistributionFeasible(dist, filters, maxTable)) continue;
-        const count = estimateComboCount(groups, dist);
-        if (count > 0) {
-            totalCombos += count;
-            validDists.push({ dist, count });
+
+    if (isOwnedMode) {
+        for (const dist of distributions) {
+            // For each type with count > 0, create a variant where the friend fills that type
+            const types = Object.keys(dist).filter(t => dist[t] > 0);
+            for (const friendType of types) {
+                // Owned distribution: one fewer of friendType
+                const ownedDist = { ...dist, [friendType]: dist[friendType] - 1 };
+                // Check feasibility using combined max tables
+                if (!isDistributionFeasibleWithFriend(ownedDist, friendType, filters, maxTable, friendMaxTable)) continue;
+                const ownedCount = estimateComboCount(groups, ownedDist);
+                const friendCount = friendGroups[friendType]?.length || 0;
+                if (ownedCount === 0 || friendCount === 0) continue;
+                const count = ownedCount * friendCount;
+                totalCombos += count;
+                validDists.push({ dist: ownedDist, friendType, count });
+            }
+        }
+    } else {
+        for (const dist of distributions) {
+            if (!isDistributionFeasible(dist, filters, maxTable)) continue;
+            const count = estimateComboCount(groups, dist);
+            if (count > 0) {
+                totalCombos += count;
+                validDists.push({ dist, friendType: null, count });
+            }
         }
     }
 
@@ -1079,13 +1197,12 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         return;
     }
 
-    let useGreedy = false; // Always exhaustive search
     let warningMessage = null;
 
     // Try to use Web Worker for search
-    if (typeof Worker !== 'undefined' && !useGreedy) {
+    if (typeof Worker !== 'undefined') {
         try {
-            await runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage);
+            await runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable);
             return;
         } catch (workerErr) {
             // Fall back to main thread
@@ -1094,13 +1211,8 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     }
 
     try {
-        let results;
         const startTime = performance.now();
-        if (useGreedy) {
-            results = await simulatedAnnealingSearch(groups, filters, cache, validDists, filters.resultCount, onProgress, traineeData);
-        } else {
-            results = await bruteForceSearch(groups, filters, cache, validDists, totalCombos, filters.resultCount, onProgress, onLiveResults, maxTable, traineeData);
-        }
+        const results = await bruteForceSearch(groups, filters, cache, validDists, totalCombos, filters.resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache);
         const elapsed = performance.now() - startTime;
 
         deckFinderState.results = results;
@@ -1125,7 +1237,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
 // Zero allocations in the hot loop — no array spreads, no object copies.
 // Memory usage: O(deck_size=6) stack depth, O(1) per step.
 
-async function bruteForceSearch(groups, filters, cache, validDists, totalCombos, resultCount, onProgress, onLiveResults, maxTable, traineeData) {
+async function bruteForceSearch(groups, filters, cache, validDists, totalCombos, resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache) {
     const topN = new MinHeap(resultCount);
     let evaluated = 0;
     let pruned = 0;
@@ -1212,13 +1324,12 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     // Growth rate multiplier for cardScoreContrib
     const traineeGrowthRates = traineeData?.growthRates;
 
-    cache.forEach((data, cardId) => {
+    function computeCardScore(data) {
         let cs = 0;
         for (const [eid, val] of Object.entries(data.effects)) {
             cs += val * (effectWeightMap[eid] || 0);
             cs += val * totalEffectSumWeight;
         }
-        // Growth rate multiplier
         if (traineeGrowthRates) {
             const growthKey = CARD_TYPE_GROWTH_KEY[data.type];
             if (growthKey) {
@@ -1226,12 +1337,23 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 cs *= (1 + rate / 100);
             }
         }
-        // Skill-aptitude contribution
         if (data.skillAptitudeScore > 0 && skillAptWeight > 0) {
             cs += data.skillAptitudeScore * skillAptWeight;
         }
-        cardScoreContrib.set(cardId, cs);
+        return cs;
+    }
+
+    cache.forEach((data, cardId) => {
+        cardScoreContrib.set(cardId, computeCardScore(data));
     });
+
+    // Friend card score contributions (at max level — may differ from owned)
+    const friendCardScoreContrib = new Map();
+    if (friendCache) {
+        friendCache.forEach((data, cardId) => {
+            friendCardScoreContrib.set(cardId, computeCardScore(data));
+        });
+    }
 
     // Mutable state shared across all recursions — never allocated in the hot loop
     const deckIds = [];                     // max length 6
@@ -1244,7 +1366,7 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     // Per-distribution flattened card list: cards are grouped by type,
     // and we build a flat "slot plan" that says for each of the 6 card slots,
     // which pool of cards to pick from and what index range.
-    for (const { dist } of validDists) {
+    for (const { dist, friendType } of validDists) {
         if (deckFinderState.cancelled) throw new Error('cancelled');
 
         // Get types in order: smallest pool first for tighter early pruning
@@ -1254,8 +1376,9 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
 
         if (typeEntries.some(([type, count]) => (groups[type]?.length || 0) < count)) continue;
 
-        // Build a flat slot plan: [{pool: [...cardIds], type, isLastOfType, effectBoundsIdx}]
+        // Build a flat slot plan: [{pool: [...cardIds], type, isLastOfType, isFriend}]
         // Each slot picks one card. Slots for the same type must pick in ascending index order.
+        // The friend slot (if any) is appended last so owned cards are picked first.
         const slots = [];
         const typeOrder = [];
         for (const [type, count] of typeEntries) {
@@ -1266,9 +1389,24 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                     pool,
                     type,
                     isLastOfType: s === count - 1,
-                    slotInType: s
+                    slotInType: s,
+                    isFriend: false
                 });
             }
+        }
+
+        // Append friend slot last (if owned mode)
+        if (friendType && friendGroups) {
+            const fPool = (friendGroups[friendType] || []).map(c => c.support_id);
+            if (fPool.length === 0) continue;
+            typeOrder.push({ type: friendType, count: 1 });
+            slots.push({
+                pool: fPool,
+                type: friendType,
+                isLastOfType: true,
+                slotInType: 0,
+                isFriend: true
+            });
         }
         const totalSlots = slots.length; // should be 6
 
@@ -1325,11 +1463,18 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 evaluated++;
                 yieldCounter++;
 
+                // Helper: get correct cache entry for a deck card
+                const friendSlotIdx = friendType ? totalSlots - 1 : -1;
+                function getDeckCardData(idx) {
+                    if (idx === friendSlotIdx && friendCache) return friendCache.get(deckIds[idx]);
+                    return cache.get(deckIds[idx]);
+                }
+
                 // Check skill-based hard filters (can't prune these during traversal)
                 if (filters.requiredSkills.length > 0) {
                     const deckSkills = new Set();
-                    for (let i = 0; i < 6; i++) {
-                        const data = cache.get(deckIds[i]);
+                    for (let i = 0; i < totalSlots; i++) {
+                        const data = getDeckCardData(i);
                         if (data) data.hintSkillIds.forEach(s => deckSkills.add(s));
                     }
                     if (filters.requiredSkillsMode === 'any') {
@@ -1343,8 +1488,8 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
 
                 if (filters.minHintSkills > 0) {
                     const allSkills = new Set();
-                    for (let i = 0; i < 6; i++) {
-                        const data = cache.get(deckIds[i]);
+                    for (let i = 0; i < totalSlots; i++) {
+                        const data = getDeckCardData(i);
                         if (data) data.hintSkillIds.forEach(s => allSkills.add(s));
                     }
                     if (allSkills.size < filters.minHintSkills) return;
@@ -1359,8 +1504,8 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 const allSkills = new Set();
                 const allTypes = new Set();
                 const typeCounts = {};
-                for (let i = 0; i < 6; i++) {
-                    const data = cache.get(deckIds[i]);
+                for (let i = 0; i < totalSlots; i++) {
+                    const data = getDeckCardData(i);
                     if (!data) continue;
                     data.hintSkillIds.forEach(s => allSkills.add(s));
                     data.hintSkillTypes.forEach(t => allTypes.add(t));
@@ -1372,8 +1517,8 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
 
                 // Skill-aptitude sum
                 let skillAptSum = 0;
-                for (let i = 0; i < 6; i++) {
-                    const data = cache.get(deckIds[i]);
+                for (let i = 0; i < totalSlots; i++) {
+                    const data = getDeckCardData(i);
                     if (data) skillAptSum += (data.skillAptitudeScore || 0);
                 }
 
@@ -1418,8 +1563,8 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 // Growth rate boost: cards matching trainee's strong growth stats score higher
                 if (traineeGrowthRates) {
                     const statEffectIds = { speed: 3, stamina: 4, power: 5, guts: 6, wisdom: 7 };
-                    for (let ci = 0; ci < 6; ci++) {
-                        const cdata = cache.get(deckIds[ci]);
+                    for (let ci = 0; ci < totalSlots; ci++) {
+                        const cdata = getDeckCardData(ci);
                         if (!cdata) continue;
                         const growthKey = CARD_TYPE_GROWTH_KEY[cdata.type];
                         if (growthKey) {
@@ -1436,7 +1581,8 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 const aggCopy = {};
                 for (const k of Object.keys(partialEffects)) aggCopy[k] = partialEffects[k];
 
-                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy });
+                const friendCardId = friendType ? deckIds[totalSlots - 1] : null;
+                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy, friendCardId });
                 matchesFound++;
 
                 if (onLiveResults && matchesFound - lastLiveCount >= LIVE_BATCH) {
@@ -1457,16 +1603,16 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
             }
 
             const slot = slots[slotIdx];
-            const pool = slot.pool;
+            const slotPool = slot.pool;
+            const slotCache = slot.isFriend ? friendCache : cache;
+            const slotScoreMap = slot.isFriend ? friendCardScoreContrib : cardScoreContrib;
             const startFrom = slot.slotInType === 0 ? 0 : minIndices[slotIdx];
             const slotsRemaining = totalSlots - slotIdx;
             const eb = slotEffectBounds[slotIdx + 1]; // bounds for slots after this one
 
-            for (let i = startFrom; i < pool.length; i++) {
-                // Ensure enough cards left for remaining slots of this type
-                // (handled implicitly by the ascending index constraint + pool size check)
-                const cardId = pool[i];
-                const data = cache.get(cardId);
+            for (let i = startFrom; i < slotPool.length; i++) {
+                const cardId = slotPool[i];
+                const data = slotCache ? slotCache.get(cardId) : cache.get(cardId);
                 if (!data) continue;
 
                 // Same-character exclusion
@@ -1484,7 +1630,7 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 const prevUECount = ueCount;
                 if (data.uniqueEffectActive) ueCount++;
                 if (data.charId) usedCharIds.add(data.charId);
-                const cardScore = cardScoreContrib.get(cardId) || 0;
+                const cardScore = slotScoreMap ? slotScoreMap.get(cardId) || 0 : cardScoreContrib.get(cardId) || 0;
                 partialScore += cardScore;
                 deckIds.push(cardId);
 
@@ -1934,7 +2080,7 @@ function individualCardScore(cardId, filters, cache, traineeData) {
 
 // ===== WEB WORKER SEARCH =====
 
-async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage) {
+async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable) {
     return new Promise((resolve, reject) => {
         let worker;
         try {
@@ -2004,6 +2150,24 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             reject(new Error(e.message || 'Worker error'));
         };
 
+        // Serialize friend cache/groups if present
+        let friendCacheObj = null;
+        let friendGroupsObj = null;
+        if (friendCache && friendGroups) {
+            friendCacheObj = {};
+            friendCache.forEach((val, key) => {
+                friendCacheObj[key] = {
+                    ...val,
+                    hintSkillIds: [...val.hintSkillIds],
+                    hintSkillTypes: [...val.hintSkillTypes]
+                };
+            });
+            friendGroupsObj = {};
+            for (const [type, cards] of Object.entries(friendGroups)) {
+                friendGroupsObj[type] = cards.map(c => ({ support_id: c.support_id }));
+            }
+        }
+
         worker.postMessage({
             type: 'start',
             payload: {
@@ -2019,7 +2183,9 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                 skillTypeBitMap: Object.fromEntries(_skillTypeBitMap),
                 traineeData: deckFinderState.traineeData,
                 cardTypeGrowthKey: CARD_TYPE_GROWTH_KEY,
-                sortBoosts: buildSortBoostWeights()
+                sortBoosts: buildSortBoostWeights(),
+                friendCache: friendCacheObj,
+                friendGroups: friendGroupsObj
             }
         });
     });
@@ -2106,24 +2272,27 @@ function analyzeWhyThisDeck(result, filters) {
         badges.push({ type: 'info', label: 'Unique Effects', value: `${m.uniqueEffects} active` });
     }
 
-    // Find key cards — which card contributes most to top metric
+    // Find key cards — top 2 contributors to the deck's highest metric
     const topMetric = checks.reduce((best, c) => c.value > (best?.value || 0) ? c : best, null);
     const keyCards = [];
     if (topMetric) {
         const effectIdMap = { 'Race Bonus': 15, 'Training Eff': 8, 'Friendship Bonus': 1, 'Energy Reduction': 28, 'Event Recovery': 25 };
         const effectId = effectIdMap[topMetric.label];
         if (effectId) {
+            const candidates = [];
             result.cardIds.forEach(id => {
                 const data = deckFinderState.cardEffectCache.get(id);
                 if (data && data.effects[effectId]) {
-                    keyCards.push({
+                    candidates.push({
                         cardId: id,
                         contribution: data.effects[effectId],
                         metric: topMetric.label
                     });
                 }
             });
-            keyCards.sort((a, b) => b.contribution - a.contribution);
+            candidates.sort((a, b) => b.contribution - a.contribution);
+            // Only mark top 2 as key cards
+            keyCards.push(...candidates.slice(0, 2));
         }
     }
 

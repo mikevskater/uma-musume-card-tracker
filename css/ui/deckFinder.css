@@ -635,6 +635,30 @@
     pointer-events: none;
 }
 
+/* Friend card indicator on thumbnail */
+.finder-thumb-friend {
+    position: relative;
+}
+
+.finder-thumb-friend .finder-result-thumb {
+    box-shadow: 0 0 0 2px var(--color-secondary);
+}
+
+.finder-thumb-friend-tag {
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    font-size: 9px;
+    font-weight: var(--font-weight-bold);
+    color: #fff;
+    background: var(--color-secondary);
+    border-radius: 3px;
+    padding: 0 3px;
+    line-height: 14px;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .finder-result-actions-top {
     flex-shrink: 0;
 }
@@ -791,12 +815,10 @@
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     display: flex;
     align-items: center;
     gap: var(--space-xs);
+    flex-wrap: wrap;
 }
 
 .finder-key-badge {
@@ -807,6 +829,24 @@
     border-radius: var(--radius-sm);
     font-weight: var(--font-weight-bold);
     flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.finder-friend-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    background: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+    color: var(--color-secondary);
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Friend card border in detail view */
+.finder-detail-card.friend-card {
+    border-color: var(--color-secondary);
+    border-style: dashed;
 }
 
 .finder-detail-card-meta {

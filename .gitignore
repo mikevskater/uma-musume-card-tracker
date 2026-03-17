@@ -1,4 +1,7 @@
 docs/
 *.py
 *.sql
+*.md
 scripts/__pycache__/*
+scripts/bin/*
+scripts/dll/*

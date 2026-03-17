@@ -1087,16 +1087,19 @@ function renderResultCard(result, idx) {
 
     // Card thumbnails with rarity borders and type icons
     const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const resultFriendId = result.friendCardId || null;
     const cardThumbs = result.cardIds.map(id => {
         const card = cardData.find(c => c.support_id === id);
         if (!card) return '';
+        const isFriend = id === resultFriendId;
         const iconFile = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
-        return `<div class="finder-thumb-wrap">
+        return `<div class="finder-thumb-wrap${isFriend ? ' finder-thumb-friend' : ''}">
             <img src="support_card_images/${card.support_id}.png"
                  onerror="this.style.display='none'"
                  class="finder-result-thumb card-image rarity-${card.rarity}"
-                 title="${card.char_name}" alt="${card.char_name}">
+                 title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
             <img class="finder-thumb-type-icon" src="${iconFile}" alt="${card.type}">
+            ${isFriend ? '<span class="finder-thumb-friend-tag">F</span>' : ''}
         </div>`;
     }).join('');
 
@@ -1249,29 +1252,44 @@ function toggleResultDetail(idx) {
     }
 
     // Card details with images
+    const friendCardId = result.friendCardId || null;
     html += '<div class="finder-detail-cards">';
     result.cardIds.forEach(id => {
         const card = cardData.find(c => c.support_id === id);
-        const data = cache.get(id);
+        const isFriend = id === friendCardId;
+        // Use friend-prefixed cache key for friend cards (max level data)
+        const data = isFriend ? (cache.get('friend_' + id) || cache.get(id)) : cache.get(id);
         if (!card) return;
-
-        const isKey = analysis.keyCards.some(k => k.cardId === id);
+        const keyEntry = analysis.keyCards.find(k => k.cardId === id);
         const rarityLabel = card.rarity === 3 ? 'SSR' : card.rarity === 2 ? 'SR' : 'R';
         const effectsTable = data ? buildCardEffectsTable(data.effects, data.uniqueEffectBonuses, data.uniqueEffectName) : '';
 
-        html += `<div class="finder-detail-card ${isKey ? 'key-card' : ''}">
+        // Build badges for this card
+        let cardBadges = '';
+        if (isFriend) {
+            cardBadges += '<span class="finder-friend-badge">Friend</span>';
+        }
+        if (keyEntry) {
+            cardBadges += `<span class="finder-key-badge" title="Top contributor to ${keyEntry.metric}">${keyEntry.metric}</span>`;
+        }
+
+        const cardClasses = ['finder-detail-card'];
+        if (keyEntry) cardClasses.push('key-card');
+        if (isFriend) cardClasses.push('friend-card');
+
+        html += `<div class="${cardClasses.join(' ')}">
             <img src="support_card_images/${card.support_id}.png"
                  onerror="this.src='support_card_images/placeholder.png'"
                  class="finder-detail-img card-image rarity-${card.rarity}">
             <div class="finder-detail-card-info">
                 <div class="finder-detail-card-name">
                     ${card.char_name || 'Unknown'}
-                    ${isKey ? '<span class="finder-key-badge">Key</span>' : ''}
+                    ${cardBadges}
                 </div>
                 <div class="finder-detail-card-meta">
                     <span class="rarity rarity-${card.rarity}">${rarityLabel}</span>
                     <span class="type type-${card.type}">${getTypeDisplayName(card.type)}</span>
-                    <span class="finder-detail-level">Lv.${data?.level || '?'}</span>
+                    <span class="finder-detail-level">Lv.${data?.level || '?'}${isFriend ? ' (Max)' : ''}</span>
                 </div>
                 <div class="finder-detail-card-effects">${effectsTable}</div>
             </div>

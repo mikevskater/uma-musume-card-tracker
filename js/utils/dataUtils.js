@@ -27,23 +27,19 @@ function calculateEffectValue(effectArray, level) {
     
     // Find exact milestone match first
     const exactMilestoneIndex = EFFECT_MILESTONES.indexOf(level);
-    if (exactMilestoneIndex !== -1 && values[exactMilestoneIndex] !== -1) {
-        return values[exactMilestoneIndex];
+    if (exactMilestoneIndex !== -1) {
+        const exactVal = values[exactMilestoneIndex];
+        // -1 means not active at this level — return 0 silently
+        if (exactVal === -1) return 0;
+        if (exactVal !== undefined) return exactVal;
     }
-    
+
     // Find surrounding milestones for interpolation
     const { lowerMilestone, upperMilestone } = findSurroundingMilestones(effectArray, level);
-    
-    // Get corresponding array indices
-    const lowerIndex = EFFECT_MILESTONES.indexOf(lowerMilestone.level);
-    const upperIndex = EFFECT_MILESTONES.indexOf(upperMilestone.level);
-    
-    // Validate indices and values
-    if (lowerIndex === -1 || upperIndex === -1 || 
-        lowerMilestone.value === -1 || upperMilestone.value === -1) {
-        console.warn(`Invalid interpolation data for level ${level}:`, {
-            lowerMilestone, upperMilestone, lowerIndex, upperIndex
-        });
+
+    // No valid surrounding milestones — effect not active at this level
+    if (lowerMilestone.value === -1 || upperMilestone.value === -1 ||
+        (lowerMilestone.level === 0 && lowerMilestone.value === 0 && upperMilestone.value === 0)) {
         return 0;
     }
     
@@ -100,11 +96,10 @@ function findSurroundingMilestones(effectArray, targetLevel) {
         // Target is after last valid milestone - use last value
         upperMilestone = lowerMilestone;
     } else if (!lowerMilestone && !upperMilestone) {
-        // No valid milestones found
-        console.warn(`No valid milestones found for level ${targetLevel}`);
-        return { 
-            lowerMilestone: { level: 0, value: 0 }, 
-            upperMilestone: { level: 50, value: 0 } 
+        // No valid milestones found — effect not active at any level
+        return {
+            lowerMilestone: { level: 0, value: 0 },
+            upperMilestone: { level: 50, value: 0 }
         };
     }
     

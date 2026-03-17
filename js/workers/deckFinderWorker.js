@@ -165,7 +165,8 @@ function runBranchAndBound(payload) {
     const {
         cache, groups, maxTable, validDists, totalCombos,
         filters, resultCount, scenarioWeights: scenarioWeightsMap,
-        statBonusEffectIds, skillTypeBitMap, traineeData, cardTypeGrowthKey
+        statBonusEffectIds, skillTypeBitMap, traineeData, cardTypeGrowthKey,
+        friendCache, friendGroups
     } = payload;
 
     const topN = new MinHeap(resultCount);
@@ -242,14 +243,12 @@ function runBranchAndBound(payload) {
 
     const traineeGrowthRates = traineeData?.growthRates;
 
-    const cardScoreContrib = {};
-    for (const [cardId, data] of Object.entries(cache)) {
+    function computeWorkerCardScore(data) {
         let cs = 0;
         for (const [eid, val] of Object.entries(data.effects)) {
             cs += val * (effectWeightMap[eid] || 0);
             cs += val * totalEffectSumWeight;
         }
-        // Growth rate multiplier
         if (traineeGrowthRates && cardTypeGrowthKey) {
             const growthKey = cardTypeGrowthKey[data.type];
             if (growthKey) {
@@ -257,11 +256,22 @@ function runBranchAndBound(payload) {
                 cs *= (1 + rate / 100);
             }
         }
-        // Skill-aptitude contribution
         if (data.skillAptitudeScore > 0 && skillAptWeight > 0) {
             cs += data.skillAptitudeScore * skillAptWeight;
         }
-        cardScoreContrib[cardId] = cs;
+        return cs;
+    }
+
+    const cardScoreContrib = {};
+    for (const [cardId, data] of Object.entries(cache)) {
+        cardScoreContrib[cardId] = computeWorkerCardScore(data);
+    }
+
+    const friendCardScoreContrib = {};
+    if (friendCache) {
+        for (const [cardId, data] of Object.entries(friendCache)) {
+            friendCardScoreContrib[cardId] = computeWorkerCardScore(data);
+        }
     }
 
     // Mutable state
@@ -272,7 +282,7 @@ function runBranchAndBound(payload) {
     let ueCount = 0;
     let partialScore = 0;
 
-    for (const { dist } of validDists) {
+    for (const { dist, friendType } of validDists) {
         if (cancelled) break;
 
         const typeEntries = Object.entries(dist)
@@ -286,8 +296,15 @@ function runBranchAndBound(payload) {
         for (const [type, count] of typeEntries) {
             const pool = (groups[type] || []).map(c => c.support_id);
             for (let s = 0; s < count; s++) {
-                slots.push({ pool, type, slotInType: s });
+                slots.push({ pool, type, slotInType: s, isFriend: false });
             }
+        }
+
+        // Append friend slot last (if present)
+        if (friendType && friendGroups) {
+            const fPool = (friendGroups[friendType] || []).map(c => c.support_id);
+            if (fPool.length === 0) continue;
+            slots.push({ pool: fPool, type: friendType, slotInType: 0, isFriend: true });
         }
         const totalSlots = slots.length;
         const slotEffectBounds = buildSlotEffectBounds(slots, maxTable);
@@ -333,11 +350,18 @@ function runBranchAndBound(payload) {
             if (slotIdx === totalSlots) {
                 evaluated++;
 
+                // Helper: get correct cache for a deck card index
+                const fSlotIdx = friendType ? totalSlots - 1 : -1;
+                function getCardData(idx) {
+                    if (idx === fSlotIdx && friendCache) return friendCache[deckIds[idx]];
+                    return cache[deckIds[idx]];
+                }
+
                 // Skill-based hard filters
                 if (filters.requiredSkills.length > 0) {
                     const deckSkills = new Set();
-                    for (let i = 0; i < 6; i++) {
-                        const data = cache[deckIds[i]];
+                    for (let i = 0; i < totalSlots; i++) {
+                        const data = getCardData(i);
                         if (data && data.hintSkillIds) data.hintSkillIds.forEach(s => deckSkills.add(s));
                     }
                     if (filters.requiredSkillsMode === 'any') {
@@ -351,8 +375,8 @@ function runBranchAndBound(payload) {
 
                 if (filters.minHintSkills > 0) {
                     const allSkills = new Set();
-                    for (let i = 0; i < 6; i++) {
-                        const data = cache[deckIds[i]];
+                    for (let i = 0; i < totalSlots; i++) {
+                        const data = getCardData(i);
                         if (data && data.hintSkillIds) data.hintSkillIds.forEach(s => allSkills.add(s));
                     }
                     if (allSkills.size < filters.minHintSkills) return;
@@ -363,8 +387,8 @@ function runBranchAndBound(payload) {
                 // Skill type count check (layers with min counts)
                 if (filters.requiredSkillTypes.length > 0) {
                     const stCounts = {};
-                    for (let i = 0; i < 6; i++) {
-                        const data = cache[deckIds[i]];
+                    for (let i = 0; i < totalSlots; i++) {
+                        const data = getCardData(i);
                         if (data && data.hintSkillTypes) data.hintSkillTypes.forEach(t => {
                             stCounts[t] = (stCounts[t] || 0) + 1;
                         });
@@ -383,8 +407,8 @@ function runBranchAndBound(payload) {
                 const allSkills = new Set();
                 const allTypes = new Set();
                 const typeCounts = {};
-                for (let i = 0; i < 6; i++) {
-                    const data = cache[deckIds[i]];
+                for (let i = 0; i < totalSlots; i++) {
+                    const data = getCardData(i);
                     if (!data) continue;
                     if (data.hintSkillIds) data.hintSkillIds.forEach(s => allSkills.add(s));
                     if (data.hintSkillTypes) data.hintSkillTypes.forEach(t => allTypes.add(t));
@@ -396,8 +420,8 @@ function runBranchAndBound(payload) {
 
                 // Skill-aptitude sum
                 let skillAptSum = 0;
-                for (let i = 0; i < 6; i++) {
-                    const data = cache[deckIds[i]];
+                for (let i = 0; i < totalSlots; i++) {
+                    const data = getCardData(i);
                     if (data) skillAptSum += (data.skillAptitudeScore || 0);
                 }
 
@@ -442,8 +466,8 @@ function runBranchAndBound(payload) {
                 // Growth rate boost
                 if (traineeGrowthRates && cardTypeGrowthKey) {
                     const statEffectIds = { speed: 3, stamina: 4, power: 5, guts: 6, wisdom: 7 };
-                    for (let ci = 0; ci < 6; ci++) {
-                        const cdata = cache[deckIds[ci]];
+                    for (let ci = 0; ci < totalSlots; ci++) {
+                        const cdata = getCardData(ci);
                         if (!cdata) continue;
                         const growthKey = cardTypeGrowthKey[cdata.type];
                         if (growthKey) {
@@ -459,7 +483,8 @@ function runBranchAndBound(payload) {
                 const aggCopy = {};
                 for (const k of Object.keys(partialEffects)) aggCopy[k] = partialEffects[k];
 
-                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy });
+                const friendCardId = friendType ? deckIds[totalSlots - 1] : null;
+                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy, friendCardId });
                 matchesFound++;
 
                 // Progress & live results
@@ -475,15 +500,17 @@ function runBranchAndBound(payload) {
             }
 
             const slot = slots[slotIdx];
-            const pool = slot.pool;
+            const slotPool = slot.pool;
+            const slotCache = slot.isFriend && friendCache ? friendCache : cache;
+            const slotScoreMap = slot.isFriend && friendCache ? friendCardScoreContrib : cardScoreContrib;
             const startFrom = slot.slotInType === 0 ? 0 : minIndices[slotIdx];
             const eb = slotEffectBounds[slotIdx + 1];
 
-            for (let i = startFrom; i < pool.length; i++) {
+            for (let i = startFrom; i < slotPool.length; i++) {
                 if (cancelled) return;
 
-                const cardId = pool[i];
-                const data = cache[cardId];
+                const cardId = slotPool[i];
+                const data = slotCache[cardId];
                 if (!data) continue;
 
                 // Same-character exclusion
@@ -501,7 +528,7 @@ function runBranchAndBound(payload) {
                 const prevUECount = ueCount;
                 if (data.uniqueEffectActive) ueCount++;
                 if (data.charId) usedCharIds.add(data.charId);
-                const cardScore = cardScoreContrib[cardId] || 0;
+                const cardScore = slotScoreMap[cardId] || 0;
                 partialScore += cardScore;
                 deckIds.push(cardId);
 
