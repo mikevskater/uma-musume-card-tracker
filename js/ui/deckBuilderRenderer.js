@@ -1491,10 +1491,10 @@ function renderScenarioInfo(aggregated) {
         `;
     });
 
-    // Enhanced training for Trailblazer
+    // Enhanced training for Trackblazer
     let enhancedHtml = '';
     if (scenario?.enhanced_training) {
-        enhancedHtml = '<div class="deck-summary-section-label">Enhanced Training (Trailblazer)</div>';
+        enhancedHtml = '<div class="deck-summary-section-label">Enhanced Training (Trackblazer)</div>';
         for (const [cmdId, baseType] of Object.entries(scenario.enhanced_training)) {
             const base = getBaseTrainingValues(`${baseType}_enhanced`, scenarioId, facilityLevel);
             if (!base) continue;
@@ -1564,11 +1564,11 @@ function getScenarioTips(scenarioId) {
             ];
         case '4':
             return [
-                '<strong>Enhanced Training</strong> -- Trailblazer unlocks boosted training commands (higher stats but more energy cost).',
+                '<strong>Enhanced Training</strong> -- Trackblazer unlocks boosted training commands (higher stats but more energy cost).',
                 '<strong>Race Bonus is king</strong> -- races are the primary progression source, making Race Bonus the most impactful effect.',
                 '<strong>Shop Items</strong> -- Megaphones (+20-60% training for 2-4 turns) and Ankle Weights (+50% single stat) amplify your deck\'s effects.',
                 '<strong>Energy management</strong> -- enhanced training costs more energy; Energy Cost Reduction and Event Recovery are critical.',
-                '<strong>Custom goal routes</strong> -- Trailblazer supports character-specific race routes for optimized progression.'
+                '<strong>Custom goal routes</strong> -- Trackblazer supports character-specific race routes for optimized progression.'
             ];
         default:
             return ['Select a scenario to see strategy tips.'];

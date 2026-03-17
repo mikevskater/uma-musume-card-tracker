@@ -401,6 +401,66 @@
 
 .finder-chip-remove:hover { color: var(--color-danger); }
 
+/* Include cards */
+.finder-include-mode {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+}
+
+.finder-include-info {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.finder-include-warning {
+    font-size: var(--font-size-xs);
+    color: var(--color-danger);
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.finder-dupe-highlight {
+    background: var(--color-danger) !important;
+    color: var(--color-on-danger, #fff) !important;
+}
+
+.finder-include-chip {
+    background: var(--bg-accent, var(--bg-tertiary));
+}
+
+.finder-reset-section {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+/* Live preview styles */
+.finder-live-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    cursor: default;
+}
+
+.finder-live-names {
+    flex: 1;
+    font-size: var(--font-size-xs);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.finder-live-metrics {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
 .finder-add-row {
     display: flex;
     gap: var(--space-xs);
@@ -1422,4 +1482,98 @@
 
 .finder-search-stats span:first-child::before {
     content: '';
+}
+
+/* ===== FINDER CARD PICKER ===== */
+
+/* Picker overlay — above finder modal */
+.finder-card-picker-overlay {
+    z-index: calc(var(--z-modal) + 2);
+}
+
+/* Thumbnail grid for selected cards */
+.finder-thumb-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+/* Removable thumbnails — hover X button */
+.finder-thumb-removable {
+    cursor: pointer;
+}
+
+.finder-thumb-remove {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-danger);
+    color: white;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-fast);
+    z-index: 1;
+}
+
+.finder-thumb-removable:hover .finder-thumb-remove {
+    opacity: 1;
+}
+
+/* Add/Select button */
+.finder-pick-btn {
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* Selected tile checkmark in picker grid */
+.finder-card-picker-overlay .picker-card-tile.selected {
+    border-color: var(--color-secondary);
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.finder-card-picker-overlay .picker-card-tile.selected::after {
+    content: '\2713';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    background: var(--color-secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Disabled tiles (used in other section) */
+.finder-card-picker-overlay .picker-card-tile.disabled-tile {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* Picker footer (Done button + count) */
+.finder-picker-footer {
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.finder-picker-count {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
 }

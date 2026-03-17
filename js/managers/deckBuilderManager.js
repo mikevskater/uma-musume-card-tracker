@@ -59,7 +59,7 @@ let deckBuilderState = {
         sortBy: 'effect_15',
         sortDirection: 'desc'
     },
-    scenario: '1',      // Default to URA; '1'=URA, '2'=Aoharu, '4'=Trailblazer
+    scenario: '1',      // Default to URA; '1'=URA, '2'=Aoharu, '4'=Trackblazer
     trainingLevel: 1,
     mood: 'very_good',
     friendshipTraining: true,

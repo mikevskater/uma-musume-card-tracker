@@ -1,19 +1,47 @@
 // Deck Finder Renderer
 // Modal UI, filter panel, results list, preview, and comparison for Best Deck Finder
 
+// ===== CARD LOOKUP MAP =====
+// O(1) lookup by support_id instead of O(n) cardData.find() in render loops
+let _cardDataMap = null;
+function getCardDataMap() {
+    if (!_cardDataMap) {
+        _cardDataMap = new Map(cardData.map(c => [c.support_id, c]));
+    }
+    return _cardDataMap;
+}
+function invalidateCardDataMap() { _cardDataMap = null; }
+
+// ===== CARD PICKER STATE =====
+let _finderExcludeCardIds = new Set();   // support_id strings
+let _finderIncludeCardIds = new Set();   // support_id strings
+let _finderIncludeFriendIds = new Set(); // support_id strings
+
 // ===== MODAL LIFECYCLE =====
 
+let _finderInitialized = false;
+
 function openDeckFinder() {
-    deckFinderState.filters = getDefaultFinderFilters();
-    deckFinderState.results = [];
-    deckFinderState.selectedResultIndex = -1;
-    deckFinderState.compareIndices = [];
-    deckFinderState.searching = false;
-    deckFinderState.progress = 0;
-    deckFinderState.searchStats = null;
-    deckFinderState.traineeData = null;
-    deckFinderState.sortLayers = [];
-    _finderSkillTypeLayers = [];
+    const isReopen = _finderInitialized;
+
+    if (!isReopen) {
+        // First open — initialize with defaults
+        deckFinderState.filters = getDefaultFinderFilters();
+        deckFinderState.results = [];
+        deckFinderState.selectedResultIndex = -1;
+        deckFinderState.compareIndices = [];
+        deckFinderState.searching = false;
+        deckFinderState.progress = 0;
+        deckFinderState.searchStats = null;
+        deckFinderState.traineeData = null;
+        if (!deckFinderState.sortLayers) deckFinderState.sortLayers = [];
+        _finderInitialized = true;
+    }
+
+    // Cancel any active search but preserve results
+    if (deckFinderState.searching) cancelSearch();
+
+    _resultsDelegateWired = false;
 
     const existing = document.getElementById('deckFinderOverlay');
     if (existing) existing.remove();
@@ -26,11 +54,60 @@ function openDeckFinder() {
 
     requestAnimationFrame(() => overlay.classList.add('open'));
     initFinderEvents();
+
+    // Restore UI from persisted state on reopen
+    if (isReopen) {
+        restoreFinderUIFromState();
+    }
+}
+
+function resetDeckFinder() {
+    deckFinderState.filters = getDefaultFinderFilters();
+    deckFinderState.results = [];
+    deckFinderState.selectedResultIndex = -1;
+    deckFinderState.compareIndices = [];
+    deckFinderState.searching = false;
+    deckFinderState.progress = 0;
+    deckFinderState.searchStats = null;
+    deckFinderState.traineeData = null;
+    deckFinderState.sortLayers = [];
+    _finderSkillTypeLayers = [];
+    _selectedRequiredSkills = [];
+    _finderExcludeCardIds = new Set();
+    _finderIncludeCardIds = new Set();
+    _finderIncludeFriendIds = new Set();
+    _finderInitialized = true;
+
+    // Rebuild the filter panel with defaults
+    const filtersEl = document.getElementById('finderFilters');
+    if (filtersEl) filtersEl.innerHTML = buildFinderFiltersHTML();
+
+    // Re-wire events on the new filter DOM
+    const overlay = document.getElementById('deckFinderOverlay');
+    if (overlay) {
+        // Re-init all filter-related events
+        reInitFilterEvents(overlay);
+    }
+
+    // Clear results
+    const resultsBody = document.getElementById('finderResultsBody');
+    if (resultsBody) {
+        resultsBody.innerHTML = `<div class="finder-results-placeholder">
+            <div class="finder-placeholder-icon">&#128269;</div>
+            <div>Configure filters and click <strong>Search</strong> to find optimal decks.</div>
+        </div>`;
+    }
+
+    showToast('Deck finder reset to defaults.', 'info');
 }
 
 function closeDeckFinder() {
-    if (deckFinderState.searching) cancelSearch();
+    // Save current UI state before tearing down DOM
     const overlay = document.getElementById('deckFinderOverlay');
+    if (overlay) {
+        try { deckFinderState.filters = collectFiltersFromUI(); } catch (e) {}
+    }
+    if (deckFinderState.searching) cancelSearch();
     if (overlay) {
         overlay.classList.remove('open');
         setTimeout(() => overlay.remove(), 200);
@@ -209,14 +286,40 @@ function buildFinderFiltersHTML() {
                 </div>
                 <div class="finder-exclusion-list" id="finderExcludeChars"></div>
                 <div class="finder-label" style="margin-top:8px;">By Specific Card</div>
-                <div class="multi-select" id="finderExcludeCardSelect">
-                    <div class="multi-select-trigger">
-                        <span class="multi-select-text">Select cards...</span>
-                        <span class="multi-select-arrow">&#9660;</span>
-                    </div>
-                    <div class="multi-select-dropdown" id="finderExcludeCardDropdown"></div>
+                <button class="btn btn-secondary btn-sm finder-pick-btn" id="finderExcludeCardPickBtn">
+                    + Add Cards to Exclude
+                </button>
+                <div class="finder-thumb-grid" id="finderExcludeCardThumbs"></div>
+            </div>
+        </div>
+
+        <!-- Include Cards (collapsible) -->
+        <div class="finder-section finder-collapsible">
+            <button class="finder-collapse-btn" data-target="finderIncludeBody">
+                <span class="finder-collapse-icon">&#9654;</span> Include Cards
+                <span class="finder-hint">(force specific cards into deck)</span>
+            </button>
+            <div class="finder-collapse-body" id="finderIncludeBody" style="display:none;">
+                <!-- Player Slot Cards -->
+                <div class="finder-label">Player Deck Cards</div>
+                <div class="finder-include-mode">
+                    <span class="finder-hint">Mode:</span>
+                    <label class="finder-pill finder-pill-sm active"><input type="radio" name="finderIncludeMode" value="all" checked hidden> ALL</label>
+                    <label class="finder-pill finder-pill-sm"><input type="radio" name="finderIncludeMode" value="any" hidden> ANY</label>
                 </div>
-                <div class="finder-exclusion-list" id="finderExcludeCards"></div>
+                <button class="btn btn-secondary btn-sm finder-pick-btn" id="finderIncludeCardPickBtn">
+                    + Add Cards to Include
+                </button>
+                <div class="finder-thumb-grid" id="finderIncludeCardThumbs"></div>
+                <div class="finder-include-info" id="finderIncludeInfo"></div>
+
+                <!-- Friend Slot Card -->
+                <div class="finder-label" style="margin-top:8px;">Friend Cards <span class="finder-hint">(optional — decks choose from these)</span></div>
+                <button class="btn btn-secondary btn-sm finder-pick-btn" id="finderIncludeFriendPickBtn">
+                    + Add Friend Cards
+                </button>
+                <div class="finder-thumb-grid finder-thumb-grid-single" id="finderIncludeFriendThumb"></div>
+                <div class="finder-include-warning" id="finderIncludeDupeWarning" style="display:none;"></div>
             </div>
         </div>
 
@@ -328,6 +431,11 @@ function buildFinderFiltersHTML() {
                     <span class="sort-icon">+</span> Add Skill Type
                 </button>
             </div>
+        </div>
+
+        <!-- Reset -->
+        <div class="finder-section finder-reset-section">
+            <button class="btn btn-danger btn-sm" id="finderResetBtn">Reset All Filters</button>
         </div>
     `;
 }
@@ -442,8 +550,8 @@ function initFinderEvents() {
     // Required skills search
     initRequiredSkillsSearch(overlay);
 
-    // Exclusion dropdowns
-    populateExcludeDropdowns();
+    // Exclusion character dropdown
+    populateExcludeCharDropdown();
 
     const excludeCharDropdown = overlay.querySelector('#finderExcludeCharDropdown');
     if (excludeCharDropdown) {
@@ -455,15 +563,22 @@ function initFinderEvents() {
         });
     }
 
-    const excludeCardDropdown = overlay.querySelector('#finderExcludeCardDropdown');
-    if (excludeCardDropdown) {
-        excludeCardDropdown.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox') {
-                renderExclusionChipsFromDropdown('finderExcludeCards', '#finderExcludeCardDropdown', '.finder-exclude-card-check');
-                updateFinderMultiSelectText('finderExcludeCardSelect', 'Select cards...');
+    // Exclude card picker button
+    wireFinderPickerButtons(overlay);
+
+    // Include mode radio pills
+    overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const radio = pill.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(p => {
+                    p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
+                });
+                updateIncludeInfo();
             }
         });
-    }
+    });
 
     // Sort layer management
     overlay.querySelector('#finderAddSortBtn')?.addEventListener('click', addFinderSortLayer);
@@ -476,6 +591,267 @@ function initFinderEvents() {
     // Search
     overlay.querySelector('#finderSearchBtn').addEventListener('click', startFinderSearch);
     overlay.querySelector('#finderCancelBtn').addEventListener('click', () => cancelSearch());
+
+    // Reset button with confirmation
+    overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
+        if (confirm('Reset all deck finder filters, settings, and results to defaults?')) {
+            resetDeckFinder();
+        }
+    });
+}
+
+// ===== STATE RESTORATION =====
+
+function restoreFinderUIFromState() {
+    const overlay = document.getElementById('deckFinderOverlay');
+    if (!overlay) return;
+
+    const f = deckFinderState.filters;
+    if (!f) return;
+
+    // Pool toggle
+    overlay.querySelectorAll('.finder-toggle-btn[data-pool]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.pool === f.cardPool);
+    });
+
+    // Scenario
+    const scenarioSel = overlay.querySelector('#finderScenario');
+    if (scenarioSel) scenarioSel.value = f.scenario || '1';
+
+    // Trainee
+    const traineeSel = overlay.querySelector('#finderTrainee');
+    if (traineeSel) traineeSel.value = f.selectedTrainee || '';
+
+    // Rarity
+    const rarityMap = { finderSSR: f.rarity.ssr, finderSR: f.rarity.sr, finderR: f.rarity.r };
+    for (const [id, selected] of Object.entries(rarityMap)) {
+        const btn = overlay.querySelector(`#${id}`);
+        if (btn) btn.classList.toggle('selected', selected);
+    }
+
+    // Types
+    overlay.querySelectorAll('.finder-type-btn').forEach(btn => {
+        const type = btn.dataset.type;
+        btn.classList.toggle('selected', !!f.types[type]);
+    });
+
+    // Type ratio
+    overlay.querySelectorAll('.finder-ratio-input').forEach(input => {
+        const type = input.dataset.type;
+        input.value = f.typeRatio[type] || 0;
+        const ratioItem = input.closest('.finder-ratio-item');
+        if (ratioItem) {
+            const disabled = !f.types[type];
+            ratioItem.classList.toggle('disabled', disabled);
+            input.disabled = disabled;
+        }
+    });
+    updateRatioSum();
+
+    // Thresholds
+    const threshMap = {
+        finderMinRace: f.minRaceBonus,
+        finderMinTrain: f.minTrainingEff,
+        finderMinFriend: f.minFriendBonus,
+        finderMinEnergy: f.minEnergyCost
+    };
+    for (const [id, val] of Object.entries(threshMap)) {
+        const el = overlay.querySelector(`#${id}`);
+        if (el) el.value = val || 0;
+    }
+
+    // Result count toggle
+    overlay.querySelectorAll('.finder-toggle-btn[data-count]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.count) === f.resultCount);
+    });
+
+    // Exclude characters
+    (f.excludeCharacters || []).forEach(name => {
+        const cb = overlay.querySelector(`.finder-exclude-char-check[value="${name}"]`);
+        if (cb) cb.checked = true;
+    });
+    renderExclusionChipsFromDropdown('finderExcludeChars', '#finderExcludeCharDropdown', '.finder-exclude-char-check');
+    updateFinderMultiSelectText('finderExcludeCharSelect', 'Select characters...');
+
+    // Exclude cards — restore from state into Set
+    _finderExcludeCardIds = new Set((f.excludeCards || []).map(String));
+    renderExcludeThumbGrid();
+
+    // Include cards — restore from state into Sets
+    _finderIncludeCardIds = new Set((f.includeCards || []).map(String));
+    _finderIncludeFriendIds = new Set((f.includeFriendCards || []).map(String));
+    renderIncludeThumbsAndInfo();
+    renderFriendThumbAndInfo();
+
+    // Include mode
+    const includeMode = f.includeCardsMode || 'all';
+    const includeModeRadio = overlay.querySelector(`input[name="finderIncludeMode"][value="${includeMode}"]`);
+    if (includeModeRadio) {
+        includeModeRadio.checked = true;
+        overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(p => {
+            p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
+        });
+    }
+
+    // Required skills mode
+    const reqMode = f.requiredSkillsMode || 'all';
+    const reqModeRadio = overlay.querySelector(`input[name="finderReqSkillMode"][value="${reqMode}"]`);
+    if (reqModeRadio) {
+        reqModeRadio.checked = true;
+        overlay.querySelectorAll('.finder-req-skills-mode .finder-pill').forEach(p => {
+            p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
+        });
+    }
+
+    // Required skills — restore from _selectedRequiredSkills
+    if (_selectedRequiredSkills.length > 0) {
+        _selectedRequiredSkills.forEach(skill => {
+            const cb = overlay.querySelector(`.finder-req-skill-check[value="${skill.id}"]`);
+            if (cb) cb.checked = true;
+        });
+        renderRequiredSkillsList();
+        updateFinderMultiSelectText('finderReqSkillSelect', 'Select hint skills...');
+    }
+
+    // Sort layers
+    if (deckFinderState.sortLayers && deckFinderState.sortLayers.length > 0) {
+        renderFinderSortLayers();
+        wireFinderSortEvents();
+    }
+
+    // Skill type layers
+    if (_finderSkillTypeLayers.length > 0) {
+        renderFinderSkillTypeLayers();
+        wireFinderSkillTypeEvents();
+    }
+
+    // Restore results if we have them
+    if (deckFinderState.results && deckFinderState.results.length > 0) {
+        renderFinderResults(deckFinderState.results, null, false);
+    }
+}
+
+// Re-initialize filter events after reset (filter DOM was replaced)
+function reInitFilterEvents(overlay) {
+    // Toggle buttons
+    overlay.querySelectorAll('.finder-toggle-row').forEach(row => {
+        row.querySelectorAll('.finder-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                row.querySelectorAll('.finder-toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    });
+
+    // Rarity icons
+    overlay.querySelectorAll('.finder-icon-grid .quick-add-icon-btn[data-rarity]').forEach(btn => {
+        btn.addEventListener('click', () => btn.classList.toggle('selected'));
+    });
+
+    // Type icons
+    overlay.querySelectorAll('.finder-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const isSelected = btn.classList.toggle('selected');
+            const type = btn.dataset.type;
+            const ratioItem = overlay.querySelector(`.finder-ratio-item[data-type="${type}"]`);
+            if (ratioItem) {
+                ratioItem.classList.toggle('disabled', !isSelected);
+                ratioItem.querySelector('.finder-ratio-input').disabled = !isSelected;
+                if (!isSelected) {
+                    ratioItem.querySelector('.finder-ratio-input').value = 0;
+                    updateRatioSum();
+                }
+            }
+        });
+    });
+
+    // Multi-selects
+    overlay.querySelectorAll('.multi-select-trigger').forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            const ms = trigger.closest('.multi-select');
+            overlay.querySelectorAll('.multi-select.open').forEach(other => {
+                if (other !== ms) other.classList.remove('open');
+            });
+            ms.classList.toggle('open');
+            e.stopPropagation();
+        });
+    });
+
+    // Radio pills (required skills mode)
+    overlay.querySelectorAll('.finder-req-skills-mode .finder-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const radio = pill.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                overlay.querySelectorAll('.finder-req-skills-mode .finder-pill').forEach(p => {
+                    p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
+                });
+            }
+        });
+    });
+
+    // Collapsible sections
+    overlay.querySelectorAll('.finder-collapse-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = document.getElementById(btn.dataset.target);
+            if (target) {
+                const isOpen = target.style.display !== 'none';
+                target.style.display = isOpen ? 'none' : '';
+                btn.querySelector('.finder-collapse-icon').textContent = isOpen ? '\u25B6' : '\u25BC';
+            }
+        });
+    });
+
+    // Ratio sum
+    overlay.querySelectorAll('.finder-ratio-input').forEach(input => {
+        input.addEventListener('input', updateRatioSum);
+    });
+
+    // Required skills
+    initRequiredSkillsSearch(overlay);
+
+    // Exclusion character dropdown
+    populateExcludeCharDropdown();
+    const excludeCharDropdown = overlay.querySelector('#finderExcludeCharDropdown');
+    if (excludeCharDropdown) {
+        excludeCharDropdown.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                renderExclusionChipsFromDropdown('finderExcludeChars', '#finderExcludeCharDropdown', '.finder-exclude-char-check');
+                updateFinderMultiSelectText('finderExcludeCharSelect', 'Select characters...');
+            }
+        });
+    }
+
+    // Picker buttons
+    wireFinderPickerButtons(overlay);
+
+    overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const radio = pill.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(p => {
+                    p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
+                });
+                updateIncludeInfo();
+            }
+        });
+    });
+
+    // Sort layers
+    overlay.querySelector('#finderAddSortBtn')?.addEventListener('click', addFinderSortLayer);
+    wireFinderSortEvents();
+
+    // Skill type layers
+    overlay.querySelector('#finderAddSkillTypeBtn')?.addEventListener('click', addFinderSkillTypeLayer);
+    wireFinderSkillTypeEvents();
+
+    // Reset button
+    overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
+        if (confirm('Reset all deck finder filters, settings, and results to defaults?')) {
+            resetDeckFinder();
+        }
+    });
 }
 
 // ===== SORT LAYER UI =====
@@ -711,7 +1087,7 @@ let _availableSkillsCache = null;
 let _selectedRequiredSkills = [];
 
 function initRequiredSkillsSearch(overlay) {
-    _selectedRequiredSkills = [];
+    // Don't wipe selected skills on reopen — they'll be restored by restoreFinderUIFromState
     _availableSkillsCache = null;
 
     // Populate the hint skills dropdown with checkboxes
@@ -779,9 +1155,21 @@ function renderRequiredSkillsList() {
 function updateFinderMultiSelectText(selectId, defaultText) {
     const ms = document.getElementById(selectId);
     if (!ms) return;
-    const checked = ms.querySelectorAll('input[type="checkbox"]:checked');
     const textEl = ms.querySelector('.multi-select-text');
     if (!textEl) return;
+
+    // Support both checkboxes and radios
+    let checked = ms.querySelectorAll('input[type="checkbox"]:checked');
+    if (checked.length === 0) {
+        // Check for radio with a non-empty value
+        const radio = ms.querySelector('input[type="radio"]:checked');
+        if (radio && radio.value) {
+            const label = radio.closest('label');
+            textEl.textContent = label ? label.textContent.trim() : '1 selected';
+            return;
+        }
+    }
+
     if (checked.length === 0) {
         textEl.textContent = defaultText;
     } else if (checked.length === 1) {
@@ -792,30 +1180,462 @@ function updateFinderMultiSelectText(selectId, defaultText) {
     }
 }
 
+// ===== FINDER CARD PICKER =====
+
+const FINDER_PICKER_SORT_OPTIONS = [
+    { value: 'name',      label: 'Name' },
+    { value: 'rarity',    label: 'Rarity' },
+    { value: 'effect_15', label: 'Race Bonus' },
+    { value: 'effect_8',  label: 'Training Effectiveness' },
+    { value: 'effect_1',  label: 'Friendship Bonus' },
+    { value: 'effect_30', label: 'Skill Point Bonus' }
+];
+
+function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disabledIds }) {
+    const existingPicker = document.getElementById('finderCardPickerOverlay');
+    if (existingPicker) existingPicker.remove();
+
+    // Working copy — mutate this, only commit on Done
+    const working = new Set(selected);
+    const disabled = disabledIds || new Set();
+
+    // Filter state local to this picker
+    const pickerFilter = {
+        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
+        search: '',
+        ssrOnly: false,
+        sortBy: 'name',
+        sortDirection: 'asc'
+    };
+
+    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+
+    const overlay = document.createElement('div');
+    overlay.className = 'picker-modal-overlay finder-card-picker-overlay';
+    overlay.id = 'finderCardPickerOverlay';
+
+    const typeButtonsHtml = `
+        <button class="picker-type-btn active" data-type="all">All</button>
+        <button class="picker-type-btn" data-type="speed">Speed</button>
+        <button class="picker-type-btn" data-type="stamina">Stamina</button>
+        <button class="picker-type-btn" data-type="power">Power</button>
+        <button class="picker-type-btn" data-type="guts">Guts</button>
+        <button class="picker-type-btn" data-type="intelligence">Wit</button>
+        <button class="picker-type-btn" data-type="friend">Friend</button>
+    `;
+
+    const sortOptionsHtml = FINDER_PICKER_SORT_OPTIONS.map(opt =>
+        `<option value="${opt.value}"${pickerFilter.sortBy === opt.value ? ' selected' : ''}>${opt.label}</option>`
+    ).join('');
+
+    const footerHtml = mode === 'multi' ? `
+        <div class="finder-picker-footer">
+            <span class="finder-picker-count" id="finderPickerCount">${working.size} selected</span>
+            <button class="btn btn-primary btn-sm" id="finderPickerDoneBtn">Done</button>
+        </div>
+    ` : '';
+
+    overlay.innerHTML = `
+        <div class="picker-modal" id="finderPickerModal">
+            <div class="picker-header">
+                <h3>${title}</h3>
+                <button class="picker-close" id="finderPickerCloseBtn">&times;</button>
+            </div>
+            <div class="picker-filters">
+                <div class="picker-type-filters" id="finderPickerTypeFilters">
+                    ${typeButtonsHtml}
+                </div>
+                <input class="picker-search" id="finderPickerSearch" type="text" placeholder="Search by card name...">
+                <div class="picker-filter-row">
+                    <label class="picker-ssr-toggle">
+                        <input type="checkbox" id="finderPickerSsrOnly">
+                        SSR Only
+                    </label>
+                    <div class="picker-sort-controls">
+                        <label class="picker-sort-label">Sort:</label>
+                        <select class="picker-sort-select" id="finderPickerSortBy">
+                            ${sortOptionsHtml}
+                        </select>
+                        <button class="picker-sort-dir-btn" id="finderPickerSortDir" title="Toggle sort direction">
+                            \u2191 Asc
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="picker-card-grid" id="finderPickerCardGrid"></div>
+            ${footerHtml}
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    function closePicker() {
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+        document.removeEventListener('keydown', escHandler);
+    }
+
+    function renderCards() {
+        renderFinderPickerCards('finderPickerCardGrid', pickerFilter, filterFn, working, disabled, mode, onCardClick);
+        updateCount();
+    }
+
+    function updateCount() {
+        const countEl = document.getElementById('finderPickerCount');
+        if (countEl) countEl.textContent = `${working.size} selected`;
+    }
+
+    function onCardClick(cardId) {
+        if (disabled.has(cardId)) return;
+        if (mode === 'single') {
+            onDone(new Set([cardId]));
+            closePicker();
+            return;
+        }
+        // Multi-mode: toggle
+        if (working.has(cardId)) {
+            working.delete(cardId);
+        } else {
+            working.add(cardId);
+        }
+        // Toggle visual state on the tile
+        const tile = overlay.querySelector(`.picker-card-tile[data-card-id="${cardId}"]`);
+        if (tile) tile.classList.toggle('selected', working.has(cardId));
+        updateCount();
+    }
+
+    // Close button
+    overlay.querySelector('#finderPickerCloseBtn').addEventListener('click', closePicker);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closePicker();
+    });
+
+    // Done button (multi-mode)
+    const doneBtn = overlay.querySelector('#finderPickerDoneBtn');
+    if (doneBtn) {
+        doneBtn.addEventListener('click', () => {
+            onDone(new Set(working));
+            closePicker();
+        });
+    }
+
+    // Type filter buttons
+    overlay.querySelectorAll('#finderPickerTypeFilters .picker-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const type = btn.dataset.type;
+            const allBtn = overlay.querySelector('#finderPickerTypeFilters .picker-type-btn[data-type="all"]');
+
+            if (type === 'all') {
+                pickerFilter.types = [...allTypes];
+                overlay.querySelectorAll('#finderPickerTypeFilters .picker-type-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.type === 'all');
+                });
+            } else if (allBtn.classList.contains('active')) {
+                pickerFilter.types = [type];
+                allBtn.classList.remove('active');
+                overlay.querySelectorAll('#finderPickerTypeFilters .picker-type-btn').forEach(b => {
+                    if (b.dataset.type !== 'all') b.classList.toggle('active', b.dataset.type === type);
+                });
+            } else {
+                const idx = pickerFilter.types.indexOf(type);
+                if (idx >= 0) pickerFilter.types.splice(idx, 1);
+                else pickerFilter.types.push(type);
+                btn.classList.toggle('active');
+
+                if (pickerFilter.types.length === 0 || pickerFilter.types.length === 6) {
+                    pickerFilter.types = [...allTypes];
+                    allBtn.classList.add('active');
+                    overlay.querySelectorAll('#finderPickerTypeFilters .picker-type-btn').forEach(b => {
+                        if (b.dataset.type !== 'all') b.classList.remove('active');
+                    });
+                }
+            }
+            renderCards();
+        });
+    });
+
+    // Search
+    let searchTimeout;
+    overlay.querySelector('#finderPickerSearch').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            pickerFilter.search = e.target.value.trim().toLowerCase();
+            renderCards();
+        }, 300);
+    });
+
+    // SSR only
+    overlay.querySelector('#finderPickerSsrOnly').addEventListener('change', (e) => {
+        pickerFilter.ssrOnly = e.target.checked;
+        renderCards();
+    });
+
+    // Sort
+    overlay.querySelector('#finderPickerSortBy').addEventListener('change', (e) => {
+        pickerFilter.sortBy = e.target.value;
+        renderCards();
+    });
+
+    overlay.querySelector('#finderPickerSortDir').addEventListener('click', () => {
+        pickerFilter.sortDirection = pickerFilter.sortDirection === 'desc' ? 'asc' : 'desc';
+        const btn = overlay.querySelector('#finderPickerSortDir');
+        const arrow = pickerFilter.sortDirection === 'desc' ? '\u2193' : '\u2191';
+        const label = pickerFilter.sortDirection === 'desc' ? 'Desc' : 'Asc';
+        btn.textContent = `${arrow} ${label}`;
+        renderCards();
+    });
+
+    // Escape closes picker only (not finder)
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            e.stopPropagation();
+            closePicker();
+        }
+    };
+    document.addEventListener('keydown', escHandler, true); // capture phase
+
+    renderCards();
+    requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function renderFinderPickerCards(gridId, filter, filterFn, selectedIds, disabledIds, mode, onCardClick) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+
+    const map = getCardDataMap();
+
+    let cards = cardData.filter(card => {
+        if (!card.char_name || !card.start_date) return false;
+        if (filter.ssrOnly && card.rarity !== 3) return false;
+        if (filter.types.length > 0 && !filter.types.includes(card.type)) return false;
+        if (filter.search) {
+            const s = filter.search;
+            if (!(card.char_name || '').toLowerCase().includes(s) &&
+                !(card.card_name || '').toLowerCase().includes(s)) return false;
+        }
+        if (filterFn && !filterFn(card)) return false;
+        return true;
+    });
+
+    // Sort
+    const sortBy = filter.sortBy;
+    const dir = filter.sortDirection === 'desc' ? -1 : 1;
+
+    if (sortBy === 'name') {
+        cards.sort((a, b) => dir * (a.char_name || '').localeCompare(b.char_name || ''));
+    } else if (sortBy === 'rarity') {
+        cards.sort((a, b) => dir * (a.rarity - b.rarity));
+    } else if (sortBy.startsWith('effect_')) {
+        const effectId = parseInt(sortBy.split('_')[1]);
+        const getVal = (card) => {
+            const eff = card.effects?.find(e => e[0] === effectId);
+            if (!eff) return 0;
+            try { return calculateEffectValue(eff, limitBreaks[card.rarity]?.[4] || 50); } catch { return 0; }
+        };
+        cards.sort((a, b) => dir * (getVal(a) - getVal(b)));
+    }
+
+    if (cards.length === 0) {
+        grid.innerHTML = '<div class="picker-no-results">No cards match your filters.</div>';
+        return;
+    }
+
+    grid.innerHTML = '';
+    cards.forEach(card => {
+        const cardId = String(card.support_id);
+        const isSelected = selectedIds.has(cardId);
+        const isDisabled = disabledIds.has(cardId);
+
+        const tile = document.createElement('div');
+        tile.className = 'picker-card-tile' +
+            (isSelected ? ' selected' : '') +
+            (isDisabled ? ' disabled-tile' : '');
+        tile.dataset.cardId = cardId;
+        tile.setAttribute('tabindex', isDisabled ? '-1' : '0');
+        tile.style.position = 'relative';
+
+        const topRow = document.createElement('div');
+        topRow.className = 'picker-tile-top';
+
+        const icon = document.createElement('img');
+        icon.className = 'picker-tile-icon';
+        icon.src = `support_card_images/${card.support_id}_i.png`;
+        icon.alt = card.char_name || '';
+        icon.loading = 'lazy';
+        icon.onerror = function() { this.style.display = 'none'; };
+        topRow.appendChild(icon);
+
+        const info = document.createElement('div');
+        info.className = 'picker-tile-info';
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'picker-tile-name';
+        nameDiv.textContent = card.char_name || 'Unknown';
+        nameDiv.title = card.char_name || '';
+        info.appendChild(nameDiv);
+
+        const badges = document.createElement('div');
+        badges.className = 'picker-tile-badges';
+        badges.appendChild(createRarityBadge(card.rarity));
+        badges.appendChild(createTypeBadge(card.type));
+        info.appendChild(badges);
+
+        topRow.appendChild(info);
+        tile.appendChild(topRow);
+
+        if (!isDisabled) {
+            tile.addEventListener('click', () => onCardClick(cardId));
+        }
+
+        grid.appendChild(tile);
+    });
+}
+
+function renderFinderThumbGrid(containerId, selectedIds, onRemove) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!selectedIds || selectedIds.size === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const map = getCardDataMap();
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+
+    container.innerHTML = '';
+    selectedIds.forEach(id => {
+        const card = map.get(id) || map.get(Number(id));
+        if (!card) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'finder-thumb-wrap finder-thumb-removable';
+
+        const img = document.createElement('img');
+        img.src = `support_card_images/${card.support_id}.png`;
+        img.className = `finder-result-thumb card-image rarity-${card.rarity}`;
+        img.title = card.char_name || '';
+        img.loading = 'lazy';
+        img.onerror = function() { this.style.display = 'none'; };
+        wrap.appendChild(img);
+
+        const typeIcon = document.createElement('img');
+        typeIcon.className = 'finder-thumb-type-icon';
+        typeIcon.src = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
+        wrap.appendChild(typeIcon);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'finder-thumb-remove';
+        removeBtn.dataset.id = String(card.support_id);
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            onRemove(String(card.support_id));
+        });
+        wrap.appendChild(removeBtn);
+
+        container.appendChild(wrap);
+    });
+}
+
+// ===== PICKER BUTTON WIRING =====
+
+function wireFinderPickerButtons(overlay) {
+    // Exclude card picker
+    const excludeBtn = overlay.querySelector('#finderExcludeCardPickBtn');
+    if (excludeBtn) {
+        excludeBtn.addEventListener('click', () => {
+            openFinderCardPicker({
+                title: 'Exclude Specific Cards',
+                mode: 'multi',
+                selected: _finderExcludeCardIds,
+                onDone: (ids) => {
+                    _finderExcludeCardIds = ids;
+                    renderExcludeThumbGrid();
+                }
+            });
+        });
+    }
+
+    // Include card picker
+    const includeBtn = overlay.querySelector('#finderIncludeCardPickBtn');
+    if (includeBtn) {
+        includeBtn.addEventListener('click', () => {
+            const poolBtn = overlay.querySelector('.finder-toggle-btn[data-pool].active');
+            const isOwned = (poolBtn?.dataset?.pool || 'owned') === 'owned';
+
+            openFinderCardPicker({
+                title: 'Include Player Cards',
+                mode: 'multi',
+                selected: _finderIncludeCardIds,
+                filterFn: isOwned ? (card) => isCardOwned(card.support_id) : null,
+                disabledIds: new Set(_finderIncludeFriendIds),
+                onDone: (ids) => {
+                    _finderIncludeCardIds = ids;
+                    renderIncludeThumbsAndInfo();
+                }
+            });
+        });
+    }
+
+    // Friend card picker (multi-select — search picks best friend from these)
+    const friendBtn = overlay.querySelector('#finderIncludeFriendPickBtn');
+    if (friendBtn) {
+        friendBtn.addEventListener('click', () => {
+            openFinderCardPicker({
+                title: 'Add Friend Cards',
+                mode: 'multi',
+                selected: _finderIncludeFriendIds,
+                disabledIds: new Set(),
+                onDone: (ids) => {
+                    _finderIncludeFriendIds = ids;
+                    renderFriendThumbAndInfo();
+                }
+            });
+        });
+    }
+
+    // Render initial thumb grids
+    renderExcludeThumbGrid();
+    renderIncludeThumbsAndInfo();
+    renderFriendThumbAndInfo();
+}
+
+function renderExcludeThumbGrid() {
+    renderFinderThumbGrid('finderExcludeCardThumbs', _finderExcludeCardIds, (id) => {
+        _finderExcludeCardIds.delete(id);
+        renderExcludeThumbGrid();
+    });
+}
+
+function renderIncludeThumbsAndInfo() {
+    renderFinderThumbGrid('finderIncludeCardThumbs', _finderIncludeCardIds, (id) => {
+        _finderIncludeCardIds.delete(id);
+        renderIncludeThumbsAndInfo();
+    });
+    updateIncludeInfo();
+    checkIncludeDuplicates();
+}
+
+function renderFriendThumbAndInfo() {
+    renderFinderThumbGrid('finderIncludeFriendThumb', _finderIncludeFriendIds, (id) => {
+        _finderIncludeFriendIds.delete(id);
+        renderFriendThumbAndInfo();
+    });
+    checkIncludeDuplicates();
+}
+
 // ===== EXCLUSION DROPDOWNS =====
 
-function populateExcludeDropdowns() {
+function populateExcludeCharDropdown() {
     const charDropdown = document.getElementById('finderExcludeCharDropdown');
-    const cardDropdown = document.getElementById('finderExcludeCardDropdown');
-    if (!charDropdown || !cardDropdown) return;
+    if (!charDropdown) return;
 
     // Character dropdown — unique char_name values, sorted
     const charNames = [...new Set(cardData.map(c => c.char_name).filter(Boolean))].sort();
     charDropdown.innerHTML = charNames.map(name =>
         `<label><input type="checkbox" class="finder-exclude-char-check" value="${name}"> ${name}</label>`
     ).join('');
-
-    // Card dropdown — all cards with "Name (Type, Rarity)" label
-    const rarityLabels = { 3: 'SSR', 2: 'SR', 1: 'R' };
-    const sortedCards = [...cardData]
-        .filter(c => c.char_name)
-        .sort((a, b) => a.char_name.localeCompare(b.char_name) || a.support_id - b.support_id);
-    cardDropdown.innerHTML = sortedCards.map(c => {
-        const typeLabel = getTypeDisplayName(c.type);
-        const rLabel = rarityLabels[c.rarity] || '?';
-        const displayName = `${c.char_name} (${typeLabel}, ${rLabel})`;
-        return `<label><input type="checkbox" class="finder-exclude-card-check" value="${c.support_id}"> ${displayName}</label>`;
-    }).join('');
 }
 
 function renderExclusionChipsFromDropdown(containerId, dropdownSelector, checkboxSelector) {
@@ -823,7 +1643,10 @@ function renderExclusionChipsFromDropdown(containerId, dropdownSelector, checkbo
     if (!container) return;
 
     const checked = document.querySelectorAll(`${dropdownSelector} ${checkboxSelector}:checked`);
-    if (checked.length === 0) { container.innerHTML = ''; return; }
+    if (checked.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
 
     container.innerHTML = Array.from(checked).map(cb => {
         const label = cb.closest('label')?.textContent.trim() || cb.value;
@@ -837,14 +1660,47 @@ function renderExclusionChipsFromDropdown(containerId, dropdownSelector, checkbo
             const cb = document.querySelector(`${sel}[value="${val}"]`);
             if (cb) { cb.checked = false; }
             renderExclusionChipsFromDropdown(containerId, dropdownSelector, checkboxSelector);
-            // Update trigger text
             if (sel.includes('char')) {
                 updateFinderMultiSelectText('finderExcludeCharSelect', 'Select characters...');
-            } else {
-                updateFinderMultiSelectText('finderExcludeCardSelect', 'Select cards...');
             }
         });
     });
+}
+
+// (Dead include dropdown/chip code removed — visual picker handles this now)
+
+function updateIncludeInfo() {
+    const info = document.getElementById('finderIncludeInfo');
+    if (!info) return;
+
+    const count = _finderIncludeCardIds.size;
+    if (count === 0) {
+        info.textContent = '';
+    } else if (count <= 4) {
+        const mode = document.querySelector('input[name="finderIncludeMode"]:checked')?.value || 'all';
+        info.textContent = mode === 'all'
+            ? `${count} card${count > 1 ? 's' : ''} forced into deck \u2014 ${5 - count} slot${5 - count !== 1 ? 's' : ''} searched`
+            : `At least 1 of ${count} cards required in deck`;
+    } else if (count === 5) {
+        info.textContent = '5 cards fill all player slots \u2014 only friend card will be searched';
+    } else {
+        info.textContent = `${count} cards selected \u2014 best 5 will be chosen from these only`;
+    }
+}
+
+function checkIncludeDuplicates() {
+    const warning = document.getElementById('finderIncludeDupeWarning');
+    if (!warning) return;
+
+    if (_finderIncludeFriendIds.size === 0) { warning.style.display = 'none'; return; }
+
+    const dupes = [..._finderIncludeFriendIds].filter(id => _finderIncludeCardIds.has(id));
+    if (dupes.length > 0) {
+        warning.style.display = '';
+        warning.textContent = `Warning: ${dupes.length} card${dupes.length > 1 ? 's' : ''} selected in both player and friend slots.`;
+    } else {
+        warning.style.display = 'none';
+    }
 }
 
 // ===== RATIO SUM =====
@@ -911,15 +1767,18 @@ function collectFiltersFromUI() {
         .filter(l => l.type && l.min > 0)
         .map(l => ({ type: l.type, min: l.min }));
 
-    // Exclusions (from multi-select dropdowns)
+    // Exclusions — characters from dropdown, cards from Set
     f.excludeCharacters = [];
     overlay.querySelectorAll('.finder-exclude-char-check:checked').forEach(cb => {
         f.excludeCharacters.push(cb.value);
     });
-    f.excludeCards = [];
-    overlay.querySelectorAll('.finder-exclude-card-check:checked').forEach(cb => {
-        f.excludeCards.push(cb.value);
-    });
+    f.excludeCards = [..._finderExcludeCardIds];
+
+    // Include cards from Sets
+    f.includeCards = [..._finderIncludeCardIds];
+    const includeModeRadio = overlay.querySelector('input[name="finderIncludeMode"]:checked');
+    f.includeCardsMode = includeModeRadio?.value || 'all';
+    f.includeFriendCards = [..._finderIncludeFriendIds];
 
     // Result count
     const countBtn = overlay.querySelector('.finder-toggle-btn[data-count].active');
@@ -1066,9 +1925,26 @@ function renderLiveResults(results, matchCount) {
         header.textContent = `Top ${results.length} of ${matchCount} matches (searching...)`;
     }
 
-    // Re-render the list
-    list.innerHTML = results.map((result, idx) => renderResultCard(result, idx)).join('');
-    wireResultEvents(container);
+    // Simplified preview during live updates — score + card names only
+    const cardMap = getCardDataMap();
+    list.innerHTML = results.map((result, idx) => {
+        const m = result.metrics;
+        const names = result.cardIds.map(id => {
+            const card = cardMap.get(id);
+            return card ? card.char_name : '?';
+        }).join(', ');
+        const keyMetrics = [];
+        if (m.raceBonus > 0) keyMetrics.push(`Race ${m.raceBonus}%`);
+        if (m.trainingEff > 0) keyMetrics.push(`TrEff ${m.trainingEff}%`);
+        if (m.friendBonus > 0) keyMetrics.push(`Friend ${m.friendBonus}%`);
+        return `<div class="finder-result-card finder-live-preview" data-idx="${idx}">
+            <span class="finder-result-rank">#${idx + 1}</span>
+            <span class="finder-live-names">${names}</span>
+            <span class="finder-live-metrics">${keyMetrics.join(' | ')}</span>
+        </div>`;
+    }).join('');
+    // Ensure delegation is wired (no-op if already done)
+    ensureResultsDelegation(container);
 }
 
 function renderResultCard(result, idx) {
@@ -1088,8 +1964,9 @@ function renderResultCard(result, idx) {
     // Card thumbnails with rarity borders and type icons
     const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
     const resultFriendId = result.friendCardId || null;
+    const cardMap = getCardDataMap();
     const cardThumbs = result.cardIds.map(id => {
-        const card = cardData.find(c => c.support_id === id);
+        const card = cardMap.get(id);
         if (!card) return '';
         const isFriend = id === resultFriendId;
         const iconFile = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
@@ -1137,47 +2014,60 @@ function renderResultCard(result, idx) {
     `;
 }
 
-function wireResultEvents(container) {
-    // Click card to expand inline preview
-    container.querySelectorAll('.finder-result-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.finder-result-btns') || e.target.closest('.finder-cmp-label') || e.target.closest('button') || e.target.closest('label')) return;
-            const idx = parseInt(card.dataset.idx);
-            toggleResultDetail(idx);
-        });
-    });
+// Delegated event listener — wired once on the results container, never re-wired
+let _resultsDelegateWired = false;
+function ensureResultsDelegation(container) {
+    if (_resultsDelegateWired) return;
+    _resultsDelegateWired = true;
 
-    // Compare checkboxes
-    container.querySelectorAll('.finder-compare-check').forEach(check => {
-        check.addEventListener('change', updateCompareSelection);
-    });
-
-    // View — creates a new saved deck
-    container.querySelectorAll('.finder-view-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    container.addEventListener('click', (e) => {
+        // View button
+        const viewBtn = e.target.closest('.finder-view-btn');
+        if (viewBtn) {
             e.stopPropagation();
-            const idx = parseInt(btn.dataset.idx);
+            const idx = parseInt(viewBtn.dataset.idx);
             const result = deckFinderState.results[idx];
             if (result) {
                 const name = saveDeckFromFinder(result.cardIds);
                 closeDeckFinder();
                 showToast(`Created deck "${name}" and loaded into builder.`, 'success');
             }
-        });
-    });
+            return;
+        }
 
-    // Save
-    container.querySelectorAll('.finder-save-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        // Save button
+        const saveBtn = e.target.closest('.finder-save-btn');
+        if (saveBtn) {
             e.stopPropagation();
-            const idx = parseInt(btn.dataset.idx);
+            const idx = parseInt(saveBtn.dataset.idx);
             const result = deckFinderState.results[idx];
             if (result) {
                 const name = saveDeckFromFinder(result.cardIds);
                 showToast(`Saved as "${name}"`, 'success');
             }
-        });
+            return;
+        }
+
+        // Ignore clicks on buttons/labels (compare checkboxes handled via change)
+        if (e.target.closest('.finder-result-btns') || e.target.closest('.finder-cmp-label') || e.target.closest('button') || e.target.closest('label')) return;
+
+        // Card click — expand/collapse detail
+        const card = e.target.closest('.finder-result-card');
+        if (card) {
+            const idx = parseInt(card.dataset.idx);
+            toggleResultDetail(idx);
+        }
     });
+
+    container.addEventListener('change', (e) => {
+        if (e.target.closest('.finder-compare-check')) {
+            updateCompareSelection();
+        }
+    });
+}
+
+function wireResultEvents(container) {
+    ensureResultsDelegation(container);
 }
 
 // ===== CARD EFFECTS TABLE =====
@@ -1254,8 +2144,9 @@ function toggleResultDetail(idx) {
     // Card details with images
     const friendCardId = result.friendCardId || null;
     html += '<div class="finder-detail-cards">';
+    const cardMap = getCardDataMap();
     result.cardIds.forEach(id => {
-        const card = cardData.find(c => c.support_id === id);
+        const card = cardMap.get(id);
         const isFriend = id === friendCardId;
         // Use friend-prefixed cache key for friend cards (max level data)
         const data = isFriend ? (cache.get('friend_' + id) || cache.get(id)) : cache.get(id);
@@ -1311,7 +2202,7 @@ function toggleResultDetail(idx) {
     // Hint skills table
     const hintSkillMap = new Map();
     result.cardIds.forEach(id => {
-        const card = cardData.find(c => c.support_id === id);
+        const card = cardMap.get(id);
         if (!card?.hints?.hint_skills) return;
         card.hints.hint_skills.forEach(skill => {
             if (!skill) return;
@@ -1375,6 +2266,7 @@ function renderDeckComparison() {
     if (indices.length < 2) return;
 
     const results = indices.map(i => deckFinderState.results[i]);
+    const cardMap = getCardDataMap();
 
     const metrics = [
         { key: 'raceBonus', label: 'Race Bonus %' },
@@ -1383,7 +2275,14 @@ function renderDeckComparison() {
         { key: 'energyCost', label: 'Energy Reduction %' },
         { key: 'eventRecovery', label: 'Event Recovery %' },
         { key: 'statBonus', label: 'Stat Bonus Sum' },
+        { key: 'specialtyPriority', label: 'Specialty Priority' },
+        { key: 'moodEffect', label: 'Mood Effect %' },
+        { key: 'initialFriendship', label: 'Initial Friendship' },
         { key: 'hintSkillCount', label: 'Hint Skills' },
+        { key: 'hintFrequency', label: 'Hint Frequency %' },
+        { key: 'hintLevels', label: 'Hint Levels' },
+        { key: 'failureProtection', label: 'Failure Protection %' },
+        { key: 'initialStats', label: 'Initial Stats' },
         { key: 'skillTypeCount', label: 'Skill Types' },
         { key: 'uniqueEffects', label: 'Unique Effects' },
         { key: 'skillAptitude', label: 'Skill Aptitude' },
@@ -1420,12 +2319,12 @@ function renderDeckComparison() {
     html += '<div class="finder-comparison-diff">';
     if (commonCards.length > 0) {
         html += '<div class="finder-diff-section"><strong>Common:</strong> ' +
-            commonCards.map(id => { const c = cardData.find(x => x.support_id === id); return c ? c.char_name : '?'; }).join(', ') + '</div>';
+            commonCards.map(id => { const c = cardMap.get(id); return c ? c.char_name : '?'; }).join(', ') + '</div>';
     }
     uniquePerDeck.forEach((unique, i) => {
         if (unique.length > 0) {
             html += `<div class="finder-diff-section"><strong>Only #${indices[i] + 1}:</strong> ` +
-                unique.map(id => { const c = cardData.find(x => x.support_id === id); return c ? c.char_name : '?'; }).join(', ') + '</div>';
+                unique.map(id => { const c = cardMap.get(id); return c ? c.char_name : '?'; }).join(', ') + '</div>';
         }
     });
     html += '</div>';
@@ -1436,5 +2335,5 @@ function renderDeckComparison() {
 
 // ===== EXPORTS =====
 
-window.DeckFinderRenderer = { openDeckFinder, closeDeckFinder, renderFinderResults };
+window.DeckFinderRenderer = { openDeckFinder, closeDeckFinder, renderFinderResults, invalidateCardDataMap, resetDeckFinder };
 Object.assign(window, { openDeckFinder, closeDeckFinder });

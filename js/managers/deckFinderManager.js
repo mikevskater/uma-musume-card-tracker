@@ -10,20 +10,39 @@
 //   hintSkillCount: 0-20 → multiplied by 3 to normalize to ~0-60 range
 //   totalEffectSum: 0-800 → used as weak tiebreaker only (weight ~1)
 const SCENARIO_WEIGHTS = {
-    '1': { // URA — balanced, race bonus focused
+    '1': {
         name: 'URA',
-        weights: { raceBonus: 100, trainingEff: 70, friendBonus: 90, statBonus: 40, energyCost: 40, eventRecovery: 30, hintSkillCount: 20, skillAptitude: 25, totalEffectSum: 1 },
-        thresholdHints: { raceBonus: 35 }
+        raceBreakpoint: 34,
+        weights: {
+            friendBonus: 100, specialtyPriority: 90, trainingEff: 85,
+            raceBonus: 70, moodEffect: 60, energyCost: 55,
+            initialFriendship: 50, statBonus: 35, initialStats: 30,
+            failureProtection: 25, skillAptitude: 25, hintSkillCount: 20,
+            hintFrequency: 18, hintLevels: 15, totalEffectSum: 1
+        }
     },
-    '2': { // Aoharu — training efficiency focused
+    '2': {
         name: 'Aoharu',
-        weights: { raceBonus: 70, trainingEff: 100, friendBonus: 90, statBonus: 50, energyCost: 50, eventRecovery: 30, hintSkillCount: 20, skillAptitude: 25, totalEffectSum: 1 },
-        thresholdHints: { raceBonus: 35 }
+        raceBreakpoint: 34,
+        weights: {
+            trainingEff: 100, friendBonus: 90, specialtyPriority: 90,
+            raceBonus: 60, moodEffect: 55, energyCost: 60,
+            initialFriendship: 50, statBonus: 45, initialStats: 30,
+            failureProtection: 25, skillAptitude: 25, hintSkillCount: 20,
+            hintFrequency: 18, hintLevels: 15, totalEffectSum: 1
+        }
     },
-    '4': { // Trailblazer — high race bonus + energy management
-        name: 'Trailblazer',
-        weights: { raceBonus: 100, trainingEff: 80, friendBonus: 80, statBonus: 35, energyCost: 70, eventRecovery: 50, hintSkillCount: 15, skillAptitude: 25, totalEffectSum: 1 },
-        thresholdHints: { raceBonus: 50 }
+    '4': {
+        name: 'Trackblazer',
+        raceBreakpoint: 50,
+        weights: {
+            raceBonus: 130, energyCost: 80, friendBonus: 75,
+            specialtyPriority: 70, trainingEff: 65, eventRecovery: 65,
+            moodEffect: 50, initialFriendship: 40, statBonus: 30,
+            failureProtection: 30, initialStats: 25, skillAptitude: 20,
+            hintSkillCount: 15, hintFrequency: 12, hintLevels: 10,
+            totalEffectSum: 1
+        }
     }
 };
 
@@ -68,12 +87,9 @@ class MinHeap {
         this.keySet = new Set();
     }
 
-    _makeKey(cardIds) {
-        return cardIds.slice().sort().join(',');
-    }
-
     insert(entry) {
-        const key = this._makeKey(entry.cardIds);
+        // Key is pre-computed on the entry to avoid slice+sort per insert
+        const key = entry._key;
         if (this.keySet.has(key)) return false;
 
         if (this.heap.length < this.maxSize) {
@@ -85,8 +101,7 @@ class MinHeap {
 
         // Heap is full — only insert if better than the min
         if (entry.score > this.heap[0].score) {
-            const evictedKey = this._makeKey(this.heap[0].cardIds);
-            this.keySet.delete(evictedKey);
+            this.keySet.delete(this.heap[0]._key);
             this.heap[0] = entry;
             this.keySet.add(key);
             this._sinkDown(0);
@@ -150,8 +165,9 @@ let deckFinderState = {
     cardEffectCache: new Map(),
     // Trainee data resolved from filters
     traineeData: null,
-    // Worker reference
+    // Worker references
     worker: null,
+    workers: null,
     // Search stats
     searchStats: null,
     // Multi-layer sort state — array of { key, direction } objects
@@ -195,11 +211,18 @@ const FINDER_SORT_CATEGORIES = {
                 .map(([id, str]) => ({ value: id, label: str }));
         }
     },
-    statBonus:       { label: 'Stat Bonus (total)',   defaultDirection: 'desc', metricKey: 'statBonus' },
-    hintSkillCount:  { label: 'Hint Skills',          defaultDirection: 'desc', metricKey: 'hintSkillCount' },
-    skillAptitude:   { label: 'Skill Aptitude',       defaultDirection: 'desc', metricKey: 'skillAptitude' },
-    uniqueEffects:   { label: 'Unique Effects',       defaultDirection: 'desc', metricKey: 'uniqueEffects' },
-    totalEffectSum:  { label: 'Total Effect Sum',     defaultDirection: 'desc', metricKey: 'totalEffectSum' }
+    statBonus:          { label: 'Stat Bonus (total)',    defaultDirection: 'desc', metricKey: 'statBonus' },
+    specialtyPriority:  { label: 'Specialty Priority',    defaultDirection: 'desc', metricKey: 'specialtyPriority' },
+    moodEffect:         { label: 'Mood Effect',           defaultDirection: 'desc', metricKey: 'moodEffect' },
+    initialFriendship:  { label: 'Initial Friendship',    defaultDirection: 'desc', metricKey: 'initialFriendship' },
+    hintSkillCount:     { label: 'Hint Skills',           defaultDirection: 'desc', metricKey: 'hintSkillCount' },
+    hintFrequency:      { label: 'Hint Frequency',        defaultDirection: 'desc', metricKey: 'hintFrequency' },
+    hintLevels:         { label: 'Hint Levels',            defaultDirection: 'desc', metricKey: 'hintLevels' },
+    failureProtection:  { label: 'Failure Protection',    defaultDirection: 'desc', metricKey: 'failureProtection' },
+    initialStats:       { label: 'Initial Stats',         defaultDirection: 'desc', metricKey: 'initialStats' },
+    skillAptitude:      { label: 'Skill Aptitude',        defaultDirection: 'desc', metricKey: 'skillAptitude' },
+    uniqueEffects:      { label: 'Unique Effects',        defaultDirection: 'desc', metricKey: 'uniqueEffects' },
+    totalEffectSum:     { label: 'Total Effect Sum',      defaultDirection: 'desc', metricKey: 'totalEffectSum' }
 };
 
 function getFinderSortValue(result, layer) {
@@ -324,6 +347,9 @@ function getDefaultFinderFilters() {
         minUniqueEffects: 0,
         excludeCharacters: [],        // character names
         excludeCards: [],             // card support_ids
+        includeCards: [],             // card support_ids to force into player slots
+        includeCardsMode: 'all',      // 'all' = must contain all, 'any' = at least one
+        includeFriendCards: [],       // support_ids restricting friend slot pool (empty = unrestricted)
         resultCount: 10,
         scenario: '1',               // scenario ID for scoring weights
         selectedTrainee: null         // trainee version ID from charactersData
@@ -350,7 +376,10 @@ function validateFinderFilters(filters) {
         filters.types[t] && filters.typeRatioAtLeast[t] && filters.typeRatio[t] > 0
     );
 
-    if (ratioSum > 0) {
+    // Skip ratio validation when "all" mode include cards override it
+    const includeAllMode = (filters.includeCards || []).length > 0 && filters.includeCardsMode === 'all';
+
+    if (ratioSum > 0 && !includeAllMode) {
         if (hasAnyAtLeast) {
             if (ratioSum > 6) {
                 errors.push(`Type "at least" minimums sum to ${ratioSum} — must be ≤ 6.`);
@@ -359,6 +388,14 @@ function validateFinderFilters(filters) {
             if (ratioSum !== 6) {
                 errors.push(`Type ratio must sum to exactly 6 (currently ${ratioSum}).`);
             }
+        }
+    }
+
+    // Validate include cards
+    if ((filters.includeCards || []).length > 0 && filters.includeCardsMode === 'all' && filters.includeCards.length > 5) {
+        // 6+ cards: we'll find best 5 from them — just need enough cards
+        if (filters.includeCards.length < 5) {
+            errors.push('Need at least 5 included cards to fill player slots.');
         }
     }
 
@@ -483,8 +520,14 @@ function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
         // Skill-aptitude score for trainee matching
         const skillAptitudeScore = computeCardSkillAptitudeScore(card, traineeData, skillLookup);
 
+        // Pre-compute effect keys/values arrays to avoid Object.keys() in hot loops
+        const effectKeyArr = Object.keys(effects);
+        const effectValArr = effectKeyArr.map(k => effects[k]);
+
         cache.set(cardId, {
             effects,
+            effectKeyArr,
+            effectValArr,
             uniqueEffectBonuses,
             uniqueEffectName: card.unique_effect?.name || null,
             level,
@@ -802,7 +845,7 @@ function checkHardFilters(cardIds, filters, cache) {
     return true;
 }
 
-function scoreDeck(cardIds, filters, cache, traineeData) {
+function scoreDeck(cardIds, filters, cache, traineeData, metricNorms) {
     const agg = aggregateFinderDeckEffects(cardIds, cache);
 
     // Compute stat bonus sum
@@ -852,6 +895,13 @@ function scoreDeck(cardIds, filters, cache, traineeData) {
         if (data) skillAptitude += (data.skillAptitudeScore || 0);
     });
     metrics.skillAptitude = skillAptitude;
+    metrics.specialtyPriority = agg[19] || 0;
+    metrics.moodEffect = agg[2] || 0;
+    metrics.initialFriendship = agg[14] || 0;
+    metrics.hintFrequency = agg[18] || 0;
+    metrics.hintLevels = agg[17] || 0;
+    metrics.failureProtection = agg[27] || 0;
+    metrics.initialStats = (agg[9]||0) + (agg[10]||0) + (agg[11]||0) + (agg[12]||0) + (agg[13]||0);
 
     // Count cards per type for friendship multiplier boost
     const typeCounts = {};
@@ -889,20 +939,15 @@ function scoreDeck(cardIds, filters, cache, traineeData) {
         filterBoosts[key] = (filterBoosts[key] || 0) + val;
     }
 
-    // Normalize metrics to comparable 0-60ish ranges before applying weights
-    const normalized = {
-        raceBonus: metrics.raceBonus,           // 0-60%  → already in range
-        trainingEff: metrics.trainingEff,       // 0-60%  → already in range
-        friendBonus: metrics.friendBonus,       // 0-80%  → already in range
-        energyCost: metrics.energyCost,         // 0-50%  → already in range
-        eventRecovery: metrics.eventRecovery,   // 0-50%  → already in range
-        statBonus: metrics.statBonus / 5,       // 0-300  → /5 = 0-60
-        hintSkillCount: metrics.hintSkillCount * 3, // 0-20 → *3 = 0-60
-        skillTypeCount: metrics.skillTypeCount * 3,
-        totalEffectSum: metrics.totalEffectSum / 10, // 0-800 → /10 = 0-80 (weak tiebreaker)
-        uniqueEffects: metrics.uniqueEffects * 5,    // 0-6  → *5 = 0-30
-        skillAptitude: metrics.skillAptitude * 5     // 0-12 → *5 = 0-60
-    };
+    // Normalize metrics to comparable ranges before applying weights
+    const scenario = SCENARIO_WEIGHTS[scenarioId] || SCENARIO_WEIGHTS['1'];
+    const norms = metricNorms || METRIC_NORM_FALLBACK;
+    const normalized = {};
+    for (const key of Object.keys(scenarioWeights)) {
+        const norm = norms[key] || 1;
+        normalized[key] = (metrics[key] || 0) * norm;
+    }
+    normalized.raceBonus = scoreRaceBonus(metrics.raceBonus, scenario.raceBreakpoint || 34);
 
     // Combined score using normalized values
     let score = 0;
@@ -917,8 +962,13 @@ function scoreDeck(cardIds, filters, cache, traineeData) {
     // friendship is multiplicatively valuable — boost it
     const maxTypeCount = Math.max(...Object.values(typeCounts), 0);
     if (maxTypeCount >= 3 && metrics.friendBonus > 0) {
-        score += metrics.friendBonus * (maxTypeCount - 2) * 20;
+        const stackCount = Math.min(maxTypeCount - 2, 4);
+        const diminishing = stackCount <= 1 ? 1 : 1 + (stackCount - 1) * 0.6;
+        score += metrics.friendBonus * (norms.friendBonus || 1/3) * diminishing * 8;
     }
+
+    // Type diversity multiplier
+    score *= (0.85 + computeDiversityBonus(typeCounts) * 0.15);
 
     // Growth rate boost: cards matching trainee's strong growth stats score higher
     if (traineeData?.growthRates) {
@@ -943,21 +993,24 @@ function scoreDeck(cardIds, filters, cache, traineeData) {
 
 // ===== TYPE DISTRIBUTION ENUMERATION =====
 
-function enumerateTypeDistributions(filters) {
+function enumerateTypeDistributions(filters, totalSlots) {
+    const total = totalSlots || 6;
     const types = Object.keys(filters.types).filter(t => filters.types[t]);
     const ratioSum = types.reduce((s, t) => s + (filters.typeRatio[t] || 0), 0);
 
-    // If no ratio specified, enumerate all distributions summing to 6
+    // If no ratio specified, enumerate all distributions summing to total
     if (ratioSum === 0) {
-        return enumerateAllDistributions(types, 6);
+        return enumerateAllDistributions(types, total);
     }
 
     const hasAtLeast = types.some(t => filters.typeRatioAtLeast[t] && filters.typeRatio[t] > 0);
 
     if (!hasAtLeast) {
-        // Exact ratio
+        // Exact ratio — only valid if it sums to total
         const dist = {};
-        types.forEach(t => { dist[t] = filters.typeRatio[t] || 0; });
+        let sum = 0;
+        types.forEach(t => { dist[t] = filters.typeRatio[t] || 0; sum += dist[t]; });
+        if (sum !== total) return [];
         return [dist];
     }
 
@@ -981,7 +1034,7 @@ function enumerateTypeDistributions(filters) {
         }
     });
 
-    const remaining = 6 - fixedSum;
+    const remaining = total - fixedSum;
     if (remaining < 0) return [];
 
     return distributeRemaining(types, mins, flexTypes, remaining);
@@ -1090,9 +1143,6 @@ function binomial(n, k) {
 
 // ===== SEARCH ALGORITHMS =====
 
-const BRUTE_FORCE_LIMIT = 5000000;
-const CHUNK_SIZE = 50000;
-
 async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     deckFinderState.searching = true;
     deckFinderState.cancelled = false;
@@ -1105,7 +1155,49 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     deckFinderState.traineeData = traineeData;
 
     const isOwnedMode = filters.cardPool === 'owned';
-    const pool = buildCardPool(filters);
+
+    // === Include Cards Logic ===
+    const includeCards = filters.includeCards || [];
+    const includeMode = filters.includeCardsMode || 'all';
+    const includeFriendCards = filters.includeFriendCards || [];
+    const lockedPlayerCards = (includeMode === 'all') ? includeCards : [];
+    const anyRequiredCards = (includeMode === 'any' && includeCards.length > 0) ? includeCards : [];
+
+    // Remove include-card conflicts from exclude list
+    const includeFriendSet = new Set(includeFriendCards.map(String));
+    const effectiveExcludeCards = (filters.excludeCards || []).filter(id =>
+        !includeCards.includes(id) && !includeFriendSet.has(String(id))
+    );
+    const effectiveFilters = { ...filters, excludeCards: effectiveExcludeCards };
+
+    let pool = buildCardPool(effectiveFilters);
+
+    // For "all" mode with 6+ locked cards: restrict pool to just those cards
+    if (lockedPlayerCards.length >= 6) {
+        const lockedSet = new Set(lockedPlayerCards);
+        pool = cardData.filter(c => lockedSet.has(String(c.support_id)) || lockedSet.has(c.support_id));
+    } else if (lockedPlayerCards.length > 0) {
+        // Ensure locked cards are in the pool even if not normally included
+        const poolIds = new Set(pool.map(c => String(c.support_id)));
+        for (const id of lockedPlayerCards) {
+            if (!poolIds.has(String(id))) {
+                const card = cardData.find(c => String(c.support_id) === String(id));
+                if (card) pool.push(card);
+            }
+        }
+    }
+
+    // For "any" mode: ensure at least the required cards are in the pool
+    if (anyRequiredCards.length > 0) {
+        const poolIds = new Set(pool.map(c => String(c.support_id)));
+        for (const id of anyRequiredCards) {
+            if (!poolIds.has(String(id))) {
+                const card = cardData.find(c => String(c.support_id) === String(id));
+                if (card) pool.push(card);
+            }
+        }
+    }
+
     if (pool.length === 0) {
         deckFinderState.searching = false;
         onComplete([], 'No cards match the current pool filters.');
@@ -1119,11 +1211,30 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
 
     let friendCache = null;
     let friendGroups = null;
-    if (isOwnedMode) {
-        const friendPool = buildFriendPool(filters);
+
+    // Build friend pool — selected friend cards restrict pool to those cards
+    if (includeFriendCards.length > 0) {
+        const friendPool = cardData.filter(c => includeFriendSet.has(String(c.support_id)));
+        if (friendPool.length > 0) {
+            friendCache = precomputeCardEffects(friendPool, traineeData, true);
+            friendGroups = groupCardsByType(friendPool);
+            if (friendPool.length > 1) presortCardGroups(friendGroups, filters, friendCache, traineeData);
+        }
+    } else if (isOwnedMode) {
+        const friendPool = buildFriendPool(effectiveFilters);
         friendCache = precomputeCardEffects(friendPool, traineeData, true);
         friendGroups = groupCardsByType(friendPool);
         presortCardGroups(friendGroups, filters, friendCache, traineeData);
+    }
+
+    // Compute dynamic normalization from actual card pool
+    const metricNorms = computeMetricNorms(cache);
+    if (friendCache) {
+        const friendNorms = computeMetricNorms(friendCache);
+        // Merge: use the lower norm (= higher P90 = more generous bound)
+        for (const [k, v] of Object.entries(friendNorms)) {
+            if (!metricNorms[k] || v < metricNorms[k]) metricNorms[k] = v;
+        }
     }
 
     // Merge both caches for the renderer.
@@ -1150,11 +1261,55 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     const maxTable = buildMaxContributionTable(groups, cache);
     const friendMaxTable = friendGroups ? buildMaxContributionTable(friendGroups, friendCache) : null;
 
-    const distributions = enumerateTypeDistributions(filters);
+    // For "all" mode locked cards, compute locked type counts to constrain distributions
+    const lockedTypeCounts = {};
+    if (lockedPlayerCards.length > 0 && lockedPlayerCards.length < 6) {
+        for (const id of lockedPlayerCards) {
+            const data = cache.get(id) || cache.get(Number(id)) || cache.get(String(id));
+            if (data) lockedTypeCounts[data.type] = (lockedTypeCounts[data.type] || 0) + 1;
+        }
+    }
+    // Override type ratio constraints for "all" mode with locked cards
+    const distFilters = (lockedPlayerCards.length > 0)
+        ? { ...filters, typeRatio: { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 } }
+        : filters;
+
+    let distributions;
+    if (lockedPlayerCards.length >= 5) {
+        // All player slots are locked — single empty distribution
+        // If 6+: use combinations of locked cards; handled by restricting pool above
+        distributions = [{ speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 }];
+        // Set actual types from locked cards
+        if (lockedPlayerCards.length === 5) {
+            const dist = { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 };
+            for (const id of lockedPlayerCards) {
+                const data = cache.get(id) || cache.get(Number(id)) || cache.get(String(id));
+                if (data) dist[data.type] = (dist[data.type] || 0) + 1;
+            }
+            distributions = [dist];
+        }
+    } else {
+        distributions = enumerateTypeDistributions(distFilters);
+    }
+
     if (distributions.length === 0) {
         deckFinderState.searching = false;
         onComplete([], 'No valid type distributions possible.');
         return;
+    }
+
+    // For "all" mode locked cards, filter distributions that are compatible with locked types
+    if (lockedPlayerCards.length > 0 && lockedPlayerCards.length < 5) {
+        const filtered = distributions.filter(dist => {
+            for (const [type, count] of Object.entries(lockedTypeCounts)) {
+                if ((dist[type] || 0) < count) return false;
+            }
+            return true;
+        });
+        if (filtered.length > 0) {
+            distributions.length = 0;
+            distributions.push(...filtered);
+        }
     }
 
     // Phase 1c: Filter infeasible distributions
@@ -1163,11 +1318,19 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     const validDists = [];
     let totalCombos = 0;
 
-    if (isOwnedMode) {
+    // Determine if friend slot is used (owned mode or restricted friend cards)
+    const hasFriendRestriction = includeFriendCards.length > 0;
+    const useFriendSlot = isOwnedMode || hasFriendRestriction;
+
+    if (useFriendSlot && friendGroups) {
         for (const dist of distributions) {
             // For each type with count > 0, create a variant where the friend fills that type
-            const types = Object.keys(dist).filter(t => dist[t] > 0);
-            for (const friendType of types) {
+            const friendTypes = hasFriendRestriction
+                ? Object.keys(friendGroups) // restricted friend: only its type(s) available
+                : Object.keys(dist).filter(t => dist[t] > 0);
+            for (const friendType of friendTypes) {
+                // Check friend type is in the distribution (for non-restricted)
+                if (!hasFriendRestriction && (dist[friendType] || 0) <= 0) continue;
                 // Owned distribution: one fewer of friendType
                 const ownedDist = { ...dist, [friendType]: dist[friendType] - 1 };
                 // Check feasibility using combined max tables
@@ -1197,12 +1360,39 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         return;
     }
 
+    // === Option 1: Rank distributions by estimated score potential ===
+    // Sum top-k individualCardScore values per type for each distribution
+    // Reuse the already-computed cache (no need to re-precompute)
+    const distCardScores = {};
+    for (const [type, cards] of Object.entries(groups)) {
+        distCardScores[type] = cards
+            .map(c => individualCardScore(c.support_id, filters, cache, traineeData))
+            .sort((a, b) => b - a);
+    }
+    for (const entry of validDists) {
+        let potential = 0;
+        for (const [type, count] of Object.entries(entry.dist)) {
+            if (count === 0) continue;
+            const scores = distCardScores[type] || [];
+            for (let i = 0; i < Math.min(count, scores.length); i++) potential += scores[i];
+        }
+        // Add friend potential if present
+        if (entry.friendType && friendGroups) {
+            const friendScores = (friendGroups[entry.friendType] || [])
+                .map(c => individualCardScore(c.support_id, filters, friendCache || cache, traineeData))
+                .sort((a, b) => b - a);
+            if (friendScores.length > 0) potential += friendScores[0];
+        }
+        entry.potential = potential;
+    }
+    validDists.sort((a, b) => b.potential - a.potential);
+
     let warningMessage = null;
 
     // Try to use Web Worker for search
     if (typeof Worker !== 'undefined') {
         try {
-            await runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable);
+            await runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable, metricNorms);
             return;
         } catch (workerErr) {
             // Fall back to main thread
@@ -1212,7 +1402,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
 
     try {
         const startTime = performance.now();
-        const results = await bruteForceSearch(groups, filters, cache, validDists, totalCombos, filters.resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache);
+        const results = await bruteForceSearch(groups, filters, cache, validDists, totalCombos, filters.resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache, metricNorms);
         const elapsed = performance.now() - startTime;
 
         deckFinderState.results = results;
@@ -1237,13 +1427,14 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
 // Zero allocations in the hot loop — no array spreads, no object copies.
 // Memory usage: O(deck_size=6) stack depth, O(1) per step.
 
-async function bruteForceSearch(groups, filters, cache, validDists, totalCombos, resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache) {
+async function bruteForceSearch(groups, filters, cache, validDists, totalCombos, resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache, metricNorms) {
     const topN = new MinHeap(resultCount);
     let evaluated = 0;
     let pruned = 0;
     let matchesFound = 0;
     let lastLiveCount = 0;
-    const LIVE_BATCH = 10;
+    let lastLiveUITime = 0;
+    const LIVE_BATCH = 100;
     let yieldCounter = 0;
     const YIELD_INTERVAL = 80000;
     const startTime = performance.now();
@@ -1295,21 +1486,16 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     //   statBonus(3,4,5,6,7,30): /5, totalEffectSum(all): /10
     const cardScoreContrib = new Map();
 
-    // Normalization factors per metric
-    const METRIC_NORM_BF = {
-        raceBonus: 1, trainingEff: 1, friendBonus: 1,
-        energyCost: 1, eventRecovery: 1,
-        statBonus: 1 / 5, hintSkillCount: 3, skillTypeCount: 3,
-        totalEffectSum: 1 / 10, uniqueEffects: 5, skillAptitude: 5
-    };
+    // Use dynamically computed norms (fall back to defaults if not provided)
+    const norms = metricNorms || METRIC_NORM_FALLBACK;
 
     // Build effectId -> normalized weight
     const effectWeightMap = {};
     let totalEffectSumWeight = 0;
-    const skillAptWeight = (combinedWeights.skillAptitude || 0) * (METRIC_NORM_BF.skillAptitude || 1);
+    const skillAptWeight = (combinedWeights.skillAptitude || 0) * (norms.skillAptitude || 1);
     for (const [metricKey, weight] of Object.entries(combinedWeights)) {
         if (weight === 0) continue;
-        const norm = METRIC_NORM_BF[metricKey] || 1;
+        const norm = norms[metricKey] || 1;
         const effectIds = METRIC_EFFECT_MAP[metricKey];
         if (effectIds === null) {
             // totalEffectSum — every effect contributes
@@ -1334,7 +1520,11 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
             const growthKey = CARD_TYPE_GROWTH_KEY[data.type];
             if (growthKey) {
                 const rate = traineeGrowthRates[growthKey] || 0;
-                cs *= (1 + rate / 100);
+                if (rate > 0) {
+                    const statEffectId = { speed: '3', stamina: '4', power: '5', guts: '6', wisdom: '7' }[growthKey];
+                    const statVal = data.effects[statEffectId] || 0;
+                    cs += statVal * (rate / 100) * (combinedWeights.statBonus || 35);
+                }
             }
         }
         if (data.skillAptitudeScore > 0 && skillAptWeight > 0) {
@@ -1362,12 +1552,24 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     let skillMask = 0;
     let ueCount = 0;
     let partialScore = 0;                   // running score from card contributions
+    let partialEffectSum = 0;               // running total of all effect values
+    const deckTypeCounts = {};              // running type counts for diversity
+    let maxTypeCount = 0;                   // max type count for friendship stacking
+
+    // === Option 1: Early termination tracking ===
+    let distsWithoutImprovement = 0;
+    let prevMinScore = -Infinity;
+    const STABILITY_THRESHOLD = Math.max(50, Math.ceil(validDists.length * 0.3));
+    const PER_DIST_EVAL_CAP = 2000000;
 
     // Per-distribution flattened card list: cards are grouped by type,
     // and we build a flat "slot plan" that says for each of the 6 card slots,
     // which pool of cards to pick from and what index range.
     for (const { dist, friendType } of validDists) {
         if (deckFinderState.cancelled) throw new Error('cancelled');
+
+        // Early termination: stop if results have stabilized
+        if (topN.isFull() && distsWithoutImprovement >= STABILITY_THRESHOLD) break;
 
         // Get types in order: smallest pool first for tighter early pruning
         const typeEntries = Object.entries(dist)
@@ -1415,7 +1617,7 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
         // Since cards within a type are pre-sorted, the max remaining for a type
         // starting at slot rank j is sum of top-(count-j) values.
         const slotEffectBounds = buildSlotEffectBounds(slots, typeOrder, maxTable);
-        const slotScoreBounds = buildSlotScoreBounds(slotEffectBounds, combinedWeights);
+        const slotScoreBounds = buildSlotScoreBounds(slotEffectBounds, combinedWeights, norms);
 
         // Build required-skill reachability: for each required skill,
         // a bitmask of which slot indices have pools containing that skill.
@@ -1448,20 +1650,50 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
         skillMask = 0;
         ueCount = 0;
         partialScore = 0;
+        partialEffectSum = 0;
+        for (const k of Object.keys(deckTypeCounts)) delete deckTypeCounts[k];
+        maxTypeCount = 0;
         foundSkillBits = 0;
 
         // Card-by-card DFS — slot 0 picks from its pool starting at index 0.
         // slot 1 of the same type picks at a higher index than slot 0.
         // Slot 0 of a different type picks at index 0.
         const minIndices = new Array(totalSlots).fill(0);
+        let distEvaluated = 0;
 
         await dfsSlot(0);
 
+        // Track early termination stability
+        const currentMinScore = topN.minScore();
+        if (topN.isFull() && currentMinScore > prevMinScore) {
+            prevMinScore = currentMinScore;
+            distsWithoutImprovement = 0;
+        } else {
+            distsWithoutImprovement++;
+        }
+
         async function dfsSlot(slotIdx) {
+            if (distEvaluated >= PER_DIST_EVAL_CAP) return;
+
             if (slotIdx === totalSlots) {
                 // LEAF: complete deck
                 evaluated++;
+                distEvaluated++;
                 yieldCounter++;
+
+                // Include card checks
+                if (lockedPlayerCards.length > 0) {
+                    for (const lid of lockedPlayerCards) {
+                        if (!deckIds.includes(lid) && !deckIds.includes(String(lid)) && !deckIds.includes(Number(lid))) return;
+                    }
+                }
+                if (anyRequiredCards.length > 0) {
+                    let found = false;
+                    for (const rid of anyRequiredCards) {
+                        if (deckIds.includes(rid) || deckIds.includes(String(rid)) || deckIds.includes(Number(rid))) { found = true; break; }
+                    }
+                    if (!found) return;
+                }
 
                 // Helper: get correct cache entry for a deck card
                 const friendSlotIdx = friendType ? totalSlots - 1 : -1;
@@ -1497,23 +1729,19 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
 
                 if (filters.minUniqueEffects > 0 && ueCount < filters.minUniqueEffects) return;
 
-                // Score — read from mutable partialEffects directly
+                // Score — use running counters where possible
                 let statBonus = 0;
                 for (const eid of STAT_BONUS_EFFECT_IDS) statBonus += (partialEffects[eid] || 0);
 
+                // Still need skills/types (not easily maintained as running counters)
                 const allSkills = new Set();
                 const allTypes = new Set();
-                const typeCounts = {};
                 for (let i = 0; i < totalSlots; i++) {
                     const data = getDeckCardData(i);
                     if (!data) continue;
                     data.hintSkillIds.forEach(s => allSkills.add(s));
                     data.hintSkillTypes.forEach(t => allTypes.add(t));
-                    typeCounts[data.type] = (typeCounts[data.type] || 0) + 1;
                 }
-
-                let totalEffectSum = 0;
-                for (const k of Object.keys(partialEffects)) totalEffectSum += partialEffects[k];
 
                 // Skill-aptitude sum
                 let skillAptSum = 0;
@@ -1531,34 +1759,40 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                     statBonus,
                     hintSkillCount: allSkills.size,
                     skillTypeCount: allTypes.size,
-                    totalEffectSum,
+                    totalEffectSum: partialEffectSum,
                     uniqueEffects: ueCount,
-                    skillAptitude: skillAptSum
+                    skillAptitude: skillAptSum,
+                    specialtyPriority: partialEffects[19] || 0,
+                    moodEffect: partialEffects[2] || 0,
+                    initialFriendship: partialEffects[14] || 0,
+                    hintFrequency: partialEffects[18] || 0,
+                    hintLevels: partialEffects[17] || 0,
+                    failureProtection: partialEffects[27] || 0,
+                    initialStats: (partialEffects[9]||0) + (partialEffects[10]||0) + (partialEffects[11]||0) + (partialEffects[12]||0) + (partialEffects[13]||0)
                 };
 
                 // Normalize for scoring (same as scoreDeck)
-                const norm = {
-                    raceBonus: metrics.raceBonus,
-                    trainingEff: metrics.trainingEff,
-                    friendBonus: metrics.friendBonus,
-                    energyCost: metrics.energyCost,
-                    eventRecovery: metrics.eventRecovery,
-                    statBonus: metrics.statBonus / 5,
-                    hintSkillCount: metrics.hintSkillCount * 3,
-                    skillTypeCount: metrics.skillTypeCount * 3,
-                    totalEffectSum: metrics.totalEffectSum / 10,
-                    uniqueEffects: metrics.uniqueEffects * 5,
-                    skillAptitude: metrics.skillAptitude * 5
-                };
+                const scenarioObj = SCENARIO_WEIGHTS[scenarioId] || SCENARIO_WEIGHTS['1'];
+                const normVals = {};
+                for (const key of scoringKeys) {
+                    const nf = norms[key] || 1;
+                    normVals[key] = (metrics[key] || 0) * nf;
+                }
+                normVals.raceBonus = scoreRaceBonus(metrics.raceBonus, scenarioObj.raceBreakpoint || 34);
 
                 let score = 0;
                 for (const key of scoringKeys) {
-                    score += (norm[key] || 0) * combinedWeights[key];
+                    score += (normVals[key] || 0) * combinedWeights[key];
                 }
-                const maxTypeCount = Math.max(...Object.values(typeCounts), 0);
+                // Use running maxTypeCount instead of recomputing
                 if (maxTypeCount >= 3 && metrics.friendBonus > 0) {
-                    score += metrics.friendBonus * (maxTypeCount - 2) * 20;
+                    const stackCount = Math.min(maxTypeCount - 2, 4);
+                    const diminishing = stackCount <= 1 ? 1 : 1 + (stackCount - 1) * 0.6;
+                    score += metrics.friendBonus * (norms.friendBonus || 1/3) * diminishing * 8;
                 }
+
+                // Type diversity multiplier (use running deckTypeCounts)
+                score *= (0.85 + computeDiversityBonus(deckTypeCounts) * 0.15);
 
                 // Growth rate boost: cards matching trainee's strong growth stats score higher
                 if (traineeGrowthRates) {
@@ -1582,13 +1816,18 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 for (const k of Object.keys(partialEffects)) aggCopy[k] = partialEffects[k];
 
                 const friendCardId = friendType ? deckIds[totalSlots - 1] : null;
-                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy, friendCardId });
+                const sortedIds = deckIds.slice().sort();
+                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy, friendCardId, _key: sortedIds.join(',') });
                 matchesFound++;
 
                 if (onLiveResults && matchesFound - lastLiveCount >= LIVE_BATCH) {
-                    lastLiveCount = matchesFound;
-                    deckFinderState.results = topN.toSortedArray();
-                    onLiveResults(deckFinderState.results, matchesFound);
+                    const now = performance.now();
+                    if (now - lastLiveUITime >= 500) {
+                        lastLiveCount = matchesFound;
+                        lastLiveUITime = now;
+                        deckFinderState.results = topN.toSortedArray();
+                        onLiveResults(deckFinderState.results, matchesFound);
+                    }
                 }
 
                 // Yield to UI periodically
@@ -1618,13 +1857,17 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 // Same-character exclusion
                 if (data.charId && usedCharIds.has(data.charId)) continue;
 
-                // ADD card effects to mutable state
-                const cardEffects = data.effects;
-                const effectKeys = Object.keys(cardEffects);
+                // ADD card effects to mutable state (use pre-computed arrays)
+                const effectKeys = data.effectKeyArr || Object.keys(data.effects);
+                const effectVals = data.effectValArr;
+                let cardEffectSum = 0;
                 for (let e = 0; e < effectKeys.length; e++) {
                     const eid = effectKeys[e];
-                    partialEffects[eid] = (partialEffects[eid] || 0) + cardEffects[eid];
+                    const val = effectVals ? effectVals[e] : data.effects[eid];
+                    partialEffects[eid] = (partialEffects[eid] || 0) + val;
+                    cardEffectSum += val;
                 }
+                partialEffectSum += cardEffectSum;
                 const prevSkillMask = skillMask;
                 skillMask |= data.skillTypeMask;
                 const prevUECount = ueCount;
@@ -1632,6 +1875,11 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 if (data.charId) usedCharIds.add(data.charId);
                 const cardScore = slotScoreMap ? slotScoreMap.get(cardId) || 0 : cardScoreContrib.get(cardId) || 0;
                 partialScore += cardScore;
+                // Track type counts for diversity scoring
+                const prevTypeCount = deckTypeCounts[data.type] || 0;
+                deckTypeCounts[data.type] = prevTypeCount + 1;
+                const prevMaxTypeCount = maxTypeCount;
+                if (prevTypeCount + 1 > maxTypeCount) maxTypeCount = prevTypeCount + 1;
                 deckIds.push(cardId);
 
                 // Track required skills found by this card
@@ -1703,6 +1951,7 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
 
                 if (dominated) {
                     pruned++;
+                    distEvaluated++;
                     yieldCounter++;
                     // Yield even on prune paths to keep UI responsive
                     if (yieldCounter >= YIELD_INTERVAL) {
@@ -1723,13 +1972,17 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 // BACKTRACK: remove card effects from mutable state
                 deckIds.pop();
                 partialScore -= cardScore;
+                partialEffectSum -= cardEffectSum;
+                deckTypeCounts[data.type] = prevTypeCount;
+                maxTypeCount = prevMaxTypeCount;
                 foundSkillBits = prevFoundSkillBits;
                 if (data.charId) usedCharIds.delete(data.charId);
                 ueCount = prevUECount;
                 skillMask = prevSkillMask;
                 for (let e = 0; e < effectKeys.length; e++) {
                     const eid = effectKeys[e];
-                    partialEffects[eid] -= cardEffects[eid];
+                    const val = effectVals ? effectVals[e] : data.effects[eid];
+                    partialEffects[eid] -= val;
                     if (partialEffects[eid] === 0) delete partialEffects[eid];
                 }
             }
@@ -1779,21 +2032,99 @@ const METRIC_EFFECT_MAP = {
     energyCost: ['28'],
     eventRecovery: ['25'],
     statBonus: ['3', '4', '5', '6', '7', '30'],
-    skillAptitude: undefined,  // no effect mapping — uses pre-computed score
-    totalEffectSum: null  // special: sum of ALL effects
+    specialtyPriority: ['19'],
+    moodEffect: ['2'],
+    initialFriendship: ['14'],
+    hintFrequency: ['18'],
+    hintLevels: ['17'],
+    failureProtection: ['27'],
+    initialStats: ['9', '10', '11', '12', '13'],
+    skillAptitude: undefined,
+    totalEffectSum: null
 };
 
-// Normalization factors matching scoreDeck
-const METRIC_NORM = {
-    raceBonus: 1, trainingEff: 1, friendBonus: 1,
-    energyCost: 1, eventRecovery: 1,
-    statBonus: 1 / 5, hintSkillCount: 3, skillTypeCount: 3,
+// Fallback normalization factors — used only by individualCardScore (presort)
+// before dynamic norms are computed. Overridden by computeMetricNorms() for actual scoring.
+const METRIC_NORM_FALLBACK = {
+    raceBonus: 1, trainingEff: 1,
+    friendBonus: 1/3, energyCost: 1/3, failureProtection: 1/3,
+    eventRecovery: 1/6, moodEffect: 1/6, hintFrequency: 1/6,
+    specialtyPriority: 1/8,
+    statBonus: 10, hintSkillCount: 3, skillTypeCount: 3,
+    hintLevels: 5, initialFriendship: 1/3, initialStats: 1/15,
     totalEffectSum: 1 / 10, uniqueEffects: 5, skillAptitude: 5
 };
 
-function buildSlotScoreBounds(slotEffectBounds, combinedWeights) {
+// Reverse lookup: effect ID -> metric key (built from METRIC_EFFECT_MAP)
+const METRIC_EFFECT_MAP_REVERSE = {};
+for (const [metric, eids] of Object.entries(METRIC_EFFECT_MAP)) {
+    if (!Array.isArray(eids)) continue;
+    for (const eid of eids) METRIC_EFFECT_MAP_REVERSE[eid] = metric;
+}
+
+// Compute dynamic normalization from the actual card pool.
+// Uses P90 per-card value × 6 as reference so outliers don't skew everything.
+// Target: metric_value * norm ≈ 50 for a competitive 6-card deck.
+function computeMetricNorms(cache) {
+    const metricValues = {};
+
+    cache.forEach((data) => {
+        const cardMetrics = {};
+        for (const [eid, val] of Object.entries(data.effects)) {
+            const metric = METRIC_EFFECT_MAP_REVERSE[eid];
+            if (metric) cardMetrics[metric] = (cardMetrics[metric] || 0) + val;
+        }
+        for (const [m, v] of Object.entries(cardMetrics)) {
+            if (!metricValues[m]) metricValues[m] = [];
+            metricValues[m].push(v);
+        }
+    });
+
+    const norms = {};
+    const TARGET = 50;
+    const DECK_SIZE = 6;
+
+    for (const [metric, values] of Object.entries(metricValues)) {
+        values.sort((a, b) => a - b);
+        const p90idx = Math.floor(values.length * 0.9);
+        const p90 = values[p90idx] || values[values.length - 1] || 1;
+        norms[metric] = TARGET / (p90 * DECK_SIZE);
+    }
+
+    // Metrics not derived from effects — use sensible defaults
+    norms.hintSkillCount = norms.hintSkillCount || 2.5;
+    norms.skillTypeCount = norms.skillTypeCount || 3;
+    norms.uniqueEffects = norms.uniqueEffects || 8.33;
+    norms.skillAptitude = norms.skillAptitude || 5;
+    norms.totalEffectSum = norms.totalEffectSum || 1/15;
+
+    return norms;
+}
+
+function scoreRaceBonus(rawBonus, breakpoint) {
+    if (rawBonus <= 0) return 0;
+    if (rawBonus <= breakpoint) return rawBonus;
+    return breakpoint + (rawBonus - breakpoint) * 0.3;
+}
+
+function computeDiversityBonus(typeCounts) {
+    const sorted = Object.values(typeCounts).sort((a, b) => b - a);
+    const [p, s] = [sorted[0] || 0, sorted[1] || 0];
+    if (p === 4 && s === 2) return 1.0;
+    if (p === 3 && s === 2) return 0.95;
+    if (p === 3 && s === 3) return 0.9;
+    if (p === 4 && s === 1) return 0.85;
+    if (p === 2 && s === 2) return 0.8;
+    if (p === 5 && s === 1) return 0.65;
+    if (p === 5 && s === 0) return 0.5;
+    if (p === 6) return 0.4;
+    return 0.7;
+}
+
+function buildSlotScoreBounds(slotEffectBounds, combinedWeights, metricNorms) {
     const n = slotEffectBounds.length;
     const scoreBounds = new Array(n);
+    const norms = metricNorms || METRIC_NORM_FALLBACK;
 
     for (let i = 0; i < n; i++) {
         const eb = slotEffectBounds[i];
@@ -1801,7 +2132,7 @@ function buildSlotScoreBounds(slotEffectBounds, combinedWeights) {
 
         for (const [metricKey, weight] of Object.entries(combinedWeights)) {
             if (weight === 0) continue;
-            const norm = METRIC_NORM[metricKey] || 1;
+            const norm = norms[metricKey] || 1;
             const effectIds = METRIC_EFFECT_MAP[metricKey];
 
             if (effectIds === null) {
@@ -1823,9 +2154,9 @@ function buildSlotScoreBounds(slotEffectBounds, combinedWeights) {
             }
         }
 
-        // Generous friendship multiplier upper bound
+        // Generous friendship stacking upper bound (capped)
         const friendMax = eb['1'] || 0;
-        if (friendMax > 0) maxScore += friendMax * 4 * 20;
+        if (friendMax > 0) maxScore += friendMax * (norms.friendBonus || 0.29) * 2.8 * 8;
 
         scoreBounds[i] = maxScore;
     }
@@ -1977,7 +2308,8 @@ async function simulatedAnnealingSearch(groups, filters, cache, validDists, resu
         // Score final deck
         if (checkHardFilters(currentDeck, filters, cache)) {
             const { score, metrics, aggregated } = scoreDeck(currentDeck, filters, cache, traineeData);
-            topN.insert({ cardIds: [...currentDeck], score, metrics, aggregated });
+            const sortedIds = [...currentDeck].sort();
+            topN.insert({ cardIds: [...currentDeck], score, metrics, aggregated, _key: sortedIds.join(',') });
         }
 
         deckFinderState.progress = Math.round((startIdx + 1) / NUM_STARTS * 100);
@@ -2044,29 +2376,40 @@ function individualCardScore(cardId, filters, cache, traineeData) {
     if (!data) return 0;
     const e = data.effects;
 
-    // Use scenario weights if available
+    // Use scenario weights and normalization — matches deck-level scoring
     const scenarioId = filters.scenario || '1';
     const sw = SCENARIO_WEIGHTS[scenarioId]?.weights || SCENARIO_WEIGHTS['1'].weights;
 
     let score = 0;
-    score += (e[15] || 0) * (sw.raceBonus / 30);     // Race bonus
-    score += (e[8] || 0) * (sw.trainingEff / 30);     // Training eff
-    score += (e[1] || 0) * (sw.friendBonus / 30);     // Friendship
-    score += (e[28] || 0) * (sw.energyCost / 30);     // Energy reduction
-    score += (e[25] || 0) * (sw.eventRecovery / 30);  // Event recovery
-    // Stat bonuses
-    for (const eid of STAT_BONUS_EFFECT_IDS) {
-        score += (e[eid] || 0) * (sw.statBonus / 100);
+    // Score all effects using METRIC_EFFECT_MAP and fallback norms (presort only)
+    for (const [metricKey, weight] of Object.entries(sw)) {
+        if (weight === 0) continue;
+        const norm = METRIC_NORM_FALLBACK[metricKey] || 1;
+        const effectIds = METRIC_EFFECT_MAP[metricKey];
+        if (effectIds === null) {
+            // totalEffectSum
+            let sum = 0;
+            for (const v of Object.values(e)) sum += v;
+            score += sum * norm * weight;
+        } else if (effectIds !== undefined) {
+            let metricVal = 0;
+            for (const eid of effectIds) metricVal += (e[eid] || 0);
+            score += metricVal * norm * weight;
+        }
     }
-    score += data.hintSkillIds.size * 2;
-    if (data.uniqueEffectActive) score += 5;
+    score += data.hintSkillIds.size * (METRIC_NORM_FALLBACK.hintSkillCount || 3) * (sw.hintSkillCount || 20);
+    if (data.uniqueEffectActive) score += (METRIC_NORM_FALLBACK.uniqueEffects || 5) * (sw.uniqueEffects || 0);
 
-    // Growth rate multiplier for trainee
+    // Growth rate boost — only boost matching stat bonus, not entire score
     if (traineeData?.growthRates) {
         const growthKey = CARD_TYPE_GROWTH_KEY[data.type];
         if (growthKey) {
             const rate = traineeData.growthRates[growthKey] || 0;
-            score *= (1 + rate / 100);
+            if (rate > 0) {
+                const statEffectId = { speed: 3, stamina: 4, power: 5, guts: 6, wisdom: 7 }[growthKey];
+                const cardStatBonus = e[statEffectId] || 0;
+                score += cardStatBonus * (rate / 100) * (sw.statBonus || 35);
+            }
         }
     }
 
@@ -2078,79 +2421,30 @@ function individualCardScore(cardId, filters, cache, traineeData) {
     return score;
 }
 
-// ===== WEB WORKER SEARCH =====
+// ===== WEB WORKER SEARCH (Multi-Worker Pool) =====
 
-async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable) {
+async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable, metricNorms) {
     return new Promise((resolve, reject) => {
-        let worker;
-        try {
-            worker = new Worker('js/workers/deckFinderWorker.js');
-        } catch (e) {
-            reject(new Error('Worker creation failed'));
-            return;
-        }
-        deckFinderState.worker = worker;
+        // Determine worker count: use up to 4 cores, min 1
+        const numWorkers = Math.min(4, Math.max(1, navigator.hardwareConcurrency || 1));
 
-        // Store resolve so cancelSearch can break the promise
-        deckFinderState._workerCancelResolve = () => {
-            const partialResults = deckFinderState.results.length > 0 ? deckFinderState.results : [];
-            onComplete(partialResults, 'Search cancelled.');
-            resolve();
-        };
-
-        // Serialize cache to plain object (include skillAptitudeScore for worker)
+        // Serialize cache to plain object (shared across all workers)
         const cacheObj = {};
         cache.forEach((val, key) => {
             cacheObj[key] = {
                 ...val,
                 hintSkillIds: [...val.hintSkillIds],
-                hintSkillTypes: [...val.hintSkillTypes]
+                hintSkillTypes: [...val.hintSkillTypes],
+                effectKeyArr: val.effectKeyArr,
+                effectValArr: val.effectValArr
             };
         });
 
-        // Serialize groups
         const groupsObj = {};
         for (const [type, cards] of Object.entries(groups)) {
             groupsObj[type] = cards.map(c => ({ support_id: c.support_id }));
         }
 
-        worker.onmessage = (e) => {
-            const msg = e.data;
-            switch (msg.type) {
-                case 'progress':
-                    deckFinderState.progress = msg.progress;
-                    onProgress(msg.progress, msg.matchCount);
-                    break;
-                case 'liveResults':
-                    deckFinderState.results = msg.results;
-                    if (onLiveResults) onLiveResults(msg.results, msg.matchCount);
-                    break;
-                case 'complete':
-                    deckFinderState.results = msg.results;
-                    deckFinderState.searching = false;
-                    deckFinderState.searchStats = msg.stats;
-                    deckFinderState.worker = null;
-                    worker.terminate();
-                    onComplete(msg.results, warningMessage);
-                    resolve();
-                    break;
-                case 'error':
-                    deckFinderState.searching = false;
-                    deckFinderState.worker = null;
-                    worker.terminate();
-                    reject(new Error(msg.message));
-                    break;
-            }
-        };
-
-        worker.onerror = (e) => {
-            deckFinderState.searching = false;
-            deckFinderState.worker = null;
-            worker.terminate();
-            reject(new Error(e.message || 'Worker error'));
-        };
-
-        // Serialize friend cache/groups if present
         let friendCacheObj = null;
         let friendGroupsObj = null;
         if (friendCache && friendGroups) {
@@ -2159,7 +2453,9 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                 friendCacheObj[key] = {
                     ...val,
                     hintSkillIds: [...val.hintSkillIds],
-                    hintSkillTypes: [...val.hintSkillTypes]
+                    hintSkillTypes: [...val.hintSkillTypes],
+                    effectKeyArr: val.effectKeyArr,
+                    effectValArr: val.effectValArr
                 };
             });
             friendGroupsObj = {};
@@ -2168,26 +2464,190 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             }
         }
 
-        worker.postMessage({
-            type: 'start',
-            payload: {
-                cache: cacheObj,
-                groups: groupsObj,
-                maxTable,
-                validDists,
-                totalCombos,
-                filters,
-                resultCount: filters.resultCount,
-                scenarioWeights: SCENARIO_WEIGHTS,
-                statBonusEffectIds: STAT_BONUS_EFFECT_IDS,
-                skillTypeBitMap: Object.fromEntries(_skillTypeBitMap),
-                traineeData: deckFinderState.traineeData,
-                cardTypeGrowthKey: CARD_TYPE_GROWTH_KEY,
-                sortBoosts: buildSortBoostWeights(),
-                friendCache: friendCacheObj,
-                friendGroups: friendGroupsObj
+        // Shard distributions round-robin across workers (already sorted by potential)
+        const shards = Array.from({ length: numWorkers }, () => []);
+        const shardCombos = new Array(numWorkers).fill(0);
+        for (let i = 0; i < validDists.length; i++) {
+            const workerIdx = i % numWorkers;
+            shards[workerIdx].push(validDists[i]);
+            shardCombos[workerIdx] += validDists[i].count || 0;
+        }
+
+        // Global result heap — merges results from all workers
+        const globalTopN = new MinHeap(filters.resultCount);
+        const workers = [];
+        let completedWorkers = 0;
+        let globalEvaluated = 0;
+        let globalPruned = 0;
+        let globalMatches = 0;
+        let globalElapsed = 0;
+        const workerProgress = new Array(numWorkers).fill(0);
+        const workerMatches = new Array(numWorkers).fill(0);
+        let failed = false;
+        let lastLiveUIUpdate = 0;
+
+        // Store cancel handler
+        deckFinderState._workerCancelResolve = () => {
+            for (const w of workers) {
+                try { w.postMessage({ type: 'cancel' }); } catch (e) {}
+                try { w.terminate(); } catch (e) {}
             }
-        });
+            workers.length = 0;
+            deckFinderState.workers = null;
+            const partialResults = deckFinderState.results.length > 0 ? deckFinderState.results : [];
+            onComplete(partialResults, 'Search cancelled.');
+            resolve();
+        };
+
+        const commonPayload = {
+            cache: cacheObj,
+            groups: groupsObj,
+            maxTable,
+            totalCombos,
+            filters,
+            resultCount: filters.resultCount,
+            scenarioWeights: SCENARIO_WEIGHTS,
+            statBonusEffectIds: STAT_BONUS_EFFECT_IDS,
+            skillTypeBitMap: Object.fromEntries(_skillTypeBitMap),
+            traineeData: deckFinderState.traineeData,
+            cardTypeGrowthKey: CARD_TYPE_GROWTH_KEY,
+            sortBoosts: buildSortBoostWeights(),
+            metricNorms,
+            friendCache: friendCacheObj,
+            friendGroups: friendGroupsObj,
+            lockedCardIds: ((filters.includeCardsMode === 'all') ? (filters.includeCards || []) : []).map(String),
+            anyRequiredCardIds: ((filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : []).map(String)
+        };
+
+        for (let wi = 0; wi < numWorkers; wi++) {
+            let worker;
+            try {
+                worker = new Worker('js/workers/deckFinderWorker.js');
+            } catch (e) {
+                if (wi === 0) { reject(new Error('Worker creation failed')); return; }
+                continue; // Use fewer workers if some fail to spawn
+            }
+            workers.push(worker);
+
+            const workerIdx = wi;
+            worker.onmessage = (e) => {
+                if (failed) return;
+                const msg = e.data;
+
+                switch (msg.type) {
+                    case 'progress': {
+                        workerProgress[workerIdx] = msg.progress || 0;
+                        workerMatches[workerIdx] = msg.matchCount || 0;
+                        // Aggregate progress across workers — weighted by shard combo count
+                        let weightedProgress = 0;
+                        for (let k = 0; k < numWorkers; k++) {
+                            weightedProgress += (workerProgress[k] / 100) * (shardCombos[k] || 0);
+                        }
+                        const totalProgress = totalCombos > 0 ? Math.min(99, Math.round(weightedProgress / totalCombos * 100)) : 0;
+                        deckFinderState.progress = totalProgress;
+                        const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
+                        onProgress(totalProgress, totalMatches);
+                        break;
+                    }
+                    case 'liveResults': {
+                        // Merge worker's live results into global heap
+                        if (msg.results) {
+                            for (const entry of msg.results) {
+                                if (!entry._key) entry._key = entry.cardIds.slice().sort().join(',');
+                                globalTopN.insert(entry);
+                            }
+                        }
+                        workerMatches[workerIdx] = msg.matchCount || 0;
+                        // Throttle UI updates to max 1 per 500ms
+                        const now = performance.now();
+                        if (onLiveResults && now - lastLiveUIUpdate >= 500) {
+                            lastLiveUIUpdate = now;
+                            const liveResults = globalTopN.toSortedArray();
+                            deckFinderState.results = liveResults;
+                            const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
+                            onLiveResults(liveResults, totalMatches);
+                        }
+                        // Broadcast updated min-score to all workers for tighter pruning
+                        if (globalTopN.heap.length >= filters.resultCount) {
+                            const globalMin = globalTopN.minScore();
+                            for (const w of workers) {
+                                try { w.postMessage({ type: 'updateMinScore', minScore: globalMin }); } catch (e) {}
+                            }
+                        }
+                        break;
+                    }
+                    case 'complete': {
+                        // Merge final results
+                        if (msg.results) {
+                            for (const entry of msg.results) {
+                                if (!entry._key) entry._key = entry.cardIds.slice().sort().join(',');
+                                globalTopN.insert(entry);
+                            }
+                        }
+                        if (msg.stats) {
+                            globalEvaluated += msg.stats.evaluated || 0;
+                            globalPruned += msg.stats.pruned || 0;
+                            globalElapsed = Math.max(globalElapsed, msg.stats.elapsed || 0);
+                        }
+                        workerProgress[workerIdx] = 100;
+                        worker.terminate();
+                        completedWorkers++;
+
+                        // Update live results after each worker completes
+                        const currentResults = globalTopN.toSortedArray();
+                        deckFinderState.results = currentResults;
+                        if (onLiveResults) {
+                            const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
+                            onLiveResults(currentResults, totalMatches);
+                        }
+
+                        if (completedWorkers >= workers.length) {
+                            const finalResults = globalTopN.toSortedArray();
+                            deckFinderState.results = finalResults;
+                            deckFinderState.searching = false;
+                            deckFinderState.searchStats = {
+                                totalCombos,
+                                evaluated: globalEvaluated,
+                                pruned: globalPruned,
+                                elapsed: globalElapsed
+                            };
+                            deckFinderState.workers = null;
+                            onComplete(finalResults, warningMessage);
+                            resolve();
+                        }
+                        break;
+                    }
+                    case 'error':
+                        failed = true;
+                        for (const w of workers) { try { w.terminate(); } catch (e) {} }
+                        deckFinderState.searching = false;
+                        deckFinderState.workers = null;
+                        reject(new Error(msg.message));
+                        break;
+                }
+            };
+
+            worker.onerror = (e) => {
+                if (failed) return;
+                failed = true;
+                for (const w of workers) { try { w.terminate(); } catch (e2) {} }
+                deckFinderState.searching = false;
+                deckFinderState.workers = null;
+                reject(new Error(e.message || 'Worker error'));
+            };
+
+            // Send shard to this worker
+            worker.postMessage({
+                type: 'start',
+                payload: {
+                    ...commonPayload,
+                    validDists: shards[workerIdx],
+                    totalCombos: shardCombos[workerIdx]
+                }
+            });
+        }
+
+        deckFinderState.workers = workers;
     });
 }
 
@@ -2199,15 +2659,24 @@ function yieldToUI() {
 
 function cancelSearch() {
     deckFinderState.cancelled = true;
-    if (deckFinderState.worker) {
-        deckFinderState.worker.terminate();
-        deckFinderState.worker = null;
-        deckFinderState.searching = false;
-        // Call the stored cancel callback to resolve the hanging promise
-        if (deckFinderState._workerCancelResolve) {
-            deckFinderState._workerCancelResolve();
-            deckFinderState._workerCancelResolve = null;
+    // Terminate all workers (multi-worker pool)
+    if (deckFinderState.workers) {
+        for (const w of deckFinderState.workers) {
+            try { w.postMessage({ type: 'cancel' }); } catch (e) {}
+            try { w.terminate(); } catch (e) {}
         }
+        deckFinderState.workers = null;
+    }
+    // Legacy single-worker support
+    if (deckFinderState.worker) {
+        try { deckFinderState.worker.postMessage({ type: 'cancel' }); } catch (e) {}
+        try { deckFinderState.worker.terminate(); } catch (e) {}
+        deckFinderState.worker = null;
+    }
+    deckFinderState.searching = false;
+    if (deckFinderState._workerCancelResolve) {
+        deckFinderState._workerCancelResolve();
+        deckFinderState._workerCancelResolve = null;
     }
 }
 

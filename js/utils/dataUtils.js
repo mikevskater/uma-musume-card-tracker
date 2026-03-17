@@ -29,9 +29,16 @@ function calculateEffectValue(effectArray, level) {
     const exactMilestoneIndex = EFFECT_MILESTONES.indexOf(level);
     if (exactMilestoneIndex !== -1) {
         const exactVal = values[exactMilestoneIndex];
-        // -1 means not active at this level — return 0 silently
-        if (exactVal === -1) return 0;
-        if (exactVal !== undefined) return exactVal;
+        // -1 means no data at this milestone — fall through to interpolation
+        // which will find the nearest active milestones. Only return 0 if
+        // no earlier milestone has an active (non-(-1)) value.
+        if (exactVal === -1) {
+            const hasActiveEarlier = values.slice(0, exactMilestoneIndex).some(v => v !== -1 && v !== undefined);
+            if (!hasActiveEarlier) return 0;
+            // Fall through to interpolation
+        } else if (exactVal !== undefined) {
+            return exactVal;
+        }
     }
 
     // Find surrounding milestones for interpolation
