@@ -1,0 +1,57 @@
+<h3>Settings</h3>
+
+<p>App-wide settings that persist between sessions via your browser's local storage.</p>
+
+<!-- ===== DEBUG LOGGING ===== -->
+<h4>Debug Logging</h4>
+<p class="settings-description">Debug logging outputs diagnostic messages to the browser's Developer Console (<kbd>F12</kbd>). Useful for troubleshooting issues or reporting bugs.</p>
+
+<div class="settings-group">
+    <div class="settings-row">
+        <div class="settings-label">
+            <strong>Enable Debug Logging</strong>
+            <span class="settings-hint">Master toggle — when off, no debug messages are emitted</span>
+        </div>
+        <div class="settings-control">
+            <label class="settings-toggle">
+                <input type="checkbox" id="settingsDebugEnabled">
+                <span class="settings-toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="settings-row">
+        <div class="settings-label">
+            <strong>Minimum Log Level</strong>
+            <span class="settings-hint">Only messages at or above this level are shown</span>
+        </div>
+        <div class="settings-control">
+            <select id="settingsDebugLevel" class="settings-select">
+                <option value="debug">Debug (all messages)</option>
+                <option value="info">Info</option>
+                <option value="warn">Warn (default)</option>
+                <option value="error">Error only</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<h5>Per-Module Toggles</h5>
+<p class="settings-description">Enable logging for specific modules only. The master toggle above must be off for these to take effect individually — when the master toggle is on, all modules log.</p>
+
+<div class="settings-group" id="settingsModuleToggles">
+    <!-- Populated by JavaScript -->
+</div>
+
+<div class="settings-actions">
+    <button class="btn btn-secondary btn-sm" id="settingsDebugEnableAll">Enable All Modules</button>
+    <button class="btn btn-secondary btn-sm" id="settingsDebugDisableAll">Disable All Modules</button>
+</div>
+
+<div class="help-tip" style="margin-top: var(--space-lg);">
+    <strong>Tip:</strong> You can also control debug logging from the browser console:<br>
+    <code>_debug.enableAll()</code> / <code>_debug.disableAll()</code><br>
+    <code>_debug.setLevel('debug')</code><br>
+    <code>_debug.status()</code> — print current config<br>
+    Or via URL: <code>?debug=DeckFinder,Worker&debugLevel=debug</code>
+</div>

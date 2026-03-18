@@ -1,9 +1,12 @@
 // Deck Builder Renderer
 // Handles all DOM rendering for the Deck Builder tab
 
+const _logDeckBuilderUI = _debug.create('DeckBuilderUI');
+
 // ===== SHELL RENDERING =====
 
 function renderDeckBuilderShell() {
+    _logDeckBuilderUI.info('renderDeckBuilderShell');
     const container = document.getElementById('deckBuilderContainer');
     if (!container) return;
 
@@ -149,6 +152,7 @@ function renderDeckBuilderShell() {
 // ===== DECK SLOTS =====
 
 function renderDeckSlots() {
+    _logDeckBuilderUI.debug('renderDeckSlots');
     const slotsContainer = document.getElementById('deckSlots');
     if (!slotsContainer) return;
 
@@ -284,6 +288,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         lbSelect.addEventListener('change', (e) => {
             e.stopPropagation();
             const newLB = parseInt(e.target.value);
+            _logDeckBuilderUI.info('LB changed', { slotIndex, newLB });
             const maxLevel = limitBreaks[card.rarity][newLB];
             const clampedLevel = Math.min(slotData.level, maxLevel);
             setDeckSlot(slotIndex, slotData.cardId, clampedLevel, newLB);
@@ -304,6 +309,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
             let newLevel = parseInt(e.target.value);
             const max = limitBreaks[card.rarity][slotData.limitBreak];
             newLevel = Math.max(1, Math.min(newLevel, max));
+            _logDeckBuilderUI.info('Level changed', { slotIndex, newLevel });
             e.target.value = newLevel;
             setDeckSlot(slotIndex, slotData.cardId, newLevel, slotData.limitBreak);
         });
@@ -337,6 +343,7 @@ const PICKER_SORT_OPTIONS = [
 const PICKER_DISPLAY_EFFECT_IDS = [15, 8, 1, 2, 3, 4, 5, 6, 7, 30, 19];
 
 function renderCardPicker() {
+    _logDeckBuilderUI.info('renderCardPicker', { slot: deckBuilderState.activeSlot });
     const existingOverlay = document.getElementById('deckPickerOverlay');
     if (existingOverlay) existingOverlay.remove();
 
@@ -457,17 +464,20 @@ function renderCardPicker() {
     });
 
     document.getElementById('pickerSsrOnly').addEventListener('change', (e) => {
+        _logDeckBuilderUI.debug('Picker SSR toggle', { ssrOnly: e.target.checked });
         filter.ssrOnly = e.target.checked;
         renderPickerCards();
     });
 
     document.getElementById('pickerSortBy').addEventListener('change', (e) => {
+        _logDeckBuilderUI.debug('Picker sort changed', { sortBy: e.target.value });
         filter.sortBy = e.target.value;
         renderPickerCards();
     });
 
     document.getElementById('pickerSortDir').addEventListener('click', () => {
         filter.sortDirection = filter.sortDirection === 'desc' ? 'asc' : 'desc';
+        _logDeckBuilderUI.debug('Picker sort direction', { direction: filter.sortDirection });
         const btn = document.getElementById('pickerSortDir');
         const arrow = filter.sortDirection === 'desc' ? '\u2193' : '\u2191';
         const label = filter.sortDirection === 'desc' ? 'Desc' : 'Asc';
@@ -732,6 +742,7 @@ function getCardEffectValue(card, effectId, level) {
 // ===== DECK SUMMARY =====
 
 function renderDeckSummary(aggregated, perTraining) {
+    _logDeckBuilderUI.debug('renderDeckSummary');
     const content = document.getElementById('deckSummaryContent');
     if (!content) return;
 
@@ -939,6 +950,7 @@ function renderRaceBonusSection(raceBonusPct) {
 // ===== TRAINING BREAKDOWN TABLE =====
 
 function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
+    _logDeckBuilderUI.debug('renderTrainingBreakdown');
     const content = document.getElementById('trainingBreakdownContent');
     if (!content) return;
 
@@ -1055,6 +1067,7 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
 // ===== TRAINING ASSIGNMENT MODAL =====
 
 function renderTrainingAssignmentModal(trainingType) {
+    _logDeckBuilderUI.info('renderTrainingAssignmentModal', { trainingType });
     const existingOverlay = document.getElementById('trainingAssignOverlay');
     if (existingOverlay) existingOverlay.remove();
 
@@ -1578,6 +1591,7 @@ function getScenarioTips(scenarioId) {
 // ===== DECK SELECT RENDERING =====
 
 function renderDeckSelect() {
+    _logDeckBuilderUI.debug('renderDeckSelect', { deckCount: deckBuilderState.savedDecks.length });
     const select = document.getElementById('deckSelect');
     if (!select) return;
 

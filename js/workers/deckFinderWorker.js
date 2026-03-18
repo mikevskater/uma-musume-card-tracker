@@ -4,6 +4,9 @@
 
 'use strict';
 
+importScripts('../utils/debug.js');
+const log = _debug.create('Worker');
+
 let cancelled = false;
 let globalMinScore = -Infinity; // Updated by manager for cross-worker pruning
 
@@ -573,7 +576,9 @@ function runBranchAndBound(payload) {
                 // Progress & live results
                 if (evaluated - lastProgressUpdate >= PROGRESS_INTERVAL) {
                     lastProgressUpdate = evaluated;
-                    postMessage({ type: 'progress', progress: Math.min(99, Math.round((evaluated + pruned) / totalCombos * 100)), matchCount: matchesFound });
+                    const pct = Math.min(99, Math.round((evaluated + pruned) / totalCombos * 100));
+                    log.debug(`Progress: ${pct}% | evaluated=${evaluated} pruned=${pruned} matches=${matchesFound} heapMin=${topN.minScore().toFixed(1)}`);
+                    postMessage({ type: 'progress', progress: pct, matchCount: matchesFound });
                 }
                 if (matchesFound - lastLiveUpdate >= LIVE_INTERVAL) {
                     lastLiveUpdate = matchesFound;
@@ -746,14 +751,29 @@ self.onmessage = function(e) {
         cancelled = false;
         globalMinScore = -Infinity;
 
+        if (msg.debugConfig) _debug.applyConfig(msg.debugConfig);
+
+        log.info('Search starting', {
+            distributions: msg.payload.validDists.length,
+            totalCombos: msg.payload.totalCombos,
+            cacheSize: Object.keys(msg.payload.cache).length
+        });
+
         try {
             const result = runBranchAndBound(msg.payload);
+            log.info('Search complete', {
+                evaluated: result.evaluated,
+                pruned: result.pruned,
+                matches: result.matchesFound,
+                elapsed: result.elapsed + 'ms'
+            });
             postMessage({
                 type: 'complete',
                 results: result.topN.toSortedArray(),
                 stats: { totalCombos: result.totalCombos, evaluated: result.evaluated, pruned: result.pruned, elapsed: result.elapsed }
             });
         } catch (err) {
+            log.error('Search error', err.message);
             postMessage({ type: 'error', message: err.message });
         }
     }

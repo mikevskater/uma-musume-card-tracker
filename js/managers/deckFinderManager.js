@@ -1,6 +1,8 @@
 // Deck Finder Manager
 // Search algorithm, scoring, and filter validation for the Best Deck Finder
 
+const _logDeckFinder = _debug.create('DeckFinder');
+
 // ===== SCENARIO WEIGHTS =====
 
 // Scoring weights per scenario.
@@ -267,6 +269,8 @@ function sortFinderResults() {
     const results = deckFinderState.results;
     if (!results || results.length === 0) return;
 
+    _logDeckFinder.debug('Sorting results', { layers: layers.length, results: results.length });
+
     if (layers.length === 0) {
         results.sort((a, b) => b.score - a.score);
     } else {
@@ -359,6 +363,16 @@ function getDefaultFinderFilters() {
 // ===== FILTER VALIDATION =====
 
 function validateFinderFilters(filters) {
+    _logDeckFinder.debug('validateFinderFilters', {
+        cardPool: filters.cardPool, scenario: filters.scenario, trainee: filters.selectedTrainee,
+        types: Object.keys(filters.types).filter(t => filters.types[t]),
+        rarity: filters.rarity,
+        minRaceBonus: filters.minRaceBonus, minTrainingEff: filters.minTrainingEff,
+        minFriendBonus: filters.minFriendBonus, minEnergyCost: filters.minEnergyCost,
+        requiredSkills: filters.requiredSkills.length, requiredSkillTypes: filters.requiredSkillTypes.length,
+        includeCards: (filters.includeCards || []).length, excludeCards: (filters.excludeCards || []).length,
+        resultCount: filters.resultCount
+    });
     const errors = [];
 
     // Check type ratio sums
@@ -1144,6 +1158,9 @@ function binomial(n, k) {
 // ===== SEARCH ALGORITHMS =====
 
 async function runSearch(filters, onProgress, onComplete, onLiveResults) {
+    _logDeckFinder.info('runSearch started', { cardPool: filters.cardPool, scenario: filters.scenario, resultCount: filters.resultCount });
+    _logDeckFinder.time('runSearch');
+
     deckFinderState.searching = true;
     deckFinderState.cancelled = false;
     deckFinderState.progress = 0;
@@ -1164,9 +1181,9 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     const anyRequiredCards = (includeMode === 'any' && includeCards.length > 0) ? includeCards : [];
 
     // Remove include-card conflicts from exclude list
-    const includeFriendSet = new Set(includeFriendCards.map(String));
+    const includeFriendSet = new Set(includeFriendCards);
     const effectiveExcludeCards = (filters.excludeCards || []).filter(id =>
-        !includeCards.includes(id) && !includeFriendSet.has(String(id))
+        !includeCards.includes(id) && !includeFriendSet.has(id)
     );
     const effectiveFilters = { ...filters, excludeCards: effectiveExcludeCards };
 
@@ -1198,23 +1215,43 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         }
     }
 
+    // Friend-included cards should also be eligible for player slots
+    // (they only restrict the friend slot pool, not the player pool)
+    if (includeFriendCards.length > 0) {
+        const poolIds = new Set(pool.map(c => c.support_id));
+        for (const id of includeFriendCards) {
+            if (!poolIds.has(id)) {
+                const card = cardData.find(c => c.support_id === id);
+                if (card && (!isOwnedMode || isCardOwned(card.support_id))) {
+                    pool.push(card);
+                }
+            }
+        }
+    }
+
     if (pool.length === 0) {
+        _logDeckFinder.warn('Card pool is empty — no cards match filters');
         deckFinderState.searching = false;
         onComplete([], 'No cards match the current pool filters.');
         return;
     }
 
+    _logDeckFinder.info('Card pool built', { poolSize: pool.length });
+
     // For owned mode: owned cards at actual levels + friend pool at max level
     // For all mode: all cards at max level for all 6 slots
+    _logDeckFinder.time('precomputeCardEffects');
     const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode);
+    _logDeckFinder.timeEnd('precomputeCardEffects');
     const groups = groupCardsByType(pool);
+    _logDeckFinder.debug('Groups by type', Object.fromEntries(Object.entries(groups).map(([t, c]) => [t, c.length])));
 
     let friendCache = null;
     let friendGroups = null;
 
     // Build friend pool — selected friend cards restrict pool to those cards
     if (includeFriendCards.length > 0) {
-        const friendPool = cardData.filter(c => includeFriendSet.has(String(c.support_id)));
+        const friendPool = cardData.filter(c => includeFriendSet.has(c.support_id));
         if (friendPool.length > 0) {
             friendCache = precomputeCardEffects(friendPool, traineeData, true);
             friendGroups = groupCardsByType(friendPool);
@@ -1225,6 +1262,10 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         friendCache = precomputeCardEffects(friendPool, traineeData, true);
         friendGroups = groupCardsByType(friendPool);
         presortCardGroups(friendGroups, filters, friendCache, traineeData);
+    }
+
+    if (friendCache) {
+        _logDeckFinder.info('Friend pool built', Object.fromEntries(Object.entries(friendGroups).map(([t, c]) => [t, c.length])));
     }
 
     // Compute dynamic normalization from actual card pool
@@ -1265,7 +1306,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     const lockedTypeCounts = {};
     if (lockedPlayerCards.length > 0 && lockedPlayerCards.length < 6) {
         for (const id of lockedPlayerCards) {
-            const data = cache.get(id) || cache.get(Number(id)) || cache.get(String(id));
+            const data = cache.get(id);
             if (data) lockedTypeCounts[data.type] = (lockedTypeCounts[data.type] || 0) + 1;
         }
     }
@@ -1283,7 +1324,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         if (lockedPlayerCards.length === 5) {
             const dist = { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 };
             for (const id of lockedPlayerCards) {
-                const data = cache.get(id) || cache.get(Number(id)) || cache.get(String(id));
+                const data = cache.get(id);
                 if (data) dist[data.type] = (dist[data.type] || 0) + 1;
             }
             distributions = [dist];
@@ -1329,8 +1370,8 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
                 ? Object.keys(friendGroups) // restricted friend: only its type(s) available
                 : Object.keys(dist).filter(t => dist[t] > 0);
             for (const friendType of friendTypes) {
-                // Check friend type is in the distribution (for non-restricted)
-                if (!hasFriendRestriction && (dist[friendType] || 0) <= 0) continue;
+                // Friend type must have at least 1 slot in the distribution to borrow from
+                if ((dist[friendType] || 0) <= 0) continue;
                 // Owned distribution: one fewer of friendType
                 const ownedDist = { ...dist, [friendType]: dist[friendType] - 1 };
                 // Check feasibility using combined max tables
@@ -1354,11 +1395,16 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         }
     }
 
+    _logDeckFinder.debug('Metric norms', metricNorms);
+
     if (validDists.length === 0) {
+        _logDeckFinder.warn('No feasible distributions found');
         deckFinderState.searching = false;
         onComplete([], 'No feasible distributions found — try relaxing your thresholds.');
         return;
     }
+
+    _logDeckFinder.info('Distributions', { valid: validDists.length, totalCombos });
 
     // === Option 1: Rank distributions by estimated score potential ===
     // Sum top-k individualCardScore values per type for each distribution
@@ -1392,15 +1438,18 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     // Try to use Web Worker for search
     if (typeof Worker !== 'undefined') {
         try {
+            _logDeckFinder.info('Spawning worker search');
             await runWorkerSearch(filters, pool, cache, groups, maxTable, validDists, totalCombos, onProgress, onComplete, onLiveResults, warningMessage, friendCache, friendGroups, friendMaxTable, metricNorms);
+            _logDeckFinder.timeEnd('runSearch');
             return;
         } catch (workerErr) {
             // Fall back to main thread
-            console.warn('Worker search failed, falling back to main thread:', workerErr.message);
+            _logDeckFinder.warn('Worker search failed, falling back to main thread', workerErr.message);
         }
     }
 
     try {
+        _logDeckFinder.info('Running main-thread fallback search');
         const startTime = performance.now();
         const results = await bruteForceSearch(groups, filters, cache, validDists, totalCombos, filters.resultCount, onProgress, onLiveResults, maxTable, traineeData, friendGroups, friendCache, metricNorms);
         const elapsed = performance.now() - startTime;
@@ -1410,12 +1459,17 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         if (deckFinderState.searchStats) {
             deckFinderState.searchStats.elapsed = Math.round(elapsed);
         }
+        _logDeckFinder.info('Main-thread search complete', { results: results.length, elapsed: Math.round(elapsed) + 'ms' });
+        _logDeckFinder.timeEnd('runSearch');
         onComplete(results, warningMessage);
     } catch (err) {
         deckFinderState.searching = false;
+        _logDeckFinder.timeEnd('runSearch');
         if (err.message === 'cancelled') {
+            _logDeckFinder.info('Search cancelled');
             onComplete(deckFinderState.results.length > 0 ? deckFinderState.results : [], 'Search cancelled.');
         } else {
+            _logDeckFinder.error('Search error', err.message);
             onComplete([], `Search error: ${err.message}`);
         }
     }
@@ -1438,6 +1492,10 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     let yieldCounter = 0;
     const YIELD_INTERVAL = 80000;
     const startTime = performance.now();
+
+    // Derive include-card constraints from filters (avoid closure dependency on runSearch locals)
+    const lockedPlayerCards = (filters.includeCardsMode === 'all') ? (filters.includeCards || []) : [];
+    const anyRequiredCards = (filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : [];
 
     // Build threshold checks for B&B pruning
     const thresholdChecks = [];
@@ -1681,16 +1739,16 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 distEvaluated++;
                 yieldCounter++;
 
-                // Include card checks
+                // Include card checks (both deckIds and locked/required are strings)
                 if (lockedPlayerCards.length > 0) {
                     for (const lid of lockedPlayerCards) {
-                        if (!deckIds.includes(lid) && !deckIds.includes(String(lid)) && !deckIds.includes(Number(lid))) return;
+                        if (!deckIds.includes(lid)) return;
                     }
                 }
                 if (anyRequiredCards.length > 0) {
                     let found = false;
                     for (const rid of anyRequiredCards) {
-                        if (deckIds.includes(rid) || deckIds.includes(String(rid)) || deckIds.includes(Number(rid))) { found = true; break; }
+                        if (deckIds.includes(rid)) { found = true; break; }
                     }
                     if (!found) return;
                 }
@@ -2427,6 +2485,7 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
     return new Promise((resolve, reject) => {
         // Determine worker count: use up to 4 cores, min 1
         const numWorkers = Math.min(4, Math.max(1, navigator.hardwareConcurrency || 1));
+        _logDeckFinder.info('Worker pool', { numWorkers, cores: navigator.hardwareConcurrency });
 
         // Serialize cache to plain object (shared across all workers)
         const cacheObj = {};
@@ -2515,8 +2574,8 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             metricNorms,
             friendCache: friendCacheObj,
             friendGroups: friendGroupsObj,
-            lockedCardIds: ((filters.includeCardsMode === 'all') ? (filters.includeCards || []) : []).map(String),
-            anyRequiredCardIds: ((filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : []).map(String)
+            lockedCardIds: (filters.includeCardsMode === 'all') ? (filters.includeCards || []) : [],
+            anyRequiredCardIds: (filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : []
         };
 
         for (let wi = 0; wi < numWorkers; wi++) {
@@ -2602,6 +2661,7 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                         }
 
                         if (completedWorkers >= workers.length) {
+                            _logDeckFinder.info('All workers complete', { evaluated: globalEvaluated, pruned: globalPruned, elapsed: globalElapsed + 'ms' });
                             const finalResults = globalTopN.toSortedArray();
                             deckFinderState.results = finalResults;
                             deckFinderState.searching = false;
@@ -2639,6 +2699,7 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             // Send shard to this worker
             worker.postMessage({
                 type: 'start',
+                debugConfig: _debug.getConfig(),
                 payload: {
                     ...commonPayload,
                     validDists: shards[workerIdx],
@@ -2658,6 +2719,7 @@ function yieldToUI() {
 }
 
 function cancelSearch() {
+    _logDeckFinder.info('cancelSearch');
     deckFinderState.cancelled = true;
     // Terminate all workers (multi-worker pool)
     if (deckFinderState.workers) {
@@ -2771,6 +2833,7 @@ function analyzeWhyThisDeck(result, filters) {
 // ===== LOAD DECK FROM FINDER =====
 
 function loadDeckFromFinder(cardIds, saveName) {
+    _logDeckFinder.info('loadDeckFromFinder', { cardIds, saveName });
     // Create slots array matching deckBuilderState format
     const slots = cardIds.map((cardId, idx) => {
         const card = cardData.find(c => c.support_id === cardId);
@@ -2810,6 +2873,7 @@ function loadDeckFromFinder(cardIds, saveName) {
 }
 
 function saveDeckFromFinder(cardIds) {
+    _logDeckFinder.info('saveDeckFromFinder', { cardIds });
     const slots = loadDeckFromFinder(cardIds);
     const deckId = 'deck_' + Date.now();
     const typeCounts = {};

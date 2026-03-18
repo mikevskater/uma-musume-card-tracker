@@ -1,6 +1,8 @@
 // Deck Finder Renderer
 // Modal UI, filter panel, results list, preview, and comparison for Best Deck Finder
 
+const _logDeckFinderUI = _debug.create('DeckFinderUI');
+
 // ===== CARD LOOKUP MAP =====
 // O(1) lookup by support_id instead of O(n) cardData.find() in render loops
 let _cardDataMap = null;
@@ -22,6 +24,7 @@ let _finderIncludeFriendIds = new Set(); // support_id strings
 let _finderInitialized = false;
 
 function openDeckFinder() {
+    _logDeckFinderUI.info('openDeckFinder');
     const isReopen = _finderInitialized;
 
     if (!isReopen) {
@@ -62,6 +65,7 @@ function openDeckFinder() {
 }
 
 function resetDeckFinder() {
+    _logDeckFinderUI.info('resetDeckFinder — all filters cleared');
     deckFinderState.filters = getDefaultFinderFilters();
     deckFinderState.results = [];
     deckFinderState.selectedResultIndex = -1;
@@ -102,6 +106,7 @@ function resetDeckFinder() {
 }
 
 function closeDeckFinder() {
+    _logDeckFinderUI.info('closeDeckFinder');
     // Save current UI state before tearing down DOM
     const overlay = document.getElementById('deckFinderOverlay');
     if (overlay) {
@@ -468,6 +473,7 @@ function initFinderEvents() {
             btn.addEventListener('click', () => {
                 row.querySelectorAll('.finder-toggle-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                _logDeckFinderUI.debug('Toggle', { pool: btn.dataset.pool, count: btn.dataset.count });
             });
         });
     });
@@ -476,6 +482,7 @@ function initFinderEvents() {
     overlay.querySelectorAll('.finder-icon-grid .quick-add-icon-btn[data-rarity]').forEach(btn => {
         btn.addEventListener('click', () => {
             btn.classList.toggle('selected');
+            _logDeckFinderUI.debug('Rarity toggle', { rarity: btn.dataset.rarity, selected: btn.classList.contains('selected') });
         });
     });
 
@@ -484,6 +491,7 @@ function initFinderEvents() {
         btn.addEventListener('click', () => {
             const isSelected = btn.classList.toggle('selected');
             const type = btn.dataset.type;
+            _logDeckFinderUI.debug('Type toggle', { type, selected: isSelected });
             // Sync ratio item disabled state
             const ratioItem = overlay.querySelector(`.finder-ratio-item[data-type="${type}"]`);
             if (ratioItem) {
@@ -523,6 +531,7 @@ function initFinderEvents() {
             const radio = pill.querySelector('input[type="radio"]');
             if (radio) {
                 radio.checked = true;
+                _logDeckFinderUI.debug('Required skills mode', { mode: radio.value });
                 overlay.querySelectorAll('.finder-req-skills-mode .finder-pill').forEach(p => {
                     p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
                 });
@@ -538,13 +547,40 @@ function initFinderEvents() {
                 const isOpen = target.style.display !== 'none';
                 target.style.display = isOpen ? 'none' : '';
                 btn.querySelector('.finder-collapse-icon').textContent = isOpen ? '\u25B6' : '\u25BC';
+                _logDeckFinderUI.debug('Collapsible', { section: btn.dataset.target, open: !isOpen });
             }
         });
     });
 
+    // Scenario change
+    const scenarioSel = overlay.querySelector('#finderScenario');
+    if (scenarioSel) {
+        scenarioSel.addEventListener('change', (e) => {
+            _logDeckFinderUI.info('Scenario changed', { scenario: e.target.value });
+        });
+    }
+
+    // Trainee change
+    const traineeSel = overlay.querySelector('#finderTrainee');
+    if (traineeSel) {
+        traineeSel.addEventListener('change', (e) => {
+            _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
+        });
+    }
+
     // Ratio sum update
     overlay.querySelectorAll('.finder-ratio-input').forEach(input => {
         input.addEventListener('input', updateRatioSum);
+    });
+
+    // Minimum deck effect thresholds
+    ['finderMinRace', 'finderMinTrain', 'finderMinFriend', 'finderMinEnergy'].forEach(id => {
+        const el = overlay.querySelector('#' + id);
+        if (el) {
+            el.addEventListener('change', (e) => {
+                _logDeckFinderUI.debug('Threshold changed', { id, value: parseInt(e.target.value) || 0 });
+            });
+        }
     });
 
     // Required skills search
@@ -572,6 +608,7 @@ function initFinderEvents() {
             const radio = pill.querySelector('input[type="radio"]');
             if (radio) {
                 radio.checked = true;
+                _logDeckFinderUI.debug('Include mode', { mode: radio.value });
                 overlay.querySelectorAll('.finder-include-mode .finder-pill').forEach(p => {
                     p.classList.toggle('active', p.querySelector('input[type="radio"]')?.checked);
                 });
@@ -590,7 +627,10 @@ function initFinderEvents() {
 
     // Search
     overlay.querySelector('#finderSearchBtn').addEventListener('click', startFinderSearch);
-    overlay.querySelector('#finderCancelBtn').addEventListener('click', () => cancelSearch());
+    overlay.querySelector('#finderCancelBtn').addEventListener('click', () => {
+        _logDeckFinderUI.info('Search cancel requested');
+        cancelSearch();
+    });
 
     // Reset button with confirmation
     overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
@@ -603,6 +643,7 @@ function initFinderEvents() {
 // ===== STATE RESTORATION =====
 
 function restoreFinderUIFromState() {
+    _logDeckFinderUI.debug('restoreFinderUIFromState');
     const overlay = document.getElementById('deckFinderOverlay');
     if (!overlay) return;
 
@@ -798,13 +839,40 @@ function reInitFilterEvents(overlay) {
                 const isOpen = target.style.display !== 'none';
                 target.style.display = isOpen ? 'none' : '';
                 btn.querySelector('.finder-collapse-icon').textContent = isOpen ? '\u25B6' : '\u25BC';
+                _logDeckFinderUI.debug('Collapsible', { section: btn.dataset.target, open: !isOpen });
             }
         });
     });
 
+    // Scenario change
+    const scenarioSel = overlay.querySelector('#finderScenario');
+    if (scenarioSel) {
+        scenarioSel.addEventListener('change', (e) => {
+            _logDeckFinderUI.info('Scenario changed', { scenario: e.target.value });
+        });
+    }
+
+    // Trainee change
+    const traineeSel = overlay.querySelector('#finderTrainee');
+    if (traineeSel) {
+        traineeSel.addEventListener('change', (e) => {
+            _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
+        });
+    }
+
     // Ratio sum
     overlay.querySelectorAll('.finder-ratio-input').forEach(input => {
         input.addEventListener('input', updateRatioSum);
+    });
+
+    // Minimum deck effect thresholds
+    ['finderMinRace', 'finderMinTrain', 'finderMinFriend', 'finderMinEnergy'].forEach(id => {
+        const el = overlay.querySelector('#' + id);
+        if (el) {
+            el.addEventListener('change', (e) => {
+                _logDeckFinderUI.debug('Threshold changed', { id, value: parseInt(e.target.value) || 0 });
+            });
+        }
     });
 
     // Required skills
@@ -858,16 +926,17 @@ function reInitFilterEvents(overlay) {
 
 function addFinderSortLayer() {
     const layers = deckFinderState.sortLayers;
-    // Default: first unused non-hasOptions category, or 'score'
     const usedKeys = new Set(layers.map(l => l.key));
     const available = Object.keys(FINDER_SORT_CATEGORIES).find(k => !usedKeys.has(k)) || 'score';
     const cat = FINDER_SORT_CATEGORIES[available];
     layers.push({ key: available, option: null, direction: cat?.defaultDirection || 'desc' });
+    _logDeckFinderUI.debug('addSortLayer', { key: available, total: layers.length });
     renderFinderSortLayers();
     wireFinderSortEvents();
 }
 
 function removeFinderSortLayer(index) {
+    _logDeckFinderUI.debug('removeSortLayer', { index });
     deckFinderState.sortLayers.splice(index, 1);
     renderFinderSortLayers();
     wireFinderSortEvents();
@@ -876,6 +945,7 @@ function removeFinderSortLayer(index) {
 function moveFinderSortLayer(fromIndex, toIndex) {
     const layers = deckFinderState.sortLayers;
     if (toIndex < 0 || toIndex >= layers.length) return;
+    _logDeckFinderUI.debug('moveSortLayer', { from: fromIndex, to: toIndex });
     const [item] = layers.splice(fromIndex, 1);
     layers.splice(toIndex, 0, item);
     renderFinderSortLayers();
@@ -885,6 +955,7 @@ function moveFinderSortLayer(fromIndex, toIndex) {
 function updateFinderSortLayer(index, updates) {
     const layer = deckFinderState.sortLayers[index];
     if (!layer) return;
+    _logDeckFinderUI.debug('updateSortLayer', { index, updates });
     Object.assign(layer, updates);
     renderFinderSortLayers();
     wireFinderSortEvents();
@@ -990,7 +1061,6 @@ function wireFinderSortEvents() {
 let _finderSkillTypeLayers = []; // [{ type: 'type_id', min: 1 }, ...]
 
 function addFinderSkillTypeLayer() {
-    // Pick first unused type
     const usedTypes = new Set(_finderSkillTypeLayers.map(l => l.type));
     const allTypes = (typeof skillTypesData === 'object')
         ? Object.entries(skillTypesData).filter(([id, str]) => id && str).sort((a, b) => a[1].localeCompare(b[1]))
@@ -998,11 +1068,13 @@ function addFinderSkillTypeLayer() {
     const available = allTypes.find(([id]) => !usedTypes.has(id));
     if (!available) { showToast('All skill types already added.', 'warning'); return; }
     _finderSkillTypeLayers.push({ type: available[0], min: 1 });
+    _logDeckFinderUI.debug('addSkillTypeLayer', { type: available[0], total: _finderSkillTypeLayers.length });
     renderFinderSkillTypeLayers();
     wireFinderSkillTypeEvents();
 }
 
 function removeFinderSkillTypeLayer(index) {
+    _logDeckFinderUI.debug('removeSkillTypeLayer', { index });
     _finderSkillTypeLayers.splice(index, 1);
     renderFinderSkillTypeLayers();
     wireFinderSkillTypeEvents();
@@ -1124,6 +1196,7 @@ function syncSelectedSkillsFromDropdown() {
     document.querySelectorAll('.finder-req-skill-check:checked').forEach(cb => {
         _selectedRequiredSkills.push({ id: cb.value, name: cb.dataset.skillName });
     });
+    _logDeckFinderUI.debug('Required skills updated', { count: _selectedRequiredSkills.length, skills: _selectedRequiredSkills.map(s => s.name) });
 }
 
 function renderRequiredSkillsList() {
@@ -1192,6 +1265,7 @@ const FINDER_PICKER_SORT_OPTIONS = [
 ];
 
 function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disabledIds }) {
+    _logDeckFinderUI.info('openFinderCardPicker', { title, mode, selectedCount: selected?.size || 0 });
     const existingPicker = document.getElementById('finderCardPickerOverlay');
     if (existingPicker) existingPicker.remove();
 
@@ -1288,6 +1362,7 @@ function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disable
     function onCardClick(cardId) {
         if (disabled.has(cardId)) return;
         if (mode === 'single') {
+            _logDeckFinderUI.debug('Card picker single select', { cardId });
             onDone(new Set([cardId]));
             closePicker();
             return;
@@ -1295,8 +1370,10 @@ function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disable
         // Multi-mode: toggle
         if (working.has(cardId)) {
             working.delete(cardId);
+            _logDeckFinderUI.debug('Card picker deselected', { cardId, remaining: working.size });
         } else {
             working.add(cardId);
+            _logDeckFinderUI.debug('Card picker selected', { cardId, total: working.size });
         }
         // Toggle visual state on the tile
         const tile = overlay.querySelector(`.picker-card-tile[data-card-id="${cardId}"]`);
@@ -1550,6 +1627,7 @@ function wireFinderPickerButtons(overlay) {
                 mode: 'multi',
                 selected: _finderExcludeCardIds,
                 onDone: (ids) => {
+                    _logDeckFinderUI.info('Exclude cards updated', { count: ids.size, cardIds: [...ids] });
                     _finderExcludeCardIds = ids;
                     renderExcludeThumbGrid();
                 }
@@ -1571,6 +1649,7 @@ function wireFinderPickerButtons(overlay) {
                 filterFn: isOwned ? (card) => isCardOwned(card.support_id) : null,
                 disabledIds: new Set(_finderIncludeFriendIds),
                 onDone: (ids) => {
+                    _logDeckFinderUI.info('Include cards updated', { count: ids.size, cardIds: [...ids] });
                     _finderIncludeCardIds = ids;
                     renderIncludeThumbsAndInfo();
                 }
@@ -1588,6 +1667,7 @@ function wireFinderPickerButtons(overlay) {
                 selected: _finderIncludeFriendIds,
                 disabledIds: new Set(),
                 onDone: (ids) => {
+                    _logDeckFinderUI.info('Friend cards updated', { count: ids.size, cardIds: [...ids] });
                     _finderIncludeFriendIds = ids;
                     renderFriendThumbAndInfo();
                 }
@@ -1603,6 +1683,7 @@ function wireFinderPickerButtons(overlay) {
 
 function renderExcludeThumbGrid() {
     renderFinderThumbGrid('finderExcludeCardThumbs', _finderExcludeCardIds, (id) => {
+        _logDeckFinderUI.debug('Exclude card removed', { cardId: id, remaining: _finderExcludeCardIds.size - 1 });
         _finderExcludeCardIds.delete(id);
         renderExcludeThumbGrid();
     });
@@ -1610,6 +1691,7 @@ function renderExcludeThumbGrid() {
 
 function renderIncludeThumbsAndInfo() {
     renderFinderThumbGrid('finderIncludeCardThumbs', _finderIncludeCardIds, (id) => {
+        _logDeckFinderUI.debug('Include card removed', { cardId: id, remaining: _finderIncludeCardIds.size - 1 });
         _finderIncludeCardIds.delete(id);
         renderIncludeThumbsAndInfo();
     });
@@ -1619,6 +1701,7 @@ function renderIncludeThumbsAndInfo() {
 
 function renderFriendThumbAndInfo() {
     renderFinderThumbGrid('finderIncludeFriendThumb', _finderIncludeFriendIds, (id) => {
+        _logDeckFinderUI.debug('Friend card removed', { cardId: id, remaining: _finderIncludeFriendIds.size - 1 });
         _finderIncludeFriendIds.delete(id);
         renderFriendThumbAndInfo();
     });
@@ -1707,9 +1790,13 @@ function checkIncludeDuplicates() {
 
 function updateRatioSum() {
     let sum = 0;
+    const ratios = {};
     document.querySelectorAll('.finder-ratio-input').forEach(input => {
-        if (!input.disabled) sum += parseInt(input.value) || 0;
+        const val = parseInt(input.value) || 0;
+        if (!input.disabled) sum += val;
+        if (val > 0) ratios[input.dataset.type] = val;
     });
+    _logDeckFinderUI.debug('Type composition changed', { ratios, sum });
     const el = document.getElementById('finderRatioSum');
     if (el) {
         el.textContent = `Sum: ${sum} / 6`;
@@ -1720,6 +1807,7 @@ function updateRatioSum() {
 // ===== COLLECT FILTERS FROM UI =====
 
 function collectFiltersFromUI() {
+    _logDeckFinderUI.debug('collectFiltersFromUI');
     const f = getDefaultFinderFilters();
     const overlay = document.getElementById('deckFinderOverlay');
     if (!overlay) return f;
@@ -1772,13 +1860,13 @@ function collectFiltersFromUI() {
     overlay.querySelectorAll('.finder-exclude-char-check:checked').forEach(cb => {
         f.excludeCharacters.push(cb.value);
     });
-    f.excludeCards = [..._finderExcludeCardIds];
+    f.excludeCards = [..._finderExcludeCardIds].map(Number);
 
-    // Include cards from Sets
-    f.includeCards = [..._finderIncludeCardIds];
+    // Include cards from Sets (convert string IDs to numbers for data layer)
+    f.includeCards = [..._finderIncludeCardIds].map(Number);
     const includeModeRadio = overlay.querySelector('input[name="finderIncludeMode"]:checked');
     f.includeCardsMode = includeModeRadio?.value || 'all';
-    f.includeFriendCards = [..._finderIncludeFriendIds];
+    f.includeFriendCards = [..._finderIncludeFriendIds].map(Number);
 
     // Result count
     const countBtn = overlay.querySelector('.finder-toggle-btn[data-count].active');
@@ -1790,7 +1878,9 @@ function collectFiltersFromUI() {
 // ===== SEARCH TRIGGER =====
 
 function startFinderSearch() {
+    _logDeckFinderUI.info('Search triggered');
     const filters = collectFiltersFromUI();
+    _logDeckFinderUI.debug('Filter state', filters);
     const errors = validateFinderFilters(filters);
     if (errors.length > 0) { showToast(errors[0], 'error'); return; }
 
@@ -1822,6 +1912,7 @@ function startFinderSearch() {
         },
         // onComplete
         (results, message) => {
+            _logDeckFinderUI.info('Results received', { count: results.length, message: message || 'none' });
             if (searchBtn) searchBtn.style.display = '';
             if (cancelBtn) cancelBtn.style.display = 'none';
             if (progressEl) progressEl.style.display = 'none';
@@ -1853,8 +1944,9 @@ function startFinderSearch() {
 // ===== RESULTS RENDERING =====
 
 function renderFinderResults(results, message, searching) {
+    _logDeckFinderUI.time('renderFinderResults');
     const container = document.getElementById('finderResultsBody');
-    if (!container) return;
+    if (!container) { _logDeckFinderUI.timeEnd('renderFinderResults'); return; }
 
     if (searching) {
         container.innerHTML = '<div class="finder-results-placeholder"><div class="finder-spinner"></div><div>Searching...</div></div>';
@@ -1898,9 +1990,11 @@ function renderFinderResults(results, message, searching) {
 
     container.innerHTML = html;
     wireResultEvents(container);
+    _logDeckFinderUI.timeEnd('renderFinderResults');
 }
 
 function renderLiveResults(results, matchCount) {
+    _logDeckFinderUI.debug('renderLiveResults', { count: results.length, matchCount });
     const container = document.getElementById('finderResultsBody');
     if (!container) return;
 
@@ -2105,6 +2199,7 @@ function buildCardEffectsTable(effects, uniqueEffectBonuses, uniqueEffectName) {
 // ===== INLINE DETAIL TOGGLE =====
 
 function toggleResultDetail(idx) {
+    _logDeckFinderUI.debug('toggleResultDetail', { idx });
     const detail = document.getElementById(`finderDetail${idx}`);
     if (!detail) return;
 
@@ -2248,6 +2343,7 @@ function toggleResultDetail(idx) {
 function updateCompareSelection() {
     const checks = document.querySelectorAll('.finder-compare-check:checked');
     deckFinderState.compareIndices = Array.from(checks).map(c => parseInt(c.dataset.idx));
+    _logDeckFinderUI.debug('Compare selection', { indices: deckFinderState.compareIndices });
 
     const compareBtn = document.getElementById('finderCompareBtn');
     if (compareBtn) {
@@ -2259,6 +2355,7 @@ function updateCompareSelection() {
 }
 
 function renderDeckComparison() {
+    _logDeckFinderUI.info('renderDeckComparison', { indices: deckFinderState.compareIndices });
     const container = document.getElementById('finderComparison');
     if (!container) return;
 

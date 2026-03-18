@@ -1,6 +1,8 @@
 // Deck Builder Manager
 // State management, calculations, save/load for Deck Builder
 
+const _logDeckBuilder = _debug.create('DeckBuilder');
+
 // ===== CONSTANTS =====
 
 const DECK_STORAGE_KEY = 'uma_deck_builder_decks';
@@ -151,12 +153,14 @@ function initializeDeckBuilder() {
     renderDeckSelect();
 
     deckBuilderState.initialized = true;
+    _logDeckBuilder.info('Deck Builder initialized');
     console.log('Deck Builder initialized');
 }
 
 // ===== TAB SWITCHING =====
 
 function switchAppTab(tabId) {
+    _logDeckBuilder.info('switchAppTab', { tabId });
     document.querySelectorAll('.app-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === tabId);
         btn.setAttribute('aria-selected', btn.dataset.tab === tabId ? 'true' : 'false');
@@ -174,6 +178,7 @@ function switchAppTab(tabId) {
 // ===== SLOT MANAGEMENT =====
 
 function setDeckSlot(slotIndex, cardId, level, lb) {
+    _logDeckBuilder.info('setDeckSlot', { slotIndex, cardId, level, lb });
     deckBuilderState.slots[slotIndex] = {
         cardId: cardId,
         level: level,
@@ -190,6 +195,7 @@ function setDeckSlot(slotIndex, cardId, level, lb) {
 }
 
 function removeDeckSlot(slotIndex) {
+    _logDeckBuilder.info('removeDeckSlot', { slotIndex });
     deckBuilderState.slots[slotIndex] = null;
     resetSlotAssignments(slotIndex, false);
     renderDeckSlots();
@@ -200,6 +206,7 @@ function removeDeckSlot(slotIndex) {
 // ===== CARD PICKER =====
 
 function openCardPicker(slotIndex) {
+    _logDeckBuilder.info('openCardPicker', { slotIndex });
     deckBuilderState.activeSlot = slotIndex;
     deckBuilderState.pickerOpen = true;
     deckBuilderState.pickerFilter.search = '';
@@ -207,6 +214,7 @@ function openCardPicker(slotIndex) {
 }
 
 function closeCardPicker() {
+    _logDeckBuilder.debug('closeCardPicker');
     deckBuilderState.pickerOpen = false;
     deckBuilderState.activeSlot = null;
 
@@ -219,6 +227,7 @@ function closeCardPicker() {
 }
 
 function selectCardForSlot(slotIndex, cardId) {
+    _logDeckBuilder.info('selectCardForSlot', { slotIndex, cardId });
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
 
@@ -244,6 +253,7 @@ function selectCardForSlot(slotIndex, cardId) {
 // ===== EFFECT AGGREGATION =====
 
 function aggregateDeckEffects(slots) {
+    _logDeckBuilder.debug('aggregateDeckEffects', { slotCount: slots.filter(s => s !== null).length });
     const aggregated = {};
 
     slots.forEach(slot => {
@@ -472,6 +482,7 @@ function computePerTrainingEffects(slots) {
 }
 
 function recalculateDeck() {
+    _logDeckBuilder.time('recalculateDeck');
     const { aggregated, results } = calculateAllTraining();
     const perTraining = computePerTrainingEffects(deckBuilderState.slots);
     const uniqueEffects = aggregateUniqueEffects(deckBuilderState.slots);
@@ -484,6 +495,7 @@ function recalculateDeck() {
     renderUniqueEffectsSection(uniqueEffects);
     renderDeckSkillsSection(deckSkills);
     renderCharacterInfoSection();
+    _logDeckBuilder.timeEnd('recalculateDeck');
 }
 
 // ===== TRAINING ASSIGNMENTS =====
@@ -507,6 +519,7 @@ function openTrainingAssignmentModal(trainingType) {
 }
 
 function saveTrainingAssignment(trainingType, assignments) {
+    _logDeckBuilder.info('saveTrainingAssignment', { trainingType, assignments });
     deckBuilderState.trainingAssignments[trainingType] = [...assignments];
     recalculateDeck();
 }
@@ -674,9 +687,11 @@ function loadSavedDecks() {
             const data = JSON.parse(stored);
             deckBuilderState.savedDecks = data.decks || [];
             deckBuilderState.activeDeckId = data.activeDeckId || null;
+            _logDeckBuilder.info('Loaded saved decks', { count: deckBuilderState.savedDecks.length });
         }
     } catch (error) {
         console.error('Error loading saved decks:', error);
+        _logDeckBuilder.error('Error loading saved decks', error);
         deckBuilderState.savedDecks = [];
     }
 }
@@ -711,6 +726,7 @@ function debouncedSaveDeck() {
 }
 
 function createNewDeck(name) {
+    _logDeckBuilder.info('createNewDeck', { name });
     const deckId = 'deck_' + Date.now();
     const carrySlots = deckBuilderState.slots.some(s => s !== null)
         ? [...deckBuilderState.slots]
@@ -731,6 +747,7 @@ function createNewDeck(name) {
 }
 
 function deleteDeck(deckId) {
+    _logDeckBuilder.info('deleteDeck', { deckId });
     const idx = deckBuilderState.savedDecks.findIndex(d => d.id === deckId);
     if (idx < 0) return;
 
@@ -755,6 +772,7 @@ function deleteDeck(deckId) {
 }
 
 function renameDeck(deckId, newName) {
+    _logDeckBuilder.info('renameDeck', { deckId, newName });
     const deck = deckBuilderState.savedDecks.find(d => d.id === deckId);
     if (!deck) return;
 
@@ -769,6 +787,7 @@ function renameDeck(deckId, newName) {
 }
 
 function switchToDeck(deckId) {
+    _logDeckBuilder.info('switchToDeck', { deckId });
     const deck = deckBuilderState.savedDecks.find(d => d.id === deckId);
     if (!deck) return;
 
@@ -854,6 +873,7 @@ function initializeDeckBuilderEvents() {
     const scenarioSelect = document.getElementById('scenarioSelect');
     if (scenarioSelect) {
         scenarioSelect.addEventListener('change', (e) => {
+            _logDeckBuilder.info('Scenario changed', { scenario: e.target.value });
             deckBuilderState.scenario = e.target.value;
             recalculateDeck();
         });
@@ -863,6 +883,7 @@ function initializeDeckBuilderEvents() {
     const characterSelect = document.getElementById('characterSelect');
     if (characterSelect) {
         characterSelect.addEventListener('change', (e) => {
+            _logDeckBuilder.info('Character changed', { character: e.target.value || null });
             deckBuilderState.selectedCharacter = e.target.value || null;
             recalculateDeck();
         });
@@ -871,6 +892,7 @@ function initializeDeckBuilderEvents() {
     // Facility level buttons
     document.querySelectorAll('#facilityLevelBtns .facility-level-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            _logDeckBuilder.info('Training level changed', { level: btn.dataset.level });
             deckBuilderState.trainingLevel = parseInt(btn.dataset.level);
             document.querySelectorAll('#facilityLevelBtns .facility-level-btn').forEach(b =>
                 b.classList.toggle('active', b === btn)
@@ -883,6 +905,7 @@ function initializeDeckBuilderEvents() {
     const moodSelect = document.getElementById('moodSelect');
     if (moodSelect) {
         moodSelect.addEventListener('change', (e) => {
+            _logDeckBuilder.info('Mood changed', { mood: e.target.value });
             deckBuilderState.mood = e.target.value;
             recalculateDeck();
         });
@@ -892,6 +915,7 @@ function initializeDeckBuilderEvents() {
     const friendshipToggle = document.getElementById('friendshipToggle');
     if (friendshipToggle) {
         friendshipToggle.addEventListener('change', (e) => {
+            _logDeckBuilder.info('Friendship training toggled', { enabled: e.target.checked });
             deckBuilderState.friendshipTraining = e.target.checked;
             recalculateDeck();
         });

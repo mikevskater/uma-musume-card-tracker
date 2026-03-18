@@ -1,6 +1,8 @@
 // Data Processing Utilities
 // Centralized functions for calculations, formatting, and data manipulation
 
+const _logDataUtils = _debug.create('DataUtils');
+
 // ===== EFFECT CALCULATIONS =====
 
 // Calculate effect value at specific level with caching
@@ -104,6 +106,7 @@ function findSurroundingMilestones(effectArray, targetLevel) {
         upperMilestone = lowerMilestone;
     } else if (!lowerMilestone && !upperMilestone) {
         // No valid milestones found — effect not active at any level
+        _logDataUtils.warn('No valid milestones found for effect', { effectId: effectArray[0], targetLevel });
         return {
             lowerMilestone: { level: 0, value: 0 },
             upperMilestone: { level: 50, value: 0 }

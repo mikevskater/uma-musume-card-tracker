@@ -261,6 +261,10 @@ async function renderHelpContent(sectionId) {
             if (sectionId === 'whatsnew') {
                 enhanceWhatsNewContent(sectionElement);
             }
+            // Settings section — wire up interactive controls
+            if (sectionId === 'settings') {
+                enhanceSettingsContent(sectionElement);
+            }
         } catch (error) {
             console.error(`Failed to render help section ${sectionId}:`, error);
             sectionElement.innerHTML = generateFallbackContent(sectionId);
@@ -269,6 +273,11 @@ async function renderHelpContent(sectionId) {
     
     // Show the selected section
     sectionElement.classList.add('active');
+
+    // Settings section — refresh toggle states on every visit (config may have changed)
+    if (sectionId === 'settings') {
+        refreshSettingsUI(sectionElement);
+    }
 }
 
 // ===== HELP CONTENT LOADING =====
@@ -339,6 +348,119 @@ function enhanceWhatsNewContent(sectionElement) {
     if (currentVersionEntry) {
         currentVersionEntry.classList.add('version-current');
     }
+}
+
+// ===== SETTINGS SECTION ENHANCEMENT =====
+
+const DEBUG_MODULES = [
+    { id: 'DeckFinder',    label: 'Deck Finder (search algorithm)' },
+    { id: 'DeckBuilder',   label: 'Deck Builder (state & calculations)' },
+    { id: 'Worker',        label: 'Web Worker (search computation)' },
+    { id: 'DeckFinderUI',  label: 'Deck Finder UI (renderer & interactions)' },
+    { id: 'DeckBuilderUI', label: 'Deck Builder UI (renderer & interactions)' },
+    { id: 'DataUtils',     label: 'Data Utilities (effect calculations)' }
+];
+
+function enhanceSettingsContent(sectionElement) {
+    if (typeof _debug === 'undefined') return;
+
+    const config = _debug.getConfig();
+
+    // Master toggle
+    const enabledToggle = sectionElement.querySelector('#settingsDebugEnabled');
+    if (enabledToggle) {
+        enabledToggle.checked = config.allEnabled;
+        enabledToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                _debug.enableAll();
+            } else {
+                _debug.disableAll();
+            }
+            refreshSettingsModuleToggles(sectionElement);
+            showToast(e.target.checked ? 'Debug logging enabled for all modules' : 'Debug logging disabled', 'success');
+        });
+    }
+
+    // Level select
+    const levelSelect = sectionElement.querySelector('#settingsDebugLevel');
+    if (levelSelect) {
+        levelSelect.value = config.level;
+        levelSelect.addEventListener('change', (e) => {
+            _debug.setLevel(e.target.value);
+            showToast(`Debug level set to "${e.target.value}"`, 'success');
+        });
+    }
+
+    // Per-module toggles
+    refreshSettingsModuleToggles(sectionElement);
+
+    // Bulk buttons
+    const enableAllBtn = sectionElement.querySelector('#settingsDebugEnableAll');
+    if (enableAllBtn) {
+        enableAllBtn.addEventListener('click', () => {
+            DEBUG_MODULES.forEach(m => _debug.enable(m.id));
+            refreshSettingsModuleToggles(sectionElement);
+            showToast('All modules enabled', 'success');
+        });
+    }
+
+    const disableAllBtn = sectionElement.querySelector('#settingsDebugDisableAll');
+    if (disableAllBtn) {
+        disableAllBtn.addEventListener('click', () => {
+            DEBUG_MODULES.forEach(m => _debug.disable(m.id));
+            refreshSettingsModuleToggles(sectionElement);
+            showToast('All modules disabled', 'success');
+        });
+    }
+}
+
+function refreshSettingsUI(sectionElement) {
+    if (typeof _debug === 'undefined') return;
+    const config = _debug.getConfig();
+    const enabledToggle = sectionElement.querySelector('#settingsDebugEnabled');
+    if (enabledToggle) enabledToggle.checked = config.allEnabled;
+    const levelSelect = sectionElement.querySelector('#settingsDebugLevel');
+    if (levelSelect) levelSelect.value = config.level;
+    refreshSettingsModuleToggles(sectionElement);
+}
+
+function refreshSettingsModuleToggles(sectionElement) {
+    const container = sectionElement.querySelector('#settingsModuleToggles');
+    if (!container) return;
+
+    const config = _debug.getConfig();
+
+    container.innerHTML = DEBUG_MODULES.map(m => {
+        const checked = config.allEnabled || !!config.enabled[m.id];
+        const disabled = config.allEnabled;
+        return `
+            <div class="settings-row">
+                <div class="settings-label">
+                    <strong>${m.id}</strong>
+                    <span class="settings-hint">${m.label}</span>
+                </div>
+                <div class="settings-control">
+                    <label class="settings-toggle">
+                        <input type="checkbox" class="settings-module-toggle" data-module="${m.id}"
+                            ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+                        <span class="settings-toggle-slider ${disabled ? 'disabled' : ''}"></span>
+                    </label>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Wire individual module toggles
+    container.querySelectorAll('.settings-module-toggle').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+            const moduleId = e.target.dataset.module;
+            if (e.target.checked) {
+                _debug.enable(moduleId);
+            } else {
+                _debug.disable(moduleId);
+            }
+        });
+    });
 }
 
 // Generate fallback content if file loading fails (ENHANCED)
