@@ -38,6 +38,12 @@ function openDeckFinder() {
         deckFinderState.searchStats = null;
         deckFinderState.traineeData = null;
         if (!deckFinderState.sortLayers) deckFinderState.sortLayers = [];
+        // Initialize custom weights from scenario defaults
+        if (!deckFinderState.customWeights) resetWeightsToDefaults('1');
+        // Initialize search settings
+        if (!deckFinderState.searchSettings) {
+            deckFinderState.searchSettings = { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 };
+        }
         _finderInitialized = true;
     }
 
@@ -75,6 +81,9 @@ function resetDeckFinder() {
     deckFinderState.searchStats = null;
     deckFinderState.traineeData = null;
     deckFinderState.sortLayers = [];
+    deckFinderState.customWeights = null;
+    resetWeightsToDefaults('1');
+    deckFinderState.searchSettings = { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 };
     _finderSkillTypeLayers = [];
     _selectedRequiredSkills = [];
     _finderExcludeCardIds = new Set();
@@ -333,7 +342,7 @@ function buildFinderFiltersHTML() {
 
         <!-- Result Count -->
         <div class="finder-section">
-            <div class="finder-label">Top Results to Show</div>
+            <div class="finder-label">Display Count</div>
             <div class="finder-toggle-row">
                 <button class="finder-toggle-btn active" data-count="10">10</button>
                 <button class="finder-toggle-btn" data-count="25">25</button>
@@ -435,6 +444,55 @@ function buildFinderFiltersHTML() {
                 <button class="btn btn-secondary btn-sm finder-add-sort-btn" id="finderAddSkillTypeBtn">
                     <span class="sort-icon">+</span> Add Skill Type
                 </button>
+            </div>
+        </div>
+
+        <!-- ═══ ADVANCED SETTINGS ═══ -->
+        <div class="finder-group-header">Advanced Settings</div>
+
+        <!-- Scoring Weights (collapsible) -->
+        <div class="finder-section finder-collapsible">
+            <button class="finder-collapse-btn" data-target="finderWeightsBody">
+                <span class="finder-collapse-icon">&#9654;</span> Scoring Weights
+                <span class="finder-hint">(what the search optimizes for)</span>
+            </button>
+            <div class="finder-collapse-body" id="finderWeightsBody" style="display:none;">
+                <div class="finder-weights-list" id="finderWeightsList"></div>
+                <button class="btn btn-secondary btn-sm" id="finderResetWeightsBtn" style="width:100%;margin-top:4px;">Reset to Scenario Defaults</button>
+            </div>
+        </div>
+
+        <!-- Search Settings (collapsible) -->
+        <div class="finder-section finder-collapsible">
+            <button class="finder-collapse-btn" data-target="finderSearchSettingsBody">
+                <span class="finder-collapse-icon">&#9654;</span> Search Settings
+                <span class="finder-hint">(performance tuning)</span>
+            </button>
+            <div class="finder-collapse-body" id="finderSearchSettingsBody" style="display:none;">
+                <div class="finder-threshold-grid">
+                    <div class="finder-threshold-item">
+                        <label>Worker Threads</label>
+                        <select class="finder-small-input" id="finderWorkerCount" style="width:100%;">
+                            <option value="auto" selected>Auto</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    <div class="finder-threshold-item">
+                        <label>Warm-start Count</label>
+                        <div class="finder-input-suffix"><input type="number" id="finderWarmStartCount" min="100" max="10000" value="1500"></div>
+                    </div>
+                    <div class="finder-threshold-item">
+                        <label>Search Pool Size</label>
+                        <div class="finder-input-suffix"><input type="number" id="finderSearchPoolSize" min="100" max="2000" value="500"></div>
+                    </div>
+                    <div class="finder-threshold-item">
+                        <label>Stability %</label>
+                        <div class="finder-input-suffix"><input type="number" id="finderStabilityPct" min="5" max="100" value="30"><span>%</span></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -552,11 +610,13 @@ function initFinderEvents() {
         });
     });
 
-    // Scenario change
+    // Scenario change — also reset weights to new scenario defaults
     const scenarioSel = overlay.querySelector('#finderScenario');
     if (scenarioSel) {
         scenarioSel.addEventListener('change', (e) => {
             _logDeckFinderUI.info('Scenario changed', { scenario: e.target.value });
+            resetWeightsToDefaults(e.target.value);
+            renderFinderWeightsList();
         });
     }
 
@@ -567,6 +627,59 @@ function initFinderEvents() {
             _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
         });
     }
+
+    // Scoring weights
+    renderFinderWeightsList();
+    overlay.querySelector('#finderResetWeightsBtn')?.addEventListener('click', () => {
+        const scenarioId = overlay.querySelector('#finderScenario')?.value || '1';
+        resetWeightsToDefaults(scenarioId);
+        renderFinderWeightsList();
+        showToast('Weights reset to scenario defaults.', 'info');
+    });
+
+    // Search settings
+    const workerCountSel = overlay.querySelector('#finderWorkerCount');
+    if (workerCountSel) {
+        workerCountSel.value = deckFinderState.searchSettings.workerCount;
+        workerCountSel.addEventListener('change', () => {
+            deckFinderState.searchSettings.workerCount = workerCountSel.value;
+        });
+    }
+    const warmStartInput = overlay.querySelector('#finderWarmStartCount');
+    if (warmStartInput) {
+        warmStartInput.value = deckFinderState.searchSettings.warmStartCount;
+        warmStartInput.addEventListener('change', () => {
+            deckFinderState.searchSettings.warmStartCount = Math.max(100, Math.min(10000, parseInt(warmStartInput.value) || 1500));
+            warmStartInput.value = deckFinderState.searchSettings.warmStartCount;
+        });
+    }
+    const poolSizeInput = overlay.querySelector('#finderSearchPoolSize');
+    if (poolSizeInput) {
+        poolSizeInput.value = deckFinderState.searchSettings.searchPoolSize;
+        poolSizeInput.addEventListener('change', () => {
+            deckFinderState.searchSettings.searchPoolSize = Math.max(100, Math.min(2000, parseInt(poolSizeInput.value) || 500));
+            poolSizeInput.value = deckFinderState.searchSettings.searchPoolSize;
+        });
+    }
+    const stabilityInput = overlay.querySelector('#finderStabilityPct');
+    if (stabilityInput) {
+        stabilityInput.value = deckFinderState.searchSettings.stabilityPercent;
+        stabilityInput.addEventListener('change', () => {
+            deckFinderState.searchSettings.stabilityPercent = Math.max(5, Math.min(100, parseInt(stabilityInput.value) || 30));
+            stabilityInput.value = deckFinderState.searchSettings.stabilityPercent;
+        });
+    }
+
+    // Result count toggle — instant re-display from pool (no re-search)
+    overlay.querySelectorAll('.finder-toggle-btn[data-count]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            deckFinderState.filters.resultCount = parseInt(btn.dataset.count) || 10;
+            // If we have results, re-display from pool instantly
+            if (deckFinderState.results.length > 0 && !deckFinderState.searching) {
+                sortFinderResults();
+            }
+        });
+    });
 
     // Ratio sum update
     overlay.querySelectorAll('.finder-ratio-input').forEach(input => {
@@ -766,6 +879,20 @@ function restoreFinderUIFromState() {
         wireFinderSkillTypeEvents();
     }
 
+    // Restore weights list
+    renderFinderWeightsList();
+
+    // Restore search settings
+    const ss = deckFinderState.searchSettings || {};
+    const workerSel = overlay.querySelector('#finderWorkerCount');
+    if (workerSel) workerSel.value = ss.workerCount || 'auto';
+    const warmInput = overlay.querySelector('#finderWarmStartCount');
+    if (warmInput) warmInput.value = ss.warmStartCount || 1500;
+    const poolInput = overlay.querySelector('#finderSearchPoolSize');
+    if (poolInput) poolInput.value = ss.searchPoolSize || 500;
+    const stabInput = overlay.querySelector('#finderStabilityPct');
+    if (stabInput) stabInput.value = ss.stabilityPercent || 30;
+
     // Restore results if we have them
     if (deckFinderState.results && deckFinderState.results.length > 0) {
         renderFinderResults(deckFinderState.results, null, false);
@@ -844,18 +971,20 @@ function reInitFilterEvents(overlay) {
         });
     });
 
-    // Scenario change
-    const scenarioSel = overlay.querySelector('#finderScenario');
-    if (scenarioSel) {
-        scenarioSel.addEventListener('change', (e) => {
+    // Scenario change — also reset weights to new scenario defaults
+    const scenarioSel2 = overlay.querySelector('#finderScenario');
+    if (scenarioSel2) {
+        scenarioSel2.addEventListener('change', (e) => {
             _logDeckFinderUI.info('Scenario changed', { scenario: e.target.value });
+            resetWeightsToDefaults(e.target.value);
+            renderFinderWeightsList();
         });
     }
 
     // Trainee change
-    const traineeSel = overlay.querySelector('#finderTrainee');
-    if (traineeSel) {
-        traineeSel.addEventListener('change', (e) => {
+    const traineeSel2 = overlay.querySelector('#finderTrainee');
+    if (traineeSel2) {
+        traineeSel2.addEventListener('change', (e) => {
             _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
         });
     }
@@ -914,6 +1043,56 @@ function reInitFilterEvents(overlay) {
     overlay.querySelector('#finderAddSkillTypeBtn')?.addEventListener('click', addFinderSkillTypeLayer);
     wireFinderSkillTypeEvents();
 
+    // Scoring weights
+    renderFinderWeightsList();
+    overlay.querySelector('#finderResetWeightsBtn')?.addEventListener('click', () => {
+        const scenarioId = overlay.querySelector('#finderScenario')?.value || '1';
+        resetWeightsToDefaults(scenarioId);
+        renderFinderWeightsList();
+        showToast('Weights reset to scenario defaults.', 'info');
+    });
+
+    // Search settings
+    const workerCountSel2 = overlay.querySelector('#finderWorkerCount');
+    if (workerCountSel2) {
+        workerCountSel2.value = deckFinderState.searchSettings.workerCount;
+        workerCountSel2.addEventListener('change', () => { deckFinderState.searchSettings.workerCount = workerCountSel2.value; });
+    }
+    const warmStartInput2 = overlay.querySelector('#finderWarmStartCount');
+    if (warmStartInput2) {
+        warmStartInput2.value = deckFinderState.searchSettings.warmStartCount;
+        warmStartInput2.addEventListener('change', () => {
+            deckFinderState.searchSettings.warmStartCount = Math.max(100, Math.min(10000, parseInt(warmStartInput2.value) || 1500));
+            warmStartInput2.value = deckFinderState.searchSettings.warmStartCount;
+        });
+    }
+    const poolSizeInput2 = overlay.querySelector('#finderSearchPoolSize');
+    if (poolSizeInput2) {
+        poolSizeInput2.value = deckFinderState.searchSettings.searchPoolSize;
+        poolSizeInput2.addEventListener('change', () => {
+            deckFinderState.searchSettings.searchPoolSize = Math.max(100, Math.min(2000, parseInt(poolSizeInput2.value) || 500));
+            poolSizeInput2.value = deckFinderState.searchSettings.searchPoolSize;
+        });
+    }
+    const stabilityInput2 = overlay.querySelector('#finderStabilityPct');
+    if (stabilityInput2) {
+        stabilityInput2.value = deckFinderState.searchSettings.stabilityPercent;
+        stabilityInput2.addEventListener('change', () => {
+            deckFinderState.searchSettings.stabilityPercent = Math.max(5, Math.min(100, parseInt(stabilityInput2.value) || 30));
+            stabilityInput2.value = deckFinderState.searchSettings.stabilityPercent;
+        });
+    }
+
+    // Result count toggle — instant re-display from pool
+    overlay.querySelectorAll('.finder-toggle-btn[data-count]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            deckFinderState.filters.resultCount = parseInt(btn.dataset.count) || 10;
+            if (deckFinderState.results.length > 0 && !deckFinderState.searching) {
+                sortFinderResults();
+            }
+        });
+    });
+
     // Reset button
     overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
         if (confirm('Reset all deck finder filters, settings, and results to defaults?')) {
@@ -933,6 +1112,7 @@ function addFinderSortLayer() {
     _logDeckFinderUI.debug('addSortLayer', { key: available, total: layers.length });
     renderFinderSortLayers();
     wireFinderSortEvents();
+    if (deckFinderState.results.length > 0) sortFinderResults();
 }
 
 function removeFinderSortLayer(index) {
@@ -940,6 +1120,8 @@ function removeFinderSortLayer(index) {
     deckFinderState.sortLayers.splice(index, 1);
     renderFinderSortLayers();
     wireFinderSortEvents();
+    // Instant re-sort (no re-search needed)
+    if (deckFinderState.results.length > 0) sortFinderResults();
 }
 
 function moveFinderSortLayer(fromIndex, toIndex) {
@@ -950,6 +1132,7 @@ function moveFinderSortLayer(fromIndex, toIndex) {
     layers.splice(toIndex, 0, item);
     renderFinderSortLayers();
     wireFinderSortEvents();
+    if (deckFinderState.results.length > 0) sortFinderResults();
 }
 
 function updateFinderSortLayer(index, updates) {
@@ -959,6 +1142,7 @@ function updateFinderSortLayer(index, updates) {
     Object.assign(layer, updates);
     renderFinderSortLayers();
     wireFinderSortEvents();
+    if (deckFinderState.results.length > 0) sortFinderResults();
 }
 
 function renderFinderSortLayers() {
@@ -1052,6 +1236,43 @@ function wireFinderSortEvents() {
             const layer = deckFinderState.sortLayers[index];
             if (!layer) return;
             updateFinderSortLayer(index, { direction: layer.direction === 'asc' ? 'desc' : 'asc' });
+        };
+    });
+}
+
+// ===== SCORING WEIGHTS UI =====
+
+function renderFinderWeightsList() {
+    const container = document.getElementById('finderWeightsList');
+    if (!container) return;
+
+    // Ensure customWeights is initialized
+    if (!deckFinderState.customWeights) {
+        resetWeightsToDefaults();
+    }
+    const weights = deckFinderState.customWeights;
+
+    // Sort by weight value descending (highest priority first)
+    const entries = Object.entries(weights).sort((a, b) => b[1] - a[1]);
+
+    container.innerHTML = entries.map(([key, value]) => {
+        const label = WEIGHT_LABELS[key] || key;
+        return `<div class="finder-weight-item">
+            <span class="finder-weight-label">${label}</span>
+            <input type="number" class="finder-weight-input" data-key="${key}" min="0" max="200" value="${value}">
+        </div>`;
+    }).join('');
+
+    // Wire change events
+    container.querySelectorAll('.finder-weight-input').forEach(input => {
+        input.onchange = () => {
+            const key = input.dataset.key;
+            const val = Math.max(0, Math.min(200, parseInt(input.value) || 0));
+            input.value = val;
+            if (deckFinderState.customWeights) {
+                deckFinderState.customWeights[key] = val;
+                _logDeckFinderUI.debug('Weight changed', { key, value: val });
+            }
         };
     });
 }
@@ -1916,22 +2137,8 @@ function startFinderSearch() {
             if (searchBtn) searchBtn.style.display = '';
             if (cancelBtn) cancelBtn.style.display = 'none';
             if (progressEl) progressEl.style.display = 'none';
-            deckFinderState.results = results;
-            // Apply multi-layer sort if configured
-            if (deckFinderState.sortLayers.length > 0) {
-                const layers = deckFinderState.sortLayers;
-                enrichResultsForSort(results);
-                results.sort((a, b) => {
-                    for (const layer of layers) {
-                        const dir = layer.direction === 'asc' ? 1 : -1;
-                        const va = getFinderSortValue(a, layer);
-                        const vb = getFinderSortValue(b, layer);
-                        if (va !== vb) return (va - vb) * dir;
-                    }
-                    return 0;
-                });
-            }
-            renderFinderResults(results, message, false);
+            // Results are already stored and sorted by sortFinderResults() called from search
+            renderFinderResults(deckFinderState.results, message, false);
         },
         // onLiveResults — update results panel in real-time during brute force
         (liveResults, matchCount) => {
@@ -1974,13 +2181,17 @@ function renderFinderResults(results, message, searching) {
         html += `</div>`;
     }
 
+    // Display only the top N from the sorted pool
+    const displayCount = deckFinderState.filters?.resultCount || 10;
+    const displayResults = results.slice(0, displayCount);
+
     html += `<div class="finder-results-header">
-        <span class="finder-results-count">${results.length} deck${results.length !== 1 ? 's' : ''} found</span>
+        <span class="finder-results-count">${displayResults.length} of ${results.length} deck${results.length !== 1 ? 's' : ''} shown (pool: ${deckFinderState.results?.length || results.length})</span>
         <button class="btn btn-secondary btn-sm" id="finderCompareBtn" style="display:none;">Compare Selected</button>
     </div>`;
 
     html += '<div class="finder-results-list" id="finderResultsList">';
-    results.forEach((result, idx) => {
+    displayResults.forEach((result, idx) => {
         html += renderResultCard(result, idx);
     });
     html += '</div>';
@@ -2015,25 +2226,43 @@ function renderLiveResults(results, matchCount) {
         header = container.querySelector('.finder-results-count');
     }
 
+    // Limit live preview to display count
+    const displayCount = deckFinderState.filters?.resultCount || 10;
+    const displayResults = results.slice(0, displayCount);
+
     if (header) {
-        header.textContent = `Top ${results.length} of ${matchCount} matches (searching...)`;
+        header.textContent = `Top ${displayResults.length} of ${matchCount} matches (searching...)`;
     }
 
-    // Simplified preview during live updates — score + card names only
+    // Live preview with card thumbnails (rarity border + type icon) and key metrics
     const cardMap = getCardDataMap();
-    list.innerHTML = results.map((result, idx) => {
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    list.innerHTML = displayResults.map((result, idx) => {
         const m = result.metrics;
-        const names = result.cardIds.map(id => {
+        const resultFriendId = result.friendCardId || null;
+        const thumbs = result.cardIds.map(id => {
             const card = cardMap.get(id);
-            return card ? card.char_name : '?';
-        }).join(', ');
+            if (!card) return '';
+            const isFriend = id === resultFriendId;
+            const iconFile = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
+            return `<div class="finder-thumb-wrap${isFriend ? ' finder-thumb-friend' : ''}">
+                <img src="support_card_images/${card.support_id}.png"
+                     onerror="this.style.display='none'"
+                     class="finder-result-thumb card-image rarity-${card.rarity}"
+                     title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
+                <img class="finder-thumb-type-icon" src="${iconFile}" alt="${card.type}">
+                ${isFriend ? '<span class="finder-thumb-friend-tag">F</span>' : ''}
+            </div>`;
+        }).join('');
         const keyMetrics = [];
         if (m.raceBonus > 0) keyMetrics.push(`Race ${m.raceBonus}%`);
         if (m.trainingEff > 0) keyMetrics.push(`TrEff ${m.trainingEff}%`);
         if (m.friendBonus > 0) keyMetrics.push(`Friend ${m.friendBonus}%`);
         return `<div class="finder-result-card finder-live-preview" data-idx="${idx}">
-            <span class="finder-result-rank">#${idx + 1}</span>
-            <span class="finder-live-names">${names}</span>
+            <div class="finder-result-top">
+                <div class="finder-result-rank">#${idx + 1}</div>
+                <div class="finder-result-thumbs">${thumbs}</div>
+            </div>
             <span class="finder-live-metrics">${keyMetrics.join(' | ')}</span>
         </div>`;
     }).join('');

@@ -8,7 +8,7 @@ importScripts('../utils/debug.js');
 const log = _debug.create('Worker');
 
 let cancelled = false;
-let globalMinScore = -Infinity; // Updated by manager for cross-worker pruning
+let globalMinBaseScore = -Infinity; // Updated by manager for cross-worker pruning
 
 function scoreRaceBonus(rawBonus, breakpoint) {
     if (rawBonus <= 0) return 0;
@@ -30,13 +30,16 @@ function computeDiversityBonus(typeCounts) {
     return 0.7;
 }
 
-// ===== MIN-HEAP =====
+// ===== MIN-HEAP (comparison-function-based) =====
+// compareFn(a, b): positive if a is BETTER than b (higher priority to keep)
+// The heap root is the WORST entry (lowest priority) — candidate for eviction.
 
 class MinHeap {
-    constructor(maxSize) {
+    constructor(maxSize, compareFn) {
         this.maxSize = maxSize;
         this.heap = [];
         this.keySet = new Set();
+        this._compare = compareFn || ((a, b) => a.score - b.score);
     }
 
     insert(entry) {
@@ -50,7 +53,7 @@ class MinHeap {
             return true;
         }
 
-        if (entry.score > this.heap[0].score) {
+        if (this._compare(entry, this.heap[0]) > 0) {
             this.keySet.delete(this.heap[0]._key);
             this.heap[0] = entry;
             this.keySet.add(key);
@@ -60,18 +63,19 @@ class MinHeap {
         return false;
     }
 
-    minScore() {
-        return this.heap.length > 0 ? this.heap[0].score : -Infinity;
+    minEntry() {
+        return this.heap.length > 0 ? this.heap[0] : null;
     }
 
     toSortedArray() {
-        return this.heap.slice().sort((a, b) => b.score - a.score);
+        const cmp = this._compare;
+        return this.heap.slice().sort((a, b) => cmp(b, a));
     }
 
     _bubbleUp(i) {
         while (i > 0) {
             const parent = (i - 1) >> 1;
-            if (this.heap[i].score < this.heap[parent].score) {
+            if (this._compare(this.heap[i], this.heap[parent]) < 0) {
                 [this.heap[i], this.heap[parent]] = [this.heap[parent], this.heap[i]];
                 i = parent;
             } else break;
@@ -84,8 +88,8 @@ class MinHeap {
             let smallest = i;
             const left = 2 * i + 1;
             const right = 2 * i + 2;
-            if (left < n && this.heap[left].score < this.heap[smallest].score) smallest = left;
-            if (right < n && this.heap[right].score < this.heap[smallest].score) smallest = right;
+            if (left < n && this._compare(this.heap[left], this.heap[smallest]) < 0) smallest = left;
+            if (right < n && this._compare(this.heap[right], this.heap[smallest]) < 0) smallest = right;
             if (smallest === i) break;
             [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];
             i = smallest;
@@ -180,13 +184,16 @@ function buildSlotScoreBounds(slotEffectBounds, combinedWeights, metricNorms) {
     return scoreBounds;
 }
 
+// ===== BRANCH AND BOUND SEARCH =====
+
 function runBranchAndBound(payload) {
     const {
         cache, groups, maxTable, validDists, totalCombos,
         filters, resultCount, scenarioWeights: scenarioWeightsMap,
         statBonusEffectIds, skillTypeBitMap, traineeData, cardTypeGrowthKey,
         metricNorms, friendCache, friendGroups,
-        lockedCardIds, anyRequiredCardIds
+        lockedCardIds, anyRequiredCardIds,
+        initialSeeds
     } = payload;
 
     // Include cards support
@@ -196,6 +203,17 @@ function runBranchAndBound(payload) {
     const hasAnyRequired = anyRequiredSet.size > 0;
 
     const topN = new MinHeap(resultCount);
+
+    // Seed heap with initial results from greedy warm-start
+    if (initialSeeds && initialSeeds.length > 0) {
+        for (const seed of initialSeeds) {
+            if (!seed._key) seed._key = seed.cardIds.slice().sort().join(',');
+            if (seed.baseScore === undefined) seed.baseScore = seed.score || 0;
+            topN.insert(seed);
+        }
+        log.debug('Seeded heap with ' + initialSeeds.length + ' warm-start results');
+    }
+
     let evaluated = 0;
     let pruned = 0;
     let matchesFound = 0;
@@ -208,7 +226,7 @@ function runBranchAndBound(payload) {
     const scenarioId = filters.scenario || '1';
     const sw = scenarioWeightsMap[scenarioId]?.weights || scenarioWeightsMap['1'].weights;
 
-    // Build threshold checks
+    // Build threshold checks — pure hard constraints, never affect scoring
     const thresholdChecks = [];
     if (filters.minRaceBonus > 0) thresholdChecks.push({ effectId: '15', threshold: filters.minRaceBonus });
     if (filters.minTrainingEff > 0) thresholdChecks.push({ effectId: '8', threshold: filters.minTrainingEff });
@@ -218,30 +236,12 @@ function runBranchAndBound(payload) {
 
     const requiredSkillTypeMask = buildRequiredSkillTypeMask(filters.requiredSkillTypes, skillTypeBitMap);
 
-    // Precompute scoring weights
-    const filterBoosts = {};
-    const boostOrder = [
-        { key: 'raceBonus', active: filters.minRaceBonus > 0 },
-        { key: 'trainingEff', active: filters.minTrainingEff > 0 },
-        { key: 'friendBonus', active: filters.minFriendBonus > 0 },
-        { key: 'energyCost', active: filters.minEnergyCost > 0 },
-        { key: 'eventRecovery', active: filters.minEventRecovery > 0 },
-        { key: 'hintSkillCount', active: filters.minHintSkills > 0 },
-        { key: 'skillTypeCount', active: filters.requiredSkillTypes.length > 0 }
-    ];
-    let bm = 150;
-    for (const { key, active } of boostOrder) {
-        if (active) { filterBoosts[key] = bm; bm -= 20; }
-    }
-    // Sort layer boosts from main thread
-    const sortBoosts = payload.sortBoosts || {};
-    for (const [key, val] of Object.entries(sortBoosts)) {
-        filterBoosts[key] = (filterBoosts[key] || 0) + val;
-    }
+    // Scoring weights: scenario weights ONLY — no filter/sort boosts.
+    // This ensures the same deck is found regardless of threshold settings.
     const scoringKeys = Object.keys(sw);
     const combinedWeights = {};
     for (const key of scoringKeys) {
-        combinedWeights[key] = (sw[key] || 0) + (filterBoosts[key] || 0);
+        combinedWeights[key] = sw[key] || 0;
     }
 
     // Precompute per-card score contribution (with normalization)
@@ -309,7 +309,7 @@ function runBranchAndBound(payload) {
     const deckTypeCounts = {};
     let maxTypeCount = 0;
 
-    // === Option 1: Rank distributions by estimated score potential ===
+    // === Rank distributions by estimated score potential ===
     for (const entry of validDists) {
         let potential = 0;
         for (const [type, count] of Object.entries(entry.dist)) {
@@ -327,10 +327,11 @@ function runBranchAndBound(payload) {
     }
     validDists.sort((a, b) => b.potential - a.potential);
 
-    // === Option 1: Early termination tracking ===
+    // === Early termination tracking ===
     let distsWithoutImprovement = 0;
-    let prevMinScore = -Infinity;
-    const STABILITY_THRESHOLD = Math.max(50, Math.ceil(validDists.length * 0.3));
+    let prevWorstBaseScore = -Infinity;
+    const stabilityPct = (filters._stabilityPercent || 30) / 100;
+    const STABILITY_THRESHOLD = Math.max(50, Math.ceil(validDists.length * stabilityPct));
     const PER_DIST_EVAL_CAP = 2000000;
 
     for (const { dist, friendType } of validDists) {
@@ -402,10 +403,11 @@ function runBranchAndBound(payload) {
         let distEvaluated = 0;
         dfsSlot(0);
 
-        // Track early termination stability
-        const currentMinScore = topN.minScore();
-        if (topN.heap.length >= resultCount && currentMinScore > prevMinScore) {
-            prevMinScore = currentMinScore;
+        // Track early termination stability (use base score as proxy)
+        const worstEntry = topN.minEntry();
+        const currentWorstBase = worstEntry ? worstEntry.baseScore : -Infinity;
+        if (topN.heap.length >= resultCount && currentWorstBase > prevWorstBaseScore) {
+            prevWorstBaseScore = currentWorstBase;
             distsWithoutImprovement = 0;
         } else {
             distsWithoutImprovement++;
@@ -483,11 +485,10 @@ function runBranchAndBound(payload) {
                     }
                 }
 
-                // Score — use running counters
+                // Compute metrics from running counters
                 let statBonus = 0;
                 for (const eid of statBonusEffectIds) statBonus += (partialEffects[eid] || 0);
 
-                // Still need skills/types (not easily maintained as running counters)
                 const allSkills = new Set();
                 const allTypes = new Set();
                 for (let i = 0; i < totalSlots; i++) {
@@ -497,7 +498,6 @@ function runBranchAndBound(payload) {
                     if (data.hintSkillTypes) data.hintSkillTypes.forEach(t => allTypes.add(t));
                 }
 
-                // Skill-aptitude sum
                 let skillAptSum = 0;
                 for (let i = 0; i < totalSlots; i++) {
                     const data = getCardData(i);
@@ -525,7 +525,7 @@ function runBranchAndBound(payload) {
                     initialStats: (partialEffects[9]||0) + (partialEffects[10]||0) + (partialEffects[11]||0) + (partialEffects[12]||0) + (partialEffects[13]||0)
                 };
 
-                // Normalize for scoring
+                // Base score — scenario weights only, NO filter/sort boosts
                 const raceBreakpoint = scenarioWeightsMap[scenarioId]?.raceBreakpoint || 34;
                 const normVals = {};
                 for (const key of scoringKeys) {
@@ -534,21 +534,21 @@ function runBranchAndBound(payload) {
                 }
                 normVals.raceBonus = scoreRaceBonus(metrics.raceBonus, raceBreakpoint);
 
-                let score = 0;
+                let baseScore = 0;
                 for (const key of scoringKeys) {
-                    score += (normVals[key] || 0) * combinedWeights[key];
+                    baseScore += (normVals[key] || 0) * combinedWeights[key];
                 }
-                // Use running maxTypeCount instead of recomputing
+                // Friendship stacking bonus
                 if (maxTypeCount >= 3 && metrics.friendBonus > 0) {
                     const stackCount = Math.min(maxTypeCount - 2, 4);
                     const diminishing = stackCount <= 1 ? 1 : 1 + (stackCount - 1) * 0.6;
-                    score += metrics.friendBonus * (metricNorms.friendBonus || 0.29) * diminishing * 8;
+                    baseScore += metrics.friendBonus * (metricNorms.friendBonus || 0.29) * diminishing * 8;
                 }
 
-                // Type diversity multiplier (use running deckTypeCounts)
-                score *= (0.85 + computeDiversityBonus(deckTypeCounts) * 0.15);
+                // Type diversity multiplier
+                baseScore *= (0.85 + computeDiversityBonus(deckTypeCounts) * 0.15);
 
-                // Growth rate boost — only stat bonus, not entire score
+                // Growth rate boost
                 if (traineeGrowthRates && cardTypeGrowthKey) {
                     const statEffectIds = { speed: 3, stamina: 4, power: 5, guts: 6, wisdom: 7 };
                     for (let ci = 0; ci < totalSlots; ci++) {
@@ -559,7 +559,7 @@ function runBranchAndBound(payload) {
                             const rate = traineeGrowthRates[growthKey] || 0;
                             if (rate > 0) {
                                 const cardStatBonus = cdata.effects[statEffectIds[growthKey]] || 0;
-                                score += cardStatBonus * (rate / 100) * (combinedWeights.statBonus || 35);
+                                baseScore += cardStatBonus * (rate / 100) * (combinedWeights.statBonus || 35);
                             }
                         }
                     }
@@ -570,14 +570,22 @@ function runBranchAndBound(payload) {
 
                 const friendCardId = friendType ? deckIds[totalSlots - 1] : null;
                 const sortedIds = deckIds.slice().sort();
-                topN.insert({ cardIds: deckIds.slice(), score, metrics, aggregated: aggCopy, friendCardId, _key: sortedIds.join(',') });
+                topN.insert({
+                    cardIds: deckIds.slice(),
+                    score: baseScore,
+                    baseScore,
+                    metrics,
+                    aggregated: aggCopy,
+                    friendCardId,
+                    _key: sortedIds.join(',')
+                });
                 matchesFound++;
 
                 // Progress & live results
                 if (evaluated - lastProgressUpdate >= PROGRESS_INTERVAL) {
                     lastProgressUpdate = evaluated;
                     const pct = Math.min(99, Math.round((evaluated + pruned) / totalCombos * 100));
-                    log.debug(`Progress: ${pct}% | evaluated=${evaluated} pruned=${pruned} matches=${matchesFound} heapMin=${topN.minScore().toFixed(1)}`);
+                    log.debug(`Progress: ${pct}% | evaluated=${evaluated} pruned=${pruned} matches=${matchesFound} heapMinBase=${topN.minEntry()?.baseScore?.toFixed(1) || 'N/A'}`);
                     postMessage({ type: 'progress', progress: pct, matchCount: matchesFound });
                 }
                 if (matchesFound - lastLiveUpdate >= LIVE_INTERVAL) {
@@ -638,7 +646,7 @@ function runBranchAndBound(payload) {
                     }
                 }
 
-                // PRUNE 1: feasibility
+                // PRUNE 1: feasibility — can remaining slots satisfy thresholds?
                 let dominated = false;
                 for (let tc = 0; tc < thresholdChecks.length; tc++) {
                     const { effectId, threshold } = thresholdChecks[tc];
@@ -650,10 +658,10 @@ function runBranchAndBound(payload) {
                     }
                 }
 
-                // PRUNE 2: optimality — can't beat worst in top-N or global min from other workers
+                // PRUNE 2: base score optimality
                 if (!dominated) {
-                    const localMin = topN.heap.length >= resultCount ? topN.minScore() : -Infinity;
-                    const effectiveMin = Math.max(localMin, globalMinScore);
+                    const localMin = topN.heap.length >= resultCount ? (topN.minEntry()?.baseScore ?? -Infinity) : -Infinity;
+                    const effectiveMin = Math.max(localMin, globalMinBaseScore);
                     if (effectiveMin > -Infinity) {
                         const maxRemaining = slotScoreBounds[slotIdx + 1] || 0;
                         if (partialScore + maxRemaining < effectiveMin) {
@@ -741,22 +749,23 @@ self.onmessage = function(e) {
 
     if (msg.type === 'updateMinScore') {
         // Cross-worker min-score broadcasting for tighter PRUNE 2
-        if (msg.minScore > globalMinScore) {
-            globalMinScore = msg.minScore;
+        if (msg.minScore > globalMinBaseScore) {
+            globalMinBaseScore = msg.minScore;
         }
         return;
     }
 
     if (msg.type === 'start') {
         cancelled = false;
-        globalMinScore = -Infinity;
+        globalMinBaseScore = -Infinity;
 
         if (msg.debugConfig) _debug.applyConfig(msg.debugConfig);
 
         log.info('Search starting', {
             distributions: msg.payload.validDists.length,
             totalCombos: msg.payload.totalCombos,
-            cacheSize: Object.keys(msg.payload.cache).length
+            cacheSize: Object.keys(msg.payload.cache).length,
+            initialSeeds: (msg.payload.initialSeeds || []).length
         });
 
         try {

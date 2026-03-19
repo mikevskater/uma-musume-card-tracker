@@ -476,6 +476,41 @@
     font-size: var(--font-size-sm);
 }
 
+/* ===== SCORING WEIGHTS ===== */
+
+.finder-weights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-xs);
+}
+
+.finder-weight-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px var(--space-xs);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+}
+
+.finder-weight-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-primary);
+}
+
+.finder-weight-input {
+    width: 60px;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    padding: 2px 4px;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
 /* ===== SEARCH BUTTON & PROGRESS ===== */
 
 .finder-actions {
