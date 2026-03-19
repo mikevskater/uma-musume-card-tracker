@@ -279,18 +279,23 @@ function getFinderSortValue(result, layer) {
     return result.metrics[cat.metricKey || key] || 0;
 }
 
-// Precompute per-skill-type counts on each result for sorting
+// Precompute per-skill-type unique skill counts on each result for sorting
 function enrichResultsForSort(results) {
     const cache = deckFinderState.cardEffectCache;
     for (const result of results) {
         if (result._skillTypeCounts) continue;
-        const counts = {};
+        const uniqueSets = {};
         result.cardIds.forEach(id => {
             const data = cache.get(id);
-            if (data) data.hintSkillTypes.forEach(t => {
-                counts[t] = (counts[t] || 0) + 1;
-            });
+            if (data && data.skillsByType) {
+                for (const [t, skillSet] of Object.entries(data.skillsByType)) {
+                    if (!uniqueSets[t]) uniqueSets[t] = new Set();
+                    skillSet.forEach(sid => uniqueSets[t].add(sid));
+                }
+            }
         });
+        const counts = {};
+        for (const [t, s] of Object.entries(uniqueSets)) counts[t] = s.size;
         result._skillTypeCounts = counts;
     }
 }
@@ -504,10 +509,11 @@ function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
             });
         }
 
-        // Pre-compute hint skill IDs and types
+        // Pre-compute hint skill IDs, types, and per-type skill sets
         // hint_skills are skill objects {id, name, type, description} after cardManager processing
         const hintSkillIds = new Set();
         const hintSkillTypes = new Set();
+        const skillsByType = {};  // type -> Set<skillId>
         let skillTypeMask = 0;
         if (card.hints?.hint_skills) {
             card.hints.hint_skills.forEach(skill => {
@@ -521,6 +527,29 @@ function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
                 if (Array.isArray(types)) {
                     types.forEach(t => {
                         hintSkillTypes.add(t);
+                        if (!skillsByType[t]) skillsByType[t] = new Set();
+                        skillsByType[t].add(skillId);
+                        const bitPos = getSkillTypeBitPosition(t);
+                        if (bitPos >= 0) skillTypeMask |= (1 << bitPos);
+                    });
+                }
+            });
+        }
+
+        // Include event skills in skill tracking (same format as hint_skills: numeric IDs)
+        if (card.event_skills) {
+            card.event_skills.forEach(skill => {
+                const skillId = typeof skill === 'object' ? skill.id : skill;
+                if (!skillId) return;
+                hintSkillIds.add(skillId);
+                const types = (typeof skill === 'object' && Array.isArray(skill.type))
+                    ? skill.type
+                    : (skillLookup?.[skillId]?.type || []);
+                if (Array.isArray(types)) {
+                    types.forEach(t => {
+                        hintSkillTypes.add(t);
+                        if (!skillsByType[t]) skillsByType[t] = new Set();
+                        skillsByType[t].add(skillId);
                         const bitPos = getSkillTypeBitPosition(t);
                         if (bitPos >= 0) skillTypeMask |= (1 << bitPos);
                     });
@@ -558,6 +587,7 @@ function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
             level,
             hintSkillIds,
             hintSkillTypes,
+            skillsByType,
             skillTypeMask,
             uniqueEffectActive,
             skillAptitudeScore,
@@ -831,19 +861,22 @@ function checkHardFilters(cardIds, filters, cache) {
         }
     }
 
-    // Required skill types (each entry: { type, min })
+    // Required skill types (each entry: { type, min }) — count unique skills per type
     if (filters.requiredSkillTypes.length > 0) {
-        const typeCounts = {};
+        const uniqueSkillsByType = {};
         cardIds.forEach(id => {
             const data = cache.get(id);
-            if (data) data.hintSkillTypes.forEach(t => {
-                typeCounts[t] = (typeCounts[t] || 0) + 1;
-            });
+            if (data && data.skillsByType) {
+                for (const [t, skillSet] of Object.entries(data.skillsByType)) {
+                    if (!uniqueSkillsByType[t]) uniqueSkillsByType[t] = new Set();
+                    skillSet.forEach(sid => uniqueSkillsByType[t].add(sid));
+                }
+            }
         });
         for (const req of filters.requiredSkillTypes) {
             const reqType = typeof req === 'object' ? req.type : req;
             const reqMin = typeof req === 'object' ? (req.min || 1) : 1;
-            if ((typeCounts[reqType] || 0) < reqMin) return false;
+            if ((uniqueSkillsByType[reqType]?.size || 0) < reqMin) return false;
         }
     }
 
@@ -1775,6 +1808,13 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
         });
     }
 
+    // Pre-extract required skill types for running state tracking
+    const reqSkillTypes = (filters.requiredSkillTypes || []).map(r => ({
+        type: typeof r === 'object' ? r.type : r,
+        min: typeof r === 'object' ? (r.min || 1) : 1
+    }));
+    const hasReqSkillTypes = reqSkillTypes.length > 0;
+
     // Mutable state shared across all recursions — never allocated in the hot loop
     const deckIds = [];                     // max length 6
     const partialEffects = {};              // mutable, add/subtract
@@ -1785,6 +1825,16 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
     let partialEffectSum = 0;               // running total of all effect values
     const deckTypeCounts = {};              // running type counts for diversity
     let maxTypeCount = 0;                   // max type count for friendship stacking
+
+    // Running unique-skill-per-type tracking (ref-counted)
+    const skillTypeRefCounts = {};
+    const skillTypeUniqueCounts = {};
+    if (hasReqSkillTypes) {
+        for (const r of reqSkillTypes) {
+            skillTypeRefCounts[r.type] = {};
+            skillTypeUniqueCounts[r.type] = 0;
+        }
+    }
 
     // === Option 1: Early termination tracking ===
     let distsWithoutImprovement = 0;
@@ -1885,6 +1935,14 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
         for (const k of Object.keys(deckTypeCounts)) delete deckTypeCounts[k];
         maxTypeCount = 0;
         foundSkillBits = 0;
+        // Reset running skill-type unique counts
+        if (hasReqSkillTypes) {
+            for (const r of reqSkillTypes) {
+                const refs = skillTypeRefCounts[r.type];
+                for (const k of Object.keys(refs)) delete refs[k];
+                skillTypeUniqueCounts[r.type] = 0;
+            }
+        }
 
         // Card-by-card DFS — slot 0 picks from its pool starting at index 0.
         // slot 1 of the same type picks at a higher index than slot 0.
@@ -1960,6 +2018,15 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 }
 
                 if (filters.minUniqueEffects > 0 && ueCount < filters.minUniqueEffects) return;
+
+                // Skill type unique count check (uses running state)
+                if (hasReqSkillTypes) {
+                    let stFail = false;
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        if (skillTypeUniqueCounts[reqSkillTypes[rt].type] < reqSkillTypes[rt].min) { stFail = true; break; }
+                    }
+                    if (stFail) return;
+                }
 
                 // Score — use running counters where possible
                 let statBonus = 0;
@@ -2110,6 +2177,20 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 if (prevTypeCount + 1 > maxTypeCount) maxTypeCount = prevTypeCount + 1;
                 deckIds.push(cardId);
 
+                // Update running unique-skill-per-type counts
+                if (hasReqSkillTypes && data.skillsByType) {
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        const rType = reqSkillTypes[rt].type;
+                        const skills = data.skillsByType[rType];
+                        if (!skills) continue;
+                        const refs = skillTypeRefCounts[rType];
+                        skills.forEach(sid => {
+                            refs[sid] = (refs[sid] || 0) + 1;
+                            if (refs[sid] === 1) skillTypeUniqueCounts[rType]++;
+                        });
+                    }
+                }
+
                 // Track required skills found by this card
                 let prevFoundSkillBits = foundSkillBits;
                 if (hasReqSkills) {
@@ -2207,6 +2288,22 @@ async function bruteForceSearch(groups, filters, cache, validDists, totalCombos,
                 if (data.charId) usedCharIds.delete(data.charId);
                 ueCount = prevUECount;
                 skillMask = prevSkillMask;
+                // Undo unique-skill-per-type counts
+                if (hasReqSkillTypes && data.skillsByType) {
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        const rType = reqSkillTypes[rt].type;
+                        const skills = data.skillsByType[rType];
+                        if (!skills) continue;
+                        const refs = skillTypeRefCounts[rType];
+                        skills.forEach(sid => {
+                            refs[sid]--;
+                            if (refs[sid] === 0) {
+                                skillTypeUniqueCounts[rType]--;
+                                delete refs[sid];
+                            }
+                        });
+                    }
+                }
                 for (let e = 0; e < effectKeys.length; e++) {
                     const eid = effectKeys[e];
                     const val = effectVals ? effectVals[e] : data.effects[eid];
@@ -2663,10 +2760,16 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         // Serialize cache to plain object (shared across all workers)
         const cacheObj = {};
         cache.forEach((val, key) => {
+            // Serialize Sets to arrays for worker transfer
+            const sbt = {};
+            if (val.skillsByType) {
+                for (const [t, s] of Object.entries(val.skillsByType)) sbt[t] = [...s];
+            }
             cacheObj[key] = {
                 ...val,
                 hintSkillIds: [...val.hintSkillIds],
                 hintSkillTypes: [...val.hintSkillTypes],
+                skillsByType: sbt,
                 effectKeyArr: val.effectKeyArr,
                 effectValArr: val.effectValArr
             };
@@ -2682,10 +2785,15 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         if (friendCache && friendGroups) {
             friendCacheObj = {};
             friendCache.forEach((val, key) => {
+                const fsbt = {};
+                if (val.skillsByType) {
+                    for (const [t, s] of Object.entries(val.skillsByType)) fsbt[t] = [...s];
+                }
                 friendCacheObj[key] = {
                     ...val,
                     hintSkillIds: [...val.hintSkillIds],
                     hintSkillTypes: [...val.hintSkillTypes],
+                    skillsByType: fsbt,
                     effectKeyArr: val.effectKeyArr,
                     effectValArr: val.effectValArr
                 };
@@ -2900,6 +3008,229 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
 
 function yieldToUI() {
     return new Promise(resolve => setTimeout(resolve, 0));
+}
+
+// ===== FINDER TRAINING SIMULATION =====
+// Self-contained training calculations that don't depend on deckBuilderState.
+// Reuses global data lookups (getBaseTrainingValues, getApplicableBonusIds, etc.)
+
+// Per-result training preview state (only one result expanded at a time)
+let finderTrainingState = {
+    trainingLevel: 1,
+    mood: 'very_good',
+    friendshipTraining: true,
+    // assignments[trainingType][slotIndex] = bool
+    assignments: null,
+    // The result index currently showing training
+    resultIdx: -1
+};
+
+const FINDER_MOOD_VALUES = {
+    very_good: 0.20, good: 0.10, normal: 0.00, bad: -0.10, very_bad: -0.20
+};
+
+const FINDER_CARD_TYPE_TRAINING = {
+    speed: 'speed', stamina: 'stamina', power: 'power',
+    guts: 'guts', intelligence: 'intelligence'
+};
+
+const FINDER_STAT_BONUS_INDEX = {
+    3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 30: 5
+};
+
+function initFinderTrainingAssignments(numCards) {
+    const a = {};
+    for (const t of ['speed', 'stamina', 'power', 'guts', 'intelligence']) {
+        a[t] = new Array(numCards).fill(true);
+    }
+    return a;
+}
+
+/**
+ * Calculate training gains for a finder result at one training type.
+ * @param {string} trainingType - 'speed'|'stamina'|'power'|'guts'|'intelligence'
+ * @param {Array} slots - [{cardId, level}, ...] built from result
+ * @param {Object} aggregated - deck-wide effect sums {effectId: value}
+ * @param {Object} options - {trainingLevel, mood, friendshipTraining, scenario}
+ * @param {Array} assignments - boolean array, one per slot
+ * @param {Object|null} growthRates - {speed,stamina,power,guts,wisdom} or null
+ */
+function calculateFinderTrainingGains(trainingType, slots, aggregated, options, assignments, growthRates) {
+    const { trainingLevel, mood, friendshipTraining, scenario } = options;
+    const scenarioId = scenario || '1';
+
+    const baseValues = getBaseTrainingValues(trainingType, scenarioId, trainingLevel);
+    if (!baseValues) return null;
+
+    const base = [
+        baseValues.speed, baseValues.stamina, baseValues.power,
+        baseValues.guts, baseValues.wisdom, baseValues.skill_pt
+    ];
+    const energy = baseValues.energy;
+
+    // Filter present cards
+    const presentCards = [];
+    const presentSlots = [];
+    slots.forEach((slot, idx) => {
+        if (!slot) return;
+        if (!assignments[idx]) return;
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card) return;
+        presentCards.push(card.type);
+        presentSlots.push(slot);
+    });
+
+    const supportCount = presentCards.length;
+
+    // Stat bonuses from present cards
+    const statBonuses = [0, 0, 0, 0, 0, 0];
+    const applicableBonusIds = getApplicableBonusIds(trainingType, scenarioId, trainingLevel);
+
+    presentSlots.forEach(slot => {
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card?.effects) return;
+        card.effects.forEach(eff => {
+            const eid = eff[0];
+            if (applicableBonusIds.includes(eid) && FINDER_STAT_BONUS_INDEX[eid] !== undefined) {
+                const val = calculateEffectValue(eff, slot.level);
+                if (val > 0) statBonuses[FINDER_STAT_BONUS_INDEX[eid]] += val;
+            }
+        });
+    });
+
+    // Training Effectiveness (8) and Mood Effect (2) from present cards
+    let trainingEff = 0, moodEffect = 0;
+    presentSlots.forEach(slot => {
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card?.effects) return;
+        card.effects.forEach(eff => {
+            if (eff[0] === 8) { const v = calculateEffectValue(eff, slot.level); if (v > 0) trainingEff += v; }
+            else if (eff[0] === 2) { const v = calculateEffectValue(eff, slot.level); if (v > 0) moodEffect += v; }
+        });
+    });
+
+    const moodBase = FINDER_MOOD_VALUES[mood] || 0;
+    const moodMultiplier = 1 + moodBase * (1 + moodEffect / 100);
+    const trainingEffMultiplier = 1 + trainingEff / 100;
+    const supportMultiplier = 1 + 0.05 * supportCount;
+
+    // Friendship multiplier
+    let friendshipMultiplier = 1;
+    if (friendshipTraining && supportCount > 0) {
+        presentSlots.forEach(slot => {
+            const card = cardData.find(c => c.support_id === slot.cardId);
+            if (!card?.effects) return;
+            const isMatch = card.type === 'friend' || FINDER_CARD_TYPE_TRAINING[card.type] === trainingType;
+            if (!isMatch) return;
+            card.effects.forEach(eff => {
+                if (eff[0] === 1) {
+                    const val = calculateEffectValue(eff, slot.level);
+                    if (val > 0) friendshipMultiplier *= (1 + val / 100);
+                }
+            });
+        });
+    }
+
+    // Calculate final gains
+    const growthKeys = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
+    const resultKeys = ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts'];
+    const result = { speed: 0, stamina: 0, power: 0, guts: 0, wit: 0, skillPts: 0, energy, presentCards };
+
+    for (let i = 0; i < 6; i++) {
+        const statBase = base[i] + statBonuses[i];
+        if (statBase > 0) {
+            let gain = statBase * moodMultiplier * trainingEffMultiplier * supportMultiplier * friendshipMultiplier;
+            if (i < 5 && growthRates) gain *= (1 + (growthRates[growthKeys[i]] || 0) / 100);
+            result[resultKeys[i]] = Math.floor(gain);
+        }
+    }
+
+    // Energy reduction (deck-wide effect 28)
+    if (energy < 0) {
+        const energyReduction = aggregated[28] || 0;
+        if (energyReduction > 0) {
+            result.energyReduced = Math.floor(energy * (1 - energyReduction / 100));
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Calculate all 5 training types for a finder result.
+ */
+function calculateFinderAllTraining(result) {
+    const cache = deckFinderState.cardEffectCache;
+    const cardMap = typeof getCardDataMap === 'function' ? getCardDataMap() : new Map(cardData.map(c => [c.support_id, c]));
+    const friendCardId = result.friendCardId || null;
+
+    // Build slots array: [{cardId, level}, ...]
+    const slots = result.cardIds.map(id => {
+        const isFriend = id === friendCardId;
+        const data = isFriend ? (cache.get('friend_' + id) || cache.get(id)) : cache.get(id);
+        return data ? { cardId: id, level: data.level } : null;
+    });
+
+    // Aggregate effects using actual card data + levels
+    const aggregated = {};
+    slots.forEach(slot => {
+        if (!slot) return;
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card?.effects) return;
+        card.effects.forEach(eff => {
+            const eid = eff[0];
+            if (!eid) return;
+            const val = calculateEffectValue(eff, slot.level);
+            if (val > 0) aggregated[eid] = (aggregated[eid] || 0) + val;
+        });
+    });
+
+    const scenarioId = deckFinderState.filters?.scenario || '1';
+    const traineeId = deckFinderState.filters?.selectedTrainee;
+    const growthRates = (traineeId && typeof charactersData !== 'undefined' && charactersData[traineeId])
+        ? charactersData[traineeId].growth_rates : null;
+
+    const ts = finderTrainingState;
+    if (!ts.assignments) ts.assignments = initFinderTrainingAssignments(slots.length);
+
+    const options = {
+        trainingLevel: ts.trainingLevel,
+        mood: ts.mood,
+        friendshipTraining: ts.friendshipTraining,
+        scenario: scenarioId
+    };
+
+    const results = {};
+    for (const type of ['speed', 'stamina', 'power', 'guts', 'intelligence']) {
+        results[type] = calculateFinderTrainingGains(type, slots, aggregated, options, ts.assignments[type], growthRates);
+    }
+
+    // Failure rates
+    const failureRates = getFinderTrainingFailureRates(aggregated, ts.trainingLevel);
+
+    // Race bonus
+    const raceBonusPct = aggregated[15] || 0;
+
+    return { results, aggregated, failureRates, raceBonusPct, slots };
+}
+
+function getFinderTrainingFailureRates(aggregated, trainingLevel) {
+    if (typeof trainingConfigData === 'undefined' || !trainingConfigData?.training_failure) return null;
+    const level = String(trainingLevel || 1);
+    const failProt = aggregated[27] || 0;
+
+    const COMMAND_IDS = { speed: '101', power: '102', guts: '103', stamina: '105', intelligence: '106' };
+    const rates = {};
+    for (const [type, cmdId] of Object.entries(COMMAND_IDS)) {
+        const data = trainingConfigData.training_failure[cmdId];
+        if (!data || !data[level]) continue;
+        const baseRate = data[level].failure_rate / 100;
+        const effectiveRate = failProt > 0
+            ? Math.floor(baseRate * (1 - failProt / 100) * 100) / 100
+            : baseRate;
+        rates[type] = { baseRate, effectiveRate, maxChara: data[level].max_chara };
+    }
+    return rates;
 }
 
 function cancelSearch() {

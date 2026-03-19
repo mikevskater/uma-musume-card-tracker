@@ -76,13 +76,13 @@ function renderDeckBuilderShell() {
             </div>
             <div class="training-control-group">
                 <span class="training-control-label">Mood:</span>
-                <select class="mood-select" id="moodSelect">
-                    <option value="very_good">Very Good (+20%)</option>
-                    <option value="good">Good (+10%)</option>
-                    <option value="normal">Normal (0%)</option>
-                    <option value="bad">Bad (-10%)</option>
-                    <option value="very_bad">Very Bad (-20%)</option>
-                </select>
+                <div class="mood-btn-row" id="moodBtnRow">
+                    <button class="mood-btn active" data-mood="very_good" title="Very Good (+20%)"><img src="images/ui/mood_very_good.png" alt="Very Good"></button>
+                    <button class="mood-btn" data-mood="good" title="Good (+10%)"><img src="images/ui/mood_good.png" alt="Good"></button>
+                    <button class="mood-btn" data-mood="normal" title="Normal (0%)"><img src="images/ui/mood_normal.png" alt="Normal"></button>
+                    <button class="mood-btn" data-mood="bad" title="Bad (-10%)"><img src="images/ui/mood_bad.png" alt="Bad"></button>
+                    <button class="mood-btn" data-mood="very_bad" title="Very Bad (-20%)"><img src="images/ui/mood_very_bad.png" alt="Very Bad"></button>
+                </div>
             </div>
             <label class="friendship-checkbox">
                 <input type="checkbox" id="friendshipToggle" checked>
@@ -239,7 +239,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
     // Image with rarity border
     const img = document.createElement('img');
     img.className = `deck-slot-image card-image rarity-${card.rarity}`;
-    img.src = `support_card_images/${card.support_id}.png`;
+    img.src = `images/supports/${card.support_id}.png`;
     img.alt = card.char_name || 'Card';
     img.loading = 'lazy';
     img.onerror = function() { this.style.display = 'none'; };
@@ -588,7 +588,7 @@ function renderPickerCards() {
 
         const icon = document.createElement('img');
         icon.className = 'picker-tile-icon';
-        icon.src = `support_card_images/${card.support_id}_i.png`;
+        icon.src = `images/supports/${card.support_id}_i.png`;
         icon.alt = card.char_name || '';
         icon.loading = 'lazy';
         icon.onerror = function() { this.style.display = 'none'; };
@@ -1127,7 +1127,7 @@ function renderTrainingAssignmentModal(trainingType) {
 
             cardEl.innerHTML = `
                 <img class="training-assign-card-img card-image rarity-${card.rarity}"
-                     src="support_card_images/${card.support_id}.png"
+                     src="images/supports/${card.support_id}.png"
                      alt="${card.char_name}" loading="lazy"
                      onerror="this.style.display='none'">
                 <div class="training-assign-card-info">

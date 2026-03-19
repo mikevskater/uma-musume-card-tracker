@@ -901,13 +901,18 @@ function initializeDeckBuilderEvents() {
         });
     });
 
-    // Mood select
-    const moodSelect = document.getElementById('moodSelect');
-    if (moodSelect) {
-        moodSelect.addEventListener('change', (e) => {
-            _logDeckBuilder.info('Mood changed', { mood: e.target.value });
-            deckBuilderState.mood = e.target.value;
-            recalculateDeck();
+    // Mood buttons
+    const moodBtnRow = document.getElementById('moodBtnRow');
+    if (moodBtnRow) {
+        moodBtnRow.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mood = btn.dataset.mood;
+                _logDeckBuilder.info('Mood changed', { mood });
+                deckBuilderState.mood = mood;
+                moodBtnRow.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                recalculateDeck();
+            });
         });
     }
 

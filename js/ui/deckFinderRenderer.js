@@ -260,13 +260,13 @@ function buildFinderFiltersHTML() {
             <div class="finder-label">Card Rarity</div>
             <div class="quick-add-icon-grid finder-icon-grid">
                 <button class="quick-add-icon-btn selected rainbow-border" data-rarity="3" id="finderSSR">
-                    <img class="quick-add-rarity-icon" src="support_card_images/utx_txt_rarity_03.png" alt="SSR">
+                    <img class="quick-add-rarity-icon" src="images/supports/utx_txt_rarity_03.png" alt="SSR">
                 </button>
                 <button class="quick-add-icon-btn selected" data-rarity="2" id="finderSR">
-                    <img class="quick-add-rarity-icon" src="support_card_images/utx_txt_rarity_02.png" alt="SR">
+                    <img class="quick-add-rarity-icon" src="images/supports/utx_txt_rarity_02.png" alt="SR">
                 </button>
                 <button class="quick-add-icon-btn" data-rarity="1" id="finderR">
-                    <img class="quick-add-rarity-icon" src="support_card_images/utx_txt_rarity_01.png" alt="R">
+                    <img class="quick-add-rarity-icon" src="images/supports/utx_txt_rarity_01.png" alt="R">
                 </button>
             </div>
         </div>
@@ -277,7 +277,7 @@ function buildFinderFiltersHTML() {
             <div class="quick-add-icon-grid finder-icon-grid">
                 ${typeOptions.map(t => `
                     <button class="quick-add-icon-btn selected finder-type-btn" data-type="${t.key}">
-                        <img class="quick-add-type-icon" src="support_card_images/utx_ico_obtain_0${typeIconIdx[t.key]}.png" alt="${t.label}"> ${t.label}
+                        <img class="quick-add-type-icon" src="images/supports/utx_ico_obtain_0${typeIconIdx[t.key]}.png" alt="${t.label}"> ${t.label}
                     </button>
                 `).join('')}
             </div>
@@ -376,7 +376,7 @@ function buildFinderFiltersHTML() {
                 <div class="finder-ratio-grid">
                     ${typeOptions.map(t => `
                         <div class="finder-ratio-item" data-type="${t.key}">
-                            <img class="finder-ratio-icon" src="support_card_images/utx_ico_obtain_0${typeIconIdx[t.key]}.png" alt="${t.label}">
+                            <img class="finder-ratio-icon" src="images/supports/utx_ico_obtain_0${typeIconIdx[t.key]}.png" alt="${t.label}">
                             <input type="number" class="finder-ratio-input" data-type="${t.key}" min="0" max="6" value="0">
                         </div>
                     `).join('')}
@@ -1757,7 +1757,7 @@ function renderFinderPickerCards(gridId, filter, filterFn, selectedIds, disabled
 
         const icon = document.createElement('img');
         icon.className = 'picker-tile-icon';
-        icon.src = `support_card_images/${card.support_id}_i.png`;
+        icon.src = `images/supports/${card.support_id}_i.png`;
         icon.alt = card.char_name || '';
         icon.loading = 'lazy';
         icon.onerror = function() { this.style.display = 'none'; };
@@ -1810,7 +1810,7 @@ function renderFinderThumbGrid(containerId, selectedIds, onRemove) {
         wrap.className = 'finder-thumb-wrap finder-thumb-removable';
 
         const img = document.createElement('img');
-        img.src = `support_card_images/${card.support_id}.png`;
+        img.src = `images/supports/${card.support_id}.png`;
         img.className = `finder-result-thumb card-image rarity-${card.rarity}`;
         img.title = card.char_name || '';
         img.loading = 'lazy';
@@ -1819,7 +1819,7 @@ function renderFinderThumbGrid(containerId, selectedIds, onRemove) {
 
         const typeIcon = document.createElement('img');
         typeIcon.className = 'finder-thumb-type-icon';
-        typeIcon.src = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
+        typeIcon.src = `images/supports/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
         wrap.appendChild(typeIcon);
 
         const removeBtn = document.createElement('button');
@@ -2244,9 +2244,9 @@ function renderLiveResults(results, matchCount) {
             const card = cardMap.get(id);
             if (!card) return '';
             const isFriend = id === resultFriendId;
-            const iconFile = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
+            const iconFile = `images/supports/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
             return `<div class="finder-thumb-wrap${isFriend ? ' finder-thumb-friend' : ''}">
-                <img src="support_card_images/${card.support_id}.png"
+                <img src="images/supports/${card.support_id}.png"
                      onerror="this.style.display='none'"
                      class="finder-result-thumb card-image rarity-${card.rarity}"
                      title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
@@ -2292,9 +2292,9 @@ function renderResultCard(result, idx) {
         const card = cardMap.get(id);
         if (!card) return '';
         const isFriend = id === resultFriendId;
-        const iconFile = `support_card_images/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
+        const iconFile = `images/supports/utx_ico_obtain_0${typeIconIdx[card.type] || '0'}.png`;
         return `<div class="finder-thumb-wrap${isFriend ? ' finder-thumb-friend' : ''}">
-            <img src="support_card_images/${card.support_id}.png"
+            <img src="images/supports/${card.support_id}.png"
                  onerror="this.style.display='none'"
                  class="finder-result-thumb card-image rarity-${card.rarity}"
                  title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
@@ -2371,10 +2371,13 @@ function ensureResultsDelegation(container) {
             return;
         }
 
-        // Ignore clicks on buttons/labels (compare checkboxes handled via change)
-        if (e.target.closest('.finder-result-btns') || e.target.closest('.finder-cmp-label') || e.target.closest('button') || e.target.closest('label')) return;
+        // Ignore clicks inside the expanded detail area (training controls, assignment, etc.)
+        if (e.target.closest('.finder-result-detail')) return;
 
-        // Card click — expand/collapse detail
+        // Ignore clicks on buttons/labels/selects/inputs (compare checkboxes handled via change)
+        if (e.target.closest('.finder-result-btns') || e.target.closest('.finder-cmp-label')) return;
+
+        // Card header click — expand/collapse detail (only from top/metrics/bottom rows)
         const card = e.target.closest('.finder-result-card');
         if (card) {
             const idx = parseInt(card.dataset.idx);
@@ -2450,6 +2453,12 @@ function toggleResultDetail(idx) {
     const result = deckFinderState.results[idx];
     if (!result) return;
 
+    // Reset training assignments when switching to a different result
+    if (finderTrainingState.resultIdx !== idx) {
+        finderTrainingState.assignments = initFinderTrainingAssignments(result.cardIds.length);
+        finderTrainingState.resultIdx = idx;
+    }
+
     const analysis = analyzeWhyThisDeck(result, deckFinderState.filters);
     const cache = deckFinderState.cardEffectCache;
 
@@ -2493,8 +2502,8 @@ function toggleResultDetail(idx) {
         if (isFriend) cardClasses.push('friend-card');
 
         html += `<div class="${cardClasses.join(' ')}">
-            <img src="support_card_images/${card.support_id}.png"
-                 onerror="this.src='support_card_images/placeholder.png'"
+            <img src="images/supports/${card.support_id}.png"
+                 onerror="this.src='images/supports/placeholder.png'"
                  class="finder-detail-img card-image rarity-${card.rarity}">
             <div class="finder-detail-card-info">
                 <div class="finder-detail-card-name">
@@ -2523,40 +2532,88 @@ function toggleResultDetail(idx) {
     });
     html += '</div>';
 
-    // Hint skills table
+    // Training simulation preview
+    html += buildFinderTrainingSection(result, idx);
+
+    // Hint + event skills table
     const hintSkillMap = new Map();
+    const _skillLookup = typeof getSkillIdLookup === 'function' ? getSkillIdLookup() : null;
+
+    function _addSkillToMap(skillEntry, cardCharName, source) {
+        const sid = typeof skillEntry === 'object' ? skillEntry.id : skillEntry;
+        if (!sid) return;
+        // Resolve name and types from skill object, or fall back to skillsData lookup
+        let skillName = typeof skillEntry === 'object' ? skillEntry.name : null;
+        let skillTypes = (typeof skillEntry === 'object' && Array.isArray(skillEntry.type)) ? skillEntry.type : null;
+        if ((!skillName || !skillTypes) && _skillLookup && _skillLookup[sid]) {
+            const looked = _skillLookup[sid];
+            if (!skillName) skillName = looked.name;
+            if (!skillTypes) skillTypes = looked.type || [];
+        }
+        skillTypes = skillTypes || [];
+
+        if (!hintSkillMap.has(sid)) {
+            hintSkillMap.set(sid, {
+                id: sid,
+                name: skillName || `Skill ${sid}`,
+                typeIds: skillTypes,
+                types: skillTypes.map(t => {
+                    const st = skillTypesData?.[t];
+                    return (typeof st === 'object' ? st.string : st) || t;
+                }).join(', '),
+                sources: [cardCharName],
+                sourceType: source
+            });
+        } else {
+            const entry = hintSkillMap.get(sid);
+            if (!entry.sources.includes(cardCharName)) entry.sources.push(cardCharName);
+        }
+    }
+
     result.cardIds.forEach(id => {
         const card = cardMap.get(id);
-        if (!card?.hints?.hint_skills) return;
-        card.hints.hint_skills.forEach(skill => {
-            if (!skill) return;
-            const sid = typeof skill === 'object' ? skill.id : skill;
-            const skillName = typeof skill === 'object' ? skill.name : null;
-            const skillTypes = (typeof skill === 'object' && Array.isArray(skill.type)) ? skill.type : [];
-            if (!sid) return;
-            if (!hintSkillMap.has(sid)) {
-                const typesStr = skillTypes
-                    .map(t => skillTypesData[t] || t)
-                    .join(', ');
-                hintSkillMap.set(sid, {
-                    name: skillName || `Skill ${sid}`,
-                    types: typesStr,
-                    sources: [card.char_name]
-                });
-            } else {
-                hintSkillMap.get(sid).sources.push(card.char_name);
-            }
-        });
+        if (!card) return;
+        if (card.hints?.hint_skills) {
+            card.hints.hint_skills.forEach(sk => _addSkillToMap(sk, card.char_name, 'hint'));
+        }
+        if (card.event_skills) {
+            card.event_skills.forEach(sk => _addSkillToMap(sk, card.char_name, 'event'));
+        }
     });
 
     if (hintSkillMap.size > 0) {
+        // Build sets of required skill IDs and type IDs for highlighting
+        const filters = deckFinderState.filters || {};
+        const reqSkillIds = new Set((filters.requiredSkills || []).map(String));
+        const reqTypeIds = new Set((filters.requiredSkillTypes || []).map(e =>
+            typeof e === 'object' ? e.type : e
+        ));
+
         const skillList = [...hintSkillMap.values()].sort((a, b) => a.name.localeCompare(b.name));
         html += `<div class="finder-detail-section-title">Hint Skills (${skillList.length})</div>`;
         html += '<table class="finder-skills-table"><thead><tr><th>Skill</th><th>Types</th><th>Sources</th></tr></thead><tbody>';
         skillList.forEach(sk => {
-            html += `<tr>
-                <td class="finder-skill-name">${sk.name}</td>
-                <td class="finder-skill-types">${sk.types}</td>
+            const isReqSkill = reqSkillIds.has(String(sk.id));
+            const matchedTypes = sk.typeIds.filter(t => reqTypeIds.has(t));
+            const hasReqType = matchedTypes.length > 0;
+            const rowCls = isReqSkill ? ' class="finder-skill-required"' : '';
+
+            // Build types cell with individual type highlighting
+            let typesHtml;
+            if (reqTypeIds.size > 0) {
+                typesHtml = sk.typeIds.map(t => {
+                    const label = skillTypesData[t] || t;
+                    return reqTypeIds.has(t)
+                        ? `<span class="finder-skill-type-match">${label}</span>`
+                        : label;
+                }).join(', ');
+            } else {
+                typesHtml = sk.types;
+            }
+
+            html += `<tr${rowCls}>
+                <td class="finder-skill-name${isReqSkill ? ' finder-skill-name-match' : ''}">${sk.name}</td>
+                <td class="finder-skill-types">${typesHtml}</td>
                 <td class="finder-skill-sources">${sk.sources.join(', ')}</td>
             </tr>`;
         });
@@ -2564,7 +2621,330 @@ function toggleResultDetail(idx) {
     }
 
     detail.innerHTML = html;
+    wireFinderTrainingEvents(idx);
     detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ===== TRAINING SIMULATION PREVIEW =====
+
+function buildFinderTrainingSection(result, idx) {
+    // Initialize training state for this result
+    finderTrainingState.resultIdx = idx;
+    if (!finderTrainingState.assignments || finderTrainingState.assignments.speed?.length !== result.cardIds.length) {
+        finderTrainingState.assignments = initFinderTrainingAssignments(result.cardIds.length);
+    }
+
+    const training = calculateFinderAllTraining(result);
+    if (!training) return '';
+
+    let html = '<div class="finder-training-section">';
+    html += '<div class="finder-detail-section-title">Training Simulation</div>';
+
+    // Controls row
+    html += '<div class="finder-training-controls">';
+    html += '<label>Facility Lv</label>';
+    html += '<div class="finder-training-level-row">';
+    for (let lv = 1; lv <= 5; lv++) {
+        html += `<button class="finder-training-level-btn${lv === finderTrainingState.trainingLevel ? ' active' : ''}" data-level="${lv}">${lv}</button>`;
+    }
+    html += '</div>';
+
+    html += '<label>Mood</label>';
+    html += '<div class="finder-mood-row">';
+    const moods = [
+        { key: 'very_good', img: 'images/ui/mood_very_good.png', title: 'Very Good (+20%)' },
+        { key: 'good', img: 'images/ui/mood_good.png', title: 'Good (+10%)' },
+        { key: 'normal', img: 'images/ui/mood_normal.png', title: 'Normal (0%)' },
+        { key: 'bad', img: 'images/ui/mood_bad.png', title: 'Bad (-10%)' },
+        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', title: 'Very Bad (-20%)' }
+    ];
+    for (const m of moods) {
+        html += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
+            <img src="${m.img}" alt="${m.title}">
+        </button>`;
+    }
+    html += '</div>';
+
+    html += `<label class="finder-friendship-toggle">
+        <input type="checkbox" id="finderTrainFriendship" ${finderTrainingState.friendshipTraining ? 'checked' : ''}>
+        Friendship
+    </label>`;
+    html += '</div>';
+
+    // Training breakdown table
+    html += buildFinderTrainingTable(training, result);
+
+    // Race bonus section
+    if (training.raceBonusPct > 0) {
+        html += buildFinderRaceBonusSection(training.raceBonusPct);
+    }
+
+    html += '</div>';
+    return html;
+}
+
+function buildFinderTrainingTable(training, result) {
+    const { results: tr, failureRates } = training;
+    const types = ['speed', 'stamina', 'power', 'guts', 'intelligence'];
+    const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+
+    let html = '<table class="finder-training-table"><thead><tr>';
+    html += '<th>Training</th><th>Spd</th><th>Sta</th><th>Pow</th><th>Gut</th><th>Wit</th><th>Skill</th><th>Energy</th><th>Fail</th>';
+    html += '</tr></thead><tbody>';
+
+    for (const type of types) {
+        const r = tr[type];
+        if (!r) continue;
+
+        const presentCount = r.presentCards.length;
+        const fail = failureRates?.[type];
+
+        html += `<tr>`;
+        // Training name — clickable to open assignment modal
+        html += `<td class="finder-train-name" data-training="${type}" title="Click to toggle card assignments">`;
+        html += `${typeLabels[type]} <span class="train-cards-count">(${presentCount})</span></td>`;
+
+        // Stats
+        for (const key of ['speed', 'stamina', 'power', 'guts', 'wit', 'skillPts']) {
+            const val = r[key] || 0;
+            html += `<td class="${val > 0 ? 'train-val-positive' : 'train-val-zero'}">${val || '-'}</td>`;
+        }
+
+        // Energy
+        if (r.energy >= 0) {
+            html += `<td class="train-energy-gain">+${r.energy}</td>`;
+        } else if (r.energyReduced !== undefined) {
+            html += `<td><span class="train-energy-cost">${r.energy}</span> <span class="train-energy-reduced">(${r.energyReduced})</span></td>`;
+        } else {
+            html += `<td class="train-energy-cost">${r.energy}</td>`;
+        }
+
+        // Failure rate
+        if (fail) {
+            const base = fail.baseRate;
+            const eff = fail.effectiveRate;
+            if (eff < base) {
+                html += `<td><span class="train-failure">${base}%</span> <span class="train-failure-reduced">${eff}%</span></td>`;
+            } else if (base > 0) {
+                html += `<td class="train-failure">${base}%</td>`;
+            } else {
+                html += '<td class="train-val-zero">-</td>';
+            }
+        } else {
+            html += '<td class="train-val-zero">-</td>';
+        }
+
+        html += '</tr>';
+    }
+
+    html += '</tbody></table>';
+    return html;
+}
+
+function buildFinderRaceBonusSection(raceBonusPct) {
+    const scenarioId = deckFinderState.filters?.scenario || '1';
+    const raceTable = typeof getRaceBonusTable === 'function' ? getRaceBonusTable(scenarioId) : [];
+    if (raceTable.length === 0) return '';
+
+    let html = '<div class="finder-detail-section-title">Race Stat Gains (Race Bonus ' + raceBonusPct + '%)</div>';
+    html += '<div class="finder-race-bonus-grid">';
+
+    for (const race of raceTable) {
+        const statGain = Math.floor(race.baseStats * (1 + raceBonusPct / 100));
+        const skillGain = Math.floor(race.baseSkillPt * (1 + raceBonusPct / 100));
+        const label = race.allStats ? `${race.label} (all)` : race.label;
+        html += `<div class="finder-race-bonus-item">
+            <span class="race-label">${label}</span>
+            <span class="race-value">+${statGain} / +${skillGain}sp</span>
+        </div>`;
+    }
+
+    html += '</div>';
+    return html;
+}
+
+function refreshFinderTraining(idx) {
+    const result = deckFinderState.results[idx];
+    if (!result) return;
+
+    const detail = document.getElementById(`finderDetail${idx}`);
+    if (!detail) return;
+
+    const section = detail.querySelector('.finder-training-section');
+    if (!section) return;
+
+    // Rebuild just the training section content
+    const training = calculateFinderAllTraining(result);
+    if (!training) return;
+
+    // Rebuild table + race bonus
+    let innerHtml = '<div class="finder-detail-section-title">Training Simulation</div>';
+
+    // Controls (preserve current state)
+    innerHtml += '<div class="finder-training-controls">';
+    innerHtml += '<label>Facility Lv</label>';
+    innerHtml += '<div class="finder-training-level-row">';
+    for (let lv = 1; lv <= 5; lv++) {
+        innerHtml += `<button class="finder-training-level-btn${lv === finderTrainingState.trainingLevel ? ' active' : ''}" data-level="${lv}">${lv}</button>`;
+    }
+    innerHtml += '</div>';
+    innerHtml += '<label>Mood</label>';
+    innerHtml += '<div class="finder-mood-row">';
+    const moods = [
+        { key: 'very_good', img: 'images/ui/mood_very_good.png', title: 'Very Good (+20%)' },
+        { key: 'good', img: 'images/ui/mood_good.png', title: 'Good (+10%)' },
+        { key: 'normal', img: 'images/ui/mood_normal.png', title: 'Normal (0%)' },
+        { key: 'bad', img: 'images/ui/mood_bad.png', title: 'Bad (-10%)' },
+        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', title: 'Very Bad (-20%)' }
+    ];
+    for (const m of moods) {
+        innerHtml += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
+            <img src="${m.img}" alt="${m.title}">
+        </button>`;
+    }
+    innerHtml += '</div>';
+    innerHtml += `<label class="finder-friendship-toggle">
+        <input type="checkbox" id="finderTrainFriendship" ${finderTrainingState.friendshipTraining ? 'checked' : ''}>
+        Friendship
+    </label>`;
+    innerHtml += '</div>';
+
+    innerHtml += buildFinderTrainingTable(training, result);
+    if (training.raceBonusPct > 0) {
+        innerHtml += buildFinderRaceBonusSection(training.raceBonusPct);
+    }
+
+    section.innerHTML = innerHtml;
+    wireFinderTrainingEvents(idx);
+}
+
+function wireFinderTrainingEvents(idx) {
+    const detail = document.getElementById(`finderDetail${idx}`);
+    if (!detail) return;
+
+    // Facility level buttons
+    detail.querySelectorAll('.finder-training-level-btn').forEach(btn => {
+        btn.onclick = () => {
+            finderTrainingState.trainingLevel = parseInt(btn.dataset.level) || 1;
+            refreshFinderTraining(idx);
+        };
+    });
+
+    // Mood buttons
+    detail.querySelectorAll('.finder-mood-btn').forEach(btn => {
+        btn.onclick = () => {
+            finderTrainingState.mood = btn.dataset.mood;
+            refreshFinderTraining(idx);
+        };
+    });
+
+    // Friendship toggle
+    const friendCb = detail.querySelector('#finderTrainFriendship');
+    if (friendCb) {
+        friendCb.onchange = () => {
+            finderTrainingState.friendshipTraining = friendCb.checked;
+            refreshFinderTraining(idx);
+        };
+    }
+
+    // Entire training row clicks -> assignment modal
+    detail.querySelectorAll('.finder-training-table tbody tr').forEach(tr => {
+        const trainingType = tr.querySelector('.finder-train-name')?.dataset?.training;
+        if (!trainingType) return;
+        tr.style.cursor = 'pointer';
+        tr.onclick = () => {
+            openFinderAssignmentModal(trainingType, idx);
+        };
+    });
+}
+
+function openFinderAssignmentModal(trainingType, resultIdx) {
+    const result = deckFinderState.results[resultIdx];
+    if (!result) return;
+
+    const cache = deckFinderState.cardEffectCache;
+    const cardMap = getCardDataMap();
+    const friendCardId = result.friendCardId || null;
+    const assignments = finderTrainingState.assignments[trainingType];
+    if (!assignments) return;
+
+    const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+
+    // Build modal
+    const overlay = document.createElement('div');
+    overlay.className = 'picker-modal-overlay finder-assign-overlay';
+    overlay.innerHTML = `
+        <div class="picker-modal finder-assign-modal">
+            <div class="picker-header">
+                <h3>${typeLabels[trainingType] || trainingType} Training — Card Assignment</h3>
+                <button class="picker-close" id="finderAssignClose">&times;</button>
+            </div>
+            <div class="finder-assign-list" id="finderAssignList"></div>
+            <div class="finder-picker-footer">
+                <button class="btn btn-secondary btn-sm" id="finderAssignResetBtn">Reset All</button>
+                <button class="btn btn-primary btn-sm" id="finderAssignDoneBtn">Done</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('open'));
+
+    const localAssign = [...assignments];
+
+    function renderList() {
+        const list = overlay.querySelector('#finderAssignList');
+        list.innerHTML = result.cardIds.map((id, i) => {
+            const card = cardMap.get(id);
+            const isFriend = id === friendCardId;
+            const data = isFriend ? (cache.get('friend_' + id) || cache.get(id)) : cache.get(id);
+            const present = localAssign[i];
+            const iconFile = `images/supports/utx_ico_obtain_0${typeIconIdx[card?.type] || '0'}.png`;
+            return `<div class="finder-assign-item${present ? '' : ' excluded'}" data-slot="${i}">
+                <img src="images/supports/${card?.support_id || 'placeholder'}.png"
+                     onerror="this.src='images/supports/placeholder.png'"
+                     class="card-image rarity-${card?.rarity || 1}">
+                <div class="finder-assign-item-info">
+                    <div class="finder-assign-item-name">${card?.char_name || 'Unknown'}${isFriend ? ' (F)' : ''}</div>
+                    <div class="finder-assign-item-type">${getTypeDisplayName(card?.type || 'speed')} Lv.${data?.level || '?'}</div>
+                </div>
+                <span class="finder-assign-status ${present ? 'present' : 'excluded'}">${present ? 'Present' : 'Excluded'}</span>
+            </div>`;
+        }).join('');
+
+        // Toggle clicks
+        list.querySelectorAll('.finder-assign-item').forEach(item => {
+            item.onclick = () => {
+                const slot = parseInt(item.dataset.slot);
+                localAssign[slot] = !localAssign[slot];
+                renderList();
+            };
+        });
+    }
+    renderList();
+
+    // Close
+    overlay.querySelector('#finderAssignClose').onclick = () => {
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+    };
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) { overlay.classList.remove('open'); setTimeout(() => overlay.remove(), 200); }
+    });
+
+    // Reset
+    overlay.querySelector('#finderAssignResetBtn').onclick = () => {
+        localAssign.fill(true);
+        renderList();
+    };
+
+    // Done — save and recalculate
+    overlay.querySelector('#finderAssignDoneBtn').onclick = () => {
+        finderTrainingState.assignments[trainingType] = localAssign;
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+        refreshFinderTraining(resultIdx);
+    };
 }
 
 // ===== COMPARISON =====

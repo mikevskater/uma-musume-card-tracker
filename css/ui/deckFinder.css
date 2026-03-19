@@ -1039,6 +1039,20 @@
     font-style: italic;
 }
 
+/* Required skill/type highlights */
+.finder-skill-required {
+    background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+}
+
+.finder-skill-name-match {
+    color: var(--color-secondary) !important;
+}
+
+.finder-skill-type-match {
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-bold);
+}
+
 /* ===== COMPARISON ===== */
 
 .finder-comparison {
@@ -1490,6 +1504,303 @@
     font-weight: var(--font-weight-normal);
     font-size: 10px;
     cursor: help;
+}
+
+/* ===== TRAINING SIMULATION PREVIEW ===== */
+
+.finder-training-section {
+    margin-bottom: var(--space-md);
+}
+
+.finder-training-controls {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
+}
+
+.finder-training-controls label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.finder-training-controls select,
+.finder-training-controls .finder-small-input {
+    padding: 3px 6px;
+    font-size: var(--font-size-xs);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.finder-training-level-row {
+    display: flex;
+    gap: 1px;
+    background: var(--border-primary);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.finder-training-level-btn {
+    padding: 3px 10px;
+    border: none;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.finder-training-level-btn:hover {
+    background: var(--bg-tertiary);
+}
+
+.finder-training-level-btn.active {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.finder-mood-row {
+    display: flex;
+    gap: 2px;
+}
+
+.finder-mood-btn {
+    padding: 4px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    line-height: 0;
+}
+
+.finder-mood-btn:hover {
+    border-color: var(--border-secondary);
+    background: var(--bg-tertiary);
+}
+
+.finder-mood-btn.active {
+    border-color: var(--color-secondary);
+    background: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+}
+
+.finder-mood-btn img {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+}
+
+.finder-friendship-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.finder-friendship-toggle input[type="checkbox"] {
+    margin: 0;
+}
+
+.finder-training-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-xs);
+}
+
+.finder-training-table th {
+    padding: 4px 6px;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-primary);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.finder-training-table th:first-child {
+    text-align: left;
+}
+
+.finder-training-table td {
+    padding: 4px 6px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.finder-training-table td:first-child {
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.finder-training-table tbody tr {
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.finder-training-table tbody tr:hover {
+    background: color-mix(in srgb, var(--color-secondary) 8%, transparent);
+}
+
+.finder-training-table tbody tr:hover td:first-child {
+    color: var(--color-secondary);
+}
+
+.finder-training-table tr:last-child td {
+    border-bottom: none;
+}
+
+.finder-training-table .train-val-zero {
+    color: var(--text-muted);
+    opacity: 0.4;
+}
+
+.finder-training-table .train-val-positive {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.finder-training-table .train-energy-cost {
+    color: var(--color-danger);
+}
+
+.finder-training-table .train-energy-gain {
+    color: var(--color-success);
+}
+
+.finder-training-table .train-energy-reduced {
+    color: var(--color-warning);
+    font-size: 10px;
+}
+
+.finder-training-table .train-failure {
+    color: var(--color-danger);
+    font-size: 10px;
+}
+
+.finder-training-table .train-failure-reduced {
+    color: var(--color-warning);
+}
+
+.finder-training-table .train-cards-count {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* Training assignment modal for finder */
+.finder-assign-overlay {
+    z-index: calc(var(--z-modal) + 3);
+}
+
+.finder-assign-modal {
+    width: 360px;
+    max-width: 90vw;
+}
+
+.finder-assign-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.finder-assign-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.finder-assign-item:hover {
+    border-color: var(--color-secondary);
+}
+
+.finder-assign-item.excluded {
+    opacity: 0.4;
+}
+
+.finder-assign-item img {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.finder-assign-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.finder-assign-item-name {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.finder-assign-item-type {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.finder-assign-status {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.finder-assign-status.present {
+    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+    color: var(--color-success);
+}
+
+.finder-assign-status.excluded {
+    background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+    color: var(--color-danger);
+}
+
+/* Race bonus mini-table */
+.finder-race-bonus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 4px;
+    margin-top: var(--space-xs);
+}
+
+.finder-race-bonus-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px var(--space-sm);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+}
+
+.finder-race-bonus-item .race-label {
+    color: var(--text-muted);
+}
+
+.finder-race-bonus-item .race-value {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
 }
 
 /* ===== SEARCH STATS ===== */

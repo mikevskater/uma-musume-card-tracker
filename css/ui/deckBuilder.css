@@ -820,13 +820,35 @@
     background: var(--bg-tertiary);
 }
 
-.mood-select {
-    padding: var(--space-xs) var(--space-sm);
-    border: 1px solid var(--border-secondary);
+.mood-btn-row {
+    display: flex;
+    gap: 2px;
+}
+
+.mood-btn {
+    padding: 4px;
+    border: 2px solid transparent;
     border-radius: var(--radius-md);
     background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    line-height: 0;
+}
+
+.mood-btn:hover {
+    border-color: var(--border-secondary);
+    background: var(--bg-tertiary);
+}
+
+.mood-btn.active {
+    border-color: var(--color-secondary);
+    background: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+}
+
+.mood-btn img {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
 }
 
 .friendship-checkbox {

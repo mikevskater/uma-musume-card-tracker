@@ -319,7 +319,7 @@ function createFilterChip(type, label, removeCallback) {
 // Create card icon img element
 function createCardIcon(cardId, charName, className = 'card-icon') {
     return createElement('img', {
-        src: `support_card_images/${cardId}_i.png`,
+        src: `images/supports/${cardId}_i.png`,
         className: className,
         alt: charName || 'Unknown Card',
         onerror: 'handleCardIconError(this)',
@@ -330,7 +330,7 @@ function createCardIcon(cardId, charName, className = 'card-icon') {
 // Create card image element
 function createCardImage(cardId, charName, rarity) {
     return createElement('img', {
-        src: `support_card_images/${cardId}.png`,
+        src: `images/supports/${cardId}.png`,
         className: `card-image rarity-${rarity}`,
         alt: charName || 'Unknown Card',
         onerror: 'handleCardImageError(this)',

@@ -8,12 +8,12 @@ function renderQuickAddSetup() {
     if (!overlay) return;
 
     const typeIconFiles = {
-        speed: 'support_card_images/utx_ico_obtain_00.png',
-        stamina: 'support_card_images/utx_ico_obtain_01.png',
-        power: 'support_card_images/utx_ico_obtain_02.png',
-        guts: 'support_card_images/utx_ico_obtain_03.png',
-        intelligence: 'support_card_images/utx_ico_obtain_04.png',
-        friend: 'support_card_images/utx_ico_obtain_05.png'
+        speed: 'images/supports/utx_ico_obtain_00.png',
+        stamina: 'images/supports/utx_ico_obtain_01.png',
+        power: 'images/supports/utx_ico_obtain_02.png',
+        guts: 'images/supports/utx_ico_obtain_03.png',
+        intelligence: 'images/supports/utx_ico_obtain_04.png',
+        friend: 'images/supports/utx_ico_obtain_05.png'
     };
 
     const typeLabels = {
@@ -67,7 +67,7 @@ function renderQuickAddSetup() {
                     <div class="quick-add-icon-grid" id="qaRarityGrid">
                         ${[1, 2, 3].map(r =>
                             `<button class="quick-add-icon-btn selected${r === 3 ? ' rainbow-border' : ''}" data-rarity="${r}" aria-label="${rarityLabels[r]}" aria-pressed="true">
-                                <img class="quick-add-rarity-icon" src="support_card_images/utx_txt_rarity_0${r}.png" alt="${rarityLabels[r]}"> ${rarityLabels[r]}
+                                <img class="quick-add-rarity-icon" src="images/supports/utx_txt_rarity_0${r}.png" alt="${rarityLabels[r]}"> ${rarityLabels[r]}
                             </button>`
                         ).join('')}
                     </div>
@@ -353,7 +353,7 @@ function renderQuickAddCard(index) {
     const fallback = document.getElementById('qaCardImageFallback');
     if (img) {
         img.className = `quick-add-card-image card-image rarity-${card.rarity}`;
-        img.src = `support_card_images/${cardId}.png`;
+        img.src = `images/supports/${cardId}.png`;
         img.alt = getQuickAddCardName(card) || 'Card';
         img.style.display = '';
         img.onerror = () => {

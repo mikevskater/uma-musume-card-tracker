@@ -298,6 +298,13 @@ function runBranchAndBound(payload) {
         }
     }
 
+    // Pre-extract required skill types for running state tracking
+    const reqSkillTypes = (filters.requiredSkillTypes || []).map(r => ({
+        type: typeof r === 'object' ? r.type : r,
+        min: typeof r === 'object' ? (r.min || 1) : 1
+    }));
+    const hasReqSkillTypes = reqSkillTypes.length > 0;
+
     // Mutable state
     const deckIds = [];
     const partialEffects = {};
@@ -308,6 +315,18 @@ function runBranchAndBound(payload) {
     let partialEffectSum = 0;
     const deckTypeCounts = {};
     let maxTypeCount = 0;
+
+    // Running unique-skill-per-type tracking (ref-counted)
+    // skillTypeRefCounts[type][skillId] = number of cards providing this skill
+    // skillTypeUniqueCounts[type] = number of unique skills (refcount > 0)
+    const skillTypeRefCounts = {};
+    const skillTypeUniqueCounts = {};
+    if (hasReqSkillTypes) {
+        for (const r of reqSkillTypes) {
+            skillTypeRefCounts[r.type] = {};
+            skillTypeUniqueCounts[r.type] = 0;
+        }
+    }
 
     // === Rank distributions by estimated score potential ===
     for (const entry of validDists) {
@@ -399,6 +418,14 @@ function runBranchAndBound(payload) {
         for (const k of Object.keys(deckTypeCounts)) delete deckTypeCounts[k];
         maxTypeCount = 0;
         foundSkillBits = 0;
+        // Reset running skill-type unique counts
+        if (hasReqSkillTypes) {
+            for (const r of reqSkillTypes) {
+                const refs = skillTypeRefCounts[r.type];
+                for (const k of Object.keys(refs)) delete refs[k];
+                skillTypeUniqueCounts[r.type] = 0;
+            }
+        }
 
         let distEvaluated = 0;
         dfsSlot(0);
@@ -469,19 +496,10 @@ function runBranchAndBound(payload) {
 
                 if (filters.minUniqueEffects > 0 && ueCount < filters.minUniqueEffects) return;
 
-                // Skill type count check (layers with min counts)
-                if (filters.requiredSkillTypes.length > 0) {
-                    const stCounts = {};
-                    for (let i = 0; i < totalSlots; i++) {
-                        const data = getCardData(i);
-                        if (data && data.hintSkillTypes) data.hintSkillTypes.forEach(t => {
-                            stCounts[t] = (stCounts[t] || 0) + 1;
-                        });
-                    }
-                    for (const req of filters.requiredSkillTypes) {
-                        const rt = typeof req === 'object' ? req.type : req;
-                        const rm = typeof req === 'object' ? (req.min || 1) : 1;
-                        if ((stCounts[rt] || 0) < rm) return;
+                // Skill type count check — uses running unique counts (maintained during add/backtrack)
+                if (hasReqSkillTypes) {
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        if (skillTypeUniqueCounts[reqSkillTypes[rt].type] < reqSkillTypes[rt].min) return;
                     }
                 }
 
@@ -636,6 +654,21 @@ function runBranchAndBound(payload) {
                 if (prevTypeCount + 1 > maxTypeCount) maxTypeCount = prevTypeCount + 1;
                 deckIds.push(cardId);
 
+                // Update running unique-skill-per-type counts
+                if (hasReqSkillTypes && data.skillsByType) {
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        const rType = reqSkillTypes[rt].type;
+                        const skills = data.skillsByType[rType];
+                        if (!skills) continue;
+                        const refs = skillTypeRefCounts[rType];
+                        for (let si = 0; si < skills.length; si++) {
+                            const sid = skills[si];
+                            refs[sid] = (refs[sid] || 0) + 1;
+                            if (refs[sid] === 1) skillTypeUniqueCounts[rType]++;
+                        }
+                    }
+                }
+
                 // Track required skills
                 let prevFoundSkillBits = foundSkillBits;
                 if (hasReqSkills) {
@@ -724,6 +757,23 @@ function runBranchAndBound(payload) {
                 if (data.charId) usedCharIds.delete(data.charId);
                 ueCount = prevUECount;
                 skillMask = prevSkillMask;
+                // Undo unique-skill-per-type counts
+                if (hasReqSkillTypes && data.skillsByType) {
+                    for (let rt = 0; rt < reqSkillTypes.length; rt++) {
+                        const rType = reqSkillTypes[rt].type;
+                        const skills = data.skillsByType[rType];
+                        if (!skills) continue;
+                        const refs = skillTypeRefCounts[rType];
+                        for (let si = 0; si < skills.length; si++) {
+                            const sid = skills[si];
+                            refs[sid]--;
+                            if (refs[sid] === 0) {
+                                skillTypeUniqueCounts[rType]--;
+                                delete refs[sid];
+                            }
+                        }
+                    }
+                }
                 for (let e = 0; e < effectKeys.length; e++) {
                     const eid = effectKeys[e];
                     const val = effectVals ? effectVals[e] : data.effects[eid];
