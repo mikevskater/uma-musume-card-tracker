@@ -564,7 +564,12 @@ function createModalBody(card, level) {
     
     // Effects section
     body.appendChild(createModalSection('Effects', createEffectsGrid(card, level)));
-    
+
+    // Unique Effect section
+    if (card.unique_effect) {
+        body.appendChild(createModalSection('Unique Effect', createUniqueEffectDisplay(card, level)));
+    }
+
     // Hint skills section
     body.appendChild(createModalSection('Hint Skills', createHintSkillsGrid(card)));
     
@@ -778,6 +783,50 @@ function createEffectsGrid(card, level) {
     return grid;
 }
 
+// Create unique effect display for modal
+function createUniqueEffectDisplay(card, level) {
+    const ue = card.unique_effect;
+    const effectiveLevel = getEffectiveLevel(card);
+    const active = isUniqueEffectActive(card, effectiveLevel);
+
+    const container = createElement('div', { id: 'modalUniqueEffectDisplay' });
+
+    const row = createElement('div', {
+        className: `ue-row${active ? '' : ' ue-locked'}`
+    });
+
+    const header = createElement('div', { className: 'ue-row-header' });
+    header.innerHTML = `
+        <span class="ue-badge ${active ? 'active' : 'locked'}">${active ? 'Active' : `Locked (Lv ${ue.level})`}</span>
+    `;
+    row.appendChild(header);
+
+    if (ue.name) {
+        row.appendChild(createElement('div', { className: 'ue-name', textContent: ue.name }));
+    }
+    if (ue.description) {
+        row.appendChild(createElement('div', { className: 'ue-desc', textContent: ue.description }));
+    }
+
+    if (ue.effects && ue.effects.length > 0) {
+        const effectsContainer = createElement('div', { className: 'ue-effects' });
+        ue.effects.forEach(effect => {
+            if (effect.type && effectsData[effect.type]) {
+                const name = getEffectName(effect.type);
+                const symbol = effectsData[effect.type].symbol === 'percent' ? '%' : '';
+                effectsContainer.appendChild(createElement('span', {
+                    className: 'ue-effect-detail',
+                    textContent: `${name} +${effect.value}${symbol}`
+                }));
+            }
+        });
+        row.appendChild(effectsContainer);
+    }
+
+    container.appendChild(row);
+    return container;
+}
+
 // Create hint skills grid
 function createHintSkillsGrid(card) {
     const grid = createElement('div', {
@@ -942,6 +991,13 @@ function updateModalDisplay(level) {
     if (effectsGrid) {
         const newGrid = createEffectsGrid(currentModalCard, level);
         effectsGrid.innerHTML = newGrid.innerHTML;
+    }
+
+    // Update unique effect display
+    const ueDisplay = document.getElementById('modalUniqueEffectDisplay');
+    if (ueDisplay && currentModalCard.unique_effect) {
+        const newDisplay = createUniqueEffectDisplay(currentModalCard, level);
+        ueDisplay.replaceWith(newDisplay);
     }
     
     // Update potential indicator display

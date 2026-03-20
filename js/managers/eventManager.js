@@ -429,7 +429,14 @@ function setupModalFormEvents(card, cardId) {
                 const newGrid = createEffectsGrid(currentModalCard, getOwnedCardLevel(cardId));
                 effectsGrid.innerHTML = newGrid.innerHTML;
             }
-            
+
+            // Refresh unique effect display
+            const ueDisplay = document.getElementById('modalUniqueEffectDisplay');
+            if (ueDisplay && currentModalCard.unique_effect) {
+                const newDisplay = createUniqueEffectDisplay(currentModalCard, getOwnedCardLevel(cardId));
+                ueDisplay.replaceWith(newDisplay);
+            }
+
             // Sync main toggle if it exists
             const mainToggle = document.getElementById('showMaxPotential');
             if (mainToggle) {

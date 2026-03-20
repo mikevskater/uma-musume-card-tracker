@@ -977,3 +977,9 @@
 .level-cell {
     min-width: 80px;
 }
+
+.ue-augment {
+    font-size: var(--font-size-xs);
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-normal);
+}

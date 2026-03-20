@@ -870,7 +870,12 @@ function createEffectItem(effectArray, level, effectInfo, card) {
             effectValueContent = 'Locked';
         }
     } else {
-        effectValueContent = `${value}${symbol}`;
+        const ueBonus = getUniqueEffectBonus(card, level, effectArray[0]);
+        if (ueBonus > 0) {
+            effectValueContent = `${value + ueBonus}${symbol} <span class="ue-augment">(+${ueBonus} UE)</span>`;
+        } else {
+            effectValueContent = `${value}${symbol}`;
+        }
     }
     
     return createElement('div', {

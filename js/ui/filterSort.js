@@ -159,12 +159,13 @@ function passesAdvancedFilters(card) {
     // Effect filters
     for (const [effectId, filter] of Object.entries(advancedFilters.effects)) {
         const effectArray = card.effects?.find(effect => effect[0] == effectId);
+        const ueBonus = getUniqueEffectBonus(card, cardLevel, parseInt(effectId));
         if (effectArray) {
             const isLocked = isEffectLocked(effectArray, cardLevel);
-            const value = isLocked ? 0 : calculateEffectValue(effectArray, cardLevel);
+            const value = (isLocked ? 0 : calculateEffectValue(effectArray, cardLevel)) + ueBonus;
             if (value < filter.min) return false;
         } else {
-            if (0 < filter.min) return false;
+            if (ueBonus < filter.min) return false;
         }
     }
     
@@ -292,8 +293,9 @@ function compareCardsBySortCriteria(a, b, sort) {
             const levelB = getEffectiveLevel(b);
             const effectArrayA = a.effects?.find(effect => effect[0] == sort.option);
             const effectArrayB = b.effects?.find(effect => effect[0] == sort.option);
-            valueA = effectArrayA ? calculateEffectValue(effectArrayA, levelA) : 0;
-            valueB = effectArrayB ? calculateEffectValue(effectArrayB, levelB) : 0;
+            const sortEffectId = parseInt(sort.option);
+            valueA = (effectArrayA ? calculateEffectValue(effectArrayA, levelA) : 0) + getUniqueEffectBonus(a, levelA, sortEffectId);
+            valueB = (effectArrayB ? calculateEffectValue(effectArrayB, levelB) : 0) + getUniqueEffectBonus(b, levelB, sortEffectId);
             break;
             
         case 'level':

@@ -236,6 +236,18 @@ function getSkillTypeDescription(typeId) {
 
 // ===== CARD DATA PROCESSING =====
 
+// Check if a card's unique effect is active at the given level
+function isUniqueEffectActive(card, level) {
+    return !!(card.unique_effect && level >= card.unique_effect.level);
+}
+
+// Get the unique effect bonus for a specific effect ID, or 0 if not applicable
+function getUniqueEffectBonus(card, level, effectId) {
+    if (!card.unique_effect || level < card.unique_effect.level || !card.unique_effect.effects) return 0;
+    const match = card.unique_effect.effects.find(ue => ue.type === effectId);
+    return (match && match.value > 0) ? match.value : 0;
+}
+
 // Get priority effects for display based on sort configuration
 function getPriorityEffects(card, targetCount = 4, overrideLevel = null) {
     const cardLevel = overrideLevel !== null ? overrideLevel : getEffectiveLevel(card);
@@ -247,7 +259,7 @@ function getPriorityEffects(card, targetCount = 4, overrideLevel = null) {
         if (sort.category === 'effect' && sort.option && !usedEffectIds.has(parseInt(sort.option))) {
             const effectArray = card.effects?.find(effect => effect[0] == sort.option);
             if (effectArray && !isEffectLocked(effectArray, cardLevel)) {
-                const value = calculateEffectValue(effectArray, cardLevel);
+                const value = calculateEffectValue(effectArray, cardLevel) + getUniqueEffectBonus(card, cardLevel, parseInt(sort.option));
                 const effectName = getEffectName(sort.option);
                 const symbol = effectsData[sort.option]?.symbol === 'percent' ? '%' : '';
                 priorityEffects.push(`${effectName}: ${value}${symbol}`);
@@ -262,7 +274,7 @@ function getPriorityEffects(card, targetCount = 4, overrideLevel = null) {
             .filter(effect => effect[0] && effectsData[effect[0]] && !usedEffectIds.has(effect[0]))
             .filter(effect => !isEffectLocked(effect, cardLevel))
             .map(effect => {
-                const value = calculateEffectValue(effect, cardLevel);
+                const value = calculateEffectValue(effect, cardLevel) + getUniqueEffectBonus(card, cardLevel, effect[0]);
                 const effectName = getEffectName(effect[0]);
                 const symbol = effectsData[effect[0]].symbol === 'percent' ? '%' : '';
                 return {
@@ -273,12 +285,35 @@ function getPriorityEffects(card, targetCount = 4, overrideLevel = null) {
             })
             .sort((a, b) => b.value - a.value)
             .slice(0, targetCount - priorityEffects.length);
-        
+
         remainingEffects.forEach(effect => {
             priorityEffects.push(effect.display);
+            usedEffectIds.add(effect.effectId);
         });
     }
-    
+
+    // Add unique-effect-only effects (types not in regular card.effects)
+    if (priorityEffects.length < targetCount && isUniqueEffectActive(card, cardLevel) && card.unique_effect.effects) {
+        const ueOnlyEffects = card.unique_effect.effects
+            .filter(ue => ue.type && ue.value > 0 && effectsData[ue.type] && !usedEffectIds.has(ue.type))
+            .map(ue => {
+                const effectName = getEffectName(ue.type);
+                const symbol = effectsData[ue.type].symbol === 'percent' ? '%' : '';
+                return {
+                    display: `${effectName}: ${ue.value}${symbol}`,
+                    value: ue.value,
+                    effectId: ue.type
+                };
+            })
+            .sort((a, b) => b.value - a.value)
+            .slice(0, targetCount - priorityEffects.length);
+
+        ueOnlyEffects.forEach(effect => {
+            priorityEffects.push(effect.display);
+            usedEffectIds.add(effect.effectId);
+        });
+    }
+
     return priorityEffects;
 }
 
@@ -322,12 +357,15 @@ function calculateEffectRanges(cards) {
         
         cards.forEach(card => {
             const effectArray = card.effects?.find(effect => effect[0] == effectId);
+            const level = getEffectiveLevel(card);
+            const ueBonus = getUniqueEffectBonus(card, level, effectId);
             if (effectArray) {
-                const level = getEffectiveLevel(card);
-                const value = calculateEffectValue(effectArray, level);
+                const value = calculateEffectValue(effectArray, level) + ueBonus;
                 if (value > 0) {
                     values.push(value);
                 }
+            } else if (ueBonus > 0) {
+                values.push(ueBonus);
             }
         });
         
@@ -475,7 +513,9 @@ window.DataUtils = {
     formatEventEffects,
     limitBreaks,
     getDisplayDate,
-    GLOBAL_LAUNCH_DATE
+    GLOBAL_LAUNCH_DATE,
+    isUniqueEffectActive,
+    getUniqueEffectBonus
 };
 
 // Also export individual functions to global scope for backward compatibility

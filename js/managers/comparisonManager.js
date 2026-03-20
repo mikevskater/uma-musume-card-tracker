@@ -471,13 +471,21 @@ function buildEffectsSection(cards) {
         rows: []
     };
 
-    // Collect all effects from selected cards
+    // Collect all effects from selected cards (including unique-effect-only types)
     const allEffectIds = new Set();
     cards.forEach(card => {
         if (card.effects) {
             card.effects.forEach(effect => {
                 if (effect[0] && effectsData[effect[0]]) {
                     allEffectIds.add(effect[0]);
+                }
+            });
+        }
+        const level = getEffectiveLevel(card);
+        if (isUniqueEffectActive(card, level) && card.unique_effect.effects) {
+            card.unique_effect.effects.forEach(ue => {
+                if (ue.type && ue.value > 0 && effectsData[ue.type]) {
+                    allEffectIds.add(ue.type);
                 }
             });
         }
@@ -490,13 +498,18 @@ function buildEffectsSection(cards) {
             const values = cards.map(card => {
                 const effectArray = card.effects?.find(effect => effect[0] == effectId);
                 const level = getEffectiveLevel(card);
+                const ueBonus = getUniqueEffectBonus(card, level, effectId);
                 if (effectArray) {
                     const isLocked = isEffectLocked(effectArray, level);
                     return {
-                        value: isLocked ? 0 : calculateEffectValue(effectArray, level),
-                        locked: isLocked,
+                        value: isLocked ? ueBonus : calculateEffectValue(effectArray, level) + ueBonus,
+                        locked: isLocked && ueBonus === 0,
                         hasEffect: true
                     };
+                }
+                // Unique-effect-only: no regular effect but UE provides a bonus
+                if (ueBonus > 0) {
+                    return { value: ueBonus, locked: false, hasEffect: true };
                 }
                 return { value: 0, locked: false, hasEffect: false };
             });
