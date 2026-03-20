@@ -123,7 +123,7 @@
 
 .finder-toggle-btn.active {
     background: var(--color-secondary);
-    color: #fff;
+    color: var(--color-white);
     font-weight: var(--font-weight-semibold);
 }
 
@@ -192,7 +192,7 @@
 .finder-pill.active {
     background: var(--color-secondary);
     border-color: var(--color-secondary);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .finder-pill-sm {
@@ -745,7 +745,7 @@
     left: -2px;
     font-size: 9px;
     font-weight: var(--font-weight-bold);
-    color: #fff;
+    color: var(--color-white);
     background: var(--color-secondary);
     border-radius: 3px;
     padding: 0 3px;
@@ -1266,7 +1266,7 @@
 
 .finder-sort-layers .sort-priority-badge {
     background: var(--color-secondary);
-    color: #fff;
+    color: var(--color-white);
     font-size: 10px;
     padding: 1px 6px;
     border-radius: var(--radius-pill);
@@ -1307,7 +1307,7 @@
 .finder-sort-layers .sort-btn.danger:hover:not(:disabled) {
     background: var(--color-danger);
     border-color: var(--color-danger);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .finder-sort-layers .sort-dropdowns {
@@ -1409,7 +1409,7 @@
 
 .finder-skill-type-layers .sort-priority-badge {
     background: var(--color-secondary);
-    color: #fff;
+    color: var(--color-white);
     font-size: 10px;
     padding: 1px 6px;
     border-radius: var(--radius-pill);
@@ -1440,7 +1440,7 @@
 .finder-skill-type-layers .sort-btn.danger:hover:not(:disabled) {
     background: var(--color-danger);
     border-color: var(--color-danger);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .finder-skill-type-layers .sort-dropdowns {
@@ -1561,7 +1561,7 @@
 
 .finder-training-level-btn.active {
     background: var(--color-secondary);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .finder-mood-row {
@@ -1858,7 +1858,7 @@
     height: 18px;
     border-radius: 50%;
     background: var(--color-danger);
-    color: white;
+    color: var(--color-white);
     border: none;
     font-size: 12px;
     cursor: pointer;
@@ -1883,7 +1883,7 @@
 /* Selected tile checkmark in picker grid */
 .finder-card-picker-overlay .picker-card-tile.selected {
     border-color: var(--color-secondary);
-    background: rgba(52, 152, 219, 0.1);
+    background: var(--highlight-secondary-subtle);
 }
 
 .finder-card-picker-overlay .picker-card-tile.selected::after {
@@ -1894,7 +1894,7 @@
     width: 20px;
     height: 20px;
     background: var(--color-secondary);
-    color: white;
+    color: var(--color-white);
     border-radius: 50%;
     display: flex;
     align-items: center;

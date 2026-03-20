@@ -84,6 +84,26 @@
     --color-rarity-sr: #f39c12;       /* SR - Gold */
     --color-rarity-ssr: #d388ff;      /* SSR - (base for rainbow) */
     
+    /* Colors - Contrast helpers (text on colored backgrounds) */
+    --color-on-danger: #ffffff;
+
+    /* Colors - Overlay */
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+
+    /* Colors - Highlight (secondary-based, for subtle selection backgrounds) */
+    --highlight-secondary-subtle: rgba(52, 152, 219, 0.1);
+    --highlight-secondary: rgba(52, 152, 219, 0.15);
+
+    /* Colors - Aptitude Grades */
+    --color-grade-s: #e74c3c;
+    --color-grade-a: #e67e22;
+    --color-grade-b: #f1c40f;
+    --color-grade-c: #2ecc71;
+    --color-grade-d: #3498db;
+    --color-grade-e: #95a5a6;
+    --color-grade-f: #7f8c8d;
+    --color-grade-g: #bdc3c7;
+
     /* Colors - Card Types */
     --color-type-speed: #38BDFF;
     --color-type-speed-bg: #9ddeff;
@@ -230,6 +250,10 @@
     --color-type-wisdom-bg: #075a40;
     --color-type-friend-bg: #534f1a;
     
+    /* Dark Mode Highlights */
+    --highlight-secondary-subtle: rgba(52, 152, 219, 0.15);
+    --highlight-secondary: rgba(52, 152, 219, 0.25);
+
     /* Dark Mode Primary Colors (slightly adjusted for better contrast) */
     --color-primary: #5f90c7;
     --color-primary-light: #7ea3cc;
