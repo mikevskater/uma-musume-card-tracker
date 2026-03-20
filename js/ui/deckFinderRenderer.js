@@ -722,10 +722,13 @@ function initFinderEvents() {
     });
 
     // Reset button with confirmation
-    overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
-        if (confirm('Reset all deck finder filters, settings, and results to defaults?')) {
-            resetDeckFinder();
-        }
+    overlay.querySelector('#finderResetBtn')?.addEventListener('click', async () => {
+        const confirmed = await showConfirmDialog(
+            'Reset Deck Finder',
+            'Reset all deck finder filters, settings, and results to defaults?',
+            { confirmLabel: 'Reset', destructive: true }
+        );
+        if (confirmed) resetDeckFinder();
     });
 }
 
@@ -1073,10 +1076,13 @@ function reInitFilterEvents(overlay) {
     });
 
     // Reset button
-    overlay.querySelector('#finderResetBtn')?.addEventListener('click', () => {
-        if (confirm('Reset all deck finder filters, settings, and results to defaults?')) {
-            resetDeckFinder();
-        }
+    overlay.querySelector('#finderResetBtn')?.addEventListener('click', async () => {
+        const confirmed = await showConfirmDialog(
+            'Reset Deck Finder',
+            'Reset all deck finder filters, settings, and results to defaults?',
+            { confirmLabel: 'Reset', destructive: true }
+        );
+        if (confirmed) resetDeckFinder();
     });
 }
 

@@ -845,14 +845,17 @@ function initializeDeckBuilderEvents() {
 
     const deleteBtn = document.getElementById('deckDeleteBtn');
     if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => {
+        deleteBtn.addEventListener('click', async () => {
             if (!deckBuilderState.activeDeckId) {
                 showToast('No deck to delete.', 'warning');
                 return;
             }
-            if (confirm(`Delete deck "${deckBuilderState.deckName}"?`)) {
-                deleteDeck(deckBuilderState.activeDeckId);
-            }
+            const confirmed = await showConfirmDialog(
+                'Delete Deck',
+                `Delete deck "${deckBuilderState.deckName}"?`,
+                { confirmLabel: 'Delete', destructive: true }
+            );
+            if (confirmed) deleteDeck(deckBuilderState.activeDeckId);
         });
     }
 

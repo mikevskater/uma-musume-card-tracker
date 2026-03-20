@@ -940,6 +940,18 @@
     margin-top: var(--space-xl);
 }
 
+/* Destructive confirm button (red) for dangerous actions */
+.confirm-destructive {
+    background-color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+    color: var(--color-white) !important;
+}
+
+.confirm-destructive:hover {
+    background-color: var(--color-danger-light) !important;
+    border-color: var(--color-danger-light) !important;
+}
+
 /* =================================================================
    MAX POTENTIAL CONTROLS
    ================================================================= */

@@ -697,29 +697,61 @@ function createSelectedCardItem(card) {
 
 // ===== NOTIFICATION COMPONENTS =====
 
-// Create and show toast notification (ENHANCED with theme support)
-function showToast(message, type = 'success') {
-    // Remove existing toast if any
-    const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
+/**
+ * Show a toast notification.
+ * Supports stacking multiple toasts, manual dismiss, and screen reader announcements.
+ * @param {string} message - The message to display
+ * @param {string} type - 'success' | 'warning' | 'error' | 'info'
+ * @param {Object} [options] - Optional settings
+ * @param {number} [options.duration=3000] - Auto-dismiss timeout in ms (0 to disable)
+ */
+function showToast(message, type = 'success', options = {}) {
+    const { duration = 3000 } = options;
+
+    // Ensure toast container exists
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = createElement('div', { id: 'toast-container' });
+        container.setAttribute('aria-live', 'polite');
+        container.setAttribute('aria-atomic', 'false');
+        document.body.appendChild(container);
     }
-    
-    const toast = createElement('div', {
-        className: `toast ${type}`,
+
+    const toast = createElement('div', { className: `toast ${type}` });
+
+    const msgSpan = createElement('span', {
+        className: 'toast-message',
         textContent: message
     });
-    
-    document.body.appendChild(toast);
-    
-    // Show toast
-    setTimeout(() => toast.classList.add('show'), 100);
-    
-    // Hide toast after 3 seconds
-    setTimeout(() => {
+
+    const dismissBtn = createElement('button', {
+        className: 'toast-dismiss',
+        textContent: '\u00d7',
+        title: 'Dismiss'
+    });
+    dismissBtn.setAttribute('aria-label', 'Dismiss notification');
+
+    toast.appendChild(msgSpan);
+    toast.appendChild(dismissBtn);
+    container.appendChild(toast);
+
+    // Slide in
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => toast.classList.add('show'));
+    });
+
+    function dismiss() {
         toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+        // Fallback removal if transition doesn't fire
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
+    }
+
+    dismissBtn.addEventListener('click', dismiss);
+
+    if (duration > 0) {
+        setTimeout(dismiss, duration);
+    }
 }
 
 // ===== EFFECT DISPLAY COMPONENTS =====
@@ -933,14 +965,95 @@ function getSortOptionLabel(category, option) {
 
 // ===== INITIALIZATION FUNCTIONS =====
 
+// ===== TOOLTIP SYSTEM =====
+
+/**
+ * Position a tooltip element so it stays within the viewport.
+ * Adds/removes tooltip-left, tooltip-right, tooltip-top classes.
+ */
+function positionTooltip(tooltipElement) {
+    const rect = tooltipElement.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+
+    // Reset position classes
+    tooltipElement.classList.remove('tooltip-left', 'tooltip-right', 'tooltip-top');
+
+    // Check horizontal positioning
+    if (rect.left < 60) {
+        tooltipElement.classList.add('tooltip-right');
+    } else if (rect.right > viewportWidth - 60) {
+        tooltipElement.classList.add('tooltip-left');
+    }
+
+    // Check vertical positioning — show below if near top
+    if (rect.top < 60) {
+        tooltipElement.classList.add('tooltip-top');
+    }
+}
+
+/**
+ * Initialize tooltip auto-positioning and mobile tap support.
+ * Uses event delegation so dynamically added tooltips work automatically.
+ */
+function initializeTooltipSystem() {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Auto-position on hover (desktop) via delegation
+    document.addEventListener('mouseenter', (e) => {
+        const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
+        if (tooltip) positionTooltip(tooltip);
+    }, true);
+
+    // Auto-position on focus (keyboard nav) via delegation
+    document.addEventListener('focusin', (e) => {
+        const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
+        if (tooltip) positionTooltip(tooltip);
+    });
+
+    if (isTouchDevice) {
+        // Track currently shown tooltip for tap-to-dismiss
+        let activeTooltip = null;
+
+        document.addEventListener('touchstart', (e) => {
+            const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
+
+            if (tooltip) {
+                e.preventDefault();
+
+                if (activeTooltip === tooltip) {
+                    // Tapping the same tooltip again — dismiss it
+                    tooltip.classList.remove('tooltip-active');
+                    activeTooltip = null;
+                } else {
+                    // Dismiss previous tooltip if any
+                    if (activeTooltip) {
+                        activeTooltip.classList.remove('tooltip-active');
+                    }
+                    // Show this tooltip
+                    positionTooltip(tooltip);
+                    tooltip.classList.add('tooltip-active');
+                    activeTooltip = tooltip;
+                }
+            } else if (activeTooltip) {
+                // Tapped elsewhere — dismiss active tooltip
+                activeTooltip.classList.remove('tooltip-active');
+                activeTooltip = null;
+            }
+        }, { passive: false });
+    }
+}
+
 // Initialize all UI systems
 function initializeUIComponents() {
     // Initialize theme system first
     initializeThemeSystem();
-    
+
     // Initialize help system
     initializeHelpSystem();
-    
+
+    // Initialize tooltip auto-positioning and mobile support
+    initializeTooltipSystem();
+
     console.log('🎨 UI Components initialized');
 }
 
@@ -957,6 +1070,10 @@ window.UIComponents = {
     updateThemeToggleState,
     THEMES,
     
+    // Tooltip system
+    initializeTooltipSystem,
+    positionTooltip,
+
     // Help system
     initializeHelpSystem,
     setupHelpModalEvents,

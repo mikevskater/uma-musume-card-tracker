@@ -965,34 +965,93 @@ function setupModalNavigationEvents() {
 
 // ===== CONFIRMATION MODAL =====
 
-// Show confirmation dialog
-function showConfirmDialog(title, message, onConfirm) {
+/**
+ * Show a confirmation dialog. Returns a Promise that resolves to true (confirm) or false (cancel).
+ * Also accepts a legacy callback as the third argument for backward compatibility.
+ * @param {string} title - Dialog title
+ * @param {string} message - Dialog message
+ * @param {Function|Object} [onConfirmOrOptions] - Legacy callback OR options object
+ * @param {string} [onConfirmOrOptions.confirmLabel='OK'] - Confirm button text
+ * @param {string} [onConfirmOrOptions.cancelLabel='Cancel'] - Cancel button text
+ * @param {boolean} [onConfirmOrOptions.destructive=false] - Red confirm button style
+ * @returns {Promise<boolean>}
+ */
+function showConfirmDialog(title, message, onConfirmOrOptions) {
     const modal = document.getElementById('confirmModal');
     const titleElement = document.getElementById('confirmTitle');
     const messageElement = document.getElementById('confirmMessage');
     const okButton = document.getElementById('confirmOk');
     const cancelButton = document.getElementById('confirmCancel');
-    
+
+    // Handle legacy callback or options
+    let legacyCallback = null;
+    let options = {};
+    if (typeof onConfirmOrOptions === 'function') {
+        legacyCallback = onConfirmOrOptions;
+    } else if (onConfirmOrOptions && typeof onConfirmOrOptions === 'object') {
+        options = onConfirmOrOptions;
+    }
+
+    const {
+        confirmLabel = 'OK',
+        cancelLabel = 'Cancel',
+        destructive = false
+    } = options;
+
     titleElement.textContent = title;
     messageElement.textContent = message;
-    
-    // Remove existing event listeners
+
+    // Clone buttons to remove old event listeners
     const newOkButton = okButton.cloneNode(true);
     const newCancelButton = cancelButton.cloneNode(true);
     okButton.parentNode.replaceChild(newOkButton, okButton);
     cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
-    
-    // Add new event listeners
-    newOkButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-        onConfirm();
-    });
-    
-    newCancelButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-    
+
+    // Apply labels and destructive styling
+    newOkButton.textContent = confirmLabel;
+    newCancelButton.textContent = cancelLabel;
+    newOkButton.classList.toggle('confirm-destructive', destructive);
+
     modal.style.display = 'block';
+
+    // Focus the cancel button (safer default) and trap focus
+    newCancelButton.focus();
+
+    return new Promise((resolve) => {
+        function close(result) {
+            modal.style.display = 'none';
+            document.removeEventListener('keydown', onKeyDown);
+            resolve(result);
+        }
+
+        function onKeyDown(e) {
+            if (e.key === 'Escape') {
+                close(false);
+            }
+            // Trap focus between the two buttons
+            if (e.key === 'Tab') {
+                const focusable = [newCancelButton, newOkButton];
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', onKeyDown);
+
+        newOkButton.addEventListener('click', () => {
+            if (legacyCallback) legacyCallback();
+            close(true);
+        });
+
+        newCancelButton.addEventListener('click', () => close(false));
+    });
 }
 
 // ===== EXPORTS =====
