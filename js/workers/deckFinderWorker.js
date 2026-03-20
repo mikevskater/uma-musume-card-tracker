@@ -217,10 +217,12 @@ function runBranchAndBound(payload) {
     let evaluated = 0;
     let pruned = 0;
     let matchesFound = 0;
-    let lastProgressUpdate = 0;
+    let lastProgressTime = 0;
     let lastLiveUpdate = 0;
+    let distsCompleted = 0;
+    const totalDists = validDists.length;
     const startTime = performance.now();
-    const PROGRESS_INTERVAL = 50000;
+    const PROGRESS_TIME_INTERVAL = 250; // ms between progress updates
     const LIVE_INTERVAL = 100;
 
     const scenarioId = filters.scenario || '1';
@@ -429,6 +431,7 @@ function runBranchAndBound(payload) {
 
         let distEvaluated = 0;
         dfsSlot(0);
+        distsCompleted++;
 
         // Track early termination stability (use base score as proxy)
         const worstEntry = topN.minEntry();
@@ -599,11 +602,13 @@ function runBranchAndBound(payload) {
                 });
                 matchesFound++;
 
-                // Progress & live results
-                if (evaluated - lastProgressUpdate >= PROGRESS_INTERVAL) {
-                    lastProgressUpdate = evaluated;
-                    const pct = Math.min(99, Math.round((evaluated + pruned) / totalCombos * 100));
-                    log.debug(`Progress: ${pct}% | evaluated=${evaluated} pruned=${pruned} matches=${matchesFound} heapMinBase=${topN.minEntry()?.baseScore?.toFixed(1) || 'N/A'}`);
+                // Progress & live results (time-based to avoid overhead)
+                const now = performance.now();
+                if (now - lastProgressTime >= PROGRESS_TIME_INTERVAL) {
+                    lastProgressTime = now;
+                    // Use distribution completion as primary progress metric (more predictable than combo count)
+                    const pct = Math.min(99, Math.round(distsCompleted / totalDists * 100));
+                    log.debug(`Progress: ${pct}% | dists=${distsCompleted}/${totalDists} evaluated=${evaluated} pruned=${pruned} matches=${matchesFound}`);
                     postMessage({ type: 'progress', progress: pct, matchCount: matchesFound });
                 }
                 if (matchesFound - lastLiveUpdate >= LIVE_INTERVAL) {
@@ -735,10 +740,6 @@ function runBranchAndBound(payload) {
                     pruned++;
                     evaluated++;
                     distEvaluated++;
-                    if (evaluated - lastProgressUpdate >= PROGRESS_INTERVAL) {
-                        lastProgressUpdate = evaluated;
-                        postMessage({ type: 'progress', progress: Math.min(99, Math.round((evaluated + pruned) / totalCombos * 100)), matchCount: matchesFound });
-                    }
                 } else {
                     // Set ascending constraint for next slot of same type
                     if (slotIdx + 1 < totalSlots && slots[slotIdx + 1].type === slot.type) {

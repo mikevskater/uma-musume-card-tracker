@@ -1368,6 +1368,9 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     deckFinderState.results = [];
     deckFinderState.searchStats = null;
 
+    // Yield to let the UI repaint (show spinner/progress bar) before heavy work
+    await new Promise(r => setTimeout(r, 0));
+
     // Resolve trainee data once for the entire search
     const traineeData = resolveTraineeData(filters);
     deckFinderState.traineeData = traineeData;
@@ -1639,9 +1642,14 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     // Search pool size — larger internal pool for sort layers to reorder
     const searchPoolSize = deckFinderState.searchSettings?.searchPoolSize || 500;
 
+    // Yield to let UI show progress before warm-start
+    onProgress(-1, 0, 'Preparing search...');
+    await new Promise(r => setTimeout(r, 0));
+
     // Run greedy warm-start
     let warmStartSeeds = [];
     if (validDists.length > 0) {
+        onProgress(-1, 0, 'Warm-start...');
         _logDeckFinder.time('greedyWarmStart');
         warmStartSeeds = greedyWarmStart(groups, effectiveFilters, cache, validDists, searchPoolSize, traineeData, metricNorms, friendGroups, friendCache);
         _logDeckFinder.timeEnd('greedyWarmStart');
@@ -1649,6 +1657,7 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     }
 
     // Try to use Web Worker for search
+    onProgress(0, warmStartSeeds.length > 0 ? warmStartSeeds.length : 0);
     if (typeof Worker !== 'undefined') {
         try {
             _logDeckFinder.info('Spawning worker search');
@@ -2887,15 +2896,13 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                     case 'progress': {
                         workerProgress[workerIdx] = msg.progress || 0;
                         workerMatches[workerIdx] = msg.matchCount || 0;
-                        // Aggregate progress across workers — weighted by shard combo count
-                        let weightedProgress = 0;
-                        for (let k = 0; k < numWorkers; k++) {
-                            weightedProgress += (workerProgress[k] / 100) * (shardCombos[k] || 0);
-                        }
-                        const totalProgress = totalCombos > 0 ? Math.min(99, Math.round(weightedProgress / totalCombos * 100)) : 0;
-                        deckFinderState.progress = totalProgress;
+                        // Aggregate: average of worker progress values (each is distribution-based)
+                        let avgProgress = 0;
+                        for (let k = 0; k < numWorkers; k++) avgProgress += workerProgress[k];
+                        avgProgress = Math.min(99, Math.round(avgProgress / numWorkers));
+                        deckFinderState.progress = avgProgress;
                         const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
-                        onProgress(totalProgress, totalMatches);
+                        onProgress(avgProgress, totalMatches);
                         break;
                     }
                     case 'liveResults': {

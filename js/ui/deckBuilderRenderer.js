@@ -60,9 +60,9 @@ function renderDeckBuilderShell() {
             </div>
             <div class="training-control-group">
                 <span class="training-control-label">Character:</span>
-                <select class="scenario-select" id="characterSelect">
-                    <option value="">None (no growth rate)</option>
-                </select>
+                <button class="trainee-pick-btn" id="characterPickBtn">
+                    <span id="characterPickLabel">None</span>
+                </button>
             </div>
             <div class="training-control-group">
                 <span class="training-control-label">Facility Level:</span>
@@ -1241,19 +1241,252 @@ function saveCollapsedState(state) {
 // ===== CHARACTER SELECT =====
 
 function populateCharacterSelect() {
-    const select = document.getElementById('characterSelect');
-    if (!select || !charactersData) return;
+    updateCharacterPickLabel();
+}
 
-    const entries = Object.entries(charactersData)
-        .sort((a, b) => a[1].name.localeCompare(b[1].name));
+function updateCharacterPickLabel() {
+    const label = document.getElementById('characterPickLabel');
+    if (!label) return;
+    const charId = deckBuilderState.selectedCharacter;
+    if (charId && typeof charactersData !== 'undefined' && charactersData[charId]) {
+        label.textContent = charactersData[charId].name;
+        label.closest('.trainee-pick-btn')?.classList.add('has-selection');
+    } else {
+        label.textContent = 'None';
+        label.closest('.trainee-pick-btn')?.classList.remove('has-selection');
+    }
+}
 
-    entries.forEach(([id, char]) => {
-        const opt = document.createElement('option');
-        opt.value = id;
-        opt.textContent = char.name;
-        if (id === deckBuilderState.selectedCharacter) opt.selected = true;
-        select.appendChild(opt);
+// ===== TRAINEE PICKER MODAL =====
+
+/**
+ * Opens a modal to pick a trainee character with filters for aptitude, growth rates, and search.
+ * @param {string|null} currentId - Currently selected character ID (for highlight)
+ * @param {function} onSelect - Callback(characterId|null) when a trainee is selected
+ */
+function openTraineePicker(currentId, onSelect) {
+    if (typeof charactersData === 'undefined' || !charactersData) return;
+
+    const APTITUDE_GRADES = ['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const GROWTH_KEYS = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
+    const GROWTH_LABELS = { speed: 'Spd', stamina: 'Sta', power: 'Pow', guts: 'Gut', wisdom: 'Wis' };
+    const DIST_KEYS = ['short', 'mile', 'medium', 'long'];
+    const STYLE_KEYS = ['front_runner', 'stalker', 'betweener', 'stretch'];
+    const STYLE_LABELS = { front_runner: 'Front', stalker: 'Stalker', betweener: 'Between', stretch: 'Stretch' };
+    const GROUND_KEYS = ['turf', 'dirt'];
+
+    let filters = { search: '', distanceMin: {}, styleMin: {}, groundMin: {}, sort: 'name' };
+
+    const overlay = document.createElement('div');
+    overlay.className = 'picker-modal-overlay trainee-picker-overlay';
+    overlay.innerHTML = `
+        <div class="picker-modal trainee-picker-modal">
+            <div class="picker-header">
+                <h3>Select Trainee Character</h3>
+                <button class="picker-close" id="traineePickerClose">&times;</button>
+            </div>
+            <div class="picker-filters trainee-picker-filters">
+                <input class="picker-search" id="traineePickerSearch" placeholder="Search by character name...">
+                <div class="trainee-filter-row">
+                    <span class="trainee-filter-label">Distance:</span>
+                    <div class="trainee-apt-btns" id="traineeDistBtns">
+                        ${DIST_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="distance" data-key="${k}" title="${k}">${k.charAt(0).toUpperCase() + k.slice(1)}</button>`).join('')}
+                    </div>
+                </div>
+                <div class="trainee-filter-row">
+                    <span class="trainee-filter-label">Style:</span>
+                    <div class="trainee-apt-btns" id="traineeStyleBtns">
+                        ${STYLE_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="style" data-key="${k}" title="${k}">${STYLE_LABELS[k]}</button>`).join('')}
+                    </div>
+                </div>
+                <div class="trainee-filter-row">
+                    <span class="trainee-filter-label">Ground:</span>
+                    <div class="trainee-apt-btns" id="traineeGroundBtns">
+                        ${GROUND_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="ground" data-key="${k}" title="${k}">${k.charAt(0).toUpperCase() + k.slice(1)}</button>`).join('')}
+                    </div>
+                </div>
+                <div class="trainee-filter-row">
+                    <span class="trainee-filter-label">Sort:</span>
+                    <select class="picker-sort-select" id="traineePickerSort">
+                        <option value="name">Name</option>
+                        ${GROWTH_KEYS.map(k => `<option value="growth_${k}">${GROWTH_LABELS[k]} Growth</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+            <div class="trainee-picker-grid" id="traineePickerGrid"></div>
+            <div class="trainee-picker-footer">
+                <button class="btn btn-secondary btn-sm" id="traineePickerClearBtn">Clear Selection</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('open'));
+
+    function getFilteredCharacters() {
+        let entries = Object.entries(charactersData);
+
+        // Search filter
+        const q = filters.search.toLowerCase().trim();
+        if (q) {
+            entries = entries.filter(([, c]) => c.name.toLowerCase().includes(q));
+        }
+
+        // Aptitude filters (only show characters with grade A or better for selected aptitudes)
+        for (const [cat, key] of Object.entries(filters.distanceMin)) {
+            if (!key) continue;
+            entries = entries.filter(([, c]) => {
+                const grade = c.aptitudes?.distance?.[key];
+                return grade && APTITUDE_GRADES.indexOf(grade) <= APTITUDE_GRADES.indexOf('A');
+            });
+        }
+        for (const [cat, key] of Object.entries(filters.styleMin)) {
+            if (!key) continue;
+            entries = entries.filter(([, c]) => {
+                const grade = c.aptitudes?.running_style?.[key];
+                return grade && APTITUDE_GRADES.indexOf(grade) <= APTITUDE_GRADES.indexOf('A');
+            });
+        }
+        for (const [cat, key] of Object.entries(filters.groundMin)) {
+            if (!key) continue;
+            entries = entries.filter(([, c]) => {
+                const grade = c.aptitudes?.ground?.[key];
+                return grade && APTITUDE_GRADES.indexOf(grade) <= APTITUDE_GRADES.indexOf('A');
+            });
+        }
+
+        // Sort
+        if (filters.sort === 'name') {
+            entries.sort((a, b) => a[1].name.localeCompare(b[1].name));
+        } else if (filters.sort.startsWith('growth_')) {
+            const gk = filters.sort.replace('growth_', '');
+            entries.sort((a, b) => (b[1].growth_rates?.[gk] || 0) - (a[1].growth_rates?.[gk] || 0));
+        }
+
+        return entries;
+    }
+
+    function gradeClass(grade) {
+        if (grade === 'S' || grade === 'A') return 'apt-good';
+        if (grade === 'B' || grade === 'C') return 'apt-ok';
+        return 'apt-low';
+    }
+
+    function renderGrid() {
+        const grid = overlay.querySelector('#traineePickerGrid');
+        const entries = getFilteredCharacters();
+
+        if (entries.length === 0) {
+            grid.innerHTML = '<div class="picker-no-results">No characters match the current filters.</div>';
+            return;
+        }
+
+        grid.innerHTML = entries.map(([id, char]) => {
+            const gr = char.growth_rates || {};
+            const apt = char.aptitudes || {};
+            const isSelected = id === currentId;
+
+            // Growth rate bars
+            const growthHtml = GROWTH_KEYS.map(k => {
+                const val = gr[k] || 0;
+                return `<span class="trainee-growth-stat${val > 0 ? ' has-growth' : ''}">
+                    <span class="trainee-growth-label">${GROWTH_LABELS[k]}</span>
+                    <span class="trainee-growth-val">${val}%</span>
+                </span>`;
+            }).join('');
+
+            // Aptitude summary — distance, style, ground
+            const distHtml = DIST_KEYS.map(k => {
+                const g = apt.distance?.[k] || '-';
+                return `<span class="trainee-apt ${gradeClass(g)}">${k.charAt(0).toUpperCase()}:${g}</span>`;
+            }).join(' ');
+            const styleHtml = STYLE_KEYS.map(k => {
+                const g = apt.running_style?.[k] || '-';
+                return `<span class="trainee-apt ${gradeClass(g)}">${STYLE_LABELS[k].charAt(0)}:${g}</span>`;
+            }).join(' ');
+            const groundHtml = GROUND_KEYS.map(k => {
+                const g = apt.ground?.[k] || '-';
+                return `<span class="trainee-apt ${gradeClass(g)}">${k.charAt(0).toUpperCase()}:${g}</span>`;
+            }).join(' ');
+
+            return `<div class="trainee-tile${isSelected ? ' selected' : ''}" data-id="${id}">
+                <img class="trainee-tile-icon" src="images/characters/${id}_icon.png"
+                     onerror="this.style.display='none'" alt="${char.name}">
+                <div class="trainee-tile-info">
+                    <div class="trainee-tile-name">${char.name}</div>
+                    <div class="trainee-tile-growth">${growthHtml}</div>
+                    <div class="trainee-tile-apts">${distHtml} ${groundHtml} ${styleHtml}</div>
+                </div>
+            </div>`;
+        }).join('');
+
+        // Click handler on tiles
+        grid.querySelectorAll('.trainee-tile').forEach(tile => {
+            tile.onclick = () => {
+                const selectedId = tile.dataset.id;
+                currentId = selectedId;
+                closeAndReturn(selectedId);
+            };
+        });
+    }
+
+    function closeAndReturn(selectedId) {
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+        if (onSelect) onSelect(selectedId || null);
+    }
+
+    // Wire events
+    overlay.querySelector('#traineePickerClose').onclick = () => closeAndReturn(currentId);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeAndReturn(currentId);
     });
+
+    overlay.querySelector('#traineePickerClearBtn').onclick = () => closeAndReturn(null);
+
+    // Search
+    const searchInput = overlay.querySelector('#traineePickerSearch');
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            filters.search = searchInput.value;
+            renderGrid();
+        }, 200);
+    });
+
+    // Sort
+    overlay.querySelector('#traineePickerSort').addEventListener('change', (e) => {
+        filters.sort = e.target.value;
+        renderGrid();
+    });
+
+    // Aptitude filter buttons (toggle)
+    overlay.querySelectorAll('.trainee-apt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cat = btn.dataset.cat;
+            const key = btn.dataset.key;
+            const isActive = btn.classList.contains('active');
+
+            // Deactivate all in same category
+            btn.closest('.trainee-apt-btns').querySelectorAll('.trainee-apt-btn').forEach(b => b.classList.remove('active'));
+
+            if (isActive) {
+                // Toggle off
+                if (cat === 'distance') delete filters.distanceMin[cat];
+                else if (cat === 'style') delete filters.styleMin[cat];
+                else if (cat === 'ground') delete filters.groundMin[cat];
+            } else {
+                btn.classList.add('active');
+                if (cat === 'distance') filters.distanceMin[cat] = key;
+                else if (cat === 'style') filters.styleMin[cat] = key;
+                else if (cat === 'ground') filters.groundMin[cat] = key;
+            }
+            renderGrid();
+        });
+    });
+
+    renderGrid();
+    searchInput.focus();
 }
 
 // ===== CHARACTER INFO =====

@@ -801,11 +801,8 @@ function switchToDeck(deckId) {
     deckBuilderState.selectedCharacter = deck.selectedCharacter || null;
     resetAllAssignments();
 
-    // Update character dropdown to match restored state
-    const charSelect = document.getElementById('characterSelect');
-    if (charSelect) {
-        charSelect.value = deckBuilderState.selectedCharacter || '';
-    }
+    // Update character picker button label to match restored state
+    if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
 
     renderDeckSlots();
     recalculateDeck();
@@ -880,12 +877,15 @@ function initializeDeckBuilderEvents() {
     }
 
     // Character selector
-    const characterSelect = document.getElementById('characterSelect');
-    if (characterSelect) {
-        characterSelect.addEventListener('change', (e) => {
-            _logDeckBuilder.info('Character changed', { character: e.target.value || null });
-            deckBuilderState.selectedCharacter = e.target.value || null;
-            recalculateDeck();
+    const characterPickBtn = document.getElementById('characterPickBtn');
+    if (characterPickBtn) {
+        characterPickBtn.addEventListener('click', () => {
+            openTraineePicker(deckBuilderState.selectedCharacter, (selectedId) => {
+                _logDeckBuilder.info('Character changed', { character: selectedId || null });
+                deckBuilderState.selectedCharacter = selectedId || null;
+                updateCharacterPickLabel();
+                recalculateDeck();
+            });
         });
     }
 

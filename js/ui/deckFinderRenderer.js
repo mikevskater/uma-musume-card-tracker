@@ -166,41 +166,17 @@ function buildFinderModalHTML() {
     `;
 }
 
-function buildTraineeOptions() {
-    if (typeof charactersData === 'undefined' || !charactersData) return '';
-
-    const entries = Object.entries(charactersData);
-    if (entries.length === 0) return '';
-
-    // Check if a character has multiple versions (same character_id)
-    const charIdCounts = {};
-    entries.forEach(([, char]) => {
-        charIdCounts[char.character_id] = (charIdCounts[char.character_id] || 0) + 1;
-    });
-
-    // Build display labels, disambiguating multi-version characters
-    const options = entries.map(([id, char]) => {
-        let label = char.name;
-        if (charIdCounts[char.character_id] > 1 && char.growth_rates) {
-            // Find top growth rate stat(s) for disambiguation
-            const gr = char.growth_rates;
-            const statLabels = { speed: 'Spd', stamina: 'Sta', power: 'Pow', guts: 'Gut', wisdom: 'Wis' };
-            const sorted = Object.entries(gr).sort((a, b) => b[1] - a[1]);
-            const top = sorted.filter(([, v]) => v === sorted[0][1]);
-            const disambig = top.map(([k, v]) => `${statLabels[k] || k} ${v}%`).join(' / ');
-            label += ` (${disambig})`;
-        }
-        return { id, label, name: char.name };
-    });
-
-    options.sort((a, b) => a.label.localeCompare(b.label));
-
-    // Pre-select from deck builder's selected character
-    const preselect = typeof deckBuilderState !== 'undefined' ? deckBuilderState.selectedCharacter : null;
-
-    return options.map(o =>
-        `<option value="${o.id}"${o.id === preselect ? ' selected' : ''}>${o.label}</option>`
-    ).join('');
+function updateFinderTraineeLabel() {
+    const label = document.getElementById('finderTraineePickLabel');
+    if (!label) return;
+    const charId = deckFinderState.filters?.selectedTrainee;
+    if (charId && typeof charactersData !== 'undefined' && charactersData[charId]) {
+        label.textContent = charactersData[charId].name;
+        label.closest('.trainee-pick-btn')?.classList.add('has-selection');
+    } else {
+        label.textContent = '— No trainee selected —';
+        label.closest('.trainee-pick-btn')?.classList.remove('has-selection');
+    }
 }
 
 function buildFinderFiltersHTML() {
@@ -222,9 +198,6 @@ function buildFinderFiltersHTML() {
             `<option value="${id}"${id === '1' ? ' selected' : ''}>${data.name}</option>`
         ).join('');
 
-    // Build trainee options from charactersData
-    const traineeOptions = buildTraineeOptions();
-
     return `
         <!-- ═══ CARD POOL FILTERS ═══ -->
         <div class="finder-group-header">Card Pool</div>
@@ -240,10 +213,9 @@ function buildFinderFiltersHTML() {
         <!-- Trainee -->
         <div class="finder-section">
             <div class="finder-label">Trainee Character <span class="finder-hint">(optional — weights skills by aptitude)</span></div>
-            <select class="finder-scenario-select" id="finderTrainee">
-                <option value="">— No trainee selected —</option>
-                ${traineeOptions}
-            </select>
+            <button class="trainee-pick-btn finder-trainee-pick-btn" id="finderTraineePickBtn">
+                <span id="finderTraineePickLabel">— No trainee selected —</span>
+            </button>
         </div>
 
         <!-- Card Pool -->
@@ -620,11 +592,15 @@ function initFinderEvents() {
         });
     }
 
-    // Trainee change
-    const traineeSel = overlay.querySelector('#finderTrainee');
-    if (traineeSel) {
-        traineeSel.addEventListener('change', (e) => {
-            _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
+    // Trainee picker button
+    const traineePickBtn = overlay.querySelector('#finderTraineePickBtn');
+    if (traineePickBtn) {
+        traineePickBtn.addEventListener('click', () => {
+            openTraineePicker(deckFinderState.filters.selectedTrainee, (selectedId) => {
+                _logDeckFinderUI.info('Trainee changed', { trainee: selectedId || null });
+                deckFinderState.filters.selectedTrainee = selectedId || null;
+                updateFinderTraineeLabel();
+            });
         });
     }
 
@@ -773,8 +749,7 @@ function restoreFinderUIFromState() {
     if (scenarioSel) scenarioSel.value = f.scenario || '1';
 
     // Trainee
-    const traineeSel = overlay.querySelector('#finderTrainee');
-    if (traineeSel) traineeSel.value = f.selectedTrainee || '';
+    updateFinderTraineeLabel();
 
     // Rarity
     const rarityMap = { finderSSR: f.rarity.ssr, finderSR: f.rarity.sr, finderR: f.rarity.r };
@@ -981,11 +956,15 @@ function reInitFilterEvents(overlay) {
         });
     }
 
-    // Trainee change
-    const traineeSel2 = overlay.querySelector('#finderTrainee');
-    if (traineeSel2) {
-        traineeSel2.addEventListener('change', (e) => {
-            _logDeckFinderUI.info('Trainee changed', { trainee: e.target.value || null });
+    // Trainee picker button
+    const traineePickBtn2 = overlay.querySelector('#finderTraineePickBtn');
+    if (traineePickBtn2) {
+        traineePickBtn2.addEventListener('click', () => {
+            openTraineePicker(deckFinderState.filters.selectedTrainee, (selectedId) => {
+                _logDeckFinderUI.info('Trainee changed', { trainee: selectedId || null });
+                deckFinderState.filters.selectedTrainee = selectedId || null;
+                updateFinderTraineeLabel();
+            });
         });
     }
 
@@ -2037,7 +2016,7 @@ function collectFiltersFromUI() {
     f.scenario = overlay.querySelector('#finderScenario')?.value || '1';
 
     // Trainee
-    f.selectedTrainee = overlay.querySelector('#finderTrainee')?.value || null;
+    f.selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
 
     // Pool
     const poolBtn = overlay.querySelector('.finder-toggle-btn[data-pool].active');
@@ -2122,14 +2101,22 @@ function startFinderSearch() {
     renderFinderResults([], null, true);
 
     runSearch(filters,
-        // onProgress
-        (progress, matchCount) => {
+        // onProgress(progress, matchCount, statusText)
+        (progress, matchCount, statusText) => {
             const fill = document.getElementById('finderProgressFill');
             const text = document.getElementById('finderProgressText');
             const matches = document.getElementById('finderProgressMatches');
-            if (fill) fill.style.width = progress + '%';
-            if (text) text.textContent = progress + '%';
-            if (matches && matchCount !== undefined) matches.textContent = `${matchCount} matches`;
+            if (progress < 0) {
+                // Indeterminate phase (preparing/warm-start)
+                if (fill) fill.style.width = '100%';
+                if (fill) fill.style.opacity = '0.3';
+                if (text) text.textContent = statusText || 'Preparing...';
+            } else {
+                if (fill) fill.style.opacity = '1';
+                if (fill) fill.style.width = progress + '%';
+                if (text) text.textContent = progress + '%';
+            }
+            if (matches && matchCount !== undefined && matchCount > 0) matches.textContent = `${matchCount} matches`;
         },
         // onComplete
         (results, message) => {
@@ -2173,11 +2160,14 @@ function renderFinderResults(results, message, searching) {
     // Search stats
     const stats = deckFinderState.searchStats;
     if (stats) {
+        const elapsed = stats.elapsed ? (stats.elapsed / 1000).toFixed(1) + 's' : '?';
+        const evaluated = stats.evaluated || 0;
+        const pruned = stats.pruned || 0;
+        const total = evaluated + pruned;
+        const prunePct = total > 0 ? Math.round(pruned / total * 100) : 0;
         html += `<div class="finder-search-stats">`;
-        if (stats.totalCombos) html += `<span>${stats.totalCombos.toLocaleString()} possible</span>`;
-        html += `<span>${stats.evaluated?.toLocaleString() || '?'} evaluated</span>`;
-        if (stats.pruned > 0) html += `<span>${stats.pruned.toLocaleString()} branches pruned</span>`;
-        html += `<span>${stats.elapsed ? (stats.elapsed / 1000).toFixed(1) + 's' : '?'}</span>`;
+        html += `<span>Searched ${total.toLocaleString()} decks in ${elapsed}</span>`;
+        if (prunePct > 0) html += `<span>${prunePct}% pruned by optimizer</span>`;
         html += `</div>`;
     }
 
