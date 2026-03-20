@@ -3,6 +3,16 @@
 
 const _logDeckBuilderUI = _debug.create('DeckBuilderUI');
 
+// Stat tooltip descriptions (shared between deck summary and training breakdown tables)
+const STAT_TOOLTIPS = [
+    'Speed — affects position-taking and final stretch acceleration',
+    'Stamina — determines how far a character can run at full effort',
+    'Power — affects acceleration and ability to push through packs',
+    'Guts — affects stamina conservation and late-race willpower',
+    'Wisdom — affects race strategy and skill activation rate',
+    'Skill Points — currency used to learn skills during training'
+];
+
 // ===== SHELL RENDERING =====
 
 function renderDeckBuilderShell() {
@@ -867,15 +877,10 @@ function renderDeckSummary(aggregated, perTraining) {
                     <tr>
                         <th>Training</th>
                         <th>Cards</th>
-                        <th>Train Eff</th>
-                        <th>Mood Eff</th>
-                        <th>${statBonusLabels[0]}</th>
-                        <th>${statBonusLabels[1]}</th>
-                        <th>${statBonusLabels[2]}</th>
-                        <th>${statBonusLabels[3]}</th>
-                        <th>${statBonusLabels[4]}</th>
-                        <th>${statBonusLabels[5]}</th>
-                        <th>Friend</th>
+                        <th>Train Eff <span class="tooltip-small" data-tooltip="Training Effectiveness — bonus % applied to base stat gains" tabindex="0">?</span></th>
+                        <th>Mood Eff <span class="tooltip-small" data-tooltip="Mood Effect — additional % bonus from character mood" tabindex="0">?</span></th>
+                        ${statBonusLabels.map((label, i) => `<th>${label} <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[i]}" tabindex="0">?</span></th>`).join('\n                        ')}
+                        <th>Friend <span class="tooltip-small" data-tooltip="Friendship bonus multiplier — 1.00× = no bonus, higher = more stat gains when training with bonded cards" tabindex="0">?</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -976,14 +981,14 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
                     <tr>
                         <th>Training</th>
                         <th>Cards</th>
-                        <th>Speed</th>
-                        <th>Stamina</th>
-                        <th>Power</th>
-                        <th>Guts</th>
-                        <th>Wit</th>
-                        <th>Skill Pts</th>
-                        <th>Energy</th>
-                        ${hasFailureRates ? '<th>Fail %</th>' : ''}
+                        <th>Speed <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[0]}" tabindex="0">?</span></th>
+                        <th>Stamina <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[1]}" tabindex="0">?</span></th>
+                        <th>Power <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[2]}" tabindex="0">?</span></th>
+                        <th>Guts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[3]}" tabindex="0">?</span></th>
+                        <th>Wit <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[4]}" tabindex="0">?</span></th>
+                        <th>Skill Pts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[5]}" tabindex="0">?</span></th>
+                        <th>Energy <span class="tooltip-small" data-tooltip="Stamina cost — negative = energy drain per training session" tabindex="0">?</span></th>
+                        ${hasFailureRates ? '<th>Fail % <span class="tooltip-small" data-tooltip="Training failure probability at current facility level" tabindex="0">?</span></th>' : ''}
                     </tr>
                 </thead>
                 <tbody>
