@@ -189,6 +189,8 @@ let deckFinderState = {
     sortLayers: [],
     // Custom scoring weights — null until initialized from scenario defaults
     customWeights: null,
+    // Weight display order — array of weight keys; null until initialized
+    weightOrder: null,
     // Search tuning parameters
     searchSettings: { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 }
 };
@@ -205,6 +207,10 @@ function resetWeightsToDefaults(scenarioId) {
     const id = scenarioId || deckFinderState.filters?.scenario || '1';
     const defaults = SCENARIO_WEIGHTS[id]?.weights || SCENARIO_WEIGHTS['1'].weights;
     deckFinderState.customWeights = { ...defaults };
+    // Reset order to scenario default (sorted by value descending)
+    deckFinderState.weightOrder = Object.entries(defaults)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key]) => key);
 }
 
 // ===== RESULT SORT =====

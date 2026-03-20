@@ -469,7 +469,7 @@ function buildFinderFiltersHTML() {
             </button>
             <div class="finder-collapse-body collapsed" id="finderSearchSettingsBody">
                 <div class="finder-threshold-grid">
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Number of parallel web workers used during search. Auto detects your CPU core count. More threads = faster search but higher CPU usage." tabindex="0">
                         <label>Worker Threads</label>
                         <select class="finder-small-input" id="finderWorkerCount" style="width:100%;">
                             <option value="auto" selected>Auto</option>
@@ -479,15 +479,15 @@ function buildFinderFiltersHTML() {
                             <option value="8">8</option>
                         </select>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Number of random decks evaluated before the optimizer begins. Higher values explore more of the search space but take longer to start. Default: 1500." tabindex="0">
                         <label>Warm-start Count</label>
                         <div class="finder-input-suffix"><input type="number" id="finderWarmStartCount" min="100" max="10000" value="1500"></div>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Maximum number of top-scoring decks kept during search. Higher values find more diverse results but use more memory. Default: 500." tabindex="0">
                         <label>Search Pool Size</label>
                         <div class="finder-input-suffix"><input type="number" id="finderSearchPoolSize" min="100" max="2000" value="500"></div>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Percentage of warm-start decks that must converge before the optimizer stops early. Lower values stop sooner (faster but may miss results). Default: 30%." tabindex="0">
                         <label>Stability %</label>
                         <div class="finder-input-suffix"><input type="number" id="finderStabilityPct" min="5" max="100" value="30"><span>%</span></div>
                     </div>
@@ -1262,24 +1262,33 @@ function renderFinderWeightsList() {
     const container = document.getElementById('finderWeightsList');
     if (!container) return;
 
-    // Ensure customWeights is initialized
-    if (!deckFinderState.customWeights) {
+    // Ensure customWeights and order are initialized
+    if (!deckFinderState.customWeights || !deckFinderState.weightOrder) {
         resetWeightsToDefaults();
     }
     const weights = deckFinderState.customWeights;
+    const order = deckFinderState.weightOrder;
+    const total = order.length;
 
-    // Sort by weight value descending (highest priority first)
-    const entries = Object.entries(weights).sort((a, b) => b[1] - a[1]);
-
-    container.innerHTML = entries.map(([key, value]) => {
+    container.innerHTML = order.map((key, index) => {
         const label = WEIGHT_LABELS[key] || key;
-        return `<div class="finder-weight-item">
+        const value = weights[key] || 0;
+        return `<div class="finder-weight-item" data-index="${index}">
+            <span class="finder-weight-priority">${index + 1}</span>
             <span class="finder-weight-label">${label}</span>
-            <input type="number" class="finder-weight-input" data-key="${key}" min="0" max="200" value="${value}">
+            <div class="finder-weight-controls">
+                <input type="number" class="finder-weight-input" data-key="${key}" min="0" max="200" value="${value}">
+                <button class="sort-btn finder-weight-btn" data-action="move-up" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move up">&#8593;</button>
+                <button class="sort-btn finder-weight-btn" data-action="move-down" data-index="${index}" ${index === total - 1 ? 'disabled' : ''} title="Move down">&#8595;</button>
+            </div>
         </div>`;
     }).join('');
 
-    // Wire change events
+    wireFinderWeightEvents(container);
+}
+
+function wireFinderWeightEvents(container) {
+    // Wire value change events
     container.querySelectorAll('.finder-weight-input').forEach(input => {
         input.onchange = () => {
             const key = input.dataset.key;
@@ -1291,6 +1300,25 @@ function renderFinderWeightsList() {
             }
         };
     });
+
+    // Wire move buttons
+    container.querySelectorAll('.finder-weight-btn').forEach(btn => {
+        btn.onclick = () => {
+            const action = btn.dataset.action;
+            const index = parseInt(btn.dataset.index);
+            if (action === 'move-up') moveFinderWeight(index, index - 1);
+            else if (action === 'move-down') moveFinderWeight(index, index + 1);
+        };
+    });
+}
+
+function moveFinderWeight(fromIndex, toIndex) {
+    const order = deckFinderState.weightOrder;
+    if (toIndex < 0 || toIndex >= order.length) return;
+    _logDeckFinderUI.debug('moveWeight', { from: fromIndex, to: toIndex });
+    const [item] = order.splice(fromIndex, 1);
+    order.splice(toIndex, 0, item);
+    renderFinderWeightsList();
 }
 
 // ===== SKILL TYPE LAYER UI =====
@@ -2354,7 +2382,7 @@ function renderResultCard(result, idx) {
                 <div class="finder-result-rank${idx === 0 ? ' rank-gold' : idx === 1 ? ' rank-silver' : idx === 2 ? ' rank-bronze' : ''}" data-tooltip="Rank based on weighted scoring of all deck metrics" tabindex="0">#${idx + 1}</div>
                 <div class="finder-result-thumbs">${cardThumbs}</div>
                 <div class="finder-result-actions-top">
-                    <label class="finder-cmp-label"><input type="checkbox" class="finder-compare-check" data-idx="${idx}"> Cmp</label>
+                    <label class="finder-cmp-label" data-tooltip="Select multiple decks then press Compare at the top to view them side-by-side" tabindex="0"><input type="checkbox" class="finder-compare-check" data-idx="${idx}"> Compare</label>
                 </div>
             </div>
             <div class="finder-result-metrics">

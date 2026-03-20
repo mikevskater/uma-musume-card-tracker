@@ -360,7 +360,8 @@ input[type="checkbox"]:disabled {
         0 0 20px rgba(243, 156, 18, 0.2);
 }
 
-/* Shared animated rainbow border */
+/* Shared animated rainbow border — animation runs on :root,
+   --angle is inherited so all elements stay in sync across re-renders */
 .rainbow-border,
 .card-image.rarity-3 {
     border: 4px solid transparent;
@@ -371,7 +372,6 @@ input[type="checkbox"]:disabled {
             #ff0000, #ff7f00, #ffff00, #00ff00,
             #0000ff, #4b0082, #9400d3, #ff0000
         ) border-box;
-    animation: rainbow-spin 6s linear infinite;
 }
 
 .card-image.rarity-3 {
@@ -385,7 +385,13 @@ input[type="checkbox"]:disabled {
 @property --angle {
     syntax: "<angle>";
     initial-value: 0deg;
-    inherits: false;
+    inherits: true;
+}
+
+/* Single global animation on :root so all rainbow borders stay in sync
+   even when elements are added/removed from the DOM */
+:root {
+    animation: rainbow-spin 6s linear infinite;
 }
 
 @keyframes rainbow-spin {

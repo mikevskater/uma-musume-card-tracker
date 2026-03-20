@@ -501,21 +501,44 @@
 
 .finder-weight-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: var(--space-xs);
     padding: 3px var(--space-xs);
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-sm);
 }
 
+.finder-weight-priority {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+    background: var(--bg-tertiary, var(--bg-secondary));
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
 .finder-weight-label {
     font-size: var(--font-size-xs);
     color: var(--text-primary);
+    flex: 1;
+    min-width: 0;
+}
+
+.finder-weight-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
 }
 
 .finder-weight-input {
-    width: 60px;
+    width: 52px;
     text-align: center;
     font-size: var(--font-size-xs);
     padding: 2px 4px;
@@ -523,6 +546,19 @@
     border-radius: var(--radius-sm);
     background: var(--bg-secondary);
     color: var(--text-primary);
+}
+
+.finder-weight-btn {
+    padding: 1px 4px;
+    font-size: var(--font-size-xs);
+    line-height: 1;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.finder-weight-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
 }
 
 /* ===== SEARCH BUTTON & PROGRESS ===== */

@@ -162,7 +162,7 @@
     max-width: 200px;
     min-height: 220px;
     border: 2px solid var(--border-secondary);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
     background: var(--bg-primary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -170,6 +170,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+    overflow: hidden;
 }
 
 .deck-slot:hover {
@@ -244,7 +245,7 @@
 .deck-slot-image.card-image {
     width: 100%;
     height: auto;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    border-radius: var(--radius-card);
     aspect-ratio: 3 / 4;
 }
 
