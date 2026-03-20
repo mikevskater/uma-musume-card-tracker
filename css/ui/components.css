@@ -600,10 +600,16 @@ input[type="checkbox"]:disabled {
 }
 
 /* =================================================================
-   ENHANCED TOOLTIPS (Updated to match unlock tooltip quality)
+   TOOLTIP SYSTEM — JS-positioned shared popup div (#tooltip-popup)
+   Trigger elements: any element with [data-tooltip] attribute.
+   Circle icons: .tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small
    ================================================================= */
 
-.tooltip {
+/* Tooltip trigger circles (the ? icons) */
+.tooltip,
+.tooltip-small,
+.unlock-tooltip,
+.unlock-tooltip-small {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -616,190 +622,82 @@ input[type="checkbox"]:disabled {
     font-size: 10px;
     font-weight: var(--font-weight-bold);
     cursor: help;
-    transition: all var(--transition-normal);
+    transition: background-color var(--transition-normal), transform var(--transition-normal);
     flex-shrink: 0;
 }
 
-.tooltip:hover {
-    background-color: var(--color-primary);
-    transform: scale(1.1);
-}
-
-/* Enhanced tooltip content styling */
-.tooltip::before {
-    content: attr(data-tooltip);
-    position: fixed;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-5px);
-    background-color: var(--bg-accent);
-    color: var(--text-primary);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-normal);
-    white-space: normal;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-slow), 
-                visibility var(--transition-slow),
-                transform var(--transition-slow);
-    z-index: 9999;
-    pointer-events: none;
-    border: 1px solid var(--color-warning);
-    box-shadow: var(--shadow-lg);
-    max-width: 200px;
-    min-width: 140px;
-    text-align: center;
-    line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.tooltip::after {
-    content: '';
-    position: fixed;
-    bottom: 115%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--color-warning);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-slow), visibility var(--transition-slow);
-    pointer-events: none;
-    z-index: 9999;
-}
-
-.tooltip:hover::before,
-.tooltip:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-.tooltip:hover::before {
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Small tooltip variant */
-.tooltip-small {
+.tooltip-small,
+.unlock-tooltip-small {
     width: 14px;
     height: 14px;
     font-size: 9px;
     margin-left: 2px;
 }
 
-.tooltip-small::before {
+.tooltip:hover,
+.tooltip-small:hover,
+.unlock-tooltip:hover,
+.unlock-tooltip-small:hover {
+    background-color: var(--color-primary);
+    transform: scale(1.1);
+}
+
+/* The shared tooltip popup (created by JS, appended to body) */
+#tooltip-popup {
     position: fixed;
+    z-index: 2147483647;
+    background-color: var(--bg-accent);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-xs);
-    padding: var(--space-xs) var(--space-sm);
-    max-width: 180px;
-    min-width: 120px;
+    font-weight: var(--font-weight-normal);
     white-space: normal;
+    border: 1px solid var(--color-warning);
+    box-shadow: var(--shadow-lg);
+    max-width: 220px;
+    min-width: 100px;
+    text-align: center;
     line-height: 1.4;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
-.tooltip-small::after {
-    position: fixed;
-    z-index: 9999;
+#tooltip-popup.visible {
+    opacity: 1;
 }
 
-/* =================================================================
-   TOOLTIP POSITIONING VARIATIONS
-   ================================================================= */
-
-/* Right-aligned tooltip (for left edge elements) */
-.tooltip.tooltip-right::before {
-    left: 0;
-    transform: translateY(-5px);
+/* Arrow pointing at the trigger */
+.tooltip-popup-arrow {
+    position: absolute;
+    bottom: -5px;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: var(--color-warning);
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 
-.tooltip.tooltip-right::after {
-    left: 10px;
-    transform: none;
-}
-
-/* Left-aligned tooltip (for right edge elements) */
-.tooltip.tooltip-left::before {
-    right: 0;
-    left: auto;
-    transform: translateY(-5px);
-}
-
-.tooltip.tooltip-left::after {
-    right: 10px;
-    left: auto;
-    transform: none;
-}
-
-/* Top tooltip (when element is near bottom of screen) */
-.tooltip.tooltip-top::before {
+/* When tooltip shows below the trigger, flip the arrow */
+#tooltip-popup.tooltip-popup-below .tooltip-popup-arrow {
     bottom: auto;
-    top: 125%;
-    transform: translateX(-50%) translateY(5px);
-}
-
-.tooltip.tooltip-top::after {
-    bottom: auto;
-    top: 115%;
+    top: -5px;
     border-top-color: transparent;
     border-bottom-color: var(--color-warning);
 }
 
-.tooltip.tooltip-top:hover::before {
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Escape parent container clipping */
-.tooltip::before,
-.tooltip::after,
-.tooltip-small::before,
-.tooltip-small::after {
-    /* Ensure tooltips escape any parent overflow clipping */
-    position: fixed !important;
+[data-theme="dark"] #tooltip-popup {
+    background-color: var(--bg-secondary);
+    border-color: var(--color-warning);
+    color: var(--text-primary);
 }
 
 /* =================================================================
-   DYNAMIC POSITIONING UTILITY CLASSES
-   ================================================================= */
-
-/* 
-   These classes can be dynamically applied via JavaScript to ensure 
-   tooltips stay on screen. Recommended JavaScript implementation:
-
-   function positionTooltip(tooltipElement) {
-       const rect = tooltipElement.getBoundingClientRect();
-       const viewportWidth = window.innerWidth;
-       const viewportHeight = window.innerHeight;
-       
-       // Reset classes
-       tooltipElement.classList.remove('tooltip-left', 'tooltip-right', 'tooltip-top');
-       
-       // Check horizontal positioning
-       if (rect.left < 10) {
-           tooltipElement.classList.add('tooltip-right');
-       } else if (rect.right > viewportWidth - 10) {
-           tooltipElement.classList.add('tooltip-left');
-       }
-       
-       // Check vertical positioning  
-       if (rect.top < 60) {
-           tooltipElement.classList.add('tooltip-top');
-       }
-   }
-   
-   // Apply on hover/focus
-   document.querySelectorAll('.tooltip, .tooltip-small').forEach(tooltip => {
-       tooltip.addEventListener('mouseenter', () => positionTooltip(tooltip));
-       tooltip.addEventListener('focus', () => positionTooltip(tooltip));
-   });
-*/
-
-/* =================================================================
-   UNLOCK LEVEL TOOLTIPS
+   UNLOCK LEVEL TOOLTIPS — layout wrappers
    ================================================================= */
 
 /* Container for locked effects with tooltips */
@@ -819,102 +717,6 @@ input[type="checkbox"]:disabled {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-}
-
-/* Unlock tooltip question mark icons */
-.unlock-tooltip {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: var(--color-warning);
-    color: var(--color-white);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: var(--font-weight-bold);
-    cursor: help;
-    transition: all var(--transition-normal);
-    position: relative;
-    flex-shrink: 0;
-}
-
-.unlock-tooltip-small {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background-color: var(--color-warning);
-    color: var(--color-white);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: var(--font-weight-bold);
-    cursor: help;
-    transition: all var(--transition-normal);
-    position: relative;
-    flex-shrink: 0;
-    margin-left: 2px;
-}
-
-.unlock-tooltip:hover,
-.unlock-tooltip-small:hover {
-    background-color: var(--color-primary);
-    transform: scale(1.1);
-}
-
-/* Enhanced tooltip styling for unlock information */
-.unlock-tooltip::before,
-.unlock-tooltip-small::before {
-    content: attr(data-tooltip);
-    position: fixed;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--bg-accent);
-    color: var(--text-primary);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-normal);
-    white-space: normal;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-slow), visibility var(--transition-slow);
-    z-index: 9999;
-    pointer-events: none;
-    border: 1px solid var(--color-warning);
-    box-shadow: var(--shadow-lg);
-    max-width: 200px;
-    min-width: 140px;
-    text-align: center;
-    line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.unlock-tooltip::after,
-.unlock-tooltip-small::after {
-    content: '';
-    position: fixed;
-    bottom: 115%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--color-warning);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-slow), visibility var(--transition-slow);
-    pointer-events: none;
-    z-index: 9999;
-}
-
-.unlock-tooltip:hover::before,
-.unlock-tooltip:hover::after,
-.unlock-tooltip-small:hover::before,
-.unlock-tooltip-small:hover::after {
-    opacity: 1;
-    visibility: visible;
 }
 
 /* =================================================================
@@ -981,38 +783,6 @@ input[type="checkbox"]:disabled {
     outline-offset: 2px;
 }
 
-.tooltip:focus::before,
-.tooltip:focus::after,
-.tooltip-small:focus::before,
-.tooltip-small:focus::after,
-.unlock-tooltip:focus::before,
-.unlock-tooltip:focus::after,
-.unlock-tooltip-small:focus::before,
-.unlock-tooltip-small:focus::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Mobile tap-to-show support (tooltip-active class toggled by JS) */
-.tooltip.tooltip-active::before,
-.tooltip.tooltip-active::after,
-.tooltip-small.tooltip-active::before,
-.tooltip-small.tooltip-active::after,
-.unlock-tooltip.tooltip-active::before,
-.unlock-tooltip.tooltip-active::after,
-.unlock-tooltip-small.tooltip-active::before,
-.unlock-tooltip-small.tooltip-active::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-.tooltip.tooltip-active::before,
-.tooltip-small.tooltip-active::before,
-.unlock-tooltip.tooltip-active::before,
-.unlock-tooltip-small.tooltip-active::before {
-    transform: translateX(-50%) translateY(0);
-}
-
 /* High contrast mode support */
 @media (prefers-contrast: high) {
     .tooltip,
@@ -1021,11 +791,8 @@ input[type="checkbox"]:disabled {
     .unlock-tooltip-small {
         border: 2px solid var(--text-primary);
     }
-    
-    .tooltip::before,
-    .tooltip-small::before,
-    .unlock-tooltip::before,
-    .unlock-tooltip-small::before {
+
+    #tooltip-popup {
         border: 2px solid var(--text-primary);
         background-color: var(--bg-primary);
     }
@@ -1039,41 +806,21 @@ input[type="checkbox"]:disabled {
     .unlock-tooltip-small {
         transition: none;
     }
-    
+
     .tooltip:hover,
     .tooltip-small:hover,
     .unlock-tooltip:hover,
     .unlock-tooltip-small:hover {
         transform: none;
     }
-    
-    .tooltip::before,
-    .tooltip::after,
-    .tooltip-small::before,
-    .tooltip-small::after,
-    .unlock-tooltip::before,
-    .unlock-tooltip::after,
-    .unlock-tooltip-small::before,
-    .unlock-tooltip-small::after {
+
+    #tooltip-popup {
         transition: none;
     }
 }
 
-/* =================================================================
-   RESPONSIVE ADJUSTMENTS FOR ALL TOOLTIPS
-   ================================================================= */
-
+/* Responsive — shrink tooltip circles on small screens */
 @media (max-width: 768px) {
-    .tooltip::before,
-    .tooltip-small::before,
-    .unlock-tooltip::before,
-    .unlock-tooltip-small::before {
-        font-size: var(--font-size-xs);
-        padding: var(--space-xs) var(--space-sm);
-        max-width: 150px;
-        min-width: 100px;
-    }
-    
     .tooltip,
     .tooltip-small,
     .unlock-tooltip,
@@ -1082,27 +829,13 @@ input[type="checkbox"]:disabled {
         height: 12px;
         font-size: 8px;
     }
-    
-    .tooltip-small,
-    .unlock-tooltip-small {
-        width: 12px;
-        height: 12px;
+
+    #tooltip-popup {
+        max-width: 160px;
     }
 }
 
 @media (max-width: 480px) {
-    .tooltip::before,
-    .tooltip-small::before,
-    .unlock-tooltip::before,
-    .unlock-tooltip-small::before {
-        bottom: 130%;
-        max-width: 120px;
-        min-width: 80px;
-        white-space: normal;
-        line-height: 1.3;
-        font-size: var(--font-size-xs);
-    }
-    
     /* Stack tooltips instead of inline on very small screens */
     .locked-effect-with-tooltip,
     .locked-with-tooltip,
@@ -1111,42 +844,11 @@ input[type="checkbox"]:disabled {
         align-items: flex-start;
         gap: 2px;
     }
-    
-    /* Adjust positioning variations for mobile */
-    .tooltip.tooltip-right::before,
-    .tooltip.tooltip-left::before {
-        max-width: 100px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%) translateY(-5px);
+
+    #tooltip-popup {
+        max-width: 140px;
+        font-size: 10px;
     }
-    
-    .tooltip.tooltip-right::after,
-    .tooltip.tooltip-left::after {
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-    }
-}
-
-/* =================================================================
-   DARK THEME ADJUSTMENTS FOR ALL TOOLTIPS
-   ================================================================= */
-
-[data-theme="dark"] .tooltip::before,
-[data-theme="dark"] .tooltip-small::before,
-[data-theme="dark"] .unlock-tooltip::before,
-[data-theme="dark"] .unlock-tooltip-small::before {
-    background-color: var(--bg-secondary);
-    border-color: var(--color-warning);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .tooltip::after,
-[data-theme="dark"] .tooltip-small::after,
-[data-theme="dark"] .unlock-tooltip::after,
-[data-theme="dark"] .unlock-tooltip-small::after {
-    border-top-color: var(--color-warning);
 }
 
 /* =================================================================
@@ -1163,58 +865,6 @@ input[type="checkbox"]:disabled {
 .unlock-tooltip.newly-unlocked,
 .unlock-tooltip-small.newly-unlocked {
     animation: unlock-pulse 2s ease-in-out 3;
-}
-
-/* Tooltip fade-in animation */
-.tooltip::before,
-.tooltip-small::before,
-.unlock-tooltip::before,
-.unlock-tooltip-small::before {
-    transform: translateX(-50%) translateY(-5px);
-    transition: opacity var(--transition-slow), 
-                visibility var(--transition-slow),
-                transform var(--transition-slow);
-}
-
-.tooltip:hover::before,
-.tooltip-small:hover::before,
-.unlock-tooltip:hover::before,
-.unlock-tooltip-small:hover::before {
-    transform: translateX(-50%) translateY(0);
-}
-
-/* =================================================================
-   CONTAINER CLIPPING PREVENTION
-   ================================================================= */
-
-/* Ensure sidebar and other containers don't clip tooltips */
-.sidebar,
-.main-content,
-.selection-container,
-.controls {
-    /* Allow tooltips to escape container bounds */
-    overflow: visible !important;
-}
-
-/* However, maintain scrolling for content areas */
-.sidebar {
-    overflow-y: auto !important;
-    overflow-x: visible !important;
-}
-
-/* Ensure tooltips render above all content */
-.tooltip::before,
-.tooltip::after,
-.tooltip-small::before,
-.tooltip-small::after,
-.unlock-tooltip::before,
-.unlock-tooltip::after,
-.unlock-tooltip-small::before,
-.unlock-tooltip-small::after {
-    /* Maximum z-index to appear above everything */
-    z-index: 2147483647 !important;
-    /* Force new stacking context */
-    isolation: isolate;
 }
 
 /* =================================================================

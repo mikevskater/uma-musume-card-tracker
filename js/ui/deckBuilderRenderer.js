@@ -63,7 +63,7 @@ function renderDeckBuilderShell() {
         <!-- Training Sim Controls -->
         <div class="training-controls" id="trainingControls">
             <div class="training-control-group">
-                <span class="training-control-label">Scenario:</span>
+                <span class="training-control-label">Scenario: <span class="tooltip-small" data-tooltip="Training scenario — each scenario has different base stat values and mechanics" tabindex="0">?</span></span>
                 <select class="scenario-select" id="scenarioSelect">
                     ${scenarioOptions}
                 </select>
@@ -71,11 +71,11 @@ function renderDeckBuilderShell() {
             <div class="training-control-group">
                 <span class="training-control-label">Character:</span>
                 <button class="trainee-pick-btn" id="characterPickBtn">
-                    <span id="characterPickLabel">None</span>
+                    <span id="characterPickLabel">Select Character...</span>
                 </button>
             </div>
             <div class="training-control-group">
-                <span class="training-control-label">Facility Level:</span>
+                <span class="training-control-label">Facility Level: <span class="tooltip-small" data-tooltip="Higher facility levels increase base stat gains and change failure rates for each training type" tabindex="0">?</span></span>
                 <div class="facility-level-btns" id="facilityLevelBtns">
                     <button class="facility-level-btn active" data-level="1">1</button>
                     <button class="facility-level-btn" data-level="2">2</button>
@@ -87,16 +87,17 @@ function renderDeckBuilderShell() {
             <div class="training-control-group">
                 <span class="training-control-label">Mood:</span>
                 <div class="mood-btn-row" id="moodBtnRow">
-                    <button class="mood-btn active" data-mood="very_good" title="+20% mood bonus"><img src="images/ui/mood_very_good.png" alt="Very Good" onerror="this.replaceWith(document.createTextNode('\u{1f601}'))"><span class="mood-label">Very Good</span></button>
-                    <button class="mood-btn" data-mood="good" title="+10% mood bonus"><img src="images/ui/mood_good.png" alt="Good" onerror="this.replaceWith(document.createTextNode('\u{1f642}'))"><span class="mood-label">Good</span></button>
-                    <button class="mood-btn" data-mood="normal" title="0% mood bonus"><img src="images/ui/mood_normal.png" alt="Normal" onerror="this.replaceWith(document.createTextNode('\u{1f610}'))"><span class="mood-label">Normal</span></button>
-                    <button class="mood-btn" data-mood="bad" title="-10% mood bonus"><img src="images/ui/mood_bad.png" alt="Bad" onerror="this.replaceWith(document.createTextNode('\u{1f61e}'))"><span class="mood-label">Bad</span></button>
-                    <button class="mood-btn" data-mood="very_bad" title="-20% mood bonus"><img src="images/ui/mood_very_bad.png" alt="Very Bad" onerror="this.replaceWith(document.createTextNode('\u{1f621}'))"><span class="mood-label">Very Bad</span></button>
+                    <button class="mood-btn active" data-mood="very_good" data-tooltip="+20% mood bonus"><img src="images/ui/mood_very_good.png" alt="Very Good" onerror="this.replaceWith(document.createTextNode('\u{1f601}'))"><span class="mood-label">Very Good</span></button>
+                    <button class="mood-btn" data-mood="good" data-tooltip="+10% mood bonus"><img src="images/ui/mood_good.png" alt="Good" onerror="this.replaceWith(document.createTextNode('\u{1f642}'))"><span class="mood-label">Good</span></button>
+                    <button class="mood-btn" data-mood="normal" data-tooltip="0% mood bonus"><img src="images/ui/mood_normal.png" alt="Normal" onerror="this.replaceWith(document.createTextNode('\u{1f610}'))"><span class="mood-label">Normal</span></button>
+                    <button class="mood-btn" data-mood="bad" data-tooltip="-10% mood bonus"><img src="images/ui/mood_bad.png" alt="Bad" onerror="this.replaceWith(document.createTextNode('\u{1f61e}'))"><span class="mood-label">Bad</span></button>
+                    <button class="mood-btn" data-mood="very_bad" data-tooltip="-20% mood bonus"><img src="images/ui/mood_very_bad.png" alt="Very Bad" onerror="this.replaceWith(document.createTextNode('\u{1f621}'))"><span class="mood-label">Very Bad</span></button>
                 </div>
             </div>
             <label class="friendship-checkbox">
                 <input type="checkbox" id="friendshipToggle" checked>
                 Friendship Training active
+                <span class="tooltip-small" data-tooltip="When active, cards with max friendship apply a bonus multiplier to training stat gains" tabindex="0">?</span>
             </label>
         </div>
 
@@ -182,6 +183,7 @@ function renderDeckSlots() {
             const friendLabel = document.createElement('div');
             friendLabel.className = 'deck-slot-friend-label';
             friendLabel.textContent = 'Friend';
+            friendLabel.setAttribute('data-tooltip', 'Friend slot \u2014 this card belongs to another player and can have custom level/limit break');
             slotEl.appendChild(friendLabel);
         }
 
@@ -221,6 +223,7 @@ function renderEmptySlot(isFriend) {
     if (isFriend) {
         empty.style.paddingTop = '24px';
     }
+    empty.setAttribute('data-tooltip', isFriend ? 'Click to add a friend\'s support card' : 'Click to add a support card');
     empty.innerHTML = `
         <div class="deck-slot-empty-icon">+</div>
         <div class="deck-slot-empty-text">${isFriend ? 'Add Friend Card' : 'Add Card'}</div>
@@ -239,7 +242,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
     const removeBtn = document.createElement('button');
     removeBtn.className = 'deck-slot-remove';
     removeBtn.textContent = '\u2715';
-    removeBtn.title = 'Remove card';
+    removeBtn.setAttribute('data-tooltip', 'Remove card from deck');
     removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         removeDeckSlot(slotIndex);
@@ -284,7 +287,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         controls.className = 'deck-slot-friend-controls';
 
         const lbLabel = document.createElement('label');
-        lbLabel.textContent = 'Limit Break:';
+        lbLabel.innerHTML = 'LB: <span class="tooltip-small" data-tooltip="Limit Break — increases the card\'s max level cap (0-4)" tabindex="0">?</span>';
         controls.appendChild(lbLabel);
 
         const lbSelect = document.createElement('select');
@@ -306,7 +309,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         controls.appendChild(lbSelect);
 
         const lvLabel = document.createElement('label');
-        lvLabel.textContent = 'Level:';
+        lvLabel.innerHTML = 'Lv: <span class="tooltip-small" data-tooltip="Card level — max depends on Limit Break setting" tabindex="0">?</span>';
         controls.appendChild(lvLabel);
 
         const lvInput = document.createElement('input');
@@ -1257,7 +1260,7 @@ function updateCharacterPickLabel() {
         label.textContent = charactersData[charId].name;
         label.closest('.trainee-pick-btn')?.classList.add('has-selection');
     } else {
-        label.textContent = 'None';
+        label.textContent = 'Select Character...';
         label.closest('.trainee-pick-btn')?.classList.remove('has-selection');
     }
 }

@@ -2655,7 +2655,7 @@ function buildFinderTrainingSection(result, idx) {
         { key: 'very_bad', img: 'images/ui/mood_very_bad.png', label: 'Very Bad', title: '-20% mood bonus', fallback: '\u{1f621}' }
     ];
     for (const m of moods) {
-        html += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
+        html += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" data-tooltip="${m.title}">
             <img src="${m.img}" alt="${m.label}" onerror="this.replaceWith(document.createTextNode('${m.fallback}'))">
             <span class="mood-label">${m.label}</span>
         </button>`;
@@ -2795,7 +2795,7 @@ function refreshFinderTraining(idx) {
         { key: 'very_bad', img: 'images/ui/mood_very_bad.png', label: 'Very Bad', title: '-20% mood bonus', fallback: '\u{1f621}' }
     ];
     for (const m of moods2) {
-        innerHtml += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
+        innerHtml += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" data-tooltip="${m.title}">
             <img src="${m.img}" alt="${m.label}" onerror="this.replaceWith(document.createTextNode('${m.fallback}'))">
             <span class="mood-label">${m.label}</span>
         </button>`;

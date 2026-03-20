@@ -967,77 +967,131 @@ function getSortOptionLabel(category, option) {
 
 // ===== TOOLTIP SYSTEM =====
 
-/**
- * Position a tooltip element so it stays within the viewport.
- * Adds/removes tooltip-left, tooltip-right, tooltip-top classes.
- */
-function positionTooltip(tooltipElement) {
-    const rect = tooltipElement.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
+const TOOLTIP_SELECTOR = '[data-tooltip]';
 
-    // Reset position classes
-    tooltipElement.classList.remove('tooltip-left', 'tooltip-right', 'tooltip-top');
+let _tooltipEl = null;   // shared popup div
+let _tooltipArrow = null;
 
-    // Check horizontal positioning
-    if (rect.left < 60) {
-        tooltipElement.classList.add('tooltip-right');
-    } else if (rect.right > viewportWidth - 60) {
-        tooltipElement.classList.add('tooltip-left');
+/** Lazily create the shared tooltip popup element. */
+function _getTooltipEl() {
+    if (!_tooltipEl) {
+        _tooltipEl = document.createElement('div');
+        _tooltipEl.id = 'tooltip-popup';
+        _tooltipEl.setAttribute('role', 'tooltip');
+        _tooltipArrow = document.createElement('div');
+        _tooltipArrow.className = 'tooltip-popup-arrow';
+        _tooltipEl.appendChild(_tooltipArrow);
+        document.body.appendChild(_tooltipEl);
+    }
+    return _tooltipEl;
+}
+
+/** Show the tooltip popup near the trigger element. */
+function showTooltipPopup(trigger) {
+    const text = trigger.getAttribute('data-tooltip');
+    if (!text) return;
+
+    const el = _getTooltipEl();
+    // Remove old text nodes (keep the arrow element at index 0)
+    while (el.childNodes.length > 1) {
+        el.removeChild(el.lastChild);
+    }
+    el.appendChild(document.createTextNode(text));
+    el.classList.add('visible');
+
+    // Position after making visible so we can measure
+    const triggerRect = trigger.getBoundingClientRect();
+    const centerX = triggerRect.left + triggerRect.width / 2;
+
+    // Default: show above
+    let showBelow = triggerRect.top < 60;
+
+    // Temporarily place off-screen to measure
+    el.style.left = '-9999px';
+    el.style.top = '-9999px';
+    el.classList.remove('tooltip-popup-below');
+    const popupRect = el.getBoundingClientRect();
+
+    let left = centerX - popupRect.width / 2;
+    let top;
+
+    if (showBelow) {
+        top = triggerRect.bottom + 8;
+        el.classList.add('tooltip-popup-below');
+    } else {
+        top = triggerRect.top - popupRect.height - 8;
     }
 
-    // Check vertical positioning — show below if near top
-    if (rect.top < 60) {
-        tooltipElement.classList.add('tooltip-top');
+    // Clamp horizontal to viewport
+    const margin = 8;
+    if (left < margin) left = margin;
+    if (left + popupRect.width > window.innerWidth - margin) {
+        left = window.innerWidth - margin - popupRect.width;
+    }
+
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+
+    // Position the arrow to point at the trigger center
+    const arrowLeft = centerX - left;
+    _tooltipArrow.style.left = `${Math.max(8, Math.min(arrowLeft, popupRect.width - 8))}px`;
+}
+
+/** Hide the tooltip popup. */
+function hideTooltipPopup() {
+    if (_tooltipEl) {
+        _tooltipEl.classList.remove('visible');
     }
 }
 
 /**
- * Initialize tooltip auto-positioning and mobile tap support.
+ * Initialize tooltip system using a single shared popup div.
  * Uses event delegation so dynamically added tooltips work automatically.
  */
 function initializeTooltipSystem() {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // Auto-position on hover (desktop) via delegation
+    // Show on hover (capture phase so we get it before bubbling)
     document.addEventListener('mouseenter', (e) => {
-        const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
-        if (tooltip) positionTooltip(tooltip);
+        const trigger = e.target.closest(TOOLTIP_SELECTOR);
+        if (trigger) showTooltipPopup(trigger);
     }, true);
 
-    // Auto-position on focus (keyboard nav) via delegation
+    document.addEventListener('mouseleave', (e) => {
+        const trigger = e.target.closest(TOOLTIP_SELECTOR);
+        if (trigger) hideTooltipPopup();
+    }, true);
+
+    // Show on focus (keyboard nav)
     document.addEventListener('focusin', (e) => {
-        const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
-        if (tooltip) positionTooltip(tooltip);
+        const trigger = e.target.closest(TOOLTIP_SELECTOR);
+        if (trigger) showTooltipPopup(trigger);
     });
 
+    document.addEventListener('focusout', (e) => {
+        const trigger = e.target.closest(TOOLTIP_SELECTOR);
+        if (trigger) hideTooltipPopup();
+    });
+
+    // Mobile: tap to show, tap elsewhere to dismiss
     if (isTouchDevice) {
-        // Track currently shown tooltip for tap-to-dismiss
-        let activeTooltip = null;
+        let activeTrigger = null;
 
         document.addEventListener('touchstart', (e) => {
-            const tooltip = e.target.closest('.tooltip, .tooltip-small, .unlock-tooltip, .unlock-tooltip-small');
+            const trigger = e.target.closest(TOOLTIP_SELECTOR);
 
-            if (tooltip) {
+            if (trigger) {
                 e.preventDefault();
-
-                if (activeTooltip === tooltip) {
-                    // Tapping the same tooltip again — dismiss it
-                    tooltip.classList.remove('tooltip-active');
-                    activeTooltip = null;
+                if (activeTrigger === trigger) {
+                    hideTooltipPopup();
+                    activeTrigger = null;
                 } else {
-                    // Dismiss previous tooltip if any
-                    if (activeTooltip) {
-                        activeTooltip.classList.remove('tooltip-active');
-                    }
-                    // Show this tooltip
-                    positionTooltip(tooltip);
-                    tooltip.classList.add('tooltip-active');
-                    activeTooltip = tooltip;
+                    showTooltipPopup(trigger);
+                    activeTrigger = trigger;
                 }
-            } else if (activeTooltip) {
-                // Tapped elsewhere — dismiss active tooltip
-                activeTooltip.classList.remove('tooltip-active');
-                activeTooltip = null;
+            } else if (activeTrigger) {
+                hideTooltipPopup();
+                activeTrigger = null;
             }
         }, { passive: false });
     }
@@ -1072,7 +1126,8 @@ window.UIComponents = {
     
     // Tooltip system
     initializeTooltipSystem,
-    positionTooltip,
+    showTooltipPopup,
+    hideTooltipPopup,
 
     // Help system
     initializeHelpSystem,

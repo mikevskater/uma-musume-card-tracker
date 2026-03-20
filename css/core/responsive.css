@@ -477,12 +477,7 @@
         min-width: 40px;
     }
     
-    /* Tooltip mobile adjustments */
-    .tooltip::before {
-        max-width: 150px;
-        font-size: var(--font-size-xs);
-        padding: var(--space-sm) var(--space-md);
-    }
+    /* Tooltip mobile adjustments — handled by #tooltip-popup in components.css */
 }
 
 /* =================================================================
