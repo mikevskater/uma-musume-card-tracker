@@ -94,15 +94,15 @@
     --highlight-secondary-subtle: rgba(52, 152, 219, 0.1);
     --highlight-secondary: rgba(52, 152, 219, 0.15);
 
-    /* Colors - Aptitude Grades */
-    --color-grade-s: #e74c3c;
-    --color-grade-a: #e67e22;
-    --color-grade-b: #f1c40f;
-    --color-grade-c: #2ecc71;
-    --color-grade-d: #3498db;
-    --color-grade-e: #95a5a6;
-    --color-grade-f: #7f8c8d;
-    --color-grade-g: #bdc3c7;
+    /* Colors - Aptitude Grades (WCAG AA 4.5:1 on white) */
+    --color-grade-s: #c62828;
+    --color-grade-a: #bf5600;
+    --color-grade-b: #8c6d00;
+    --color-grade-c: #1b7d3e;
+    --color-grade-d: #1565a0;
+    --color-grade-e: #5a6868;
+    --color-grade-f: #4a5556;
+    --color-grade-g: #607078;
 
     /* Colors - Card Types */
     --color-type-speed: #38BDFF;
@@ -257,6 +257,16 @@
     /* Dark Mode Primary Colors (slightly adjusted for better contrast) */
     --color-primary: #5f90c7;
     --color-primary-light: #7ea3cc;
+
+    /* Dark Mode Aptitude Grades (WCAG AA 4.5:1 on #1a1a1a) */
+    --color-grade-s: #ef5350;
+    --color-grade-a: #e67e22;
+    --color-grade-b: #f1c40f;
+    --color-grade-c: #2ecc71;
+    --color-grade-d: #5dade2;
+    --color-grade-e: #a0b0b0;
+    --color-grade-f: #8a9a9b;
+    --color-grade-g: #bdc3c7;
 } 
 
 /* Smooth transitions for theme switching */

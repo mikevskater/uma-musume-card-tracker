@@ -912,6 +912,10 @@ function initializeDeckBuilderEvents() {
                 deckBuilderState.selectedCharacter = selectedId || null;
                 updateCharacterPickLabel();
                 recalculateDeck();
+                if (selectedId && typeof charactersData !== 'undefined' && charactersData[selectedId]) {
+                    const charName = charactersData[selectedId].name || selectedId;
+                    showToast(`Selected ${charName}`, 'success');
+                }
             });
         });
     }

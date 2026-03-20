@@ -1265,11 +1265,12 @@
     flex-shrink: 0;
 }
 
-.training-type-dot.speed { background: var(--color-type-speed); }
-.training-type-dot.stamina { background: var(--color-type-stamina); }
-.training-type-dot.power { background: var(--color-type-power); }
-.training-type-dot.guts { background: var(--color-type-guts); }
-.training-type-dot.intelligence { background: var(--color-type-wisdom); }
+/* Shape distinctions per training type (accessibility: not color-only) */
+.training-type-dot.speed { background: var(--color-type-speed); } /* circle */
+.training-type-dot.stamina { background: var(--color-type-stamina); border-radius: 2px; } /* square */
+.training-type-dot.power { background: var(--color-type-power); border-radius: 2px; transform: rotate(45deg); } /* diamond */
+.training-type-dot.guts { background: var(--color-type-guts); clip-path: polygon(50% 0%, 100% 100%, 0% 100%); border-radius: 0; } /* triangle */
+.training-type-dot.intelligence { background: var(--color-type-wisdom); border-radius: var(--radius-round); box-shadow: inset 0 0 0 2px var(--bg-primary); } /* ring */
 
 .training-cards-cell {
     display: flex;
@@ -1283,12 +1284,13 @@
     border-radius: var(--radius-round);
 }
 
-.training-card-dot.speed { background: var(--color-type-speed); }
-.training-card-dot.stamina { background: var(--color-type-stamina); }
-.training-card-dot.power { background: var(--color-type-power); }
-.training-card-dot.guts { background: var(--color-type-guts); }
-.training-card-dot.intelligence { background: var(--color-type-wisdom); }
-.training-card-dot.friend { background: var(--color-type-friend-bg); }
+/* Shape distinctions match training-type-dot for accessibility */
+.training-card-dot.speed { background: var(--color-type-speed); } /* circle */
+.training-card-dot.stamina { background: var(--color-type-stamina); border-radius: 2px; } /* square */
+.training-card-dot.power { background: var(--color-type-power); border-radius: 2px; transform: rotate(45deg); } /* diamond */
+.training-card-dot.guts { background: var(--color-type-guts); clip-path: polygon(50% 0%, 100% 100%, 0% 100%); border-radius: 0; } /* triangle */
+.training-card-dot.intelligence { background: var(--color-type-wisdom); box-shadow: inset 0 0 0 2.5px var(--bg-primary); } /* ring */
+.training-card-dot.friend { background: var(--color-type-friend-bg); border-radius: 2px; } /* square */
 
 .training-value-positive {
     color: var(--color-success);
