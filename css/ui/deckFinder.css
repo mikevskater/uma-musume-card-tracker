@@ -1190,6 +1190,43 @@
     }
 }
 
+/* 5.7: Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .deck-finder-modal {
+        width: 95vw;
+        max-width: 95vw;
+    }
+
+    .deck-finder-filters {
+        min-width: 240px;
+        max-width: 280px;
+    }
+}
+
+/* 5.8: Large screens — wider panels, larger result cards */
+@media (min-width: 1440px) {
+    .deck-finder-modal {
+        max-width: 1300px;
+    }
+
+    .deck-finder-filters {
+        min-width: 340px;
+    }
+
+    .finder-result-thumb {
+        width: 56px;
+        height: 56px;
+    }
+
+    .finder-detail-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .deck-finder-body {
+        max-width: none;
+    }
+}
+
 /* ===== DARK MODE ===== */
 
 [data-theme="dark"] .finder-result-card {
