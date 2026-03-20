@@ -70,6 +70,15 @@
     background-color: var(--color-danger-dark);
 }
 
+.btn-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: var(--color-success-dark, #218838);
+}
+
 /* Special Button Types */
 .btn-icon {
     width: var(--btn-height);

@@ -3408,6 +3408,9 @@ function loadDeckFromFinder(cardIds, saveName) {
 
 function saveDeckFromFinder(cardIds) {
     _logDeckFinder.info('saveDeckFromFinder', { cardIds });
+    // Exit preview/dirty mode
+    deckBuilderState.previewMode = false;
+    deckBuilderState.dirty = false;
     const slots = loadDeckFromFinder(cardIds);
     const deckId = 'deck_' + Date.now();
     const typeCounts = {};
@@ -3441,8 +3444,10 @@ function saveDeckFromFinder(cardIds) {
 }
 
 function viewDeckFromFinder(cardIds) {
-    // Always create a new saved deck so we never overwrite user's current deck
-    return saveDeckFromFinder(cardIds);
+    _logDeckFinder.info('viewDeckFromFinder', { cardIds });
+    const slots = loadDeckFromFinder(cardIds);
+    const selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
+    enterPreviewMode(slots, selectedTrainee);
 }
 
 // ===== EXPORTS =====

@@ -96,6 +96,17 @@
     opacity: 1;
 }
 
+.deck-preview-indicator {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-warning);
+    background: rgba(var(--color-warning-rgb, 255, 193, 7), 0.15);
+    border: 1px solid var(--color-warning);
+    border-radius: var(--radius-sm);
+    padding: 2px 8px;
+    white-space: nowrap;
+}
+
 .deck-header-actions {
     display: flex;
     gap: var(--space-xs);

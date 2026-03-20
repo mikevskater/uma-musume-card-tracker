@@ -55,6 +55,9 @@ let deckBuilderState = {
     deckName: 'New Deck',
     savedDecks: [],
     activeDeckId: null,
+    previewMode: false,       // True when viewing an unsaved finder result
+    dirty: false,             // True when there are unsaved changes
+    _snapshot: null,          // Snapshot to revert to on Cancel
     pickerFilter: {
         types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
         search: '',
@@ -149,6 +152,8 @@ function initializeDeckBuilder() {
     if (deckBuilderState.savedDecks.length > 0) {
         const lastDeckId = deckBuilderState.activeDeckId || deckBuilderState.savedDecks[0].id;
         switchToDeck(lastDeckId);
+    } else {
+        snapshotDeckState();
     }
 
     renderDeckSelect();
@@ -192,7 +197,7 @@ function setDeckSlot(slotIndex, cardId, level, lb) {
 
     renderDeckSlots();
     recalculateDeck();
-    debouncedSaveDeck();
+    markDeckDirty();
 }
 
 function removeDeckSlot(slotIndex) {
@@ -201,7 +206,7 @@ function removeDeckSlot(slotIndex) {
     resetSlotAssignments(slotIndex, false);
     renderDeckSlots();
     recalculateDeck();
-    debouncedSaveDeck();
+    markDeckDirty();
 }
 
 // ===== CARD PICKER =====
@@ -747,11 +752,9 @@ function saveDeckToStorage() {
     }
 }
 
-let saveDeckTimeout = null;
-function debouncedSaveDeck() {
-    clearTimeout(saveDeckTimeout);
-    saveDeckTimeout = setTimeout(saveDeckToStorage, 500);
-}
+// Auto-save removed — saving is now explicit via Save button.
+// Function kept for API compatibility but does nothing.
+function debouncedSaveDeck() {}
 
 function createNewDeck(name) {
     _logDeckBuilder.info('createNewDeck', { name });
@@ -769,8 +772,10 @@ function createNewDeck(name) {
 
     deckBuilderState.savedDecks.push(newDeck);
     switchToDeck(deckId);
-    saveDeckToStorage();
+    saveDeckToStorage();    // Persist the new deck immediately
     renderDeckSelect();
+    snapshotDeckState();
+    updateDeckHeaderButtons();
     showToast(`Created deck "${newDeck.name}"`, 'success');
 }
 
@@ -791,12 +796,123 @@ function deleteDeck(deckId) {
             deckBuilderState.slots = [null, null, null, null, null, null];
             renderDeckSlots();
             recalculateDeck();
+            snapshotDeckState();
+            updateDeckHeaderButtons();
         }
     }
 
     saveDeckToStorage();
     renderDeckSelect();
     showToast(`Deleted deck "${deckName}"`, 'success');
+}
+
+// ===== UNSAVED CHANGES / PREVIEW MODE =====
+
+// Snapshot the current saved state so Cancel can revert to it
+function snapshotDeckState() {
+    deckBuilderState._snapshot = {
+        slots: deckBuilderState.slots.map(s => s ? { ...s } : null),
+        activeDeckId: deckBuilderState.activeDeckId,
+        deckName: deckBuilderState.deckName,
+        selectedCharacter: deckBuilderState.selectedCharacter
+    };
+    deckBuilderState.dirty = false;
+}
+
+function markDeckDirty() {
+    deckBuilderState.dirty = true;
+    updateDeckHeaderButtons();
+}
+
+function enterPreviewMode(slots, selectedCharacter) {
+    _logDeckBuilder.info('enterPreviewMode');
+    // Snapshot so Cancel reverts to whatever was active before
+    snapshotDeckState();
+
+    deckBuilderState.previewMode = true;
+    deckBuilderState.dirty = false;
+    deckBuilderState.activeDeckId = null;
+    deckBuilderState.deckName = '';
+    deckBuilderState.slots = slots;
+    deckBuilderState.selectedCharacter = selectedCharacter || null;
+    resetAllAssignments();
+
+    if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
+    renderDeckSlots();
+    recalculateDeck();
+    renderDeckSelect();
+    updateDeckHeaderButtons();
+}
+
+function saveDeckChanges() {
+    _logDeckBuilder.info('saveDeckChanges');
+
+    if (deckBuilderState.previewMode || !deckBuilderState.activeDeckId) {
+        // No saved deck — prompt for a name and create one
+        const name = prompt('Enter deck name:', 'New Deck');
+        if (name === null || !name.trim()) return;
+
+        deckBuilderState.previewMode = false;
+        createNewDeck(name.trim());
+    } else {
+        // Save changes to the existing deck
+        saveDeckToStorage();
+    }
+
+    snapshotDeckState();
+    updateDeckHeaderButtons();
+}
+
+function cancelDeckChanges() {
+    _logDeckBuilder.info('cancelDeckChanges');
+    const snapshot = deckBuilderState._snapshot;
+
+    deckBuilderState.previewMode = false;
+    deckBuilderState.dirty = false;
+
+    if (snapshot && snapshot.activeDeckId) {
+        // Reload the saved deck from storage (source of truth)
+        switchToDeck(snapshot.activeDeckId);
+    } else if (snapshot) {
+        // No saved deck was active — restore empty/snapshot state
+        deckBuilderState.slots = snapshot.slots;
+        deckBuilderState.activeDeckId = null;
+        deckBuilderState.deckName = snapshot.deckName;
+        deckBuilderState.selectedCharacter = snapshot.selectedCharacter;
+        resetAllAssignments();
+
+        if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
+        renderDeckSlots();
+        recalculateDeck();
+        renderDeckSelect();
+        snapshotDeckState();
+        updateDeckHeaderButtons();
+    }
+
+    showToast('Changes discarded', 'info');
+}
+
+function updateDeckHeaderButtons() {
+    const saveBtn = document.getElementById('deckSavePreviewBtn');
+    const cancelBtn = document.getElementById('deckCancelPreviewBtn');
+    const indicator = document.getElementById('deckPreviewIndicator');
+
+    const showSaveCancel = deckBuilderState.previewMode || deckBuilderState.dirty;
+
+    if (saveBtn) saveBtn.style.display = showSaveCancel ? '' : 'none';
+    if (cancelBtn) cancelBtn.style.display = showSaveCancel ? '' : 'none';
+
+    if (indicator) {
+        if (deckBuilderState.previewMode) {
+            indicator.style.display = '';
+            indicator.textContent = 'Preview';
+        } else if (deckBuilderState.dirty) {
+            indicator.style.display = '';
+            indicator.textContent = 'Unsaved';
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
 }
 
 function renameDeck(deckId, newName) {
@@ -819,14 +935,11 @@ function switchToDeck(deckId) {
     const deck = deckBuilderState.savedDecks.find(d => d.id === deckId);
     if (!deck) return;
 
-    if (deckBuilderState.activeDeckId && deckBuilderState.activeDeckId !== deckId) {
-        saveDeckToStorage();
-    }
-
     deckBuilderState.activeDeckId = deckId;
     deckBuilderState.deckName = deck.name;
     deckBuilderState.slots = deck.slots ? [...deck.slots] : [null, null, null, null, null, null];
     deckBuilderState.selectedCharacter = deck.selectedCharacter || null;
+    deckBuilderState.previewMode = false;
     resetAllAssignments();
 
     // Update character picker button label to match restored state
@@ -835,6 +948,8 @@ function switchToDeck(deckId) {
     renderDeckSlots();
     recalculateDeck();
     renderDeckSelect();
+    snapshotDeckState();
+    updateDeckHeaderButtons();
 
     // Brief highlight animation on deck switch
     const slotsContainer = document.getElementById('deckSlots');
@@ -894,11 +1009,22 @@ function initializeDeckBuilderEvents() {
         });
     }
 
+    const savePreviewBtn = document.getElementById('deckSavePreviewBtn');
+    if (savePreviewBtn) {
+        savePreviewBtn.addEventListener('click', () => saveDeckChanges());
+    }
+
+    const cancelPreviewBtn = document.getElementById('deckCancelPreviewBtn');
+    if (cancelPreviewBtn) {
+        cancelPreviewBtn.addEventListener('click', () => cancelDeckChanges());
+    }
+
     const deckSelect = document.getElementById('deckSelect');
     if (deckSelect) {
         deckSelect.addEventListener('change', (e) => {
             const deckId = e.target.value;
-            if (deckId !== 'default') {
+            if (deckId !== 'default' && deckId !== 'preview') {
+                // switchToDeck handles clearing preview/dirty state
                 switchToDeck(deckId);
             }
         });
@@ -1084,5 +1210,11 @@ Object.assign(window, {
     getSelectedCharacterGrowthRates,
     getTrainingFailureRates,
     STAT_BONUS_INDEX_MAP,
-    getRaceBonusTable
+    getRaceBonusTable,
+    enterPreviewMode,
+    saveDeckChanges,
+    cancelDeckChanges,
+    snapshotDeckState,
+    markDeckDirty,
+    updateDeckHeaderButtons
 });

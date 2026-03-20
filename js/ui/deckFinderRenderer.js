@@ -2379,21 +2379,21 @@ function ensureResultsDelegation(container) {
     _resultsDelegateWired = true;
 
     container.addEventListener('click', (e) => {
-        // View button
+        // View button — preview in builder (unsaved)
         const viewBtn = e.target.closest('.finder-view-btn');
         if (viewBtn) {
             e.stopPropagation();
             const idx = parseInt(viewBtn.dataset.idx);
             const result = deckFinderState.results[idx];
             if (result) {
-                const name = saveDeckFromFinder(result.cardIds);
+                viewDeckFromFinder(result.cardIds);
                 closeDeckFinder();
-                showToast(`Deck "${name}" loaded into builder`, 'success');
+                showToast('Deck preview loaded — Save or Cancel in the Deck Builder', 'info');
             }
             return;
         }
 
-        // Save button
+        // Save button — create a named saved deck
         const saveBtn = e.target.closest('.finder-save-btn');
         if (saveBtn) {
             e.stopPropagation();

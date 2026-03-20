@@ -33,11 +33,14 @@ function renderDeckBuilderShell() {
             <select class="deck-select" id="deckSelect">
                 <option value="default">New Deck</option>
             </select>
+            <span class="deck-preview-indicator" id="deckPreviewIndicator" style="display:none;">Preview</span>
             <span class="deck-save-indicator" id="deckSaveIndicator"></span>
             <div class="deck-header-actions">
                 <button class="btn btn-secondary" id="deckNewBtn">New</button>
                 <button class="btn btn-secondary" id="deckRenameBtn">Rename</button>
                 <button class="btn btn-danger" id="deckDeleteBtn">Delete</button>
+                <button class="btn btn-success" id="deckSavePreviewBtn" style="display:none;">Save</button>
+                <button class="btn btn-secondary" id="deckCancelPreviewBtn" style="display:none;">Cancel</button>
                 <button class="btn btn-primary" id="deckFindBestBtn">Find Best Deck</button>
             </div>
         </div>
@@ -1923,7 +1926,16 @@ function renderDeckSelect() {
     select.innerHTML = '';
     const decks = deckBuilderState.savedDecks;
 
-    if (decks.length === 0) {
+    // Show preview placeholder when in preview mode
+    if (deckBuilderState.previewMode) {
+        const previewOpt = document.createElement('option');
+        previewOpt.value = 'preview';
+        previewOpt.textContent = 'Unsaved Preview';
+        previewOpt.selected = true;
+        select.appendChild(previewOpt);
+    }
+
+    if (decks.length === 0 && !deckBuilderState.previewMode) {
         const opt = document.createElement('option');
         opt.value = 'default';
         opt.textContent = 'Create your first deck to start building!';
@@ -1935,7 +1947,7 @@ function renderDeckSelect() {
         const opt = document.createElement('option');
         opt.value = deck.id;
         opt.textContent = deck.name;
-        if (deck.id === deckBuilderState.activeDeckId) opt.selected = true;
+        if (!deckBuilderState.previewMode && deck.id === deckBuilderState.activeDeckId) opt.selected = true;
         select.appendChild(opt);
     });
 }
