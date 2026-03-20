@@ -205,8 +205,12 @@ function removeDeckSlot(slotIndex) {
 
 // ===== CARD PICKER =====
 
+// Track the element that triggered a modal so focus can return on close
+let _pickerTriggerEl = null;
+
 function openCardPicker(slotIndex) {
     _logDeckBuilder.info('openCardPicker', { slotIndex });
+    _pickerTriggerEl = document.activeElement;
     deckBuilderState.activeSlot = slotIndex;
     deckBuilderState.pickerOpen = true;
     deckBuilderState.pickerFilter.search = '';
@@ -223,6 +227,12 @@ function closeCardPicker() {
     if (overlay) {
         overlay.classList.remove('open');
         setTimeout(() => overlay.remove(), 200);
+    }
+
+    // Return focus to trigger element
+    if (_pickerTriggerEl && _pickerTriggerEl.focus) {
+        _pickerTriggerEl.focus();
+        _pickerTriggerEl = null;
     }
 }
 
@@ -920,29 +930,78 @@ function initializeDeckBuilderEvents() {
         });
     }
 
-    // Facility level buttons
-    document.querySelectorAll('#facilityLevelBtns .facility-level-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            _logDeckBuilder.info('Training level changed', { level: btn.dataset.level });
-            deckBuilderState.trainingLevel = parseInt(btn.dataset.level);
-            document.querySelectorAll('#facilityLevelBtns .facility-level-btn').forEach(b =>
-                b.classList.toggle('active', b === btn)
-            );
-            recalculateDeck();
+    // Facility level buttons (arrow key navigation)
+    const facilityContainer = document.getElementById('facilityLevelBtns');
+    if (facilityContainer) {
+        const facilityBtns = [...facilityContainer.querySelectorAll('.facility-level-btn')];
+        facilityContainer.setAttribute('role', 'radiogroup');
+        facilityContainer.setAttribute('aria-label', 'Facility level');
+        facilityBtns.forEach((btn, i) => {
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', btn.classList.contains('active') ? 'true' : 'false');
+            btn.setAttribute('tabindex', btn.classList.contains('active') ? '0' : '-1');
+            btn.addEventListener('click', () => {
+                _logDeckBuilder.info('Training level changed', { level: btn.dataset.level });
+                deckBuilderState.trainingLevel = parseInt(btn.dataset.level);
+                facilityBtns.forEach(b => {
+                    b.classList.toggle('active', b === btn);
+                    b.setAttribute('aria-checked', b === btn ? 'true' : 'false');
+                    b.setAttribute('tabindex', b === btn ? '0' : '-1');
+                });
+                recalculateDeck();
+            });
+            btn.addEventListener('keydown', (e) => {
+                let next = -1;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    next = (i + 1) % facilityBtns.length;
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    next = (i - 1 + facilityBtns.length) % facilityBtns.length;
+                }
+                if (next >= 0) {
+                    e.preventDefault();
+                    facilityBtns[next].click();
+                    facilityBtns[next].focus();
+                }
+            });
         });
-    });
+    }
 
-    // Mood buttons
+    // Mood buttons (radio group pattern with arrow key navigation)
     const moodBtnRow = document.getElementById('moodBtnRow');
     if (moodBtnRow) {
-        moodBtnRow.querySelectorAll('.mood-btn').forEach(btn => {
+        const moodBtns = [...moodBtnRow.querySelectorAll('.mood-btn')];
+        moodBtnRow.setAttribute('role', 'radiogroup');
+        moodBtnRow.setAttribute('aria-label', 'Mood selection');
+        moodBtns.forEach((btn, i) => {
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', btn.classList.contains('active') ? 'true' : 'false');
+            btn.setAttribute('tabindex', btn.classList.contains('active') ? '0' : '-1');
             btn.addEventListener('click', () => {
                 const mood = btn.dataset.mood;
                 _logDeckBuilder.info('Mood changed', { mood });
                 deckBuilderState.mood = mood;
-                moodBtnRow.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                moodBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-checked', 'false');
+                    b.setAttribute('tabindex', '-1');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-checked', 'true');
+                btn.setAttribute('tabindex', '0');
                 recalculateDeck();
+            });
+            btn.addEventListener('keydown', (e) => {
+                let next = -1;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    next = (i + 1) % moodBtns.length;
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    next = (i - 1 + moodBtns.length) % moodBtns.length;
+                }
+                if (next >= 0) {
+                    e.preventDefault();
+                    moodBtns[next].click();
+                    moodBtns[next].focus();
+                }
             });
         });
     }

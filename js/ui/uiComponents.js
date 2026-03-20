@@ -695,6 +695,33 @@ function createSelectedCardItem(card) {
     return item;
 }
 
+// ===== FOCUS MANAGEMENT =====
+
+/**
+ * Trap focus within a container element (for modals).
+ * Returns a cleanup function to remove the trap.
+ * @param {HTMLElement} container - The modal container to trap focus within
+ * @returns {Function} cleanup - Call to remove the focus trap
+ */
+function trapFocus(container) {
+    function handler(e) {
+        if (e.key !== 'Tab') return;
+        const focusable = container.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    }
+    container.addEventListener('keydown', handler);
+    return () => container.removeEventListener('keydown', handler);
+}
+
 // ===== NOTIFICATION COMPONENTS =====
 
 /**
@@ -718,6 +745,7 @@ function showToast(message, type = 'success', options = {}) {
     }
 
     const toast = createElement('div', { className: `toast ${type}` });
+    toast.setAttribute('role', 'status');
 
     const msgSpan = createElement('span', {
         className: 'toast-message',
@@ -1162,6 +1190,7 @@ window.UIComponents = {
     createComparisonCardHeader,
     createSelectedCardItem,
     showToast,
+    trapFocus,
     createEffectItem,
     createSkillItem,
     checkSkillTypeFilters,

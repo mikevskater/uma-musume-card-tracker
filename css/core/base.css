@@ -269,6 +269,24 @@
     --color-grade-g: #bdc3c7;
 } 
 
+/* Skip-to-content link (accessibility) */
+.skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: var(--space-lg);
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    z-index: 9999;
+    text-decoration: none;
+    font-weight: var(--font-weight-semibold);
+}
+
+.skip-to-content:focus {
+    top: var(--space-sm);
+}
+
 /* Smooth transitions for theme switching */
 *,
 *::before,

@@ -3,6 +3,9 @@
 
 const _logDeckFinderUI = _debug.create('DeckFinderUI');
 
+// Track trigger element for focus return on close
+let _finderTriggerEl = null;
+
 // ===== METRIC TOOLTIPS =====
 const FINDER_METRIC_TOOLTIPS = {
     'metric-race': 'Race Bonus — extra stats earned from races',
@@ -66,11 +69,17 @@ function openDeckFinder() {
     const existing = document.getElementById('deckFinderOverlay');
     if (existing) existing.remove();
 
+    _finderTriggerEl = document.activeElement;
+
     const overlay = document.createElement('div');
     overlay.id = 'deckFinderOverlay';
     overlay.className = 'picker-modal-overlay deck-finder-overlay';
     overlay.innerHTML = buildFinderModalHTML();
     document.body.appendChild(overlay);
+
+    // Focus trap for modal accessibility
+    const finderModal = overlay.querySelector('.deck-finder-modal');
+    if (finderModal) trapFocus(finderModal);
 
     requestAnimationFrame(() => overlay.classList.add('open'));
     initFinderEvents();
@@ -137,6 +146,11 @@ function closeDeckFinder() {
         overlay.classList.remove('open');
         setTimeout(() => overlay.remove(), 200);
     }
+    // Return focus to trigger element
+    if (_finderTriggerEl && _finderTriggerEl.focus) {
+        _finderTriggerEl.focus();
+        _finderTriggerEl = null;
+    }
 }
 
 // ===== MODAL HTML =====
@@ -144,10 +158,10 @@ function closeDeckFinder() {
 function buildFinderModalHTML() {
     return `
         <div class="deck-finder-shield"></div>
-        <div class="picker-modal deck-finder-modal">
+        <div class="picker-modal deck-finder-modal" role="dialog" aria-modal="true" aria-label="Find best deck">
             <div class="picker-header">
                 <h3>Find Best Deck</h3>
-                <button class="picker-close" id="finderClose">&times;</button>
+                <button class="picker-close" id="finderClose" aria-label="Close (Esc)">&times;</button>
             </div>
             <div class="deck-finder-body">
                 <div class="deck-finder-filters" id="finderFilters">
@@ -157,7 +171,7 @@ function buildFinderModalHTML() {
                     <div class="finder-search-bar" id="finderSearchBar">
                         <button class="btn btn-primary finder-search-btn" id="finderSearchBtn">Search</button>
                         <button class="btn btn-danger finder-search-btn" id="finderCancelBtn" style="display:none;">Cancel</button>
-                        <div class="finder-progress" id="finderProgress" style="display:none;">
+                        <div class="finder-progress" id="finderProgress" style="display:none;" aria-live="assertive" role="status">
                             <div class="finder-progress-bar">
                                 <div class="finder-progress-fill" id="finderProgressFill"></div>
                             </div>

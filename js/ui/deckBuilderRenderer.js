@@ -57,7 +57,7 @@ function renderDeckBuilderShell() {
                 <span class="deck-section-toggle"></span>
             </div>
             <div class="deck-section-body">
-                <div id="deckSummaryContent">Add cards to see aggregated effects.</div>
+                <div id="deckSummaryContent" aria-live="polite">Add cards to see aggregated effects.</div>
             </div>
         </div>
 
@@ -244,6 +244,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
     removeBtn.className = 'deck-slot-remove';
     removeBtn.textContent = '\u2715';
     removeBtn.setAttribute('data-tooltip', 'Remove card from deck');
+    removeBtn.setAttribute('aria-label', 'Remove card from deck');
     removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         removeDeckSlot(slotIndex);
@@ -392,15 +393,16 @@ function renderCardPicker() {
     const dirLabel = filter.sortDirection === 'desc' ? 'Desc' : 'Asc';
 
     overlay.innerHTML = `
-        <div class="picker-modal" id="pickerModal">
+        <div class="picker-modal" id="pickerModal" role="dialog" aria-modal="true" aria-label="Select card">
             <div class="picker-header">
                 <h3>Select Card \u2014 ${slotLabel}</h3>
-                <button class="picker-close" id="pickerCloseBtn">&times;</button>
+                <button class="picker-close" id="pickerCloseBtn" aria-label="Close (Esc)">&times;</button>
             </div>
             <div class="picker-filters">
                 <div class="picker-type-filters" id="pickerTypeFilters">
                     ${typeButtonsHtml}
                 </div>
+                <label for="pickerSearch" class="sr-only">Search cards</label>
                 <input class="picker-search" id="pickerSearch" type="text" placeholder="Search by card or character name...">
                 <div class="picker-filter-row">
                     <label class="picker-ssr-toggle" data-tooltip="SSR = Super Special Rare — the highest card rarity with the strongest effects" tabindex="0">
@@ -426,6 +428,10 @@ function renderCardPicker() {
     `;
 
     document.body.appendChild(overlay);
+
+    // Focus trap for modal accessibility
+    const pickerModal = document.getElementById('pickerModal');
+    if (pickerModal) trapFocus(pickerModal);
 
     document.getElementById('pickerCloseBtn').addEventListener('click', closeCardPicker);
 
@@ -515,6 +521,9 @@ function renderCardPicker() {
 
     requestAnimationFrame(() => {
         overlay.classList.add('open');
+        // Auto-focus search input for keyboard users
+        const searchInput = document.getElementById('pickerSearch');
+        if (searchInput) searchInput.focus();
     });
 }
 
@@ -899,14 +908,15 @@ function renderDeckSummary(aggregated, perTraining) {
         <div class="deck-summary-section-label">Per-Training Effects (from present cards only)</div>
         <div class="deck-summary-training-wrapper">
             <table class="deck-summary-training-table">
+                <caption class="sr-only">Per-training effects summary</caption>
                 <thead>
                     <tr>
-                        <th>Training</th>
-                        <th>Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type (Speed, Stamina, Power, Guts, Wisdom, Friend)" tabindex="0">?</span></th>
-                        <th>Train Eff <span class="tooltip-small" data-tooltip="Training Effectiveness — bonus % applied to base stat gains" tabindex="0">?</span></th>
-                        <th>Mood Eff <span class="tooltip-small" data-tooltip="Mood Effect — additional % bonus from character mood" tabindex="0">?</span></th>
-                        ${statBonusLabels.map((label, i) => `<th>${label} <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[i]}" tabindex="0">?</span></th>`).join('\n                        ')}
-                        <th>Friend <span class="tooltip-small" data-tooltip="Friendship bonus multiplier — 1.00× = no bonus, higher = more stat gains when training with bonded cards" tabindex="0">?</span></th>
+                        <th scope="col">Training</th>
+                        <th scope="col">Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type (Speed, Stamina, Power, Guts, Wisdom, Friend)" tabindex="0">?</span></th>
+                        <th scope="col">Train Eff <span class="tooltip-small" data-tooltip="Training Effectiveness — bonus % applied to base stat gains" tabindex="0">?</span></th>
+                        <th scope="col">Mood Eff <span class="tooltip-small" data-tooltip="Mood Effect — additional % bonus from character mood" tabindex="0">?</span></th>
+                        ${statBonusLabels.map((label, i) => `<th scope="col">${label} <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[i]}" tabindex="0">?</span></th>`).join('\n                        ')}
+                        <th scope="col">Friend <span class="tooltip-small" data-tooltip="Friendship bonus multiplier — 1.00× = no bonus, higher = more stat gains when training with bonded cards" tabindex="0">?</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1003,18 +1013,19 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
     let html = `
         <div class="training-table-wrapper">
             <table class="training-table">
+                <caption class="sr-only">Training breakdown with stat gains per training type</caption>
                 <thead>
                     <tr>
-                        <th>Training</th>
-                        <th>Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type" tabindex="0">?</span></th>
-                        <th>Speed <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[0]}" tabindex="0">?</span></th>
-                        <th>Stamina <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[1]}" tabindex="0">?</span></th>
-                        <th>Power <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[2]}" tabindex="0">?</span></th>
-                        <th>Guts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[3]}" tabindex="0">?</span></th>
-                        <th>Wit <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[4]}" tabindex="0">?</span></th>
-                        <th>Skill Pts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[5]}" tabindex="0">?</span></th>
-                        <th>Energy <span class="tooltip-small" data-tooltip="Stamina cost — negative = energy drain per training session" tabindex="0">?</span></th>
-                        ${hasFailureRates ? '<th>Fail % <span class="tooltip-small" data-tooltip="Training failure probability at current facility level" tabindex="0">?</span></th>' : ''}
+                        <th scope="col">Training</th>
+                        <th scope="col">Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type" tabindex="0">?</span></th>
+                        <th scope="col">Speed <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[0]}" tabindex="0">?</span></th>
+                        <th scope="col">Stamina <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[1]}" tabindex="0">?</span></th>
+                        <th scope="col">Power <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[2]}" tabindex="0">?</span></th>
+                        <th scope="col">Guts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[3]}" tabindex="0">?</span></th>
+                        <th scope="col">Wit <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[4]}" tabindex="0">?</span></th>
+                        <th scope="col">Skill Pts <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[5]}" tabindex="0">?</span></th>
+                        <th scope="col">Energy <span class="tooltip-small" data-tooltip="Stamina cost — negative = energy drain per training session" tabindex="0">?</span></th>
+                        ${hasFailureRates ? '<th scope="col">Fail % <span class="tooltip-small" data-tooltip="Training failure probability at current facility level" tabindex="0">?</span></th>' : ''}
                     </tr>
                 </thead>
                 <tbody>
@@ -1025,7 +1036,7 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
         if (!result) return;
 
         const typeCell = `<td>
-            <div class="training-type-cell training-type-clickable" data-training="${type}" title="Click to assign cards">
+            <div class="training-type-cell training-type-clickable" data-training="${type}" title="Click to assign cards" tabindex="0" role="button">
                 <span class="training-type-dot ${type}"></span>
                 ${typeLabels[type]}
             </div>
@@ -1093,6 +1104,12 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
         cell.addEventListener('click', () => {
             openTrainingAssignmentModal(cell.dataset.training);
         });
+        cell.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openTrainingAssignmentModal(cell.dataset.training);
+            }
+        });
     });
 }
 
@@ -1115,6 +1132,9 @@ function renderTrainingAssignmentModal(trainingType) {
 
     const modal = document.createElement('div');
     modal.className = 'training-assign-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', `${label} training card assignment`);
 
     // Header
     modal.innerHTML = `
@@ -1123,7 +1143,7 @@ function renderTrainingAssignmentModal(trainingType) {
                 <span class="training-type-dot ${trainingType}"></span>
                 ${label} Training -- Card Assignment
             </h3>
-            <div class="training-assign-hint">Click cards to toggle their presence at this training.</div>
+            <div class="training-assign-hint">Click cards to toggle their presence at this training. <kbd>Esc</kbd> to close.</div>
         </div>
         <div class="training-assign-cards" id="trainingAssignCards"></div>
         <div class="training-assign-actions">
@@ -1135,6 +1155,10 @@ function renderTrainingAssignmentModal(trainingType) {
 
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+
+    // Focus trap + save trigger for return-focus
+    const _trainTrigger = document.activeElement;
+    trapFocus(modal);
 
     const cardsContainer = document.getElementById('trainingAssignCards');
 
@@ -1188,16 +1212,19 @@ function renderTrainingAssignmentModal(trainingType) {
     renderCards();
 
     // Cancel
-    document.getElementById('trainingAssignCancel').addEventListener('click', () => {
-        overlay.classList.remove('open');
-        setTimeout(() => overlay.remove(), 200);
-    });
+    document.getElementById('trainingAssignCancel').addEventListener('click', closeTrainingModal);
 
     // Reset
     document.getElementById('trainingAssignReset').addEventListener('click', () => {
         for (let i = 0; i < 6; i++) tempAssignments[i] = true;
         renderCards();
     });
+
+    function closeTrainingModal() {
+        overlay.classList.remove('open');
+        setTimeout(() => overlay.remove(), 200);
+        if (_trainTrigger && _trainTrigger.focus) _trainTrigger.focus();
+    }
 
     // Save
     document.getElementById('trainingAssignSave').addEventListener('click', () => {
@@ -1206,8 +1233,7 @@ function renderTrainingAssignmentModal(trainingType) {
             showToast('Warning: no cards assigned to this training type', 'warning');
         }
         saveTrainingAssignment(trainingType, tempAssignments);
-        overlay.classList.remove('open');
-        setTimeout(() => overlay.remove(), 200);
+        closeTrainingModal();
         showToast(`Training assignments saved — ${presentCount} card${presentCount !== 1 ? 's' : ''} present`, presentCount === 0 ? 'warning' : 'success');
 
         // Flash the updated training row
@@ -1229,8 +1255,7 @@ function renderTrainingAssignmentModal(trainingType) {
     // ESC to close
     const escHandler = (e) => {
         if (e.key === 'Escape') {
-            overlay.classList.remove('open');
-            setTimeout(() => overlay.remove(), 200);
+            closeTrainingModal();
             document.removeEventListener('keydown', escHandler);
         }
     };
@@ -1239,8 +1264,7 @@ function renderTrainingAssignmentModal(trainingType) {
     // Backdrop click
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
-            overlay.classList.remove('open');
-            setTimeout(() => overlay.remove(), 200);
+            closeTrainingModal();
         }
     });
 
@@ -1265,8 +1289,10 @@ function initCollapsibleSections() {
         if (!section) return;
 
         section.classList.toggle('collapsed');
+        const isCollapsed = section.classList.contains('collapsed');
+        header.setAttribute('aria-expanded', !isCollapsed);
         const state = getCollapsedState();
-        if (section.classList.contains('collapsed')) {
+        if (isCollapsed) {
             state[sectionId] = true;
         } else {
             delete state[sectionId];
@@ -1274,10 +1300,14 @@ function initCollapsibleSections() {
         saveCollapsedState(state);
     });
 
-    // Apply persisted collapsed state
+    // Apply persisted collapsed state + aria-expanded
     document.querySelectorAll('.deck-section.collapsible').forEach(section => {
+        const header = section.querySelector('.deck-section-header');
         if (collapsed[section.id]) {
             section.classList.add('collapsed');
+            if (header) header.setAttribute('aria-expanded', 'false');
+        } else {
+            if (header) header.setAttribute('aria-expanded', 'true');
         }
     });
 }
