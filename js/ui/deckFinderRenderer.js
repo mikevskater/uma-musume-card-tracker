@@ -3,6 +3,17 @@
 
 const _logDeckFinderUI = _debug.create('DeckFinderUI');
 
+// ===== METRIC TOOLTIPS =====
+const FINDER_METRIC_TOOLTIPS = {
+    'metric-race': 'Race Bonus — extra stats earned from races',
+    'metric-train': 'Training Effectiveness — bonus % applied to base stat gains',
+    'metric-friend': 'Friendship Bonus — stat gain multiplier when training with bonded cards',
+    'metric-energy': 'Energy Cost Reduction — lowers stamina cost of training',
+    'metric-event': 'Event Recovery — increases HP recovered from support card events',
+    'metric-hints': 'Hint Skill Count — total hint skills available from this deck',
+    'metric-aptitude': 'Skill Aptitude — how well deck skills match your trainee\'s race conditions'
+};
+
 // ===== CARD LOOKUP MAP =====
 // O(1) lookup by support_id instead of O(n) cardData.find() in render loops
 let _cardDataMap = null;
@@ -200,7 +211,7 @@ function buildFinderFiltersHTML() {
 
     return `
         <!-- ═══ CARD POOL FILTERS ═══ -->
-        <div class="finder-group-header">Card Pool</div>
+        <div class="finder-group-header" data-tooltip="Filters narrow the card pool before searching for optimal decks" tabindex="0">Card Pool</div>
 
         <!-- Scenario -->
         <div class="finder-section">
@@ -222,8 +233,8 @@ function buildFinderFiltersHTML() {
         <div class="finder-section">
             <div class="finder-label">Include Cards From</div>
             <div class="finder-toggle-row">
-                <button class="finder-toggle-btn active" data-pool="owned">Owned Only</button>
-                <button class="finder-toggle-btn" data-pool="all">All Cards</button>
+                <button class="finder-toggle-btn active" data-pool="owned" data-tooltip="Only search cards in your collection" tabindex="0">Owned Only</button>
+                <button class="finder-toggle-btn" data-pool="all" data-tooltip="Search all available cards, including ones you don't own" tabindex="0">All Cards</button>
             </div>
         </div>
 
@@ -353,7 +364,7 @@ function buildFinderFiltersHTML() {
                         </div>
                     `).join('')}
                 </div>
-                <div class="finder-ratio-sum" id="finderRatioSum">Sum: 0 / 6</div>
+                <div class="finder-ratio-sum" id="finderRatioSum" data-tooltip="Total must equal 6 (the number of deck slots). Set to 0 for flexible distribution." tabindex="0">Sum: 0 / 6</div>
             </div>
         </div>
 
@@ -365,19 +376,19 @@ function buildFinderFiltersHTML() {
             </button>
             <div class="finder-collapse-body" id="finderThresholdBody" style="display:none;">
                 <div class="finder-threshold-grid">
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Minimum combined Race Bonus across all 6 cards. Decks below this value are excluded." tabindex="0">
                         <label>Race Bonus</label>
                         <div class="finder-input-suffix"><input type="number" id="finderMinRace" min="0" value="0"><span>%</span></div>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Minimum combined Training Effectiveness across all 6 cards. Decks below this value are excluded." tabindex="0">
                         <label>Train Eff</label>
                         <div class="finder-input-suffix"><input type="number" id="finderMinTrain" min="0" value="0"><span>%</span></div>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Minimum combined Friendship bonus across all 6 cards. Decks below this value are excluded." tabindex="0">
                         <label>Friendship</label>
                         <div class="finder-input-suffix"><input type="number" id="finderMinFriend" min="0" value="0"><span>%</span></div>
                     </div>
-                    <div class="finder-threshold-item">
+                    <div class="finder-threshold-item" data-tooltip="Minimum combined Energy Reduction across all 6 cards. Decks below this value are excluded." tabindex="0">
                         <label>Energy Red</label>
                         <div class="finder-input-suffix"><input type="number" id="finderMinEnergy" min="0" value="0"><span>%</span></div>
                     </div>
@@ -403,8 +414,8 @@ function buildFinderFiltersHTML() {
                 </div>
                 <div class="finder-req-skills-mode">
                     <span class="finder-hint">Mode:</span>
-                    <label class="finder-pill finder-pill-sm active"><input type="radio" name="finderReqSkillMode" value="all" checked hidden> ALL</label>
-                    <label class="finder-pill finder-pill-sm"><input type="radio" name="finderReqSkillMode" value="any" hidden> ANY</label>
+                    <label class="finder-pill finder-pill-sm active" data-tooltip="ALL — deck must contain every selected skill" tabindex="0"><input type="radio" name="finderReqSkillMode" value="all" checked hidden> ALL</label>
+                    <label class="finder-pill finder-pill-sm" data-tooltip="ANY — deck must contain at least one of the selected skills" tabindex="0"><input type="radio" name="finderReqSkillMode" value="any" hidden> ANY</label>
                 </div>
                 <div class="finder-req-skills-list" id="finderReqSkillsList"></div>
 
@@ -426,7 +437,7 @@ function buildFinderFiltersHTML() {
         <div class="finder-section finder-collapsible">
             <button class="finder-collapse-btn" data-target="finderWeightsBody">
                 <span class="finder-collapse-icon">&#9654;</span> Scoring Weights
-                <span class="finder-hint">(what the search optimizes for)</span>
+                <span class="finder-hint" data-tooltip="Higher weight = metric prioritized more in deck scoring. Adjust to find decks that match your training strategy." tabindex="0">(what the search optimizes for)</span>
             </button>
             <div class="finder-collapse-body" id="finderWeightsBody" style="display:none;">
                 <div class="finder-weights-list" id="finderWeightsList"></div>
@@ -2247,7 +2258,7 @@ function renderLiveResults(results, matchCount) {
                      class="finder-result-thumb card-image rarity-${card.rarity}"
                      title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
                 <img class="finder-thumb-type-icon" src="${iconFile}" alt="${card.type}">
-                ${isFriend ? '<span class="finder-thumb-friend-tag">F</span>' : ''}
+                ${isFriend ? '<span class="finder-thumb-friend-tag" data-tooltip="Friend slot card" tabindex="0">F</span>' : ''}
             </div>`;
         }).join('');
         const keyMetrics = [];
@@ -2295,7 +2306,7 @@ function renderResultCard(result, idx) {
                  class="finder-result-thumb card-image rarity-${card.rarity}"
                  title="${card.char_name}${isFriend ? ' (Friend)' : ''}" alt="${card.char_name}">
             <img class="finder-thumb-type-icon" src="${iconFile}" alt="${card.type}">
-            ${isFriend ? '<span class="finder-thumb-friend-tag">F</span>' : ''}
+            ${isFriend ? '<span class="finder-thumb-friend-tag" data-tooltip="Friend slot card" tabindex="0">F</span>' : ''}
         </div>`;
     }).join('');
 
@@ -2312,17 +2323,17 @@ function renderResultCard(result, idx) {
     return `
         <div class="finder-result-card" data-idx="${idx}">
             <div class="finder-result-top">
-                <div class="finder-result-rank">#${idx + 1}</div>
+                <div class="finder-result-rank" data-tooltip="Rank based on weighted scoring of all deck metrics" tabindex="0">#${idx + 1}</div>
                 <div class="finder-result-thumbs">${cardThumbs}</div>
                 <div class="finder-result-actions-top">
                     <label class="finder-cmp-label"><input type="checkbox" class="finder-compare-check" data-idx="${idx}"> Cmp</label>
                 </div>
             </div>
             <div class="finder-result-metrics">
-                ${metricItems.map(mi => `<div class="finder-metric ${mi.cls}"><span class="finder-metric-label">${mi.label}</span><span class="finder-metric-value">${mi.value}</span></div>`).join('')}
+                ${metricItems.map(mi => `<div class="finder-metric ${mi.cls}" data-tooltip="${FINDER_METRIC_TOOLTIPS[mi.cls] || ''}" tabindex="0"><span class="finder-metric-label">${mi.label}</span><span class="finder-metric-value">${mi.value}</span></div>`).join('')}
             </div>
             <div class="finder-result-bottom">
-                <span class="finder-result-types">${typeStr}</span>
+                <span class="finder-result-types" data-tooltip="Deck composition — card type abbreviation × count" tabindex="0">${typeStr}</span>
                 <div class="finder-result-btns">
                     <button class="btn btn-secondary btn-sm finder-view-btn" data-idx="${idx}">View in Builder</button>
                     <button class="btn btn-primary btn-sm finder-save-btn" data-idx="${idx}">Save as Deck</button>
@@ -2487,10 +2498,10 @@ function toggleResultDetail(idx) {
         // Build badges for this card
         let cardBadges = '';
         if (isFriend) {
-            cardBadges += '<span class="finder-friend-badge">Friend</span>';
+            cardBadges += '<span class="finder-friend-badge" data-tooltip="Friend slot card — borrowed from another player at max level" tabindex="0">Friend</span>';
         }
         if (keyEntry) {
-            cardBadges += `<span class="finder-key-badge" title="Top contributor to ${keyEntry.metric}">${keyEntry.metric}</span>`;
+            cardBadges += `<span class="finder-key-badge" data-tooltip="Key Card — top contributor to ${keyEntry.metric} in this deck" tabindex="0">${keyEntry.metric}</span>`;
         }
 
         const cardClasses = ['finder-detail-card'];

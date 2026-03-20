@@ -397,9 +397,9 @@ function renderCardPicker() {
                 <div class="picker-type-filters" id="pickerTypeFilters">
                     ${typeButtonsHtml}
                 </div>
-                <input class="picker-search" id="pickerSearch" type="text" placeholder="Search by card name...">
+                <input class="picker-search" id="pickerSearch" type="text" placeholder="Search by card or character name...">
                 <div class="picker-filter-row">
-                    <label class="picker-ssr-toggle">
+                    <label class="picker-ssr-toggle" data-tooltip="SSR = Super Special Rare — the highest card rarity with the strongest effects" tabindex="0">
                         <input type="checkbox" id="pickerSsrOnly"${filter.ssrOnly ? ' checked' : ''}>
                         SSR Only
                     </label>
@@ -408,7 +408,7 @@ function renderCardPicker() {
                         <select class="picker-sort-select" id="pickerSortBy">
                             ${sortOptionsHtml}
                         </select>
-                        <button class="picker-sort-dir-btn" id="pickerSortDir" title="Toggle sort direction">
+                        <button class="picker-sort-dir-btn" id="pickerSortDir" data-tooltip="Toggle sort direction — ascending (↑) or descending (↓)" tabindex="0">
                             ${dirArrow} ${dirLabel}
                         </button>
                     </div>
@@ -626,6 +626,8 @@ function renderPickerCards() {
         levelDiv.className = 'picker-tile-level';
         if (owned) {
             levelDiv.textContent = `Lv.${level} LB${lb}`;
+            levelDiv.setAttribute('data-tooltip', `Your card: Level ${level}, Limit Break ${lb}`);
+            levelDiv.tabIndex = 0;
         } else if (isFriendSlot) {
             levelDiv.textContent = `Lv.${level} LB${lb}`;
         } else {
@@ -637,6 +639,8 @@ function renderPickerCards() {
             const badge = document.createElement('span');
             badge.className = 'picker-in-deck-badge';
             badge.textContent = 'In Deck';
+            badge.setAttribute('data-tooltip', 'This card is already in your deck');
+            badge.tabIndex = 0;
             info.appendChild(badge);
         }
 
@@ -843,31 +847,31 @@ function renderDeckSummary(aggregated, perTraining) {
     content.innerHTML = `
         <div class="deck-summary-section-label">Deck-Wide Effects (always active)</div>
         <div class="deck-summary-grid">
-            <div class="deck-summary-item highlight ${raceBonusClass}">
+            <div class="deck-summary-item highlight ${raceBonusClass}" data-tooltip="Race Bonus — extra stats earned from races. Green = high (≥30%), orange = low. Higher is better for race-focused training." tabindex="0">
                 <span class="deck-summary-item-label">Race Bonus</span>
                 <span class="deck-summary-item-value">${raceBonusVal}%</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Specialty Priority — bonus applied when a card trains in its specialty stat type" tabindex="0">
                 <span class="deck-summary-item-label">Spec. Priority</span>
                 <span class="deck-summary-item-value">${specPriority}</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Fail Protection — reduces the chance of training failure (injury/overwork)" tabindex="0">
                 <span class="deck-summary-item-label">Fail Protection</span>
                 <span class="deck-summary-item-value">${failProt}%</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Energy Reduce — lowers the stamina cost of training exercises" tabindex="0">
                 <span class="deck-summary-item-label">Energy Reduce</span>
                 <span class="deck-summary-item-value">${energyReduce}%</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Event Recovery — increases HP recovered from support card events" tabindex="0">
                 <span class="deck-summary-item-label">Event Recovery</span>
                 <span class="deck-summary-item-value">${eventRecovery}%</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Hint Level — raises the level of skill hints received from support cards, reducing skill point cost" tabindex="0">
                 <span class="deck-summary-item-label">Hint Level</span>
                 <span class="deck-summary-item-value">${hintLevel}</span>
             </div>
-            <div class="deck-summary-item">
+            <div class="deck-summary-item" data-tooltip="Hint Frequency — increases how often support cards give skill hints during training" tabindex="0">
                 <span class="deck-summary-item-label">Hint Freq.</span>
                 <span class="deck-summary-item-value">${hintFreq}%</span>
             </div>
@@ -879,7 +883,7 @@ function renderDeckSummary(aggregated, perTraining) {
                 <thead>
                     <tr>
                         <th>Training</th>
-                        <th>Cards</th>
+                        <th>Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type (Speed, Stamina, Power, Guts, Wisdom, Friend)" tabindex="0">?</span></th>
                         <th>Train Eff <span class="tooltip-small" data-tooltip="Training Effectiveness — bonus % applied to base stat gains" tabindex="0">?</span></th>
                         <th>Mood Eff <span class="tooltip-small" data-tooltip="Mood Effect — additional % bonus from character mood" tabindex="0">?</span></th>
                         ${statBonusLabels.map((label, i) => `<th>${label} <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[i]}" tabindex="0">?</span></th>`).join('\n                        ')}
@@ -983,7 +987,7 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
                 <thead>
                     <tr>
                         <th>Training</th>
-                        <th>Cards</th>
+                        <th>Cards <span class="tooltip-small" data-tooltip="Colored dots represent deck cards present at this training, colored by card type" tabindex="0">?</span></th>
                         <th>Speed <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[0]}" tabindex="0">?</span></th>
                         <th>Stamina <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[1]}" tabindex="0">?</span></th>
                         <th>Power <span class="tooltip-small" data-tooltip="${STAT_TOOLTIPS[2]}" tabindex="0">?</span></th>
@@ -1520,7 +1524,7 @@ function renderCharacterInfoSection() {
         const statKeys = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
         const statLabels = ['Speed', 'Stamina', 'Power', 'Guts', 'Wisdom'];
         statsHtml = `
-            <div class="deck-summary-section-label">Base Stats (5\u2605)</div>
+            <div class="deck-summary-section-label">Base Stats (5\u2605) <span class="tooltip-small" data-tooltip="Starting stat values at 5★ rarity before any training or support card bonuses" tabindex="0">?</span></div>
             <div class="deck-summary-grid">
                 ${statKeys.map((k, i) => `
                     <div class="deck-summary-item">
@@ -1538,7 +1542,7 @@ function renderCharacterInfoSection() {
         const growthLabels = ['Speed', 'Stamina', 'Power', 'Guts', 'Wisdom'];
         const maxGrowth = Math.max(...growthKeys.map(k => gr[k] || 0), 1);
         growthHtml = `
-            <div class="deck-summary-section-label">Growth Rates</div>
+            <div class="deck-summary-section-label">Growth Rates <span class="tooltip-small" data-tooltip="Bonus % added to stat gains from training. Bars show relative strength — the longest bar is the character's strongest growth area" tabindex="0">?</span></div>
             <div class="char-growth-bars">
                 ${growthKeys.map((k, i) => {
                     const val = gr[k] || 0;
@@ -1565,7 +1569,7 @@ function renderCharacterInfoSection() {
         const groundKeys = ['turf', 'dirt'];
 
         aptHtml = `
-            <div class="deck-summary-section-label">Aptitudes</div>
+            <div class="deck-summary-section-label">Aptitudes <span class="tooltip-small" data-tooltip="Race aptitude grades from S (best) to G (worst). Higher grades give better performance bonuses in matching race conditions" tabindex="0">?</span></div>
             <div class="char-aptitude-grid">
                 <div class="char-aptitude-group">
                     <div class="char-aptitude-group-label">Distance</div>
@@ -1617,7 +1621,7 @@ function renderUniqueEffectsSection(uniqueEffects) {
     const rows = uniqueEffects.map(ue => {
         const badge = ue.active
             ? '<span class="ue-badge active">Active</span>'
-            : `<span class="ue-badge locked">Locked (Lv.${ue.unlockLevel})</span>`;
+            : `<span class="ue-badge locked" data-tooltip="This effect unlocks at card level ${ue.unlockLevel}. Increase the card's limit break and level to activate it." tabindex="0">Locked (Lv.${ue.unlockLevel})</span>`;
 
         const effectDetails = ue.effects.map(e => {
             const name = getEffectName(e.type);
@@ -1676,7 +1680,7 @@ function renderDeckSkillsSection(deckSkills) {
             html += `<div class="ds-skill-group">`;
             html += `<div class="ds-skill-group-label">${typeLabel}</div>`;
             group.forEach(skill => {
-                const costStr = skill.cost != null ? `<span class="ds-skill-cost">${skill.cost} SP</span>` : '';
+                const costStr = skill.cost != null ? `<span class="ds-skill-cost" data-tooltip="Skill Points — currency used to learn skills during training" tabindex="0">${skill.cost} SP</span>` : '';
                 const sourceStr = skill.sources.length > 1
                     ? `<span class="ds-skill-source">(${skill.sources.length} cards)</span>`
                     : `<span class="ds-skill-source">${skill.sources[0]}</span>`;
