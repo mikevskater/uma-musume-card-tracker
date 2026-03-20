@@ -222,14 +222,14 @@ function renderDeckSlots() {
         }
 
         slotEl.addEventListener('click', (e) => {
-            if (e.target.closest('.deck-slot-remove') || e.target.closest('.deck-slot-friend-controls')) return;
+            if (e.target.closest('.deck-slot-remove') || e.target.closest('.deck-slot-info-btn') || e.target.closest('.deck-slot-friend-controls')) return;
             openCardPicker(i);
         });
 
         slotEl.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                if (!e.target.closest('.deck-slot-remove') && !e.target.closest('.deck-slot-friend-controls')) {
+                if (!e.target.closest('.deck-slot-remove') && !e.target.closest('.deck-slot-info-btn') && !e.target.closest('.deck-slot-friend-controls')) {
                     openCardPicker(i);
                 }
             }

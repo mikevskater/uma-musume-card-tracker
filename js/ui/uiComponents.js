@@ -999,6 +999,7 @@ const TOOLTIP_SELECTOR = '[data-tooltip]';
 
 let _tooltipEl = null;   // shared popup div
 let _tooltipArrow = null;
+let _tooltipScrollTimer = null; // suppress tooltips during scroll
 
 /** Lazily create the shared tooltip popup element. */
 function _getTooltipEl() {
@@ -1079,8 +1080,21 @@ function hideTooltipPopup() {
 function initializeTooltipSystem() {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+    // Suppress tooltips while scrolling — scroll fires mouseenter/mouseleave
+    // rapidly as elements pass under the cursor, causing DOM thrashing and flicker.
+    let _scrolling = false;
+    document.addEventListener('scroll', () => {
+        if (!_scrolling) {
+            _scrolling = true;
+            hideTooltipPopup();
+        }
+        clearTimeout(_tooltipScrollTimer);
+        _tooltipScrollTimer = setTimeout(() => { _scrolling = false; }, 150);
+    }, true);
+
     // Show on hover (capture phase so we get it before bubbling)
     document.addEventListener('mouseenter', (e) => {
+        if (_scrolling) return;
         if (!e.target?.closest) return;
         const trigger = e.target.closest(TOOLTIP_SELECTOR);
         if (trigger) showTooltipPopup(trigger);
