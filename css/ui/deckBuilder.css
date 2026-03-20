@@ -297,6 +297,37 @@
     color: var(--text-secondary);
 }
 
+.deck-slot-info-btn {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-round);
+    border: none;
+    background: var(--color-primary);
+    color: var(--text-inverse);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    z-index: 2;
+    line-height: 1;
+}
+
+.deck-slot:hover .deck-slot-info-btn {
+    opacity: 1;
+}
+
+.deck-slot-info-btn:hover {
+    background: var(--color-primary-dark, #2563eb);
+}
+
 .deck-slot-remove {
     position: absolute;
     top: 4px;
@@ -2083,9 +2114,11 @@
         min-height: 44px;
     }
 
+    .deck-slot-info-btn,
     .deck-slot-remove {
         min-width: 44px;
         min-height: 44px;
+        opacity: 1;
     }
 
     .training-type-clickable {

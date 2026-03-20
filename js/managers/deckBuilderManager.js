@@ -66,6 +66,7 @@ let deckBuilderState = {
         sortDirection: 'desc'
     },
     maxPotential: false, // When true, owned cards use max level for their LB
+    allCardsMax: false,  // When true, ALL cards use LB4 max level (for "all cards" finder results)
     scenario: '1',      // Default to URA; '1'=URA, '2'=Aoharu, '4'=Trackblazer
     trainingLevel: 1,
     mood: 'very_good',
@@ -210,11 +211,16 @@ function removeDeckSlot(slotIndex) {
     markDeckDirty();
 }
 
-// ===== MAX POTENTIAL =====
+// ===== MAX POTENTIAL / ALL CARDS MAX =====
 
 function toggleMaxPotential(enabled) {
     _logDeckBuilder.info('toggleMaxPotential', { enabled });
     deckBuilderState.maxPotential = enabled;
+
+    // If enabling max potential, disable all cards max (they're separate modes)
+    if (enabled && deckBuilderState.allCardsMax) {
+        deckBuilderState.allCardsMax = false;
+    }
 
     // Update all non-friend slot levels
     deckBuilderState.slots.forEach((slot, i) => {
@@ -238,12 +244,50 @@ function toggleMaxPotential(enabled) {
     updateMaxPotentialToggle();
 }
 
+function toggleAllCardsMax(enabled) {
+    _logDeckBuilder.info('toggleAllCardsMax', { enabled });
+    deckBuilderState.allCardsMax = enabled;
+
+    // If enabling all cards max, disable max potential (supersedes it)
+    if (enabled && deckBuilderState.maxPotential) {
+        deckBuilderState.maxPotential = false;
+    }
+
+    // Update all non-friend slot levels
+    deckBuilderState.slots.forEach((slot, i) => {
+        if (!slot || slot.isFriend) return;
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card) return;
+
+        if (enabled) {
+            // Set ALL cards to LB4 max level
+            slot.limitBreak = 4;
+            slot.level = limitBreaks[card.rarity][4];
+        } else if (isCardOwned(slot.cardId)) {
+            // Revert to owned LB and level
+            slot.limitBreak = getOwnedCardLimitBreak(slot.cardId);
+            slot.level = getOwnedCardLevel(slot.cardId);
+        }
+        // Unowned cards stay at LB4 max
+    });
+
+    renderDeckSlots();
+    recalculateDeck();
+    markDeckDirty();
+    updateMaxPotentialToggle();
+}
+
 function updateMaxPotentialToggle() {
-    const checked = deckBuilderState.maxPotential;
+    const maxPotChecked = deckBuilderState.maxPotential;
+    const allMaxChecked = deckBuilderState.allCardsMax;
     const toggle = document.getElementById('deckMaxPotentialToggle');
     const headerToggle = document.getElementById('deckMaxPotentialHeaderToggle');
-    if (toggle) toggle.checked = checked;
-    if (headerToggle) headerToggle.checked = checked;
+    const allMaxToggle = document.getElementById('deckAllCardsMaxToggle');
+    const allMaxHeaderToggle = document.getElementById('deckAllCardsMaxHeaderToggle');
+    if (toggle) toggle.checked = maxPotChecked;
+    if (headerToggle) headerToggle.checked = maxPotChecked;
+    if (allMaxToggle) allMaxToggle.checked = allMaxChecked;
+    if (allMaxHeaderToggle) allMaxHeaderToggle.checked = allMaxChecked;
 }
 
 // ===== CARD PICKER =====
@@ -290,6 +334,10 @@ function selectCardForSlot(slotIndex, cardId) {
     if (isFriend) {
         lb = 4;
         level = limitBreaks[card.rarity][lb];
+    } else if (deckBuilderState.allCardsMax) {
+        // All Cards Max: every card at LB4 max level
+        lb = 4;
+        level = limitBreaks[card.rarity][lb];
     } else if (isCardOwned(cardId)) {
         lb = getOwnedCardLimitBreak(cardId);
         level = deckBuilderState.maxPotential
@@ -324,17 +372,28 @@ function aggregateDeckEffects(slots) {
         if (!slot) return;
 
         const card = cardData.find(c => c.support_id === slot.cardId);
-        if (!card || !card.effects) return;
+        if (!card) return;
 
-        card.effects.forEach(effectArray => {
-            const effectId = effectArray[0];
-            if (!effectId) return;
+        if (card.effects) {
+            card.effects.forEach(effectArray => {
+                const effectId = effectArray[0];
+                if (!effectId) return;
 
-            const value = calculateEffectValue(effectArray, slot.level);
-            if (value > 0) {
-                aggregated[effectId] = (aggregated[effectId] || 0) + value;
-            }
-        });
+                const value = calculateEffectValue(effectArray, slot.level);
+                if (value > 0) {
+                    aggregated[effectId] = (aggregated[effectId] || 0) + value;
+                }
+            });
+        }
+
+        // Include active unique effect bonuses (matches deck finder behavior)
+        if (card.unique_effect && slot.level >= card.unique_effect.level && card.unique_effect.effects) {
+            card.unique_effect.effects.forEach(ue => {
+                if (ue.type && ue.value > 0) {
+                    aggregated[ue.type] = (aggregated[ue.type] || 0) + ue.value;
+                }
+            });
+        }
     });
 
     return aggregated;
@@ -390,6 +449,15 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
                 }
             }
         });
+
+        // Include active unique effect stat bonuses
+        if (card.unique_effect && slot.level >= card.unique_effect.level && card.unique_effect.effects) {
+            card.unique_effect.effects.forEach(ue => {
+                if (ue.type && ue.value > 0 && applicableBonusIds.includes(ue.type) && STAT_BONUS_INDEX_MAP[ue.type] !== undefined) {
+                    statBonuses[STAT_BONUS_INDEX_MAP[ue.type]] += ue.value;
+                }
+            });
+        }
     });
 
     // Training Effectiveness and Mood Effect -- only from present cards
@@ -407,6 +475,14 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
                 if (val > 0) moodEffect += val;
             }
         });
+
+        // Include active unique effect training eff / mood bonuses
+        if (card.unique_effect && slot.level >= card.unique_effect.level && card.unique_effect.effects) {
+            card.unique_effect.effects.forEach(ue => {
+                if (ue.type === 8 && ue.value > 0) trainingEff += ue.value;
+                else if (ue.type === 2 && ue.value > 0) moodEffect += ue.value;
+            });
+        }
     });
 
     const moodBase = MOOD_VALUES[mood] || 0;
@@ -434,6 +510,15 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
                     }
                 }
             });
+
+            // Include active unique effect friendship bonuses
+            if (card.unique_effect && slot.level >= card.unique_effect.level && card.unique_effect.effects) {
+                card.unique_effect.effects.forEach(ue => {
+                    if (ue.type === 1 && ue.value > 0) {
+                        friendshipMultiplier *= (1 + ue.value / 100);
+                    }
+                });
+            }
         });
     }
 
@@ -529,6 +614,19 @@ function computePerTrainingEffects(slots) {
                     statBonuses[STAT_BONUS_INDEX_MAP[id]] += val;
                 }
             });
+
+            // Include active unique effect bonuses
+            if (card.unique_effect && slot.level >= card.unique_effect.level && card.unique_effect.effects) {
+                card.unique_effect.effects.forEach(ue => {
+                    if (!ue.type || ue.value <= 0) return;
+                    if (ue.type === 8) trainingEff += ue.value;
+                    else if (ue.type === 2) moodEffect += ue.value;
+                    else if (ue.type === 1 && isMatchingType) friendshipMultiplier *= (1 + ue.value / 100);
+                    else if (applicableBonusIds.includes(ue.type) && STAT_BONUS_INDEX_MAP[ue.type] !== undefined) {
+                        statBonuses[STAT_BONUS_INDEX_MAP[ue.type]] += ue.value;
+                    }
+                });
+            }
         });
 
         perTraining[trainingType] = {
@@ -769,6 +867,7 @@ function saveDeckToStorage() {
                 deck.name = deckBuilderState.deckName;
                 deck.selectedCharacter = deckBuilderState.selectedCharacter || null;
                 deck.maxPotential = deckBuilderState.maxPotential || false;
+                deck.allCardsMax = deckBuilderState.allCardsMax || false;
                 deck.lastModified = Date.now();
             }
         }
@@ -808,6 +907,7 @@ function createNewDeck(name) {
         slots: carrySlots,
         selectedCharacter: deckBuilderState.selectedCharacter || null,
         maxPotential: deckBuilderState.maxPotential || false,
+        allCardsMax: deckBuilderState.allCardsMax || false,
         lastModified: Date.now()
     };
 
@@ -856,7 +956,8 @@ function snapshotDeckState() {
         activeDeckId: deckBuilderState.activeDeckId,
         deckName: deckBuilderState.deckName,
         selectedCharacter: deckBuilderState.selectedCharacter,
-        maxPotential: deckBuilderState.maxPotential
+        maxPotential: deckBuilderState.maxPotential,
+        allCardsMax: deckBuilderState.allCardsMax
     };
     deckBuilderState.dirty = false;
 }
@@ -866,7 +967,7 @@ function markDeckDirty() {
     updateDeckHeaderButtons();
 }
 
-function enterPreviewMode(slots, selectedCharacter, maxPotential) {
+function enterPreviewMode(slots, selectedCharacter, maxPotential, allCardsMax) {
     _logDeckBuilder.info('enterPreviewMode');
     // Snapshot so Cancel reverts to whatever was active before
     snapshotDeckState();
@@ -878,6 +979,7 @@ function enterPreviewMode(slots, selectedCharacter, maxPotential) {
     deckBuilderState.slots = slots;
     deckBuilderState.selectedCharacter = selectedCharacter || null;
     deckBuilderState.maxPotential = maxPotential || false;
+    deckBuilderState.allCardsMax = allCardsMax || false;
     resetAllAssignments();
 
     if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
@@ -924,6 +1026,7 @@ function cancelDeckChanges() {
         deckBuilderState.deckName = snapshot.deckName;
         deckBuilderState.selectedCharacter = snapshot.selectedCharacter;
         deckBuilderState.maxPotential = snapshot.maxPotential || false;
+        deckBuilderState.allCardsMax = snapshot.allCardsMax || false;
         resetAllAssignments();
 
         if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
@@ -986,6 +1089,7 @@ function switchToDeck(deckId) {
     deckBuilderState.slots = deck.slots ? [...deck.slots] : [null, null, null, null, null, null];
     deckBuilderState.selectedCharacter = deck.selectedCharacter || null;
     deckBuilderState.maxPotential = deck.maxPotential || false;
+    deckBuilderState.allCardsMax = deck.allCardsMax || false;
     deckBuilderState.previewMode = false;
     resetAllAssignments();
 
@@ -1200,6 +1304,16 @@ function initializeDeckBuilderEvents() {
             });
         }
     });
+
+    // All Cards Max toggles (header + training controls — kept in sync)
+    ['deckAllCardsMaxToggle', 'deckAllCardsMaxHeaderToggle'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', (e) => {
+                toggleAllCardsMax(e.target.checked);
+            });
+        }
+    });
 }
 
 // ===== EXPORTS =====
@@ -1233,7 +1347,8 @@ window.DeckBuilderManager = {
     getSelectedCharacterGrowthRates,
     getTrainingFailureRates,
     DECK_STORAGE_KEY,
-    getRaceBonusTable
+    getRaceBonusTable,
+    toggleAllCardsMax
 };
 
 Object.assign(window, {
@@ -1276,5 +1391,6 @@ Object.assign(window, {
     markDeckDirty,
     updateDeckHeaderButtons,
     toggleMaxPotential,
+    toggleAllCardsMax,
     updateMaxPotentialToggle
 });

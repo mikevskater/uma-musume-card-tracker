@@ -131,30 +131,30 @@ function checkAutoShowWhatsNew() {
 // ===== MODAL LIFECYCLE =====
 
 // Open card details modal
-function openCardDetails(cardId) {
+function openCardDetails(cardId, overrideLevel) {
     const card = cardData.find(c => c.support_id === cardId);
     if (!card) return;
-    
+
     // Validate filtered cards
     if (!currentFilteredCards || currentFilteredCards.length === 0) {
         console.warn('No filtered cards available, using fallback');
         currentFilteredCards = cardData;
     }
-    
+
     // Find card's index in current filtered results
     currentModalCardIndex = currentFilteredCards.findIndex(c => c.support_id === cardId);
-    
+
     if (currentModalCardIndex === -1) {
         console.warn(`Card ${cardId} not found in current filter`);
         currentFilteredCards = [card];
         currentModalCardIndex = 0;
     }
-    
+
     currentModalCard = card;
-    
-    // Get current effective level
-    const currentLevel = getEffectiveLevel(card);
-    
+
+    // Use override level if provided (e.g. from deck builder), otherwise use effective level
+    const currentLevel = overrideLevel != null ? overrideLevel : getEffectiveLevel(card);
+
     renderCardDetails(card, currentLevel);
     showModal();
 }

@@ -39,6 +39,10 @@ function renderDeckBuilderShell() {
                 <input type="checkbox" id="deckMaxPotentialHeaderToggle" ${deckBuilderState.maxPotential ? 'checked' : ''}>
                 Max Potential
             </label>
+            <label class="deck-header-toggle" data-tooltip="Set ALL cards to maximum limit break and level (LB4). Use this when viewing 'All Cards' deck finder results." tabindex="0">
+                <input type="checkbox" id="deckAllCardsMaxHeaderToggle" ${deckBuilderState.allCardsMax ? 'checked' : ''}>
+                All Cards Max
+            </label>
             <div class="deck-header-actions">
                 <button class="btn btn-secondary" id="deckNewBtn">New</button>
                 <button class="btn btn-secondary" id="deckRenameBtn">Rename</button>
@@ -111,6 +115,11 @@ function renderDeckBuilderShell() {
                 <input type="checkbox" id="deckMaxPotentialToggle" ${deckBuilderState.maxPotential ? 'checked' : ''}>
                 Max Potential
                 <span class="tooltip-small" data-tooltip="Set all owned cards to their maximum level for their current limit break. Shows the best possible stats your deck can achieve." tabindex="0">?</span>
+            </label>
+            <label class="friendship-checkbox">
+                <input type="checkbox" id="deckAllCardsMaxToggle" ${deckBuilderState.allCardsMax ? 'checked' : ''}>
+                All Cards Max
+                <span class="tooltip-small" data-tooltip="Set ALL cards to maximum limit break and level (LB4). Use this when viewing 'All Cards' deck finder results to match finder calculations." tabindex="0">?</span>
             </label>
         </div>
 
@@ -257,7 +266,19 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
     const wrapper = document.createElement('div');
     wrapper.className = 'deck-slot-filled';
 
-    // Remove button
+    // Info button (top-left)
+    const infoBtn = document.createElement('button');
+    infoBtn.className = 'deck-slot-info-btn';
+    infoBtn.textContent = 'i';
+    infoBtn.setAttribute('data-tooltip', 'View card details');
+    infoBtn.setAttribute('aria-label', 'View card details');
+    infoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openCardDetails(slotData.cardId, slotData.level);
+    });
+    wrapper.appendChild(infoBtn);
+
+    // Remove button (top-right)
     const removeBtn = document.createElement('button');
     removeBtn.className = 'deck-slot-remove';
     removeBtn.textContent = '\u2715';
@@ -427,6 +448,14 @@ function renderCardPicker() {
                         <input type="checkbox" id="pickerSsrOnly"${filter.ssrOnly ? ' checked' : ''}>
                         SSR Only
                     </label>
+                    <label class="picker-ssr-toggle" data-tooltip="Set owned cards to their maximum level for their current limit break" tabindex="0">
+                        <input type="checkbox" id="pickerMaxPotentialToggle"${deckBuilderState.maxPotential ? ' checked' : ''}${deckBuilderState.allCardsMax ? ' disabled' : ''}>
+                        Max Potential
+                    </label>
+                    <label class="picker-ssr-toggle" data-tooltip="Set ALL cards to LB4 max level. Shows unowned cards for deck building with any card." tabindex="0">
+                        <input type="checkbox" id="pickerAllCardsMaxToggle"${deckBuilderState.allCardsMax ? ' checked' : ''}>
+                        All Cards Max
+                    </label>
                     <div class="picker-sort-controls">
                         <label class="picker-sort-label">Sort:</label>
                         <select class="picker-sort-select" id="pickerSortBy">
@@ -511,6 +540,27 @@ function renderCardPicker() {
         renderPickerCards();
     });
 
+    document.getElementById('pickerMaxPotentialToggle').addEventListener('change', (e) => {
+        toggleMaxPotential(e.target.checked);
+        // Sync the picker's allCardsMax toggle state
+        const allMaxEl = document.getElementById('pickerAllCardsMaxToggle');
+        if (allMaxEl) allMaxEl.checked = deckBuilderState.allCardsMax;
+        const maxPotEl = document.getElementById('pickerMaxPotentialToggle');
+        if (maxPotEl) maxPotEl.disabled = deckBuilderState.allCardsMax;
+        renderPickerCards();
+    });
+
+    document.getElementById('pickerAllCardsMaxToggle').addEventListener('change', (e) => {
+        toggleAllCardsMax(e.target.checked);
+        // Sync the picker's max potential toggle state
+        const maxPotEl = document.getElementById('pickerMaxPotentialToggle');
+        if (maxPotEl) {
+            maxPotEl.checked = deckBuilderState.maxPotential;
+            maxPotEl.disabled = deckBuilderState.allCardsMax;
+        }
+        renderPickerCards();
+    });
+
     document.getElementById('pickerSortBy').addEventListener('change', (e) => {
         _logDeckBuilderUI.debug('Picker sort changed', { sortBy: e.target.value });
         filter.sortBy = e.target.value;
@@ -548,35 +598,49 @@ function renderCardPicker() {
 function getCardPickerEffects(card, level) {
     if (!card.effects) return [];
 
+    // Build combined effect values including unique effects
+    const combinedEffects = {};
+    card.effects.forEach(effectArray => {
+        const effectId = effectArray[0];
+        if (!effectId || isEffectLocked(effectArray, level)) return;
+        const value = calculateEffectValue(effectArray, level);
+        if (value > 0) {
+            combinedEffects[effectId] = (combinedEffects[effectId] || 0) + value;
+        }
+    });
+
+    // Add active unique effect bonuses
+    if (card.unique_effect && level >= card.unique_effect.level && card.unique_effect.effects) {
+        card.unique_effect.effects.forEach(ue => {
+            if (ue.type && ue.value > 0) {
+                combinedEffects[ue.type] = (combinedEffects[ue.type] || 0) + ue.value;
+            }
+        });
+    }
+
     const results = [];
     const usedIds = new Set();
 
     for (const effectId of PICKER_DISPLAY_EFFECT_IDS) {
         if (results.length >= 4) break;
-        const effectArray = card.effects.find(e => e[0] === effectId);
-        if (effectArray && !isEffectLocked(effectArray, level)) {
-            const value = calculateEffectValue(effectArray, level);
-            if (value > 0) {
-                const info = effectsData[effectId];
-                results.push({
-                    name: info?.name || `Effect ${effectId}`,
-                    value: value,
-                    symbol: info?.symbol === 'percent' ? '%' : ''
-                });
-                usedIds.add(effectId);
-            }
+        if (combinedEffects[effectId]) {
+            const info = effectsData[effectId];
+            results.push({
+                name: info?.name || `Effect ${effectId}`,
+                value: combinedEffects[effectId],
+                symbol: info?.symbol === 'percent' ? '%' : ''
+            });
+            usedIds.add(effectId);
         }
     }
 
     if (results.length < 4) {
-        const remaining = card.effects
-            .filter(e => e[0] && effectsData[e[0]] && !usedIds.has(e[0]) && !isEffectLocked(e, level))
-            .map(e => {
-                const val = calculateEffectValue(e, level);
-                const info = effectsData[e[0]];
-                return { name: info.name, value: val, symbol: info.symbol === 'percent' ? '%' : '', effectId: e[0] };
+        const remaining = Object.entries(combinedEffects)
+            .filter(([id]) => effectsData[id] && !usedIds.has(parseInt(id)))
+            .map(([id, val]) => {
+                const info = effectsData[id];
+                return { name: info.name, value: val, symbol: info.symbol === 'percent' ? '%' : '', effectId: parseInt(id) };
             })
-            .filter(e => e.value > 0)
             .sort((a, b) => b.value - a.value);
 
         for (const eff of remaining) {
@@ -620,9 +684,14 @@ function renderPickerCards() {
         if (isFriendSlot) {
             lb = 4;
             level = limitBreaks[card.rarity][lb];
+        } else if (deckBuilderState.allCardsMax) {
+            lb = 4;
+            level = limitBreaks[card.rarity][lb];
         } else if (owned) {
-            level = getOwnedCardLevel(card.support_id);
             lb = getOwnedCardLimitBreak(card.support_id);
+            level = deckBuilderState.maxPotential
+                ? limitBreaks[card.rarity][lb]
+                : getOwnedCardLevel(card.support_id);
         } else {
             lb = 4;
             level = limitBreaks[card.rarity][lb];
@@ -660,9 +729,18 @@ function renderPickerCards() {
 
         const levelDiv = document.createElement('div');
         levelDiv.className = 'picker-tile-level';
-        if (owned) {
+        if (deckBuilderState.allCardsMax) {
             levelDiv.textContent = `Lv.${level} LB${lb}`;
-            levelDiv.setAttribute('data-tooltip', `Your card: Level ${level}, Limit Break ${lb}`);
+            levelDiv.setAttribute('data-tooltip', `All Cards Max: Level ${level}, Limit Break ${lb}`);
+            levelDiv.tabIndex = 0;
+            if (!owned && !isFriendSlot) {
+                levelDiv.textContent += ' (unowned)';
+            }
+        } else if (owned) {
+            levelDiv.textContent = `Lv.${level} LB${lb}`;
+            levelDiv.setAttribute('data-tooltip', deckBuilderState.maxPotential
+                ? `Max Potential: Level ${level}, Limit Break ${lb}`
+                : `Your card: Level ${level}, Limit Break ${lb}`);
             levelDiv.tabIndex = 0;
         } else if (isFriendSlot) {
             levelDiv.textContent = `Lv.${level} LB${lb}`;
@@ -717,8 +795,8 @@ function getPickerCards() {
     const filter = deckBuilderState.pickerFilter;
 
     let cards = cardData.filter(card => {
-        // For non-friend slots, show only owned cards
-        if (!isFriend && !isCardOwned(card.support_id)) return false;
+        // For non-friend slots, show only owned cards (unless All Cards Max is on)
+        if (!isFriend && !deckBuilderState.allCardsMax && !isCardOwned(card.support_id)) return false;
 
         // Exclude R for deck building
         if (card.rarity < 2) return false;
@@ -779,17 +857,36 @@ function getPickerCardLevel(card, isFriend) {
     if (isFriend) {
         return limitBreaks[card.rarity][4];
     }
+    if (deckBuilderState.allCardsMax) {
+        return limitBreaks[card.rarity][4];
+    }
     if (isCardOwned(card.support_id)) {
+        if (deckBuilderState.maxPotential) {
+            const lb = getOwnedCardLimitBreak(card.support_id);
+            return limitBreaks[card.rarity][lb];
+        }
         return getOwnedCardLevel(card.support_id);
     }
     return limitBreaks[card.rarity][4];
 }
 
 function getCardEffectValue(card, effectId, level) {
-    if (!card.effects) return 0;
-    const effectArray = card.effects.find(e => e[0] === effectId);
-    if (!effectArray || isEffectLocked(effectArray, level)) return 0;
-    return calculateEffectValue(effectArray, level);
+    let value = 0;
+    if (card.effects) {
+        const effectArray = card.effects.find(e => e[0] === effectId);
+        if (effectArray && !isEffectLocked(effectArray, level)) {
+            value = calculateEffectValue(effectArray, level);
+        }
+    }
+    // Include active unique effect bonus for this effect ID
+    if (card.unique_effect && level >= card.unique_effect.level && card.unique_effect.effects) {
+        card.unique_effect.effects.forEach(ue => {
+            if (ue.type === effectId && ue.value > 0) {
+                value += ue.value;
+            }
+        });
+    }
+    return value;
 }
 
 // ===== DECK SUMMARY =====

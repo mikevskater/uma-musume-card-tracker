@@ -3377,6 +3377,7 @@ function analyzeWhyThisDeck(result, filters) {
 
 function loadDeckFromFinder(cardIds, saveName) {
     _logDeckFinder.info('loadDeckFromFinder', { cardIds, saveName });
+    const isAllCardsMode = deckFinderState.filters?.cardPool === 'all';
     // Create slots array matching deckBuilderState format
     const slots = cardIds.map((cardId, idx) => {
         const card = cardData.find(c => c.support_id === cardId);
@@ -3389,6 +3390,10 @@ function loadDeckFromFinder(cardIds, saveName) {
 
         if (isFriend) {
             // Friend cards belong to another player — always default to max
+            lb = 4;
+            level = limitBreaks[card.rarity][lb];
+        } else if (isAllCardsMode) {
+            // "All cards" finder uses forceMax — all cards at LB4 max level
             lb = 4;
             level = limitBreaks[card.rarity][lb];
         } else if (isCardOwned(cardId)) {
@@ -3443,7 +3448,9 @@ function saveDeckFromFinder(cardIds) {
     // Propagate trainee selection to builder
     const selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
 
-    const maxPotential = deckFinderState.filters?.maxPotential || false;
+    const isAllCardsMode = deckFinderState.filters?.cardPool === 'all';
+    const maxPotential = isAllCardsMode ? false : (deckFinderState.filters?.maxPotential || false);
+    const allCardsMax = isAllCardsMode;
 
     const newDeck = {
         id: deckId,
@@ -3451,6 +3458,7 @@ function saveDeckFromFinder(cardIds) {
         slots,
         selectedCharacter: selectedTrainee,
         maxPotential,
+        allCardsMax,
         lastModified: Date.now()
     };
     deckBuilderState.savedDecks.push(newDeck);
@@ -3458,6 +3466,7 @@ function saveDeckFromFinder(cardIds) {
         deckBuilderState.selectedCharacter = selectedTrainee;
     }
     deckBuilderState.maxPotential = maxPotential;
+    deckBuilderState.allCardsMax = allCardsMax;
     switchToDeck(deckId);
     saveDeckToStorage();
     renderDeckSelect();
@@ -3468,8 +3477,10 @@ function viewDeckFromFinder(cardIds) {
     _logDeckFinder.info('viewDeckFromFinder', { cardIds });
     const slots = loadDeckFromFinder(cardIds);
     const selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
-    const maxPotential = deckFinderState.filters?.maxPotential || false;
-    enterPreviewMode(slots, selectedTrainee, maxPotential);
+    const isAllCardsMode = deckFinderState.filters?.cardPool === 'all';
+    const maxPotential = isAllCardsMode ? false : (deckFinderState.filters?.maxPotential || false);
+    const allCardsMax = isAllCardsMode;
+    enterPreviewMode(slots, selectedTrainee, maxPotential, allCardsMax);
 }
 
 // ===== EXPORTS =====
