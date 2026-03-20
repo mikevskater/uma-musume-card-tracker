@@ -3372,7 +3372,11 @@ function loadDeckFromFinder(cardIds, saveName) {
         const isFriend = card.type === 'friend';
         let level, lb;
 
-        if (isCardOwned(cardId)) {
+        if (isFriend) {
+            // Friend cards belong to another player — always default to max
+            lb = 4;
+            level = limitBreaks[card.rarity][lb];
+        } else if (isCardOwned(cardId)) {
             level = getOwnedCardLevel(cardId);
             lb = getOwnedCardLimitBreak(cardId);
         } else {

@@ -368,6 +368,7 @@ function buildFinderFiltersHTML() {
             <button class="finder-collapse-btn" data-target="finderRatioBody">
                 <span class="finder-collapse-icon">&#9654;</span> Deck Type Composition
                 <span class="finder-hint">(require N cards of each type)</span>
+                <span class="tooltip-small" data-tooltip="Learn about type composition — click for full guide" tabindex="0" onclick="event.stopPropagation(); openHelpModal('deck-finder'); return false;">?</span>
             </button>
             <div class="finder-collapse-body collapsed" id="finderRatioBody">
                 <div class="finder-ratio-grid">
@@ -452,6 +453,7 @@ function buildFinderFiltersHTML() {
             <button class="finder-collapse-btn" data-target="finderWeightsBody">
                 <span class="finder-collapse-icon">&#9654;</span> Scoring Weights
                 <span class="finder-hint" data-tooltip="Higher weight = metric prioritized more in deck scoring. Adjust to find decks that match your training strategy." tabindex="0">(what the search optimizes for)</span>
+                <span class="tooltip-small" data-tooltip="Learn about scoring weights — click for full guide" tabindex="0" onclick="event.stopPropagation(); openHelpModal('deck-finder'); return false;">?</span>
             </button>
             <div class="finder-collapse-body collapsed" id="finderWeightsBody">
                 <div class="finder-weights-list" id="finderWeightsList"></div>

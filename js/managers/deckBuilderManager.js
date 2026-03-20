@@ -6,6 +6,7 @@ const _logDeckBuilder = _debug.create('DeckBuilder');
 // ===== CONSTANTS =====
 
 const DECK_STORAGE_KEY = 'uma_deck_builder_decks';
+const DECK_BUILDER_ONBOARDED_KEY = 'uma_deck_onboarded';
 
 // Stat name mapping: training data key -> result array index
 const STAT_KEYS = ['speed', 'stamina', 'power', 'guts', 'wisdom', 'skill_pt'];

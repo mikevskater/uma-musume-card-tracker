@@ -2102,12 +2102,9 @@
     }
 
     .deck-slot {
-        width: 180px;
-        min-height: 260px;
-    }
-
-    .deck-slot-image {
-        max-height: 160px;
+        flex: 1 1 180px;
+        max-width: 240px;
+        min-height: 280px;
     }
 
     .training-table th,

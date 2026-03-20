@@ -105,7 +105,7 @@ function renderDeckBuilderShell() {
         <!-- Training Breakdown -->
         <div class="training-breakdown deck-section collapsible" id="trainingBreakdown">
             <div class="deck-section-header" data-section="trainingBreakdown">
-                <span class="deck-section-title">Training Breakdown</span>
+                <span class="deck-section-title">Training Breakdown <span class="tooltip-small" data-tooltip="How to read this table — click for full guide" tabindex="0" onclick="openHelpModal('deck-builder'); return false;">?</span></span>
                 <span class="deck-section-toggle"></span>
             </div>
             <div class="deck-section-body">
@@ -159,6 +159,12 @@ function renderDeckBuilderShell() {
     // Initial renders
     renderDeckSlots();
     renderScenarioInfo({});
+
+    // First-time onboarding toast
+    if (!localStorage.getItem(DECK_BUILDER_ONBOARDED_KEY)) {
+        localStorage.setItem(DECK_BUILDER_ONBOARDED_KEY, '1');
+        showToast('Welcome to the Deck Builder! Add cards to slots, then review your training breakdown. Need help? Click the ? button.', 'info', { duration: 6000 });
+    }
 }
 
 // ===== DECK SLOTS =====
@@ -296,7 +302,7 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
         for (let lb = 0; lb <= 4; lb++) {
             const opt = document.createElement('option');
             opt.value = lb;
-            opt.textContent = `LB ${lb}`;
+            opt.textContent = lb;
             if (lb === slotData.limitBreak) opt.selected = true;
             lbSelect.appendChild(opt);
         }

@@ -1,0 +1,135 @@
+<h3>Deck Finder</h3>
+
+<p>Automatically search for optimized support card decks. Set your constraints, configure scoring weights, and let the finder evaluate thousands of possible deck combinations to find the best ones.</p>
+
+<div class="help-tip">
+    <strong>💡 Quick Start:</strong> Choose your card pool, set any constraints, then click "Find Best Deck" to start the search. Results appear ranked by score.
+</div>
+
+<h4>Card Pool</h4>
+
+<p>Control which cards the finder can use when building decks:</p>
+
+<div class="help-grid">
+    <div class="help-grid-item">
+        <h5>📦 Owned vs All</h5>
+        <p>Search only your owned cards, or include all cards in the database. Using owned cards gives you practical results you can build immediately.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>⭐ Rarity Filter</h5>
+        <p>Include or exclude cards by rarity (SSR, SR, R). Most competitive decks use SSR cards only.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>🏷️ Type Filter</h5>
+        <p>Include or exclude specific card types (Speed, Stamina, Power, Guts, Wisdom, Friend).</p>
+    </div>
+</div>
+
+<h4>Deck Type Composition</h4>
+
+<p>Specify how many cards of each type you want in your deck. For example, you might want exactly 2 Speed cards and 1 Friend card.</p>
+
+<ul>
+    <li><strong>Count Inputs:</strong> Set the number of cards required for each type (Speed, Stamina, Power, Guts, Wisdom, Friend).</li>
+    <li><strong>"At Least" Mode:</strong> When set, the finder treats the number as a minimum rather than an exact count. Setting Speed to 2 means "at least 2 Speed cards."</li>
+    <li><strong>Sum Counter:</strong> Shows the total required slots. If the sum exceeds 6, the constraint is impossible and the finder will warn you.</li>
+</ul>
+
+<div class="help-tip">
+    <strong>💡 Flexible Distribution:</strong> Set counts to 0 for types you don't care about. The finder will fill those slots with whatever scores best.
+</div>
+
+<h4>Minimum Deck Effects (Thresholds)</h4>
+
+<p>Set minimum values for key effects that any valid deck must meet. Decks that fall below these thresholds are excluded from results.</p>
+
+<ul>
+    <li><strong>Race Bonus:</strong> Minimum combined race bonus across all 6 cards.</li>
+    <li><strong>Training Effectiveness:</strong> Minimum combined training effectiveness.</li>
+    <li><strong>Friendship:</strong> Minimum combined friendship bonus.</li>
+    <li><strong>Energy Reduction:</strong> Minimum combined energy recovery/reduction.</li>
+</ul>
+
+<div class="help-warning">
+    <strong>⚠️ Strict Constraints:</strong> Thresholds are hard cutoffs. Setting them too high may eliminate all possible decks and return no results.
+</div>
+
+<h4>Required Skills</h4>
+
+<p>Require that decks provide specific hint skills:</p>
+
+<div class="help-steps">
+    <div class="help-step">
+        <strong>Select Skills:</strong> Use the dropdown to pick hint skills the deck must provide.
+    </div>
+    <div class="help-step">
+        <strong>ALL Mode:</strong> The deck must contain every selected skill. Use this when you need a specific set of skills.
+    </div>
+    <div class="help-step">
+        <strong>ANY Mode:</strong> The deck must contain at least one of the selected skills. Use this for flexibility.
+    </div>
+</div>
+
+<h4>Exclusions & Inclusions</h4>
+
+<p>Fine-tune the search by locking specific cards in or out:</p>
+
+<div class="help-grid">
+    <div class="help-grid-item">
+        <h5>🔒 Include Cards</h5>
+        <p>Force specific cards into every result deck. Useful when you know certain cards must be part of your deck.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>🚫 Exclude Cards</h5>
+        <p>Prevent specific cards from appearing in results. Use this to avoid cards you don't want to use.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>👤 Exclude Characters</h5>
+        <p>Remove all cards from a specific character. Useful when a character's cards don't fit your strategy.</p>
+    </div>
+</div>
+
+<h4>Scoring Weights</h4>
+
+<p>Weights determine how the finder scores each deck. Higher weight means that metric is prioritized more in the final score.</p>
+
+<ul>
+    <li><strong>Scenario Defaults:</strong> Each scenario has preset weights optimized for its mechanics. These are loaded automatically when you select a scenario.</li>
+    <li><strong>Custom Weights:</strong> Adjust individual weight sliders to match your training strategy. For example, increase Race Bonus weight if you prioritize race performance.</li>
+    <li><strong>Reset:</strong> Click "Reset to Scenario Defaults" to restore the preset weights for the current scenario.</li>
+</ul>
+
+<div class="help-tip">
+    <strong>💡 Weight Strategy:</strong> If you're unsure, start with the scenario defaults. Adjust weights after reviewing initial results — increase the weight of metrics you find too low in the top results.
+</div>
+
+<h4>Understanding Results</h4>
+
+<p>After the search completes, results are displayed ranked by their score:</p>
+
+<ul>
+    <li><strong>Score:</strong> The weighted sum of all deck metrics. Higher is better.</li>
+    <li><strong>Card List:</strong> The 6 cards that make up the deck, shown with their type and rarity.</li>
+    <li><strong>Key Metrics:</strong> Race Bonus, Training Effectiveness, and other important values shown at a glance.</li>
+    <li><strong>Expanded View:</strong> Click a result to see the full effect breakdown, per-card contributions, and detailed scoring.</li>
+</ul>
+
+<h4>Loading to Deck Builder</h4>
+
+<p>Found a deck you like? Load it directly into the Deck Builder:</p>
+
+<div class="help-steps">
+    <div class="help-step">
+        <strong>Click "Load Deck":</strong> Each result has a "Load Deck" button that populates the Deck Builder with those 6 cards.
+    </div>
+    <div class="help-step">
+        <strong>Overwrites Current Deck:</strong> Loading a result replaces whatever is currently in the Deck Builder. Save your current deck first if you want to keep it.
+    </div>
+    <div class="help-step">
+        <strong>Review & Adjust:</strong> Once loaded, use the Deck Builder to fine-tune training assignments and review the full training breakdown.
+    </div>
+</div>
+
+<div class="help-highlight">
+    <strong>🔄 Workflow:</strong> Use the Deck Finder to discover strong combinations, then load them into the Deck Builder for detailed analysis and customization.
+</div>

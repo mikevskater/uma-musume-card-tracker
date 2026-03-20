@@ -1,0 +1,129 @@
+<h3>Deck Builder</h3>
+
+<p>Build and analyze support card decks for training. Add up to 6 cards (5 support + 1 friend), configure training parameters, and review detailed stat breakdowns to optimize your training strategy.</p>
+
+<div class="help-tip">
+    <strong>💡 Quick Start:</strong> Select a scenario, add cards to the 6 slots, then scroll down to see your training breakdown and deck effects summary.
+</div>
+
+<h4>Deck Slots</h4>
+
+<div class="help-steps">
+    <div class="help-step">
+        <strong>Adding Cards:</strong> Click an empty slot to open the card picker. Browse or search your collection and click a card to add it.
+    </div>
+    <div class="help-step">
+        <strong>Removing Cards:</strong> Click the &times; button on a filled slot to remove a card. You can also click the slot to swap in a different card.
+    </div>
+    <div class="help-step">
+        <strong>Friend Slot:</strong> The 6th slot is designated for a friend card. Friend-type cards can only go here, and non-friend cards cannot be placed in the friend slot. Friend cards appear at whichever training you assign them to.
+    </div>
+</div>
+
+<div class="help-tip">
+    <strong>💡 Limit Break:</strong> Cards use their current limit break level from your collection. If a card is unowned, it defaults to LB 4.
+</div>
+
+<h4>Training Controls</h4>
+
+<div class="help-grid">
+    <div class="help-grid-item">
+        <h5>🎬 Scenario</h5>
+        <p>Choose the training scenario. Each scenario has different base stat values and mechanics that affect training calculations.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>👤 Character</h5>
+        <p>Select a trainee character. This loads their base stats, growth rates, and aptitude grades into the training calculations.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>🏟️ Facility Level</h5>
+        <p>Set the facility level (1–5). Higher levels increase base stat gains and change failure rates for each training type.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>😊 Mood</h5>
+        <p>Set character mood. Very Good gives +20% stat gains, while Very Bad gives −20%. Normal is 0%.</p>
+    </div>
+    <div class="help-grid-item">
+        <h5>🤝 Friendship Training</h5>
+        <p>Toggle friendship training on/off. When active, cards with max friendship apply a bonus multiplier to training stat gains.</p>
+    </div>
+</div>
+
+<h4>Training Breakdown</h4>
+
+<p>The training breakdown table shows calculated stat gains for each training type (Speed, Stamina, Power, Guts, Wisdom). Each row displays:</p>
+
+<ul>
+    <li><strong>Stat Columns (Spd/Sta/Pow/Gut/Wis/SP):</strong> The calculated stat gain for that training, including card bonuses, mood, facility level, and friendship effects.</li>
+    <li><strong>Energy:</strong> The stamina cost of performing that training. Negative values mean the training restores energy (common for Wisdom).</li>
+    <li><strong>Fail %:</strong> The base failure rate at the current facility level when energy is ≥ 50.</li>
+    <li><strong>Cards:</strong> Number of support cards present at that training. More cards generally means higher stat gains.</li>
+</ul>
+
+<div class="help-tip">
+    <strong>💡 Reading the Table:</strong> Higher stat values are better. Look for trainings where your deck's card bonuses concentrate the most gains. Green-highlighted values indicate the stat matching that training type.
+</div>
+
+<h4>Training Assignment</h4>
+
+<p>By default, each card appears at the training matching its type (e.g., Speed cards at Speed training). You can customize this:</p>
+
+<div class="help-steps">
+    <div class="help-step">
+        <strong>Click a Training Name:</strong> Click any training row name in the breakdown table to open the assignment editor for that training.
+    </div>
+    <div class="help-step">
+        <strong>Toggle Cards:</strong> Check or uncheck cards to control which ones are present at that training. This lets you simulate different card placement scenarios.
+    </div>
+    <div class="help-step">
+        <strong>Friend Card:</strong> Friend-type cards don't have a fixed training. Use the assignment editor to place them where you want.
+    </div>
+</div>
+
+<h4>Deck Effects Summary</h4>
+
+<p>The Deck Effects Summary shows the combined effect values from all 6 cards in your deck. This includes:</p>
+
+<ul>
+    <li><strong>Aggregated Effects:</strong> Total values for all shared effects like Training Effectiveness, Race Bonus, Friend Bonus, Energy Recovery, etc.</li>
+    <li><strong>Per-Training Breakdown:</strong> How stat bonuses stack for each training type based on which cards are assigned there.</li>
+    <li><strong>Race Bonus:</strong> The combined race bonus percentage from all cards — a key metric for competitive decks.</li>
+</ul>
+
+<h4>Character Info</h4>
+
+<p>When a character is selected, the Character Info section displays:</p>
+
+<ul>
+    <li><strong>Base Stats:</strong> The character's starting stat values (Speed, Stamina, Power, Guts, Wisdom).</li>
+    <li><strong>Growth Rates:</strong> Percentage multipliers that affect how much each stat grows during training. Higher growth = more stat gain per training.</li>
+    <li><strong>Aptitude Grades:</strong> The character's aptitudes for surfaces (Turf/Dirt) and distances (Short/Mile/Medium/Long). Aptitude grades affect race performance.</li>
+</ul>
+
+<h4>Unique Effects</h4>
+
+<p>SSR cards have unique effects that unlock at specific limit break levels. The deck builder shows:</p>
+
+<ul>
+    <li><strong>Unlock Level:</strong> The limit break level required to activate the unique effect.</li>
+    <li><strong>Effect Description:</strong> What the unique effect does when active.</li>
+    <li><strong>Active Status:</strong> Whether the effect is currently active based on the card's limit break level in your collection.</li>
+</ul>
+
+<div class="help-warning">
+    <strong>⚠️ Limit Break Matters:</strong> Unique effects only activate when the card reaches the required limit break level. A card at LB 2 will not have effects that require LB 3 or higher.
+</div>
+
+<h4>Deck Skills</h4>
+
+<p>The Deck Skills section lists all skills provided by the cards in your deck:</p>
+
+<ul>
+    <li><strong>Hint Skills:</strong> Skills the card teaches as hints during training. Hint skills cost less SP to learn than their base cost.</li>
+    <li><strong>Event Skills:</strong> Skills obtained through the card's training events.</li>
+    <li><strong>Skill Cost:</strong> The SP cost to learn each skill (with hint discount applied where applicable).</li>
+</ul>
+
+<div class="help-tip">
+    <strong>💡 Hint Discount:</strong> When a card provides a skill as a hint, it costs less SP to learn. The discount depends on the card's hint effect level.
+</div>
