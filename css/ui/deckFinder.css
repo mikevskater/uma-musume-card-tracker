@@ -1570,13 +1570,16 @@
 }
 
 .finder-mood-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     padding: 4px;
     border: 2px solid transparent;
     border-radius: var(--radius-md);
     background: var(--bg-primary);
     cursor: pointer;
     transition: all var(--transition-fast);
-    line-height: 0;
 }
 
 .finder-mood-btn:hover {
@@ -1593,6 +1596,18 @@
     height: 24px;
     width: auto;
     object-fit: contain;
+}
+
+.finder-mood-btn .mood-label {
+    font-size: 9px;
+    line-height: 1;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.finder-mood-btn.active .mood-label {
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-semibold);
 }
 
 .finder-friendship-toggle {

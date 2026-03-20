@@ -2648,15 +2648,16 @@ function buildFinderTrainingSection(result, idx) {
     html += '<label>Mood</label>';
     html += '<div class="finder-mood-row">';
     const moods = [
-        { key: 'very_good', img: 'images/ui/mood_very_good.png', title: 'Very Good (+20%)' },
-        { key: 'good', img: 'images/ui/mood_good.png', title: 'Good (+10%)' },
-        { key: 'normal', img: 'images/ui/mood_normal.png', title: 'Normal (0%)' },
-        { key: 'bad', img: 'images/ui/mood_bad.png', title: 'Bad (-10%)' },
-        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', title: 'Very Bad (-20%)' }
+        { key: 'very_good', img: 'images/ui/mood_very_good.png', label: 'Very Good', title: '+20% mood bonus', fallback: '\u{1f601}' },
+        { key: 'good', img: 'images/ui/mood_good.png', label: 'Good', title: '+10% mood bonus', fallback: '\u{1f642}' },
+        { key: 'normal', img: 'images/ui/mood_normal.png', label: 'Normal', title: '0% mood bonus', fallback: '\u{1f610}' },
+        { key: 'bad', img: 'images/ui/mood_bad.png', label: 'Bad', title: '-10% mood bonus', fallback: '\u{1f61e}' },
+        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', label: 'Very Bad', title: '-20% mood bonus', fallback: '\u{1f621}' }
     ];
     for (const m of moods) {
         html += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
-            <img src="${m.img}" alt="${m.title}">
+            <img src="${m.img}" alt="${m.label}" onerror="this.replaceWith(document.createTextNode('${m.fallback}'))">
+            <span class="mood-label">${m.label}</span>
         </button>`;
     }
     html += '</div>';
@@ -2786,16 +2787,17 @@ function refreshFinderTraining(idx) {
     innerHtml += '</div>';
     innerHtml += '<label>Mood</label>';
     innerHtml += '<div class="finder-mood-row">';
-    const moods = [
-        { key: 'very_good', img: 'images/ui/mood_very_good.png', title: 'Very Good (+20%)' },
-        { key: 'good', img: 'images/ui/mood_good.png', title: 'Good (+10%)' },
-        { key: 'normal', img: 'images/ui/mood_normal.png', title: 'Normal (0%)' },
-        { key: 'bad', img: 'images/ui/mood_bad.png', title: 'Bad (-10%)' },
-        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', title: 'Very Bad (-20%)' }
+    const moods2 = [
+        { key: 'very_good', img: 'images/ui/mood_very_good.png', label: 'Very Good', title: '+20% mood bonus', fallback: '\u{1f601}' },
+        { key: 'good', img: 'images/ui/mood_good.png', label: 'Good', title: '+10% mood bonus', fallback: '\u{1f642}' },
+        { key: 'normal', img: 'images/ui/mood_normal.png', label: 'Normal', title: '0% mood bonus', fallback: '\u{1f610}' },
+        { key: 'bad', img: 'images/ui/mood_bad.png', label: 'Bad', title: '-10% mood bonus', fallback: '\u{1f61e}' },
+        { key: 'very_bad', img: 'images/ui/mood_very_bad.png', label: 'Very Bad', title: '-20% mood bonus', fallback: '\u{1f621}' }
     ];
-    for (const m of moods) {
+    for (const m of moods2) {
         innerHtml += `<button class="finder-mood-btn${finderTrainingState.mood === m.key ? ' active' : ''}" data-mood="${m.key}" title="${m.title}">
-            <img src="${m.img}" alt="${m.title}">
+            <img src="${m.img}" alt="${m.label}" onerror="this.replaceWith(document.createTextNode('${m.fallback}'))">
+            <span class="mood-label">${m.label}</span>
         </button>`;
     }
     innerHtml += '</div>';

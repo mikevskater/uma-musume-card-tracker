@@ -87,11 +87,11 @@ function renderDeckBuilderShell() {
             <div class="training-control-group">
                 <span class="training-control-label">Mood:</span>
                 <div class="mood-btn-row" id="moodBtnRow">
-                    <button class="mood-btn active" data-mood="very_good" title="Very Good (+20%)"><img src="images/ui/mood_very_good.png" alt="Very Good"></button>
-                    <button class="mood-btn" data-mood="good" title="Good (+10%)"><img src="images/ui/mood_good.png" alt="Good"></button>
-                    <button class="mood-btn" data-mood="normal" title="Normal (0%)"><img src="images/ui/mood_normal.png" alt="Normal"></button>
-                    <button class="mood-btn" data-mood="bad" title="Bad (-10%)"><img src="images/ui/mood_bad.png" alt="Bad"></button>
-                    <button class="mood-btn" data-mood="very_bad" title="Very Bad (-20%)"><img src="images/ui/mood_very_bad.png" alt="Very Bad"></button>
+                    <button class="mood-btn active" data-mood="very_good" title="+20% mood bonus"><img src="images/ui/mood_very_good.png" alt="Very Good" onerror="this.replaceWith(document.createTextNode('\u{1f601}'))"><span class="mood-label">Very Good</span></button>
+                    <button class="mood-btn" data-mood="good" title="+10% mood bonus"><img src="images/ui/mood_good.png" alt="Good" onerror="this.replaceWith(document.createTextNode('\u{1f642}'))"><span class="mood-label">Good</span></button>
+                    <button class="mood-btn" data-mood="normal" title="0% mood bonus"><img src="images/ui/mood_normal.png" alt="Normal" onerror="this.replaceWith(document.createTextNode('\u{1f610}'))"><span class="mood-label">Normal</span></button>
+                    <button class="mood-btn" data-mood="bad" title="-10% mood bonus"><img src="images/ui/mood_bad.png" alt="Bad" onerror="this.replaceWith(document.createTextNode('\u{1f61e}'))"><span class="mood-label">Bad</span></button>
+                    <button class="mood-btn" data-mood="very_bad" title="-20% mood bonus"><img src="images/ui/mood_very_bad.png" alt="Very Bad" onerror="this.replaceWith(document.createTextNode('\u{1f621}'))"><span class="mood-label">Very Bad</span></button>
                 </div>
             </div>
             <label class="friendship-checkbox">
