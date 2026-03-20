@@ -35,6 +35,10 @@ function renderDeckBuilderShell() {
             </select>
             <span class="deck-preview-indicator" id="deckPreviewIndicator" style="display:none;">Preview</span>
             <span class="deck-save-indicator" id="deckSaveIndicator"></span>
+            <label class="deck-header-toggle" data-tooltip="Set all owned cards to their maximum level for their current limit break" tabindex="0">
+                <input type="checkbox" id="deckMaxPotentialHeaderToggle" ${deckBuilderState.maxPotential ? 'checked' : ''}>
+                Max Potential
+            </label>
             <div class="deck-header-actions">
                 <button class="btn btn-secondary" id="deckNewBtn">New</button>
                 <button class="btn btn-secondary" id="deckRenameBtn">Rename</button>
@@ -102,6 +106,11 @@ function renderDeckBuilderShell() {
                 <input type="checkbox" id="friendshipToggle" checked>
                 Friendship Training active
                 <span class="tooltip-small" data-tooltip="When active, cards with max friendship apply a bonus multiplier to training stat gains" tabindex="0">?</span>
+            </label>
+            <label class="friendship-checkbox">
+                <input type="checkbox" id="deckMaxPotentialToggle" ${deckBuilderState.maxPotential ? 'checked' : ''}>
+                Max Potential
+                <span class="tooltip-small" data-tooltip="Set all owned cards to their maximum level for their current limit break. Shows the best possible stats your deck can achieve." tabindex="0">?</span>
             </label>
         </div>
 

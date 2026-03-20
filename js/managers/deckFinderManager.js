@@ -378,7 +378,8 @@ function getDefaultFinderFilters() {
         includeFriendCards: [],       // support_ids restricting friend slot pool (empty = unrestricted)
         resultCount: 10,
         scenario: '1',               // scenario ID for scoring weights
-        selectedTrainee: null         // trainee version ID from charactersData
+        selectedTrainee: null,        // trainee version ID from charactersData
+        maxPotential: false           // use max level at current LB for all cards
     };
 }
 
@@ -498,12 +499,12 @@ function groupCardsByType(pool) {
 
 // ===== PRE-COMPUTATION =====
 
-function precomputeCardEffects(pool, traineeData, forceMaxLevel) {
+function precomputeCardEffects(pool, traineeData, forceMaxLevel, maxPotential) {
     const cache = new Map();
     const skillLookup = getSkillIdLookup();
     pool.forEach(card => {
         const cardId = card.support_id;
-        const level = getCardFinderLevel(card, forceMaxLevel);
+        const level = getCardFinderLevel(card, forceMaxLevel, maxPotential);
         const effects = {};
 
         if (card.effects) {
@@ -643,9 +644,14 @@ function buildRequiredSkillTypeMask(requiredTypes) {
     return mask;
 }
 
-function getCardFinderLevel(card, forceMax) {
+function getCardFinderLevel(card, forceMax, maxPotential) {
     if (forceMax) return limitBreaks[card.rarity][4];
     if (isCardOwned(card.support_id)) {
+        if (maxPotential) {
+            // Max level at the card's current LB
+            const lb = getOwnedCardLimitBreak(card.support_id);
+            return limitBreaks[card.rarity][lb];
+        }
         const level = getOwnedCardLevel(card.support_id);
         if (level !== null && level > 0) return level;
     }
@@ -1459,7 +1465,8 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     // For owned mode: owned cards at actual levels + friend pool at max level
     // For all mode: all cards at max level for all 6 slots
     _logDeckFinder.time('precomputeCardEffects');
-    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode);
+    const maxPotential = filters.maxPotential || false;
+    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode, maxPotential);
     _logDeckFinder.timeEnd('precomputeCardEffects');
     const groups = groupCardsByType(pool);
     _logDeckFinder.debug('Groups by type', Object.fromEntries(Object.entries(groups).map(([t, c]) => [t, c.length])));
@@ -3378,13 +3385,17 @@ function loadDeckFromFinder(cardIds, saveName) {
         const isFriend = card.type === 'friend';
         let level, lb;
 
+        const useMaxPotential = deckFinderState.filters?.maxPotential;
+
         if (isFriend) {
             // Friend cards belong to another player — always default to max
             lb = 4;
             level = limitBreaks[card.rarity][lb];
         } else if (isCardOwned(cardId)) {
-            level = getOwnedCardLevel(cardId);
             lb = getOwnedCardLimitBreak(cardId);
+            level = useMaxPotential
+                ? limitBreaks[card.rarity][lb]
+                : getOwnedCardLevel(cardId);
         } else {
             lb = 4;
             level = limitBreaks[card.rarity][lb];
@@ -3432,17 +3443,21 @@ function saveDeckFromFinder(cardIds) {
     // Propagate trainee selection to builder
     const selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
 
+    const maxPotential = deckFinderState.filters?.maxPotential || false;
+
     const newDeck = {
         id: deckId,
         name,
         slots,
         selectedCharacter: selectedTrainee,
+        maxPotential,
         lastModified: Date.now()
     };
     deckBuilderState.savedDecks.push(newDeck);
     if (selectedTrainee) {
         deckBuilderState.selectedCharacter = selectedTrainee;
     }
+    deckBuilderState.maxPotential = maxPotential;
     switchToDeck(deckId);
     saveDeckToStorage();
     renderDeckSelect();
@@ -3453,7 +3468,8 @@ function viewDeckFromFinder(cardIds) {
     _logDeckFinder.info('viewDeckFromFinder', { cardIds });
     const slots = loadDeckFromFinder(cardIds);
     const selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
-    enterPreviewMode(slots, selectedTrainee);
+    const maxPotential = deckFinderState.filters?.maxPotential || false;
+    enterPreviewMode(slots, selectedTrainee, maxPotential);
 }
 
 // ===== EXPORTS =====

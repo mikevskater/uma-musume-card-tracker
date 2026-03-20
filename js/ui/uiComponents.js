@@ -1081,22 +1081,26 @@ function initializeTooltipSystem() {
 
     // Show on hover (capture phase so we get it before bubbling)
     document.addEventListener('mouseenter', (e) => {
+        if (!e.target?.closest) return;
         const trigger = e.target.closest(TOOLTIP_SELECTOR);
         if (trigger) showTooltipPopup(trigger);
     }, true);
 
     document.addEventListener('mouseleave', (e) => {
+        if (!e.target?.closest) return;
         const trigger = e.target.closest(TOOLTIP_SELECTOR);
         if (trigger) hideTooltipPopup();
     }, true);
 
     // Show on focus (keyboard nav)
     document.addEventListener('focusin', (e) => {
+        if (!e.target?.closest) return;
         const trigger = e.target.closest(TOOLTIP_SELECTOR);
         if (trigger) showTooltipPopup(trigger);
     });
 
     document.addEventListener('focusout', (e) => {
+        if (!e.target?.closest) return;
         const trigger = e.target.closest(TOOLTIP_SELECTOR);
         if (trigger) hideTooltipPopup();
     });

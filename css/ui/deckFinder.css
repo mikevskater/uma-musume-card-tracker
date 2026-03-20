@@ -104,6 +104,15 @@
     overflow: hidden;
 }
 
+.finder-max-potential-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
 .finder-toggle-btn {
     flex: 1;
     padding: var(--space-xs) var(--space-sm);

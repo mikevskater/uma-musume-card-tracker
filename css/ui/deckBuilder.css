@@ -107,6 +107,16 @@
     white-space: nowrap;
 }
 
+.deck-header-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
 .deck-header-actions {
     display: flex;
     gap: var(--space-xs);

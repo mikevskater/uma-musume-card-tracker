@@ -250,6 +250,11 @@ function buildFinderFiltersHTML() {
                 <button class="finder-toggle-btn active" data-pool="owned" data-tooltip="Only search cards in your collection" tabindex="0">Owned Only</button>
                 <button class="finder-toggle-btn" data-pool="all" data-tooltip="Search all available cards, including ones you don't own" tabindex="0">All Cards</button>
             </div>
+            <label class="finder-max-potential-label" style="margin-top:var(--space-xs);">
+                <input type="checkbox" id="finderMaxPotentialToggle">
+                Max Potential
+                <span class="tooltip-small" data-tooltip="Use each card's maximum level for its limit break when scoring decks. Shows the best possible results assuming all cards are fully leveled." tabindex="0">?</span>
+            </label>
         </div>
 
         <!-- Rarity -->
@@ -775,6 +780,10 @@ function restoreFinderUIFromState() {
     overlay.querySelectorAll('.finder-toggle-btn[data-pool]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.pool === f.cardPool);
     });
+
+    // Max Potential
+    const maxPotToggle = overlay.querySelector('#finderMaxPotentialToggle');
+    if (maxPotToggle) maxPotToggle.checked = f.maxPotential || false;
 
     // Scenario
     const scenarioSel = overlay.querySelector('#finderScenario');
@@ -2086,6 +2095,9 @@ function collectFiltersFromUI() {
     // Pool
     const poolBtn = overlay.querySelector('.finder-toggle-btn[data-pool].active');
     f.cardPool = poolBtn?.dataset?.pool || 'owned';
+
+    // Max Potential
+    f.maxPotential = overlay.querySelector('#finderMaxPotentialToggle')?.checked || false;
 
     // Rarity (icon buttons)
     f.rarity.ssr = overlay.querySelector('#finderSSR')?.classList.contains('selected') ?? true;

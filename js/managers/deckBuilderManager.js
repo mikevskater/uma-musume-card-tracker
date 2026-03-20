@@ -65,6 +65,7 @@ let deckBuilderState = {
         sortBy: 'effect_15',
         sortDirection: 'desc'
     },
+    maxPotential: false, // When true, owned cards use max level for their LB
     scenario: '1',      // Default to URA; '1'=URA, '2'=Aoharu, '4'=Trackblazer
     trainingLevel: 1,
     mood: 'very_good',
@@ -209,6 +210,42 @@ function removeDeckSlot(slotIndex) {
     markDeckDirty();
 }
 
+// ===== MAX POTENTIAL =====
+
+function toggleMaxPotential(enabled) {
+    _logDeckBuilder.info('toggleMaxPotential', { enabled });
+    deckBuilderState.maxPotential = enabled;
+
+    // Update all non-friend slot levels
+    deckBuilderState.slots.forEach((slot, i) => {
+        if (!slot || slot.isFriend) return;
+        const card = cardData.find(c => c.support_id === slot.cardId);
+        if (!card) return;
+
+        if (enabled) {
+            // Set to max level for current LB
+            slot.level = limitBreaks[card.rarity][slot.limitBreak];
+        } else if (isCardOwned(slot.cardId)) {
+            // Revert to owned level
+            slot.level = getOwnedCardLevel(slot.cardId);
+        }
+        // Unowned cards stay at max (they were already max)
+    });
+
+    renderDeckSlots();
+    recalculateDeck();
+    markDeckDirty();
+    updateMaxPotentialToggle();
+}
+
+function updateMaxPotentialToggle() {
+    const checked = deckBuilderState.maxPotential;
+    const toggle = document.getElementById('deckMaxPotentialToggle');
+    const headerToggle = document.getElementById('deckMaxPotentialHeaderToggle');
+    if (toggle) toggle.checked = checked;
+    if (headerToggle) headerToggle.checked = checked;
+}
+
 // ===== CARD PICKER =====
 
 // Track the element that triggered a modal so focus can return on close
@@ -254,8 +291,10 @@ function selectCardForSlot(slotIndex, cardId) {
         lb = 4;
         level = limitBreaks[card.rarity][lb];
     } else if (isCardOwned(cardId)) {
-        level = getOwnedCardLevel(cardId);
         lb = getOwnedCardLimitBreak(cardId);
+        level = deckBuilderState.maxPotential
+            ? limitBreaks[card.rarity][lb]
+            : getOwnedCardLevel(cardId);
     } else {
         lb = 4;
         level = limitBreaks[card.rarity][lb];
@@ -729,6 +768,7 @@ function saveDeckToStorage() {
                 deck.slots = [...deckBuilderState.slots];
                 deck.name = deckBuilderState.deckName;
                 deck.selectedCharacter = deckBuilderState.selectedCharacter || null;
+                deck.maxPotential = deckBuilderState.maxPotential || false;
                 deck.lastModified = Date.now();
             }
         }
@@ -767,6 +807,7 @@ function createNewDeck(name) {
         name: name || 'New Deck',
         slots: carrySlots,
         selectedCharacter: deckBuilderState.selectedCharacter || null,
+        maxPotential: deckBuilderState.maxPotential || false,
         lastModified: Date.now()
     };
 
@@ -814,7 +855,8 @@ function snapshotDeckState() {
         slots: deckBuilderState.slots.map(s => s ? { ...s } : null),
         activeDeckId: deckBuilderState.activeDeckId,
         deckName: deckBuilderState.deckName,
-        selectedCharacter: deckBuilderState.selectedCharacter
+        selectedCharacter: deckBuilderState.selectedCharacter,
+        maxPotential: deckBuilderState.maxPotential
     };
     deckBuilderState.dirty = false;
 }
@@ -824,7 +866,7 @@ function markDeckDirty() {
     updateDeckHeaderButtons();
 }
 
-function enterPreviewMode(slots, selectedCharacter) {
+function enterPreviewMode(slots, selectedCharacter, maxPotential) {
     _logDeckBuilder.info('enterPreviewMode');
     // Snapshot so Cancel reverts to whatever was active before
     snapshotDeckState();
@@ -835,6 +877,7 @@ function enterPreviewMode(slots, selectedCharacter) {
     deckBuilderState.deckName = '';
     deckBuilderState.slots = slots;
     deckBuilderState.selectedCharacter = selectedCharacter || null;
+    deckBuilderState.maxPotential = maxPotential || false;
     resetAllAssignments();
 
     if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
@@ -842,6 +885,7 @@ function enterPreviewMode(slots, selectedCharacter) {
     recalculateDeck();
     renderDeckSelect();
     updateDeckHeaderButtons();
+    updateMaxPotentialToggle();
 }
 
 function saveDeckChanges() {
@@ -879,6 +923,7 @@ function cancelDeckChanges() {
         deckBuilderState.activeDeckId = null;
         deckBuilderState.deckName = snapshot.deckName;
         deckBuilderState.selectedCharacter = snapshot.selectedCharacter;
+        deckBuilderState.maxPotential = snapshot.maxPotential || false;
         resetAllAssignments();
 
         if (typeof updateCharacterPickLabel === 'function') updateCharacterPickLabel();
@@ -887,6 +932,7 @@ function cancelDeckChanges() {
         renderDeckSelect();
         snapshotDeckState();
         updateDeckHeaderButtons();
+        updateMaxPotentialToggle();
     }
 
     showToast('Changes discarded', 'info');
@@ -939,6 +985,7 @@ function switchToDeck(deckId) {
     deckBuilderState.deckName = deck.name;
     deckBuilderState.slots = deck.slots ? [...deck.slots] : [null, null, null, null, null, null];
     deckBuilderState.selectedCharacter = deck.selectedCharacter || null;
+    deckBuilderState.maxPotential = deck.maxPotential || false;
     deckBuilderState.previewMode = false;
     resetAllAssignments();
 
@@ -950,6 +997,7 @@ function switchToDeck(deckId) {
     renderDeckSelect();
     snapshotDeckState();
     updateDeckHeaderButtons();
+    updateMaxPotentialToggle();
 
     // Brief highlight animation on deck switch
     const slotsContainer = document.getElementById('deckSlots');
@@ -1142,6 +1190,16 @@ function initializeDeckBuilderEvents() {
             recalculateDeck();
         });
     }
+
+    // Max Potential toggles (header + training controls — kept in sync)
+    ['deckMaxPotentialToggle', 'deckMaxPotentialHeaderToggle'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', (e) => {
+                toggleMaxPotential(e.target.checked);
+            });
+        }
+    });
 }
 
 // ===== EXPORTS =====
@@ -1216,5 +1274,7 @@ Object.assign(window, {
     cancelDeckChanges,
     snapshotDeckState,
     markDeckDirty,
-    updateDeckHeaderButtons
+    updateDeckHeaderButtons,
+    toggleMaxPotential,
+    updateMaxPotentialToggle
 });
