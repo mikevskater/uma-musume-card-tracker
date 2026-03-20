@@ -1113,7 +1113,17 @@ function initializeTooltipSystem() {
             const trigger = e.target.closest(TOOLTIP_SELECTOR);
 
             if (trigger) {
-                e.preventDefault();
+                // Only preventDefault on dedicated tooltip triggers (? icons),
+                // not on interactive elements like buttons that have tooltips
+                const isDedicatedTooltip = trigger.classList.contains('tooltip') ||
+                    trigger.classList.contains('tooltip-small') ||
+                    trigger.classList.contains('unlock-tooltip') ||
+                    trigger.classList.contains('unlock-tooltip-small');
+
+                if (isDedicatedTooltip) {
+                    e.preventDefault();
+                }
+
                 if (activeTrigger === trigger) {
                     hideTooltipPopup();
                     activeTrigger = null;
