@@ -87,11 +87,11 @@ function renderDeckBuilderShell() {
             <div class="training-control-group">
                 <span class="training-control-label">Mood:</span>
                 <div class="mood-btn-row" id="moodBtnRow">
-                    <button class="mood-btn active" data-mood="very_good" data-tooltip="+20% mood bonus"><img src="images/ui/mood_very_good.png" alt="Very Good" onerror="this.replaceWith(document.createTextNode('\u{1f601}'))"><span class="mood-label">Very Good</span></button>
-                    <button class="mood-btn" data-mood="good" data-tooltip="+10% mood bonus"><img src="images/ui/mood_good.png" alt="Good" onerror="this.replaceWith(document.createTextNode('\u{1f642}'))"><span class="mood-label">Good</span></button>
-                    <button class="mood-btn" data-mood="normal" data-tooltip="0% mood bonus"><img src="images/ui/mood_normal.png" alt="Normal" onerror="this.replaceWith(document.createTextNode('\u{1f610}'))"><span class="mood-label">Normal</span></button>
-                    <button class="mood-btn" data-mood="bad" data-tooltip="-10% mood bonus"><img src="images/ui/mood_bad.png" alt="Bad" onerror="this.replaceWith(document.createTextNode('\u{1f61e}'))"><span class="mood-label">Bad</span></button>
-                    <button class="mood-btn" data-mood="very_bad" data-tooltip="-20% mood bonus"><img src="images/ui/mood_very_bad.png" alt="Very Bad" onerror="this.replaceWith(document.createTextNode('\u{1f621}'))"><span class="mood-label">Very Bad</span></button>
+                    <button class="mood-btn active" data-mood="very_good" data-tooltip="+20% mood bonus"><img src="images/ui/mood_very_good.png" alt="Very Good" onerror="this.replaceWith(document.createTextNode('\u{1f601}'))"><span class="mood-label">Very Good</span><span class="mood-bonus-badge">+20%</span></button>
+                    <button class="mood-btn" data-mood="good" data-tooltip="+10% mood bonus"><img src="images/ui/mood_good.png" alt="Good" onerror="this.replaceWith(document.createTextNode('\u{1f642}'))"><span class="mood-label">Good</span><span class="mood-bonus-badge">+10%</span></button>
+                    <button class="mood-btn" data-mood="normal" data-tooltip="0% mood bonus"><img src="images/ui/mood_normal.png" alt="Normal" onerror="this.replaceWith(document.createTextNode('\u{1f610}'))"><span class="mood-label">Normal</span><span class="mood-bonus-badge">0%</span></button>
+                    <button class="mood-btn" data-mood="bad" data-tooltip="-10% mood bonus"><img src="images/ui/mood_bad.png" alt="Bad" onerror="this.replaceWith(document.createTextNode('\u{1f61e}'))"><span class="mood-label">Bad</span><span class="mood-bonus-badge">-10%</span></button>
+                    <button class="mood-btn" data-mood="very_bad" data-tooltip="-20% mood bonus"><img src="images/ui/mood_very_bad.png" alt="Very Bad" onerror="this.replaceWith(document.createTextNode('\u{1f621}'))"><span class="mood-label">Very Bad</span><span class="mood-bonus-badge">-20%</span></button>
                 </div>
             </div>
             <label class="friendship-checkbox">
@@ -846,34 +846,44 @@ function renderDeckSummary(aggregated, perTraining) {
 
     content.innerHTML = `
         <div class="deck-summary-section-label">Deck-Wide Effects (always active)</div>
-        <div class="deck-summary-grid">
-            <div class="deck-summary-item highlight ${raceBonusClass}" data-tooltip="Race Bonus — extra stats earned from races. Green = high (≥30%), orange = low. Higher is better for race-focused training." tabindex="0">
-                <span class="deck-summary-item-label">Race Bonus</span>
-                <span class="deck-summary-item-value">${raceBonusVal}%</span>
+        <div class="deck-summary-effect-groups">
+            <div class="deck-summary-effect-group">
+                <div class="deck-summary-group-label">Training</div>
+                <div class="deck-summary-grid">
+                    <div class="deck-summary-item highlight ${raceBonusClass}" data-tooltip="Race Bonus — extra stats earned from races. Green = high (≥30%), orange = low. Higher is better for race-focused training." tabindex="0">
+                        <span class="deck-summary-item-label">Race Bonus</span>
+                        <span class="deck-summary-item-value">${raceBonusVal}%${raceBonusVal >= 30 ? ' <span class="deck-summary-quality-tag">High</span>' : raceBonusVal > 0 ? ' <span class="deck-summary-quality-tag low">Low</span>' : ''}</span>
+                    </div>
+                    <div class="deck-summary-item" data-tooltip="Specialty Priority — bonus applied when a card trains in its specialty stat type" tabindex="0">
+                        <span class="deck-summary-item-label">Spec. Priority</span>
+                        <span class="deck-summary-item-value">${specPriority}</span>
+                    </div>
+                    <div class="deck-summary-item" data-tooltip="Fail Protection — reduces the chance of training failure (injury/overwork)" tabindex="0">
+                        <span class="deck-summary-item-label">Fail Protection</span>
+                        <span class="deck-summary-item-value">${failProt}%</span>
+                    </div>
+                    <div class="deck-summary-item" data-tooltip="Energy Reduce — lowers the stamina cost of training exercises" tabindex="0">
+                        <span class="deck-summary-item-label">Energy Reduce</span>
+                        <span class="deck-summary-item-value">${energyReduce}%</span>
+                    </div>
+                </div>
             </div>
-            <div class="deck-summary-item" data-tooltip="Specialty Priority — bonus applied when a card trains in its specialty stat type" tabindex="0">
-                <span class="deck-summary-item-label">Spec. Priority</span>
-                <span class="deck-summary-item-value">${specPriority}</span>
-            </div>
-            <div class="deck-summary-item" data-tooltip="Fail Protection — reduces the chance of training failure (injury/overwork)" tabindex="0">
-                <span class="deck-summary-item-label">Fail Protection</span>
-                <span class="deck-summary-item-value">${failProt}%</span>
-            </div>
-            <div class="deck-summary-item" data-tooltip="Energy Reduce — lowers the stamina cost of training exercises" tabindex="0">
-                <span class="deck-summary-item-label">Energy Reduce</span>
-                <span class="deck-summary-item-value">${energyReduce}%</span>
-            </div>
-            <div class="deck-summary-item" data-tooltip="Event Recovery — increases HP recovered from support card events" tabindex="0">
-                <span class="deck-summary-item-label">Event Recovery</span>
-                <span class="deck-summary-item-value">${eventRecovery}%</span>
-            </div>
-            <div class="deck-summary-item" data-tooltip="Hint Level — raises the level of skill hints received from support cards, reducing skill point cost" tabindex="0">
-                <span class="deck-summary-item-label">Hint Level</span>
-                <span class="deck-summary-item-value">${hintLevel}</span>
-            </div>
-            <div class="deck-summary-item" data-tooltip="Hint Frequency — increases how often support cards give skill hints during training" tabindex="0">
-                <span class="deck-summary-item-label">Hint Freq.</span>
-                <span class="deck-summary-item-value">${hintFreq}%</span>
+            <div class="deck-summary-effect-group">
+                <div class="deck-summary-group-label">Skills & Events</div>
+                <div class="deck-summary-grid">
+                    <div class="deck-summary-item" data-tooltip="Event Recovery — increases HP recovered from support card events" tabindex="0">
+                        <span class="deck-summary-item-label">Event Recovery</span>
+                        <span class="deck-summary-item-value">${eventRecovery}%</span>
+                    </div>
+                    <div class="deck-summary-item" data-tooltip="Hint Level — raises the level of skill hints received from support cards, reducing skill point cost" tabindex="0">
+                        <span class="deck-summary-item-label">Hint Level</span>
+                        <span class="deck-summary-item-value">${hintLevel}</span>
+                    </div>
+                    <div class="deck-summary-item" data-tooltip="Hint Frequency — increases how often support cards give skill hints during training" tabindex="0">
+                        <span class="deck-summary-item-label">Hint Freq.</span>
+                        <span class="deck-summary-item-value">${hintFreq}%</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1037,10 +1047,11 @@ function renderTrainingBreakdown(trainingResults, aggregated, failureRates) {
             energyCell = `<td class="training-value-energy-positive">+${result.energy}</td>`;
         } else if (result.energy < 0) {
             const reduced = result.energyReduced;
+            const highCost = result.energy <= -30 ? ' training-energy-high' : '';
             if (reduced !== undefined && reduced !== result.energy) {
-                energyCell = `<td class="training-value-energy">${result.energy} <span class="energy-reduced">\u2192 ${reduced}</span></td>`;
+                energyCell = `<td class="training-value-energy${highCost}">${result.energy} <span class="energy-reduced">\u2192 ${reduced}</span></td>`;
             } else {
-                energyCell = `<td class="training-value-energy">${result.energy}</td>`;
+                energyCell = `<td class="training-value-energy${highCost}">${result.energy}</td>`;
             }
         } else {
             energyCell = `<td class="training-value-zero">0</td>`;

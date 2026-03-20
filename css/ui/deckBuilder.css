@@ -115,7 +115,8 @@
 }
 
 .deck-slot {
-    width: 160px;
+    flex: 1 1 140px;
+    max-width: 200px;
     min-height: 220px;
     border: 2px solid var(--border-secondary);
     border-radius: var(--radius-lg);
@@ -126,7 +127,6 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    overflow: hidden;
 }
 
 .deck-slot:hover {
@@ -138,6 +138,7 @@
 .deck-slot.friend-slot {
     border-style: dashed;
     border-color: var(--color-type-friend-bg);
+    min-height: 260px;
 }
 
 .deck-slot.friend-slot:hover {
@@ -183,6 +184,7 @@
 /* Filled slot */
 .deck-slot-filled {
     width: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -199,7 +201,7 @@
 .deck-slot-image.card-image {
     width: 100%;
     height: auto;
-    border-radius: 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
     aspect-ratio: 3 / 4;
 }
 
@@ -270,19 +272,24 @@
     background: var(--color-danger-dark, #c0392b);
 }
 
-/* Friend slot LB/Level controls */
+/* Friend slot LB/Level controls — dedicated strip below card */
 .deck-slot-friend-controls {
     width: 100%;
-    padding: var(--space-xs) var(--space-sm);
-    border-top: 1px solid var(--border-primary);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    border-top: 2px solid var(--border-accent);
+    background: var(--bg-secondary);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 4px 6px;
+    align-items: center;
+    margin-top: auto;
 }
 
 .deck-slot-friend-controls label {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 .deck-slot-friend-controls select,
@@ -802,7 +809,7 @@
 
 .trainee-apt.apt-low {
     color: var(--text-muted);
-    opacity: 0.5;
+    opacity: 0.65;
 }
 
 .trainee-picker-footer {
@@ -842,6 +849,28 @@
     color: var(--text-muted);
     font-size: var(--font-size-sm);
     font-style: italic;
+}
+
+.deck-summary-effect-groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.deck-summary-effect-group {
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-primary);
+}
+
+.deck-summary-group-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-xs);
 }
 
 .deck-summary-grid {
@@ -885,6 +914,21 @@
 }
 
 .deck-summary-item.race-bonus-low .deck-summary-item-value {
+    color: var(--color-warning);
+}
+
+.deck-summary-quality-tag {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 0 4px;
+    border-radius: var(--radius-sm);
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    vertical-align: middle;
+}
+
+.deck-summary-quality-tag.low {
+    background: var(--color-warning-bg);
     color: var(--color-warning);
 }
 
@@ -932,6 +976,10 @@
     text-align: center;
     border-bottom: 1px solid var(--border-primary);
     white-space: nowrap;
+}
+
+.deck-summary-training-table tbody tr:nth-child(even) {
+    background: var(--bg-secondary);
 }
 
 .deck-summary-training-table td:first-child {
@@ -1038,15 +1086,17 @@
 .mood-btn:hover {
     border-color: var(--border-secondary);
     background: var(--bg-tertiary);
+    transform: scale(1.08);
 }
 
 .mood-btn.active {
     border-color: var(--color-secondary);
     background: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+    box-shadow: 0 0 0 1px var(--color-secondary);
 }
 
 .mood-btn img {
-    height: 24px;
+    height: 32px;
     width: auto;
     object-fit: contain;
 }
@@ -1061,6 +1111,21 @@
 .mood-btn.active .mood-label {
     color: var(--color-secondary);
     font-weight: var(--font-weight-semibold);
+}
+
+.mood-bonus-badge {
+    font-size: 9px;
+    font-weight: var(--font-weight-bold);
+    padding: 1px 4px;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
+    color: var(--color-secondary);
+    line-height: 1;
+    display: none;
+}
+
+.mood-btn.active .mood-bonus-badge {
+    display: block;
 }
 
 .friendship-checkbox {
@@ -1168,8 +1233,8 @@
 }
 
 .training-card-dot {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     border-radius: var(--radius-round);
 }
 
@@ -1187,6 +1252,7 @@
 
 .training-value-zero {
     color: var(--text-muted);
+    font-style: italic;
 }
 
 .training-value-energy {
@@ -1197,6 +1263,20 @@
 .training-value-energy-positive {
     color: var(--color-success);
     font-weight: var(--font-weight-semibold);
+}
+
+.training-energy-high {
+    color: var(--color-danger);
+    font-weight: var(--font-weight-bold);
+}
+
+.training-table tbody tr {
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.training-table tbody tr:hover {
+    background: var(--bg-tertiary);
 }
 
 /* ===== SCENARIO INFO ===== */
@@ -1309,7 +1389,9 @@
 }
 
 .training-card-dot.excluded {
-    opacity: 0.2;
+    opacity: 0.25;
+    outline: 1px dashed var(--text-muted);
+    outline-offset: 1px;
 }
 
 .training-breakdown-note {
