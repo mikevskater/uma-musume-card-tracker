@@ -305,6 +305,9 @@ function renderFilledSlot(slotData, slotIndex, isFriend) {
             _logDeckBuilderUI.info('LB changed', { slotIndex, newLB });
             const maxLevel = limitBreaks[card.rarity][newLB];
             const clampedLevel = Math.min(slotData.level, maxLevel);
+            if (clampedLevel < slotData.level) {
+                showToast(`Level adjusted to ${clampedLevel} (max for LB${newLB})`, 'info');
+            }
             setDeckSlot(slotIndex, slotData.cardId, clampedLevel, newLB);
         });
         controls.appendChild(lbSelect);
@@ -1198,11 +1201,29 @@ function renderTrainingAssignmentModal(trainingType) {
 
     // Save
     document.getElementById('trainingAssignSave').addEventListener('click', () => {
+        const presentCount = tempAssignments.filter(Boolean).length;
+        if (presentCount === 0) {
+            showToast('Warning: no cards assigned to this training type', 'warning');
+        }
         saveTrainingAssignment(trainingType, tempAssignments);
         overlay.classList.remove('open');
         setTimeout(() => overlay.remove(), 200);
-        const presentCount = tempAssignments.filter(Boolean).length;
-        showToast(`Training assignments saved — ${presentCount} card${presentCount !== 1 ? 's' : ''} present`, 'success');
+        showToast(`Training assignments saved — ${presentCount} card${presentCount !== 1 ? 's' : ''} present`, presentCount === 0 ? 'warning' : 'success');
+
+        // Flash the updated training row
+        requestAnimationFrame(() => {
+            const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
+            const label = typeLabels[trainingType];
+            if (label) {
+                const rows = document.querySelectorAll('.training-table tbody tr, .deck-summary-training-table tbody tr');
+                rows.forEach(row => {
+                    if (row.textContent.includes(label)) {
+                        row.classList.add('training-row-updated');
+                        setTimeout(() => row.classList.remove('training-row-updated'), 1000);
+                    }
+                });
+            }
+        });
     });
 
     // ESC to close

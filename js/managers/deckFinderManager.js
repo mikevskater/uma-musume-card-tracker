@@ -1436,11 +1436,19 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     if (pool.length === 0) {
         _logDeckFinder.warn('Card pool is empty — no cards match filters');
         deckFinderState.searching = false;
-        onComplete([], 'No cards match the current pool filters.');
+        onComplete([], 'No cards match the current pool filters. Try expanding your card pool or relaxing type filters.');
+        return;
+    }
+
+    if (pool.length < 6) {
+        _logDeckFinder.warn('Card pool too small', { poolSize: pool.length });
+        deckFinderState.searching = false;
+        onComplete([], `Not enough cards to build a full deck (${pool.length} in pool, need at least 6). Try including more card types or switching to "All Cards".`);
         return;
     }
 
     _logDeckFinder.info('Card pool built', { poolSize: pool.length });
+    showToast(`Card pool: ${pool.length} cards`, 'info');
 
     // For owned mode: owned cards at actual levels + friend pool at max level
     // For all mode: all cards at max level for all 6 slots

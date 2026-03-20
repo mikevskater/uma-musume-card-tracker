@@ -2147,6 +2147,14 @@ function startFinderSearch() {
             if (progressEl) progressEl.style.display = 'none';
             // Results are already stored and sorted by sortFinderResults() called from search
             renderFinderResults(deckFinderState.results, message, false);
+            // Search completion toast
+            const stats = deckFinderState.searchStats;
+            const elapsed = stats?.elapsed ? (stats.elapsed / 1000).toFixed(1) + 's' : '';
+            if (deckFinderState.results.length > 0) {
+                showToast(`Search complete — found ${deckFinderState.results.length} deck${deckFinderState.results.length !== 1 ? 's' : ''}${elapsed ? ' in ' + elapsed : ''}`, 'success');
+            } else if (!message) {
+                showToast('No decks match your criteria. Try relaxing thresholds or expanding the card pool.', 'warning');
+            }
         },
         // onLiveResults — update results panel in real-time during brute force
         (liveResults, matchCount) => {
@@ -2364,7 +2372,7 @@ function ensureResultsDelegation(container) {
             if (result) {
                 const name = saveDeckFromFinder(result.cardIds);
                 closeDeckFinder();
-                showToast(`Created deck "${name}" and loaded into builder.`, 'success');
+                showToast(`Deck "${name}" loaded into builder`, 'success');
             }
             return;
         }

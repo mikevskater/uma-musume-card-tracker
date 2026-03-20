@@ -1324,6 +1324,15 @@
     background: var(--bg-tertiary);
 }
 
+.training-row-updated {
+    animation: row-flash 1s ease;
+}
+
+@keyframes row-flash {
+    0% { background: color-mix(in srgb, var(--color-success) 30%, transparent); }
+    100% { background: transparent; }
+}
+
 /* ===== SCENARIO INFO ===== */
 
 .scenario-info {
