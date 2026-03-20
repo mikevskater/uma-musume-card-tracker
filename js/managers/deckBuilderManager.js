@@ -248,6 +248,15 @@ function selectCardForSlot(slotIndex, cardId) {
     setDeckSlot(slotIndex, cardId, level, lb);
     closeCardPicker();
     showToast(`Added ${card.char_name || 'card'} to ${isFriend ? 'Friend slot' : 'Slot ' + (slotIndex + 1)}`, 'success');
+
+    // Brief highlight on the filled slot
+    requestAnimationFrame(() => {
+        const slotEl = document.querySelector(`.deck-slot[data-slot-index="${slotIndex}"]`);
+        if (slotEl) {
+            slotEl.classList.add('deck-slot-placed');
+            setTimeout(() => slotEl.classList.remove('deck-slot-placed'), 800);
+        }
+    });
 }
 
 // ===== EFFECT AGGREGATION =====
@@ -713,6 +722,14 @@ function saveDeckToStorage() {
             activeDeckId: deckBuilderState.activeDeckId
         };
         localStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data));
+        // Show brief save indicator
+        const indicator = document.getElementById('deckSaveIndicator');
+        if (indicator) {
+            indicator.textContent = 'Saved';
+            indicator.classList.add('visible');
+            clearTimeout(indicator._hideTimeout);
+            indicator._hideTimeout = setTimeout(() => indicator.classList.remove('visible'), 1500);
+        }
     } catch (error) {
         console.error('Error saving decks:', error);
         showToast('Failed to save deck.', 'error');
@@ -807,6 +824,13 @@ function switchToDeck(deckId) {
     renderDeckSlots();
     recalculateDeck();
     renderDeckSelect();
+
+    // Brief highlight animation on deck switch
+    const slotsContainer = document.getElementById('deckSlots');
+    if (slotsContainer) {
+        slotsContainer.classList.add('deck-switch-flash');
+        setTimeout(() => slotsContainer.classList.remove('deck-switch-flash'), 600);
+    }
 }
 
 // ===== DECK BUILDER EVENTS =====
@@ -852,7 +876,7 @@ function initializeDeckBuilderEvents() {
             }
             const confirmed = await showConfirmDialog(
                 'Delete Deck',
-                `Delete deck "${deckBuilderState.deckName}"?`,
+                `Delete "${deckBuilderState.deckName}"? This cannot be undone.`,
                 { confirmLabel: 'Delete', destructive: true }
             );
             if (confirmed) deleteDeck(deckBuilderState.activeDeckId);

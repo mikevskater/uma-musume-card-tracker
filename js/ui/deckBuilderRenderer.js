@@ -33,6 +33,7 @@ function renderDeckBuilderShell() {
             <select class="deck-select" id="deckSelect">
                 <option value="default">New Deck</option>
             </select>
+            <span class="deck-save-indicator" id="deckSaveIndicator"></span>
             <div class="deck-header-actions">
                 <button class="btn btn-secondary" id="deckNewBtn">New</button>
                 <button class="btn btn-secondary" id="deckRenameBtn">Rename</button>
@@ -414,6 +415,7 @@ function renderCardPicker() {
                     </div>
                 </div>
             </div>
+            <div class="picker-card-count" id="pickerCardCount"></div>
             <div class="picker-card-grid" id="pickerCardGrid">
                 <!-- Cards rendered here -->
             </div>
@@ -561,6 +563,10 @@ function renderPickerCards() {
     if (!grid) return;
 
     const cards = getPickerCards();
+
+    // Update card count
+    const countEl = document.getElementById('pickerCardCount');
+    if (countEl) countEl.textContent = `Showing ${cards.length} card${cards.length !== 1 ? 's' : ''}`;
 
     if (cards.length === 0) {
         grid.innerHTML = '<div class="picker-no-results">No cards match your filters.<br><span class="picker-no-results-hint">Try broadening your search, selecting more card types, or unchecking "SSR Only".</span></div>';
@@ -1863,7 +1869,7 @@ function renderDeckSelect() {
     if (decks.length === 0) {
         const opt = document.createElement('option');
         opt.value = 'default';
-        opt.textContent = 'New Deck';
+        opt.textContent = 'Create your first deck to start building!';
         select.appendChild(opt);
         return;
     }

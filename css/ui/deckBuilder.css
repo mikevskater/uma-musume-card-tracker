@@ -83,6 +83,19 @@
     font-size: var(--font-size-base);
 }
 
+.deck-save-indicator {
+    font-size: var(--font-size-xs);
+    color: var(--color-success);
+    font-weight: var(--font-weight-semibold);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.deck-save-indicator.visible {
+    opacity: 1;
+}
+
 .deck-header-actions {
     display: flex;
     gap: var(--space-xs);
@@ -112,6 +125,25 @@
     display: flex;
     gap: var(--space-md);
     flex-wrap: wrap;
+}
+
+.deck-slots.deck-switch-flash {
+    animation: deck-flash 0.6s ease;
+}
+
+@keyframes deck-flash {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.deck-slot.deck-slot-placed {
+    animation: slot-placed 0.8s ease;
+}
+
+@keyframes slot-placed {
+    0% { box-shadow: 0 0 0 0 var(--color-success); }
+    30% { box-shadow: 0 0 0 4px var(--color-success); }
+    100% { box-shadow: 0 0 0 0 transparent; }
 }
 
 .deck-slot {
@@ -500,6 +532,12 @@
 }
 
 /* Card grid */
+.picker-card-count {
+    padding: 0 var(--space-md);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
 .picker-card-grid {
     flex: 1;
     overflow-y: auto;
