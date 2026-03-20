@@ -272,7 +272,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Exclude Cards
                 <span class="finder-hint">(remove specific cards from pool)</span>
             </button>
-            <div class="finder-collapse-body" id="finderExcludeBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderExcludeBody">
                 <div class="finder-label">By Character Name</div>
                 <div class="multi-select" id="finderExcludeCharSelect">
                     <div class="multi-select-trigger">
@@ -296,7 +296,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Include Cards
                 <span class="finder-hint">(force specific cards into deck)</span>
             </button>
-            <div class="finder-collapse-body" id="finderIncludeBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderIncludeBody">
                 <!-- Player Slot Cards -->
                 <div class="finder-label">Player Deck Cards</div>
                 <div class="finder-include-mode">
@@ -339,7 +339,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Result Ranking
                 <span class="finder-hint">(how decks are ordered)</span>
             </button>
-            <div class="finder-collapse-body" id="finderSortBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderSortBody">
                 <div class="finder-sort-layers" id="finderSortLayers">
                     <div class="no-sorts-message">Default: score descending. Add layers to customize ranking.</div>
                 </div>
@@ -355,7 +355,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Deck Type Composition
                 <span class="finder-hint">(require N cards of each type)</span>
             </button>
-            <div class="finder-collapse-body" id="finderRatioBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderRatioBody">
                 <div class="finder-ratio-grid">
                     ${typeOptions.map(t => `
                         <div class="finder-ratio-item" data-type="${t.key}">
@@ -374,7 +374,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Minimum Deck Effects
                 <span class="finder-hint">(combined across all 6 cards)</span>
             </button>
-            <div class="finder-collapse-body" id="finderThresholdBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderThresholdBody">
                 <div class="finder-threshold-grid">
                     <div class="finder-threshold-item" data-tooltip="Minimum combined Race Bonus across all 6 cards. Decks below this value are excluded." tabindex="0">
                         <label>Race Bonus</label>
@@ -402,7 +402,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Deck Skill Requirements
                 <span class="finder-hint">(skills the deck must provide)</span>
             </button>
-            <div class="finder-collapse-body" id="finderSkillBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderSkillBody">
                 <!-- Required Hint Skills -->
                 <div class="finder-label">Required Hint Skills</div>
                 <div class="multi-select" id="finderReqSkillSelect">
@@ -439,7 +439,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Scoring Weights
                 <span class="finder-hint" data-tooltip="Higher weight = metric prioritized more in deck scoring. Adjust to find decks that match your training strategy." tabindex="0">(what the search optimizes for)</span>
             </button>
-            <div class="finder-collapse-body" id="finderWeightsBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderWeightsBody">
                 <div class="finder-weights-list" id="finderWeightsList"></div>
                 <button class="btn btn-secondary btn-sm" id="finderResetWeightsBtn" style="width:100%;margin-top:4px;">Reset to Scenario Defaults</button>
             </div>
@@ -451,7 +451,7 @@ function buildFinderFiltersHTML() {
                 <span class="finder-collapse-icon">&#9654;</span> Search Settings
                 <span class="finder-hint">(performance tuning)</span>
             </button>
-            <div class="finder-collapse-body" id="finderSearchSettingsBody" style="display:none;">
+            <div class="finder-collapse-body collapsed" id="finderSearchSettingsBody">
                 <div class="finder-threshold-grid">
                     <div class="finder-threshold-item">
                         <label>Worker Threads</label>
@@ -585,9 +585,11 @@ function initFinderEvents() {
         btn.addEventListener('click', () => {
             const target = document.getElementById(btn.dataset.target);
             if (target) {
-                const isOpen = target.style.display !== 'none';
-                target.style.display = isOpen ? 'none' : '';
-                btn.querySelector('.finder-collapse-icon').textContent = isOpen ? '\u25B6' : '\u25BC';
+                const icon = btn.querySelector('.finder-collapse-icon');
+                const isOpen = !target.classList.contains('collapsed');
+                target.classList.toggle('collapsed', isOpen);
+                target.style.display = '';
+                icon.classList.toggle('open', !isOpen);
                 _logDeckFinderUI.debug('Collapsible', { section: btn.dataset.target, open: !isOpen });
             }
         });
@@ -952,9 +954,11 @@ function reInitFilterEvents(overlay) {
         btn.addEventListener('click', () => {
             const target = document.getElementById(btn.dataset.target);
             if (target) {
-                const isOpen = target.style.display !== 'none';
-                target.style.display = isOpen ? 'none' : '';
-                btn.querySelector('.finder-collapse-icon').textContent = isOpen ? '\u25B6' : '\u25BC';
+                const icon = btn.querySelector('.finder-collapse-icon');
+                const isOpen = !target.classList.contains('collapsed');
+                target.classList.toggle('collapsed', isOpen);
+                target.style.display = '';
+                icon.classList.toggle('open', !isOpen);
                 _logDeckFinderUI.debug('Collapsible', { section: btn.dataset.target, open: !isOpen });
             }
         });
@@ -2267,7 +2271,7 @@ function renderLiveResults(results, matchCount) {
         if (m.friendBonus > 0) keyMetrics.push(`Friend ${m.friendBonus}%`);
         return `<div class="finder-result-card finder-live-preview" data-idx="${idx}">
             <div class="finder-result-top">
-                <div class="finder-result-rank">#${idx + 1}</div>
+                <div class="finder-result-rank${idx === 0 ? ' rank-gold' : idx === 1 ? ' rank-silver' : idx === 2 ? ' rank-bronze' : ''}">#${idx + 1}</div>
                 <div class="finder-result-thumbs">${thumbs}</div>
             </div>
             <span class="finder-live-metrics">${keyMetrics.join(' | ')}</span>
@@ -2323,7 +2327,7 @@ function renderResultCard(result, idx) {
     return `
         <div class="finder-result-card" data-idx="${idx}">
             <div class="finder-result-top">
-                <div class="finder-result-rank" data-tooltip="Rank based on weighted scoring of all deck metrics" tabindex="0">#${idx + 1}</div>
+                <div class="finder-result-rank${idx === 0 ? ' rank-gold' : idx === 1 ? ' rank-silver' : idx === 2 ? ' rank-bronze' : ''}" data-tooltip="Rank based on weighted scoring of all deck metrics" tabindex="0">#${idx + 1}</div>
                 <div class="finder-result-thumbs">${cardThumbs}</div>
                 <div class="finder-result-actions-top">
                     <label class="finder-cmp-label"><input type="checkbox" class="finder-compare-check" data-idx="${idx}"> Cmp</label>

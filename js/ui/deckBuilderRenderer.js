@@ -563,7 +563,7 @@ function renderPickerCards() {
     const cards = getPickerCards();
 
     if (cards.length === 0) {
-        grid.innerHTML = '<div class="picker-no-results">No cards match your filters.</div>';
+        grid.innerHTML = '<div class="picker-no-results">No cards match your filters.<br><span class="picker-no-results-hint">Try broadening your search, selecting more card types, or unchecking "SSR Only".</span></div>';
         return;
     }
 
@@ -1137,7 +1137,10 @@ function renderTrainingAssignmentModal(trainingType) {
 
             if (!slot) {
                 cardEl.classList.add('empty');
-                cardEl.innerHTML = `<div class="training-assign-card-empty">Empty Slot ${idx < 5 ? idx + 1 : 'F'}</div>`;
+                cardEl.innerHTML = `
+                    <div class="training-assign-card-empty-icon">&#x2795;</div>
+                    <div class="training-assign-card-empty">Slot ${idx < 5 ? idx + 1 : 'Friend'} — Empty</div>
+                `;
                 cardsContainer.appendChild(cardEl);
                 return;
             }
@@ -1157,6 +1160,7 @@ function renderTrainingAssignmentModal(trainingType) {
                     <div class="training-assign-card-name">${card.char_name}</div>
                     <div class="training-assign-card-meta">
                         <span class="training-card-dot ${card.type}"></span>
+                        <span class="type type-${card.type}" style="font-size:var(--font-size-xs);padding:0 3px;">${getTypeDisplayName(card.type)}</span>
                         Lv.${slot.level}
                     </div>
                 </div>
@@ -1191,6 +1195,8 @@ function renderTrainingAssignmentModal(trainingType) {
         saveTrainingAssignment(trainingType, tempAssignments);
         overlay.classList.remove('open');
         setTimeout(() => overlay.remove(), 200);
+        const presentCount = tempAssignments.filter(Boolean).length;
+        showToast(`Training assignments saved — ${presentCount} card${presentCount !== 1 ? 's' : ''} present`, 'success');
     });
 
     // ESC to close

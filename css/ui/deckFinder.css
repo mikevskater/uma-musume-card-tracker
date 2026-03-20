@@ -224,13 +224,27 @@
 .finder-collapse-icon {
     font-size: 10px;
     color: var(--text-muted);
-    transition: transform var(--transition-fast);
+    transition: transform 0.25s ease;
     display: inline-block;
     width: 14px;
 }
 
+.finder-collapse-icon.open {
+    transform: rotate(90deg);
+}
+
 .finder-collapse-body {
     padding-top: var(--space-xs);
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    max-height: 1000px;
+    opacity: 1;
+}
+
+.finder-collapse-body.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
 }
 
 /* ===== TYPE RATIO ===== */
@@ -689,6 +703,10 @@
     flex-shrink: 0;
 }
 
+.finder-result-rank.rank-gold { color: #ffd700; }
+.finder-result-rank.rank-silver { color: #c0c0c0; }
+.finder-result-rank.rank-bronze { color: #cd7f32; }
+
 .finder-result-thumbs {
     display: flex;
     gap: 4px;
@@ -703,8 +721,8 @@
 }
 
 .finder-result-thumb {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: var(--radius-md);
     object-fit: cover;
     display: block;
@@ -721,8 +739,8 @@
     position: absolute;
     top: -3px;
     right: -3px;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
     border-radius: 3px;
     background: var(--bg-primary);
@@ -799,6 +817,11 @@
 /* Color-coded metrics */
 .finder-metric.metric-race .finder-metric-value { color: var(--color-success); }
 .finder-metric.metric-train .finder-metric-value { color: var(--color-secondary); }
+.finder-metric.metric-friend .finder-metric-value { color: var(--color-info-text); }
+.finder-metric.metric-energy .finder-metric-value { color: var(--color-warning); }
+.finder-metric.metric-event .finder-metric-value { color: #e08adc; }
+.finder-metric.metric-hints .finder-metric-value { color: var(--color-info-text); }
+.finder-metric.metric-aptitude .finder-metric-value { color: var(--color-success); }
 
 /* Bottom row: types + buttons */
 .finder-result-bottom {
@@ -811,7 +834,11 @@
 
 .finder-result-types {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
 }
 
 .finder-result-btns {
@@ -888,8 +915,8 @@
 }
 
 .finder-detail-img {
-    width: 52px;
-    height: 52px;
+    width: 64px;
+    height: 64px;
     border-radius: var(--radius-md);
     object-fit: cover;
     flex-shrink: 0;
@@ -970,6 +997,14 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: var(--space-xs);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-primary);
+    margin-top: var(--space-sm);
+}
+
+.finder-detail-section-title:first-of-type {
+    border-top: none;
+    margin-top: 0;
 }
 
 .finder-detail-agg-grid {
@@ -1863,30 +1898,37 @@
 /* Removable thumbnails — hover X button */
 .finder-thumb-removable {
     cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.finder-thumb-removable:hover {
+    opacity: 0.8;
 }
 
 .finder-thumb-remove {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 18px;
-    height: 18px;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: var(--color-danger);
     color: var(--color-white);
-    border: none;
+    border: 2px solid var(--bg-primary);
     font-size: 12px;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity var(--transition-fast);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
     z-index: 1;
+    line-height: 1;
 }
 
 .finder-thumb-removable:hover .finder-thumb-remove {
     opacity: 1;
+    transform: scale(1.15);
 }
 
 /* Add/Select button */

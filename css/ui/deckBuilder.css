@@ -614,9 +614,9 @@
 }
 
 .picker-tile-effect-value {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-success);
     white-space: nowrap;
 }
 
@@ -626,6 +626,13 @@
     text-align: center;
     color: var(--text-muted);
     font-size: var(--font-size-sm);
+}
+
+.picker-no-results-hint {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+    display: inline-block;
 }
 
 /* ===== TRAINEE PICKER ===== */
@@ -1452,12 +1459,14 @@
 
 .training-assign-card.excluded {
     border-color: var(--border-primary);
-    opacity: 0.5;
+    opacity: 0.6;
+    border-style: dashed;
 }
 
 .training-assign-card.empty {
     border-color: var(--border-primary);
-    opacity: 0.3;
+    border-style: dashed;
+    opacity: 0.4;
     cursor: default;
 }
 
@@ -1490,10 +1499,18 @@
     color: var(--text-secondary);
 }
 
+.training-assign-card-empty-icon {
+    font-size: var(--font-size-lg);
+    color: var(--text-tertiary);
+    width: 48px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
 .training-assign-card-empty {
     font-size: var(--font-size-sm);
     color: var(--text-tertiary);
-    padding: var(--space-sm);
+    padding: var(--space-sm) 0;
 }
 
 .training-assign-status {
@@ -1641,7 +1658,7 @@
     content: "\25BC";
     font-size: var(--font-size-xs);
     color: var(--text-muted);
-    transition: transform var(--transition-fast);
+    transition: transform 0.25s ease;
     display: inline-block;
 }
 
@@ -1651,10 +1668,17 @@
 
 .deck-section-body {
     padding: 0 var(--space-lg) var(--space-lg);
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+    opacity: 1;
 }
 
 .deck-section.collapsed .deck-section-body {
-    display: none;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
 }
 
 /* ===== ENERGY REDUCED ===== */
