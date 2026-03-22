@@ -5,3 +5,6 @@ docs/
 scripts/__pycache__/*
 scripts/bin/*
 scripts/dll/*
+node_modules/
+package-lock.json
+package.json
