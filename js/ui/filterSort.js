@@ -81,6 +81,9 @@ function debouncedFilterAndSort() {
 
 // Main filter and sort function
 function filterAndSortCards() {
+    // Skip if deck finder modal is open — card table isn't visible
+    if (document.querySelector('.deck-finder-overlay')) return;
+
     // Get filter values
     const filters = getFilterValues();
     

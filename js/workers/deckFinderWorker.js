@@ -227,6 +227,7 @@ function runBranchAndBound(payload) {
     let lastLiveUpdate = 0;
     let distsCompleted = 0;
     const totalDists = validDists.length;
+    let combosCompleted = 0;
     const startTime = performance.now();
     const PROGRESS_TIME_INTERVAL = 250; // ms between progress updates
     const LIVE_TIME_INTERVAL = 500; // ms between live result updates (time-based, not count-based)
@@ -337,11 +338,9 @@ function runBranchAndBound(payload) {
         }
     }
 
-    // Running ref-counted unique hint skill/type tracking (eliminates per-deck Set allocations)
-    const hintSkillRefCounts = {};  // skillId → refcount
-    let uniqueHintSkillCount = 0;
-    const hintTypeRefCounts = {};   // typeString → refcount
-    let uniqueHintTypeCount = 0;
+    // Reusable Sets for leaf-node metrics (cleared and reused to avoid allocation overhead)
+    const _leafSkillSet = new Set();
+    const _leafTypeSet = new Set();
 
     // === Rank distributions by estimated score potential ===
     for (const entry of validDists) {
@@ -368,7 +367,7 @@ function runBranchAndBound(payload) {
     const STABILITY_THRESHOLD = Math.max(50, Math.ceil(validDists.length * stabilityPct));
     const PER_DIST_EVAL_CAP = 2000000;
 
-    for (const { dist, friendType } of validDists) {
+    for (const { dist, friendType, count: distComboCount } of validDists) {
         if (cancelled) break;
 
         // Early termination: stop if results have stabilized
@@ -445,6 +444,7 @@ function runBranchAndBound(payload) {
         let distEvaluated = 0;
         dfsSlot(0);
         distsCompleted++;
+        combosCompleted += (distComboCount || distEvaluated || 1);
 
         // Track early termination stability (use base score as proxy)
         const worstEntry = topN.minEntry();
@@ -486,19 +486,29 @@ function runBranchAndBound(payload) {
                     return cache[deckIds[idx]];
                 }
 
-                // Skill-based hard filters (use running ref-counted sets)
+                // Build unique skill/type sets at leaf node (reuse pre-allocated Sets)
+                _leafSkillSet.clear();
+                _leafTypeSet.clear();
+                for (let i = 0; i < totalSlots; i++) {
+                    const d = getCardData(i);
+                    if (!d) continue;
+                    if (d.hintSkillIds) for (let si = 0; si < d.hintSkillIds.length; si++) _leafSkillSet.add(d.hintSkillIds[si]);
+                    if (d.hintSkillTypes) for (let ti = 0; ti < d.hintSkillTypes.length; ti++) _leafTypeSet.add(d.hintSkillTypes[ti]);
+                }
+
+                // Skill-based hard filters
                 if (filters.requiredSkills.length > 0) {
                     if (filters.requiredSkillsMode === 'any') {
-                        if (!filters.requiredSkills.some(s => hintSkillRefCounts[s] > 0)) return;
+                        if (!filters.requiredSkills.some(s => _leafSkillSet.has(s))) return;
                     } else {
                         for (const rs of filters.requiredSkills) {
-                            if (!hintSkillRefCounts[rs]) return;
+                            if (!_leafSkillSet.has(rs)) return;
                         }
                     }
                 }
 
                 if (filters.minHintSkills > 0) {
-                    if (uniqueHintSkillCount < filters.minHintSkills) return;
+                    if (_leafSkillSet.size < filters.minHintSkills) return;
                 }
 
                 if (filters.minUniqueEffects > 0 && ueCount < filters.minUniqueEffects) return;
@@ -521,8 +531,8 @@ function runBranchAndBound(payload) {
                     energyCost: partialEffects[28] || 0,
                     eventRecovery: partialEffects[25] || 0,
                     statBonus,
-                    hintSkillCount: uniqueHintSkillCount,
-                    skillTypeCount: uniqueHintTypeCount,
+                    hintSkillCount: _leafSkillSet.size,
+                    skillTypeCount: _leafTypeSet.size,
                     totalEffectSum: partialEffectSum,
                     uniqueEffects: ueCount,
                     skillAptitude: partialSkillAptSum,
@@ -595,8 +605,8 @@ function runBranchAndBound(payload) {
                 const now = performance.now();
                 if (now - lastProgressTime >= PROGRESS_TIME_INTERVAL) {
                     lastProgressTime = now;
-                    // Use distribution completion as primary progress metric (more predictable than combo count)
-                    const pct = Math.min(99, Math.round(distsCompleted / totalDists * 100));
+                    // Combo-weighted progress: large distributions count proportionally more
+                    const pct = Math.min(99, Math.round(combosCompleted / totalCombos * 100));
                     log.debug(`Progress: ${pct}% | dists=${distsCompleted}/${totalDists} evaluated=${evaluated} pruned=${pruned} matches=${matchesFound}`);
                     postMessage({ type: 'progress', progress: pct, matchCount: matchesFound });
                 }
@@ -661,22 +671,6 @@ function runBranchAndBound(payload) {
                             refs[sid] = (refs[sid] || 0) + 1;
                             if (refs[sid] === 1) skillTypeUniqueCounts[rType]++;
                         }
-                    }
-                }
-
-                // Update running hint skill/type ref counts
-                if (data.hintSkillIds) {
-                    for (let si = 0; si < data.hintSkillIds.length; si++) {
-                        const sid = data.hintSkillIds[si];
-                        hintSkillRefCounts[sid] = (hintSkillRefCounts[sid] || 0) + 1;
-                        if (hintSkillRefCounts[sid] === 1) uniqueHintSkillCount++;
-                    }
-                }
-                if (data.hintSkillTypes) {
-                    for (let ti = 0; ti < data.hintSkillTypes.length; ti++) {
-                        const t = data.hintSkillTypes[ti];
-                        hintTypeRefCounts[t] = (hintTypeRefCounts[t] || 0) + 1;
-                        if (hintTypeRefCounts[t] === 1) uniqueHintTypeCount++;
                     }
                 }
 
@@ -765,27 +759,6 @@ function runBranchAndBound(payload) {
                 partialSkillAptSum -= (data.skillAptitudeScore || 0);
                 ueCount = prevUECount;
                 skillMask = prevSkillMask;
-                // Undo running hint skill/type ref counts
-                if (data.hintSkillIds) {
-                    for (let si = 0; si < data.hintSkillIds.length; si++) {
-                        const sid = data.hintSkillIds[si];
-                        hintSkillRefCounts[sid]--;
-                        if (hintSkillRefCounts[sid] === 0) {
-                            uniqueHintSkillCount--;
-                            delete hintSkillRefCounts[sid];
-                        }
-                    }
-                }
-                if (data.hintSkillTypes) {
-                    for (let ti = 0; ti < data.hintSkillTypes.length; ti++) {
-                        const t = data.hintSkillTypes[ti];
-                        hintTypeRefCounts[t]--;
-                        if (hintTypeRefCounts[t] === 0) {
-                            uniqueHintTypeCount--;
-                            delete hintTypeRefCounts[t];
-                        }
-                    }
-                }
                 // Undo unique-skill-per-type counts
                 if (hasReqSkillTypes && data.skillsByType) {
                     for (let rt = 0; rt < reqSkillTypes.length; rt++) {

@@ -2838,22 +2838,21 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         // Determine worker count from search settings
         const workerSetting = deckFinderState.searchSettings?.workerCount || 'auto';
         // Estimate cache size for memory-aware worker count
+        // With per-shard filtering (1B), each worker gets ~1/numTypes of the cache, not the full thing
         const cacheEntryCount = cache.size + (friendCache ? friendCache.size : 0);
-        const estimatedCacheMB = cacheEntryCount * 0.25; // ~250 bytes per entry serialized
-        const estimatedPerWorkerMB = estimatedCacheMB * 2; // structured clone overhead
+        const numTypes = Object.keys(groups).length || 1;
+        const estimatedPerShardMB = (cacheEntryCount / numTypes) * 0.5; // ~500 bytes per entry with clone overhead
         const memoryBudgetMB = 512;
-        const maxWorkersByMemory = Math.max(1, Math.floor(memoryBudgetMB / Math.max(1, estimatedPerWorkerMB)));
+        const maxWorkersByMemory = Math.max(1, Math.floor(memoryBudgetMB / Math.max(1, estimatedPerShardMB)));
 
         let numWorkers;
         if (workerSetting === 'auto') {
             const coreWorkers = Math.min(4, Math.max(1, navigator.hardwareConcurrency || 1));
             numWorkers = Math.min(coreWorkers, maxWorkersByMemory);
-            // On mobile or small pools, reduce further
-            if (cacheEntryCount > 500 && numWorkers > 2) numWorkers = 2;
         } else {
             numWorkers = Math.min(parseInt(workerSetting) || 1, navigator.hardwareConcurrency || 8, maxWorkersByMemory);
         }
-        _logDeckFinder.info('Worker pool', { numWorkers, cores: navigator.hardwareConcurrency, cacheEntries: cacheEntryCount, estimatedPerWorkerMB: estimatedPerWorkerMB.toFixed(1) });
+        _logDeckFinder.info('Worker pool', { numWorkers, cores: navigator.hardwareConcurrency, cacheEntries: cacheEntryCount, estimatedPerShardMB: estimatedPerShardMB.toFixed(1) });
 
         // Serialize cache to plain object (shared across all workers)
         const cacheObj = {};
@@ -3072,13 +3071,15 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                         worker.terminate();
                         completedWorkers++;
 
-                        // Update live results after each worker completes
-                        deckFinderState.results = null;
-                        const currentResults = globalTopN.toSortedArray();
-                        deckFinderState.results = currentResults;
-                        if (onLiveResults) {
-                            const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
-                            onLiveResults(currentResults, totalMatches);
+                        // Update live results after each worker completes (skip last — final render follows)
+                        if (completedWorkers < numWorkers) {
+                            deckFinderState.results = null;
+                            const currentResults = globalTopN.toSortedArray();
+                            deckFinderState.results = currentResults;
+                            if (onLiveResults) {
+                                const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
+                                onLiveResults(currentResults, totalMatches);
+                            }
                         }
 
                         if (completedWorkers >= workers.length) {
@@ -3123,10 +3124,12 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
 
             // Compute the set of card types needed by this worker's shard
             const shardTypes = new Set();
-            for (const dist of shards[workerIdx]) {
-                for (const type of Object.keys(dist)) {
-                    if (type !== 'count' && dist[type] > 0) shardTypes.add(type);
+            for (const entry of shards[workerIdx]) {
+                // entry = { dist: { speed: 2, stamina: 1, ... }, friendType: 'speed', count: N }
+                for (const [type, count] of Object.entries(entry.dist)) {
+                    if (count > 0) shardTypes.add(type);
                 }
+                if (entry.friendType) shardTypes.add(entry.friendType);
             }
 
             // Send shard to this worker with filtered caches (only types it needs)
