@@ -379,12 +379,34 @@ function runBranchAndBound(payload) {
 
         if (typeEntries.some(([type, count]) => (groups[type]?.length || 0) < count)) continue;
 
-        // Build flat slot plan
+        // Build flat slot plan, pre-placing locked cards into matching type slots
         const slots = [];
+        const lockedByType = {};
+        if (hasLockedCards) {
+            for (const lid of lockedSet) {
+                const d = cache[lid];
+                if (d) {
+                    if (!lockedByType[d.type]) lockedByType[d.type] = [];
+                    lockedByType[d.type].push(lid);
+                }
+            }
+        }
         for (const [type, count] of typeEntries) {
-            const pool = (groups[type] || []).map(c => c.support_id);
+            const rawPool = (groups[type] || []).map(c => c.support_id);
+            const typeLocked = lockedByType[type] || [];
+            // Exclude locked cards from free pool to prevent duplicates
+            const freePool = typeLocked.length > 0
+                ? rawPool.filter(id => !lockedSet.has(id))
+                : rawPool;
+            let lockedPlaced = 0;
             for (let s = 0; s < count; s++) {
-                slots.push({ pool, type, slotInType: s, isFriend: false });
+                if (lockedPlaced < typeLocked.length) {
+                    // This slot is pinned to a single locked card
+                    slots.push({ pool: [typeLocked[lockedPlaced]], type, slotInType: s, isFriend: false, isLocked: true });
+                    lockedPlaced++;
+                } else {
+                    slots.push({ pool: freePool, type, slotInType: s, isFriend: false });
+                }
             }
         }
 
@@ -742,7 +764,9 @@ function runBranchAndBound(payload) {
                     distEvaluated++;
                 } else {
                     // Set ascending constraint for next slot of same type
-                    if (slotIdx + 1 < totalSlots && slots[slotIdx + 1].type === slot.type) {
+                    // Skip if either slot is locked — their pools are independent
+                    if (slotIdx + 1 < totalSlots && slots[slotIdx + 1].type === slot.type
+                        && !slot.isLocked && !slots[slotIdx + 1].isLocked) {
                         minIndices[slotIdx + 1] = i + 1;
                     }
                     dfsSlot(slotIdx + 1);

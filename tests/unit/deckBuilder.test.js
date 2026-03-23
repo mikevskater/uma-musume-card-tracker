@@ -87,7 +87,7 @@ describe('getBaseTrainingValues', () => {
         expect(values).not.toBeNull();
     });
 
-    test('returns values for Trailblazer scenario', () => {
+    test('returns values for Trackblazer scenario', () => {
         const values = getBaseTrainingValues('speed', '4', 1);
         expect(values).not.toBeNull();
     });
