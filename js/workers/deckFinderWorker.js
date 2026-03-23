@@ -112,16 +112,22 @@ function buildRequiredSkillTypeMask(requiredTypes, bitMap) {
 function buildSlotEffectBounds(slots, maxTable) {
     const n = slots.length;
     const bounds = new Array(n + 1);
-    bounds[n] = {};
+    bounds[n] = Object.create(null);
 
+    // Build cumulative suffix sums — accumulate in-place with manual copy
     for (let i = n - 1; i >= 0; i--) {
         const slot = slots[i];
         const typeEffects = maxTable[slot.type] || {};
-        bounds[i] = { ...bounds[i + 1] };
-        for (const [eid, vals] of Object.entries(typeEffects)) {
-            const maxVal = (vals[slot.slotInType] || 0);
-            bounds[i][eid] = (bounds[i][eid] || 0) + maxVal;
+        const prev = bounds[i + 1];
+        const cur = Object.create(null);
+        // Copy previous bounds
+        for (const k in prev) cur[k] = prev[k];
+        // Add current slot's max contributions
+        for (const eid in typeEffects) {
+            const maxVal = (typeEffects[eid][slot.slotInType] || 0);
+            cur[eid] = (cur[eid] || 0) + maxVal;
         }
+        bounds[i] = cur;
     }
     return bounds;
 }
@@ -315,6 +321,7 @@ function runBranchAndBound(payload) {
     let ueCount = 0;
     let partialScore = 0;
     let partialEffectSum = 0;
+    let partialSkillAptSum = 0;
     const deckTypeCounts = {};
     let maxTypeCount = 0;
 
@@ -329,6 +336,12 @@ function runBranchAndBound(payload) {
             skillTypeUniqueCounts[r.type] = 0;
         }
     }
+
+    // Running ref-counted unique hint skill/type tracking (eliminates per-deck Set allocations)
+    const hintSkillRefCounts = {};  // skillId → refcount
+    let uniqueHintSkillCount = 0;
+    const hintTypeRefCounts = {};   // typeString → refcount
+    let uniqueHintTypeCount = 0;
 
     // === Rank distributions by estimated score potential ===
     for (const entry of validDists) {
@@ -473,29 +486,19 @@ function runBranchAndBound(payload) {
                     return cache[deckIds[idx]];
                 }
 
-                // Skill-based hard filters
+                // Skill-based hard filters (use running ref-counted sets)
                 if (filters.requiredSkills.length > 0) {
-                    const deckSkills = new Set();
-                    for (let i = 0; i < totalSlots; i++) {
-                        const data = getCardData(i);
-                        if (data && data.hintSkillIds) data.hintSkillIds.forEach(s => deckSkills.add(s));
-                    }
                     if (filters.requiredSkillsMode === 'any') {
-                        if (!filters.requiredSkills.some(s => deckSkills.has(s))) return;
+                        if (!filters.requiredSkills.some(s => hintSkillRefCounts[s] > 0)) return;
                     } else {
                         for (const rs of filters.requiredSkills) {
-                            if (!deckSkills.has(rs)) return;
+                            if (!hintSkillRefCounts[rs]) return;
                         }
                     }
                 }
 
                 if (filters.minHintSkills > 0) {
-                    const allSkills = new Set();
-                    for (let i = 0; i < totalSlots; i++) {
-                        const data = getCardData(i);
-                        if (data && data.hintSkillIds) data.hintSkillIds.forEach(s => allSkills.add(s));
-                    }
-                    if (allSkills.size < filters.minHintSkills) return;
+                    if (uniqueHintSkillCount < filters.minHintSkills) return;
                 }
 
                 if (filters.minUniqueEffects > 0 && ueCount < filters.minUniqueEffects) return;
@@ -511,21 +514,6 @@ function runBranchAndBound(payload) {
                 let statBonus = 0;
                 for (const eid of statBonusEffectIds) statBonus += (partialEffects[eid] || 0);
 
-                const allSkills = new Set();
-                const allTypes = new Set();
-                for (let i = 0; i < totalSlots; i++) {
-                    const data = getCardData(i);
-                    if (!data) continue;
-                    if (data.hintSkillIds) data.hintSkillIds.forEach(s => allSkills.add(s));
-                    if (data.hintSkillTypes) data.hintSkillTypes.forEach(t => allTypes.add(t));
-                }
-
-                let skillAptSum = 0;
-                for (let i = 0; i < totalSlots; i++) {
-                    const data = getCardData(i);
-                    if (data) skillAptSum += (data.skillAptitudeScore || 0);
-                }
-
                 const metrics = {
                     raceBonus: partialEffects[15] || 0,
                     trainingEff: partialEffects[8] || 0,
@@ -533,11 +521,11 @@ function runBranchAndBound(payload) {
                     energyCost: partialEffects[28] || 0,
                     eventRecovery: partialEffects[25] || 0,
                     statBonus,
-                    hintSkillCount: allSkills.size,
-                    skillTypeCount: allTypes.size,
+                    hintSkillCount: uniqueHintSkillCount,
+                    skillTypeCount: uniqueHintTypeCount,
                     totalEffectSum: partialEffectSum,
                     uniqueEffects: ueCount,
-                    skillAptitude: skillAptSum,
+                    skillAptitude: partialSkillAptSum,
                     specialtyPriority: partialEffects[19] || 0,
                     moodEffect: partialEffects[2] || 0,
                     initialFriendship: partialEffects[14] || 0,
@@ -652,6 +640,7 @@ function runBranchAndBound(payload) {
                 const prevUECount = ueCount;
                 if (data.uniqueEffectActive) ueCount++;
                 if (data.charId) usedCharIds.add(data.charId);
+                partialSkillAptSum += (data.skillAptitudeScore || 0);
                 const cardScore = slotScoreMap[cardId] ?? cardScoreContrib[cardId] ?? 0;
                 partialScore += cardScore;
                 const prevTypeCount = deckTypeCounts[data.type] || 0;
@@ -672,6 +661,22 @@ function runBranchAndBound(payload) {
                             refs[sid] = (refs[sid] || 0) + 1;
                             if (refs[sid] === 1) skillTypeUniqueCounts[rType]++;
                         }
+                    }
+                }
+
+                // Update running hint skill/type ref counts
+                if (data.hintSkillIds) {
+                    for (let si = 0; si < data.hintSkillIds.length; si++) {
+                        const sid = data.hintSkillIds[si];
+                        hintSkillRefCounts[sid] = (hintSkillRefCounts[sid] || 0) + 1;
+                        if (hintSkillRefCounts[sid] === 1) uniqueHintSkillCount++;
+                    }
+                }
+                if (data.hintSkillTypes) {
+                    for (let ti = 0; ti < data.hintSkillTypes.length; ti++) {
+                        const t = data.hintSkillTypes[ti];
+                        hintTypeRefCounts[t] = (hintTypeRefCounts[t] || 0) + 1;
+                        if (hintTypeRefCounts[t] === 1) uniqueHintTypeCount++;
                     }
                 }
 
@@ -757,8 +762,30 @@ function runBranchAndBound(payload) {
                 maxTypeCount = prevMaxTypeCount;
                 foundSkillBits = prevFoundSkillBits;
                 if (data.charId) usedCharIds.delete(data.charId);
+                partialSkillAptSum -= (data.skillAptitudeScore || 0);
                 ueCount = prevUECount;
                 skillMask = prevSkillMask;
+                // Undo running hint skill/type ref counts
+                if (data.hintSkillIds) {
+                    for (let si = 0; si < data.hintSkillIds.length; si++) {
+                        const sid = data.hintSkillIds[si];
+                        hintSkillRefCounts[sid]--;
+                        if (hintSkillRefCounts[sid] === 0) {
+                            uniqueHintSkillCount--;
+                            delete hintSkillRefCounts[sid];
+                        }
+                    }
+                }
+                if (data.hintSkillTypes) {
+                    for (let ti = 0; ti < data.hintSkillTypes.length; ti++) {
+                        const t = data.hintSkillTypes[ti];
+                        hintTypeRefCounts[t]--;
+                        if (hintTypeRefCounts[t] === 0) {
+                            uniqueHintTypeCount--;
+                            delete hintTypeRefCounts[t];
+                        }
+                    }
+                }
                 // Undo unique-skill-per-type counts
                 if (hasReqSkillTypes && data.skillsByType) {
                     for (let rt = 0; rt < reqSkillTypes.length; rt++) {

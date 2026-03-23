@@ -491,12 +491,10 @@ function validateFinderFilters(filters) {
 // ===== CARD POOL BUILDING =====
 
 function buildCardPool(filters) {
-    let pool = [...cardData];
-
-    // Card pool filter
-    if (filters.cardPool === 'owned') {
-        pool = pool.filter(c => isCardOwned(c.support_id));
-    }
+    // Filter directly on cardData — filter() returns a new array, no spread-copy needed
+    let pool = filters.cardPool === 'owned'
+        ? cardData.filter(c => isCardOwned(c.support_id))
+        : cardData;
 
     // Rarity filter
     const allowedRarities = [];
@@ -709,7 +707,7 @@ function getCardFinderLevel(card, forceMax, maxPotential) {
 }
 
 function buildFriendPool(filters) {
-    let pool = [...cardData];
+    let pool = cardData;
 
     // Rarity filter (same as main pool)
     const allowedRarities = [];
@@ -1356,6 +1354,7 @@ function greedyWarmStart(groups, filters, cache, validDists, resultCount, traine
 
         // Local search: try improving each player slot against ALL candidates of same type
         const playerSlots = friendCardId ? deck.length - 1 : deck.length;
+        const _warmStartUsedChars = new Set(); // Reused across slots to avoid per-slot allocation
         for (let pass = 0; pass < 5; pass++) {
             if (performance.now() - startTime > TIME_BUDGET) break;
             let improved = false;
@@ -1366,13 +1365,15 @@ function greedyWarmStart(groups, filters, cache, validDists, resultCount, traine
                 if (!currentData) continue;
 
                 // Try ALL candidates of same type (not just top-15)
+                // Build used chars excluding current slot (reuses single Set per slot)
                 const candidates = groups[currentData.type] || [];
-                const currentUsedChars = new Set();
-                deck.forEach(id => {
-                    const d = evalCache.get(id);
+                const currentUsedChars = _warmStartUsedChars;
+                currentUsedChars.clear();
+                for (let di = 0; di < deck.length; di++) {
+                    if (di === si) continue;
+                    const d = evalCache.get(deck[di]);
                     if (d && d.charId) currentUsedChars.add(d.charId);
-                });
-                currentUsedChars.delete(currentData.charId);
+                }
 
                 let bestResult = null;
                 if (checkHardFilters(deck, filters, evalCache)) {
@@ -1519,7 +1520,11 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     }
 
     _logDeckFinder.info('Card pool built', { poolSize: pool.length });
-    showToast(`Card pool: ${pool.length} cards`, 'info');
+    if (pool.length > 500) {
+        showToast(`Large card pool (${pool.length} cards) — search may use significant memory. Consider narrowing filters.`, 'warning');
+    } else {
+        showToast(`Card pool: ${pool.length} cards`, 'info');
+    }
 
     // For owned mode: owned cards at actual levels + friend pool at max level
     // For all mode: all cards at max level for all 6 slots
@@ -2832,10 +2837,23 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
     return new Promise((resolve, reject) => {
         // Determine worker count from search settings
         const workerSetting = deckFinderState.searchSettings?.workerCount || 'auto';
-        const numWorkers = workerSetting === 'auto'
-            ? Math.min(4, Math.max(1, navigator.hardwareConcurrency || 1))
-            : Math.min(parseInt(workerSetting) || 1, navigator.hardwareConcurrency || 8);
-        _logDeckFinder.info('Worker pool', { numWorkers, cores: navigator.hardwareConcurrency });
+        // Estimate cache size for memory-aware worker count
+        const cacheEntryCount = cache.size + (friendCache ? friendCache.size : 0);
+        const estimatedCacheMB = cacheEntryCount * 0.25; // ~250 bytes per entry serialized
+        const estimatedPerWorkerMB = estimatedCacheMB * 2; // structured clone overhead
+        const memoryBudgetMB = 512;
+        const maxWorkersByMemory = Math.max(1, Math.floor(memoryBudgetMB / Math.max(1, estimatedPerWorkerMB)));
+
+        let numWorkers;
+        if (workerSetting === 'auto') {
+            const coreWorkers = Math.min(4, Math.max(1, navigator.hardwareConcurrency || 1));
+            numWorkers = Math.min(coreWorkers, maxWorkersByMemory);
+            // On mobile or small pools, reduce further
+            if (cacheEntryCount > 500 && numWorkers > 2) numWorkers = 2;
+        } else {
+            numWorkers = Math.min(parseInt(workerSetting) || 1, navigator.hardwareConcurrency || 8, maxWorkersByMemory);
+        }
+        _logDeckFinder.info('Worker pool', { numWorkers, cores: navigator.hardwareConcurrency, cacheEntries: cacheEntryCount, estimatedPerWorkerMB: estimatedPerWorkerMB.toFixed(1) });
 
         // Serialize cache to plain object (shared across all workers)
         const cacheObj = {};
