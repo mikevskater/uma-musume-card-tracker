@@ -1579,7 +1579,7 @@
 
 .finder-stype-min-wrap {
     flex: 0 0 auto;
-    width: 70px;
+    width: auto;
 }
 
 .finder-stype-min-wrap input {
@@ -2061,4 +2061,40 @@
 .finder-picker-count {
     color: var(--text-muted);
     font-size: var(--font-size-sm);
+}
+
+/* ===== BUILD FOCUS ===== */
+
+.finder-build-focus-selects {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.finder-build-focus-select {
+    flex: 1 1 120px;
+    min-width: 120px;
+}
+
+.finder-build-focus-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.finder-build-focus-dropdown {
+    width: 100%;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+.finder-build-focus-dropdown:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -1px;
 }

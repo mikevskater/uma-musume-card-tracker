@@ -88,6 +88,16 @@ const SKILL_TYPE_TO_APTITUDE = {
     dirt: { cat: 'ground', key: 'dirt' }
 };
 
+// Build Focus off-focus penalty — skills not matching the focus get this multiplier
+const BUILD_FOCUS_OFF_PENALTY = 0.15;
+
+// Map buildFocus keys to SKILL_TYPE_TO_APTITUDE category names
+const BUILD_FOCUS_CAT_MAP = {
+    distance: 'distance',
+    style: 'running_style',
+    surface: 'ground'
+};
+
 // Skill weight framework — placeholder for future per-skill tier weighting
 const SKILL_WEIGHTS = {};  // skillId -> multiplier, default 1.0
 function getSkillWeight(skillId) { return SKILL_WEIGHTS[skillId] || 1.0; }
@@ -379,6 +389,7 @@ function getDefaultFinderFilters() {
         resultCount: 10,
         scenario: '1',               // scenario ID for scoring weights
         selectedTrainee: null,        // trainee version ID from charactersData
+        buildFocus: null,             // { distance, style, surface } or null — skill aptitude focus
         maxPotential: false           // use max level at current LB for all cards
     };
 }
@@ -499,7 +510,7 @@ function groupCardsByType(pool) {
 
 // ===== PRE-COMPUTATION =====
 
-function precomputeCardEffects(pool, traineeData, forceMaxLevel, maxPotential) {
+function precomputeCardEffects(pool, traineeData, forceMaxLevel, maxPotential, buildFocus) {
     const cache = new Map();
     const skillLookup = getSkillIdLookup();
     pool.forEach(card => {
@@ -579,7 +590,7 @@ function precomputeCardEffects(pool, traineeData, forceMaxLevel, maxPotential) {
         }
 
         // Skill-aptitude score for trainee matching
-        const skillAptitudeScore = computeCardSkillAptitudeScore(card, traineeData, skillLookup);
+        const skillAptitudeScore = computeCardSkillAptitudeScore(card, traineeData, skillLookup, buildFocus);
 
         // Pre-compute effect keys/values arrays to avoid Object.keys() in hot loops
         const effectKeyArr = Object.keys(effects);
@@ -702,7 +713,7 @@ function buildFriendPool(filters) {
 
 // ===== SKILL-APTITUDE SCORING =====
 
-function computeCardSkillAptitudeScore(card, traineeData, skillLookup) {
+function computeCardSkillAptitudeScore(card, traineeData, skillLookup, buildFocus) {
     if (!traineeData || !card.hints?.hint_skills) return 0;
     const aptitudes = traineeData.aptitudes;
     if (!aptitudes) return 0;
@@ -725,7 +736,19 @@ function computeCardSkillAptitudeScore(card, traineeData, skillLookup) {
             if (!mapping) continue;
             const grade = aptitudes[mapping.cat]?.[mapping.key];
             if (grade) {
-                const aptScore = APTITUDE_GRADE_SCORE[grade] || 0;
+                let aptScore = APTITUDE_GRADE_SCORE[grade] || 0;
+
+                // Apply build focus penalty for off-focus skills
+                if (buildFocus && aptScore > 0) {
+                    for (const [focusKey, focusCat] of Object.entries(BUILD_FOCUS_CAT_MAP)) {
+                        const focusVal = buildFocus[focusKey];
+                        if (focusVal && mapping.cat === focusCat && mapping.key !== focusVal) {
+                            aptScore *= BUILD_FOCUS_OFF_PENALTY;
+                            break;
+                        }
+                    }
+                }
+
                 if (aptScore > bestAptScore) bestAptScore = aptScore;
             }
         }
@@ -1466,7 +1489,8 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     // For all mode: all cards at max level for all 6 slots
     _logDeckFinder.time('precomputeCardEffects');
     const maxPotential = filters.maxPotential || false;
-    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode, maxPotential);
+    const buildFocus = filters.buildFocus || null;
+    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode, maxPotential, buildFocus);
     _logDeckFinder.timeEnd('precomputeCardEffects');
     const groups = groupCardsByType(pool);
     _logDeckFinder.debug('Groups by type', Object.fromEntries(Object.entries(groups).map(([t, c]) => [t, c.length])));
@@ -1478,13 +1502,13 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     if (includeFriendCards.length > 0) {
         const friendPool = cardData.filter(c => includeFriendSet.has(c.support_id));
         if (friendPool.length > 0) {
-            friendCache = precomputeCardEffects(friendPool, traineeData, true);
+            friendCache = precomputeCardEffects(friendPool, traineeData, true, false, buildFocus);
             friendGroups = groupCardsByType(friendPool);
             if (friendPool.length > 1) presortCardGroups(friendGroups, filters, friendCache, traineeData);
         }
     } else if (isOwnedMode) {
         const friendPool = buildFriendPool(effectiveFilters);
-        friendCache = precomputeCardEffects(friendPool, traineeData, true);
+        friendCache = precomputeCardEffects(friendPool, traineeData, true, false, buildFocus);
         friendGroups = groupCardsByType(friendPool);
         presortCardGroups(friendGroups, filters, friendCache, traineeData);
     }

@@ -84,6 +84,9 @@ function openDeckFinder() {
     requestAnimationFrame(() => overlay.classList.add('open'));
     initFinderEvents();
 
+    // Precompute skill type max counts from all released cards
+    computeSkillTypeMaxCounts();
+
     // Restore UI from persisted state on reopen
     if (isReopen) {
         restoreFinderUIFromState();
@@ -198,10 +201,113 @@ function updateFinderTraineeLabel() {
     if (charId && typeof charactersData !== 'undefined' && charactersData[charId]) {
         label.textContent = charactersData[charId].name;
         label.closest('.trainee-pick-btn')?.classList.add('has-selection');
+        updateBuildFocusRow(charId);
     } else {
         label.textContent = '— No trainee selected —';
         label.closest('.trainee-pick-btn')?.classList.remove('has-selection');
+        hideBuildFocusRow();
     }
+}
+
+// All aptitude grades in order (best to worst) — show all options, not just viable ones,
+// since players may train outside specialty or use parent umas that raise aptitudes
+const BUILD_FOCUS_ALL_GRADES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+// Display labels for aptitude keys
+const BUILD_FOCUS_LABELS = {
+    distance: { label: 'Distance', keys: { short: 'Short', mile: 'Mile', medium: 'Medium', long: 'Long' } },
+    running_style: { label: 'Running Style', keys: { front_runner: 'Front Runner', stalker: 'Stalker', betweener: 'Betweener', stretch: 'Stretch' } },
+    ground: { label: 'Surface', keys: { turf: 'Turf', dirt: 'Dirt' } },
+};
+
+function updateBuildFocusRow(charId) {
+    const row = document.getElementById('finderBuildFocusRow');
+    const container = document.getElementById('finderBuildFocusSelects');
+    if (!row || !container) return;
+
+    const char = typeof charactersData !== 'undefined' && charactersData[charId];
+    if (!char || !char.aptitudes) {
+        hideBuildFocusRow();
+        return;
+    }
+
+    const aptitudes = char.aptitudes;
+    let html = '';
+    let hasAnyViable = false;
+
+    for (const [catKey, catDef] of Object.entries(BUILD_FOCUS_LABELS)) {
+        const catAptitudes = aptitudes[catKey];
+        if (!catAptitudes) continue;
+
+        // Show all options sorted by grade (best first)
+        const viable = Object.entries(catAptitudes)
+            .filter(([, grade]) => BUILD_FOCUS_ALL_GRADES.includes(grade))
+            .sort((a, b) => BUILD_FOCUS_ALL_GRADES.indexOf(a[1]) - BUILD_FOCUS_ALL_GRADES.indexOf(b[1]));
+
+        if (viable.length === 0) continue;
+        hasAnyViable = true;
+
+        // Find the best-graded option as default
+        const bestKey = viable[0][0];
+        const currentFocus = deckFinderState.filters.buildFocus;
+        const focusKey = catKey === 'ground' ? 'surface' : catKey === 'running_style' ? 'style' : catKey;
+        const selectedVal = currentFocus?.[focusKey] || '';
+
+        html += `<div class="finder-build-focus-select">
+            <label class="finder-build-focus-label">${catDef.label}</label>
+            <select class="finder-build-focus-dropdown" data-focus-cat="${focusKey}">
+                <option value="">Any</option>
+                ${viable.map(([key, grade]) =>
+                    `<option value="${key}"${key === selectedVal ? ' selected' : ''}>${catDef.keys[key] || key} (${grade})</option>`
+                ).join('')}
+            </select>
+        </div>`;
+    }
+
+    if (!hasAnyViable) {
+        hideBuildFocusRow();
+        return;
+    }
+
+    container.innerHTML = html;
+    row.style.display = '';
+
+    // Wire change events
+    container.querySelectorAll('.finder-build-focus-dropdown').forEach(select => {
+        select.addEventListener('change', () => {
+            updateBuildFocusState();
+        });
+    });
+
+    // Auto-select best options if no focus is set yet
+    if (!deckFinderState.filters.buildFocus) {
+        // Leave "Any" selected — user must explicitly choose
+    }
+}
+
+function updateBuildFocusState() {
+    const container = document.getElementById('finderBuildFocusSelects');
+    if (!container) return;
+
+    let hasAnySelection = false;
+    const focus = { distance: null, style: null, surface: null };
+
+    container.querySelectorAll('.finder-build-focus-dropdown').forEach(select => {
+        const cat = select.dataset.focusCat;
+        const val = select.value || null;
+        if (cat && val) {
+            focus[cat] = val;
+            hasAnySelection = true;
+        }
+    });
+
+    deckFinderState.filters.buildFocus = hasAnySelection ? focus : null;
+}
+
+function hideBuildFocusRow() {
+    const row = document.getElementById('finderBuildFocusRow');
+    if (row) row.style.display = 'none';
+    deckFinderState.filters.buildFocus = null;
 }
 
 function buildFinderFiltersHTML() {
@@ -241,6 +347,12 @@ function buildFinderFiltersHTML() {
             <button class="trainee-pick-btn finder-trainee-pick-btn" id="finderTraineePickBtn">
                 <span id="finderTraineePickLabel">— No trainee selected —</span>
             </button>
+        </div>
+
+        <!-- Build Focus (hidden until trainee selected) -->
+        <div class="finder-section finder-build-focus-row" id="finderBuildFocusRow" style="display:none;">
+            <div class="finder-label">Build Focus <span class="finder-hint">(prioritize skills matching these aptitudes)</span></div>
+            <div class="finder-build-focus-selects" id="finderBuildFocusSelects"></div>
         </div>
 
         <!-- Card Pool -->
@@ -1333,6 +1445,39 @@ function moveFinderWeight(fromIndex, toIndex) {
 // ===== SKILL TYPE LAYER UI =====
 
 let _finderSkillTypeLayers = []; // [{ type: 'type_id', min: 1 }, ...]
+let _skillTypeMaxCounts = {};    // { typeTag: maxUniqueSkills } computed from card pool
+
+/**
+ * Precompute max unique skills per type from the current card pool.
+ * Scans all cards and builds a union set of skill IDs per type tag.
+ */
+function computeSkillTypeMaxCounts(pool) {
+    const typeSkillSets = {}; // typeTag -> Set of skill IDs
+    if (!pool) pool = typeof cardData !== 'undefined' ? cardData.filter(c => c.start_date) : [];
+
+    for (const card of pool) {
+        if (!card.hints?.hint_skills) continue;
+        for (const skill of card.hints.hint_skills) {
+            const skillId = typeof skill === 'object' ? skill.id : skill;
+            if (!skillId) continue;
+            const types = (typeof skill === 'object' && Array.isArray(skill.type))
+                ? skill.type
+                : (typeof skillsData !== 'undefined' && skillsData[skillId]?.type || []);
+            if (!Array.isArray(types)) continue;
+            for (const typeTag of types) {
+                if (!typeSkillSets[typeTag]) typeSkillSets[typeTag] = new Set();
+                typeSkillSets[typeTag].add(skillId);
+            }
+        }
+    }
+
+    const counts = {};
+    for (const [typeTag, skillSet] of Object.entries(typeSkillSets)) {
+        counts[typeTag] = skillSet.size;
+    }
+    _skillTypeMaxCounts = counts;
+    return counts;
+}
 
 function addFinderSkillTypeLayer() {
     const usedTypes = new Set(_finderSkillTypeLayers.map(l => l.type));
@@ -1386,8 +1531,8 @@ function renderFinderSkillTypeLayers() {
             <div class="sort-dropdowns has-options">
                 <select class="sort-category-select finder-stype-sel" data-index="${index}">${typeOptions}</select>
                 <div class="finder-input-suffix finder-stype-min-wrap">
-                    <input type="number" class="finder-stype-min" data-index="${index}" min="1" max="20" value="${layer.min}">
-                    <span>min</span>
+                    <input type="number" class="finder-stype-min" data-index="${index}" min="1" max="${_skillTypeMaxCounts[layer.type] || 20}" value="${Math.min(layer.min, _skillTypeMaxCounts[layer.type] || 20)}">
+                    <span>min (max: ${_skillTypeMaxCounts[layer.type] || '?'})</span>
                 </div>
             </div>
         </div>`;
@@ -1411,6 +1556,11 @@ function wireFinderSkillTypeEvents() {
             const index = parseInt(sel.dataset.index);
             if (_finderSkillTypeLayers[index]) {
                 _finderSkillTypeLayers[index].type = sel.value;
+                // Clamp min value to new type's max
+                const newMax = _skillTypeMaxCounts[sel.value] || 20;
+                if (_finderSkillTypeLayers[index].min > newMax) {
+                    _finderSkillTypeLayers[index].min = newMax;
+                }
                 renderFinderSkillTypeLayers();
                 wireFinderSkillTypeEvents();
             }
@@ -2091,6 +2241,9 @@ function collectFiltersFromUI() {
 
     // Trainee
     f.selectedTrainee = deckFinderState.filters?.selectedTrainee || null;
+
+    // Build Focus
+    f.buildFocus = deckFinderState.filters?.buildFocus || null;
 
     // Pool
     const poolBtn = overlay.querySelector('.finder-toggle-btn[data-pool].active');
