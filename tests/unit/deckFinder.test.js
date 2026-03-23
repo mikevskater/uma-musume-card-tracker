@@ -608,6 +608,68 @@ describe('individualCardScore', () => {
     });
 });
 
+// ===== computeCardSkillAptitudeScore =====
+
+describe('computeCardSkillAptitudeScore', () => {
+    const traineeData = {
+        growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
+        aptitudes: {
+            distance: { short: 'G', mile: 'A', medium: 'A', long: 'A' },
+            running_style: { front_runner: 'A', stalker: 'A', betweener: 'A', stretch: 'C' },
+            ground: { turf: 'A', dirt: 'G' },
+        },
+    };
+
+    test('returns 0 when no traineeData', () => {
+        const card = getCardById(30004); // Gold Ship — has long skills
+        expect(computeCardSkillAptitudeScore(card, null, null)).toBe(0);
+    });
+
+    test('returns 0 when card has no hint skills', () => {
+        const card = { support_id: 99999, hints: null };
+        expect(computeCardSkillAptitudeScore(card, traineeData, null)).toBe(0);
+    });
+
+    test('scores positive for card with matching aptitudes', () => {
+        // Card 30004 (Gold Ship stamina) has long-tagged skills
+        const card = getCardById(30004);
+        if (!card?.hints?.hint_skills?.length) return;
+        const score = computeCardSkillAptitudeScore(card, traineeData, skillsData);
+        expect(score).toBeGreaterThan(0);
+    });
+
+    test('buildFocus penalizes off-focus distance skills', () => {
+        // Card 30005 (Vodka power) has mile + medium distance-tagged skills
+        const card = getCardById(30005);
+        if (!card?.hints?.hint_skills?.length) return;
+
+        // No focus — both mile and medium skills score fully (both A-grade)
+        const scoreNoFocus = computeCardSkillAptitudeScore(card, traineeData, skillsData, null);
+
+        // Focus on long — mile and medium get penalty (0.15x)
+        const focusLong = { distance: 'long', style: null, surface: null };
+        const scoreFocusLong = computeCardSkillAptitudeScore(card, traineeData, skillsData, focusLong);
+
+        // Focus on medium — medium gets full score, mile gets penalty
+        const focusMedium = { distance: 'medium', style: null, surface: null };
+        const scoreFocusMedium = computeCardSkillAptitudeScore(card, traineeData, skillsData, focusMedium);
+
+        // Off-focus should score lower
+        expect(scoreNoFocus).toBeGreaterThan(0);
+        expect(scoreFocusLong).toBeLessThan(scoreNoFocus);
+        // Medium focus should be between no-focus and long-focus (since card has medium skills)
+        expect(scoreFocusMedium).toBeGreaterThanOrEqual(scoreFocusLong);
+    });
+
+    test('no focus returns same score as null buildFocus (backward compatible)', () => {
+        const card = getCardById(30004);
+        if (!card?.hints?.hint_skills?.length) return;
+        const scoreNull = computeCardSkillAptitudeScore(card, traineeData, skillsData, null);
+        const scoreUndef = computeCardSkillAptitudeScore(card, traineeData, skillsData);
+        expect(scoreNull).toBe(scoreUndef);
+    });
+});
+
 // ===== Utility functions =====
 
 describe('Utility functions', () => {
