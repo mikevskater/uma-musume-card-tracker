@@ -466,9 +466,10 @@ function runBranchAndBound(payload) {
                 }
 
                 // Helper: get correct cache for a deck card index
+                // Friend cache may omit entries identical to owned cache (dedup optimization)
                 const fSlotIdx = friendType ? totalSlots - 1 : -1;
                 function getCardData(idx) {
-                    if (idx === fSlotIdx && friendCache) return friendCache[deckIds[idx]];
+                    if (idx === fSlotIdx && friendCache) return friendCache[deckIds[idx]] || cache[deckIds[idx]];
                     return cache[deckIds[idx]];
                 }
 
@@ -629,7 +630,7 @@ function runBranchAndBound(payload) {
                 if (cancelled) return;
 
                 const cardId = slotPool[i];
-                const data = slotCache[cardId];
+                const data = slotCache[cardId] || (slot.isFriend ? cache[cardId] : undefined);
                 if (!data) continue;
 
                 // Same-character exclusion
@@ -651,7 +652,7 @@ function runBranchAndBound(payload) {
                 const prevUECount = ueCount;
                 if (data.uniqueEffectActive) ueCount++;
                 if (data.charId) usedCharIds.add(data.charId);
-                const cardScore = slotScoreMap[cardId] || 0;
+                const cardScore = slotScoreMap[cardId] ?? cardScoreContrib[cardId] ?? 0;
                 partialScore += cardScore;
                 const prevTypeCount = deckTypeCounts[data.type] || 0;
                 deckTypeCounts[data.type] = prevTypeCount + 1;

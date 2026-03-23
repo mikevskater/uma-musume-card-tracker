@@ -214,6 +214,35 @@ let deckFinderState = {
     _skillAptitudeManuallyEdited: false
 };
 
+// ===== DISPLAY CACHE PROXY =====
+
+/**
+ * Creates a lightweight proxy over owned and friend caches that avoids
+ * copying all entries into a merged Map. Supports the same .get(key) API
+ * used by the renderer and scoring helpers.
+ *
+ * Lookup rules:
+ *   'friend_' + id  → friendCache entry first, then owned cache fallback
+ *   plain id        → owned cache first, then friendCache (for friend-only cards)
+ */
+function createDisplayCacheProxy(ownedCache, friendCache) {
+    return {
+        get(key) {
+            if (typeof key === 'string' && key.startsWith('friend_')) {
+                const realId = parseInt(key.slice(7), 10);
+                if (friendCache) {
+                    const val = friendCache.get(realId);
+                    if (val !== undefined) return val;
+                }
+                return ownedCache.get(realId);
+            }
+            const val = ownedCache.get(key);
+            if (val !== undefined) return val;
+            return friendCache ? friendCache.get(key) : undefined;
+        }
+    };
+}
+
 // ===== CUSTOM WEIGHT HELPERS =====
 
 function getActiveWeights(scenarioId) {
@@ -1536,22 +1565,12 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
         }
     }
 
-    // Merge both caches for the renderer.
-    // Owned entries keep their actual level. Friend-only entries (not owned) are added.
-    // For cards that exist in both, we store the friend version under a prefixed key
-    // so the renderer can look up the correct data based on whether it's the friend slot.
-    const displayCache = new Map(cache);
-    if (friendCache) {
-        friendCache.forEach((val, key) => {
-            // Always store friend version under prefixed key for friend-slot lookups
-            displayCache.set('friend_' + key, val);
-            // Only add to main key if not already in owned cache
-            if (!cache.has(key)) {
-                displayCache.set(key, val);
-            }
-        });
-    }
-    deckFinderState.cardEffectCache = displayCache;
+    // Lightweight proxy that delegates to owned cache + friend cache on demand,
+    // avoiding the memory cost of copying all entries into a merged Map.
+    // Lookup rules:
+    //   'friend_' + id → friendCache first, then owned cache
+    //   plain id       → owned cache first, then friendCache (for friend-only cards)
+    deckFinderState.cardEffectCache = createDisplayCacheProxy(cache, friendCache);
 
     // Phase 1d: Pre-sort card groups by individual score descending
     presortCardGroups(groups, filters, cache, traineeData);
@@ -2848,6 +2867,11 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         if (friendCache && friendGroups) {
             friendCacheObj = {};
             friendCache.forEach((val, key) => {
+                // Skip friend entries identical to owned (same level = same effects)
+                // Worker falls back to main cache for these cards
+                const ownedEntry = cache.get(key);
+                if (ownedEntry && ownedEntry.level === val.level) return;
+
                 const fsbt = {};
                 if (val.skillsByType) {
                     for (const [t, s] of Object.entries(val.skillsByType)) fsbt[t] = [...s];
@@ -2911,9 +2935,34 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         }
 
         const stabilityPct = deckFinderState.searchSettings?.stabilityPercent || 30;
+        const lockedCardIds = (filters.includeCardsMode === 'all') ? (filters.includeCards || []) : [];
+        const anyRequiredCardIds = (filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : [];
+
+        // Collect types needed by locked/required cards (these must be in every worker's cache)
+        const globalRequiredIds = new Set([...lockedCardIds, ...anyRequiredCardIds]);
+
+        // Build per-worker filtered caches: only include cards of types in the worker's shard
+        function filterCacheByTypes(fullCache, neededTypes) {
+            if (!fullCache) return null;
+            const filtered = {};
+            for (const [id, val] of Object.entries(fullCache)) {
+                if (neededTypes.has(val.type) || globalRequiredIds.has(parseInt(id, 10) || id)) {
+                    filtered[id] = val;
+                }
+            }
+            return filtered;
+        }
+
+        function filterGroupsByTypes(fullGroups, neededTypes) {
+            if (!fullGroups) return null;
+            const filtered = {};
+            for (const [type, cards] of Object.entries(fullGroups)) {
+                if (neededTypes.has(type)) filtered[type] = cards;
+            }
+            return filtered;
+        }
+
         const commonPayload = {
-            cache: cacheObj,
-            groups: groupsObj,
             maxTable,
             totalCombos,
             filters: { ...filters, _stabilityPercent: stabilityPct },
@@ -2925,10 +2974,8 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             cardTypeGrowthKey: CARD_TYPE_GROWTH_KEY,
             initialSeeds: warmStartSeeds || [],
             metricNorms,
-            friendCache: friendCacheObj,
-            friendGroups: friendGroupsObj,
-            lockedCardIds: (filters.includeCardsMode === 'all') ? (filters.includeCards || []) : [],
-            anyRequiredCardIds: (filters.includeCardsMode === 'any' && (filters.includeCards || []).length > 0) ? filters.includeCards : []
+            lockedCardIds,
+            anyRequiredCardIds
         };
 
         for (let wi = 0; wi < numWorkers; wi++) {
@@ -3049,12 +3096,24 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                 reject(new Error(e.message || 'Worker error'));
             };
 
-            // Send shard to this worker
+            // Compute the set of card types needed by this worker's shard
+            const shardTypes = new Set();
+            for (const dist of shards[workerIdx]) {
+                for (const type of Object.keys(dist)) {
+                    if (type !== 'count' && dist[type] > 0) shardTypes.add(type);
+                }
+            }
+
+            // Send shard to this worker with filtered caches (only types it needs)
             worker.postMessage({
                 type: 'start',
                 debugConfig: _debug.getConfig(),
                 payload: {
                     ...commonPayload,
+                    cache: filterCacheByTypes(cacheObj, shardTypes),
+                    groups: filterGroupsByTypes(groupsObj, shardTypes),
+                    friendCache: filterCacheByTypes(friendCacheObj, shardTypes),
+                    friendGroups: filterGroupsByTypes(friendGroupsObj, shardTypes),
                     validDists: shards[workerIdx],
                     totalCombos: shardCombos[workerIdx]
                 }
