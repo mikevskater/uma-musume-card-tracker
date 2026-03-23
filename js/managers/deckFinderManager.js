@@ -3505,7 +3505,10 @@ window.DeckFinderManager = {
     SCENARIO_WEIGHTS,
     CARD_TYPE_GROWTH_KEY,
     APTITUDE_GRADE_SCORE,
-    SKILL_TYPE_TO_APTITUDE
+    SKILL_TYPE_TO_APTITUDE,
+    individualCardScore,
+    getActiveWeights,
+    METRIC_NORM_FALLBACK
 };
 
 Object.assign(window, {

@@ -490,6 +490,124 @@ describe('Filter and sort combinations on finder', () => {
     });
 });
 
+// ===== individualCardScore =====
+
+describe('individualCardScore', () => {
+    let pool, cache, filters;
+
+    beforeEach(() => {
+        filters = getDefaultFinderFilters();
+        pool = cardData.filter(c => c.rarity === 3 && c.start_date).slice(0, 30);
+        cache = precomputeCardEffects(pool, null, true);
+    });
+
+    test('returns positive score for a valid card with URA weights', () => {
+        const cardId = pool[0].support_id;
+        const score = individualCardScore(cardId, filters, cache, null);
+        expect(score).toBeGreaterThan(0);
+    });
+
+    test('returns 0 for unknown card ID', () => {
+        const score = individualCardScore(999999, filters, cache, null);
+        expect(score).toBe(0);
+    });
+
+    test('skill aptitude scoring with trainee: card with high aptitude scores higher', () => {
+        // Find a card that has hint skills with distance tags
+        const cardWithSkills = pool.find(c => {
+            const entry = cache.get(c.support_id);
+            return entry && entry.skillAptitudeScore > 0;
+        });
+        if (!cardWithSkills) return; // skip if no card has aptitude scores in test pool
+
+        // Create trainee data with strong aptitudes
+        const traineeData = {
+            growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
+            aptitudes: {
+                distance: { short: 'A', mile: 'A', medium: 'A', long: 'A' },
+                running_style: { front_runner: 'A', stalker: 'A', stretch: 'A' },
+                ground: { turf: 'A', dirt: 'A' },
+            },
+        };
+        // Recompute cache with trainee data for aptitude scores
+        const cacheWithTrainee = precomputeCardEffects(pool, traineeData, true);
+
+        const scoreWithTrainee = individualCardScore(cardWithSkills.support_id, filters, cacheWithTrainee, traineeData);
+        const scoreWithout = individualCardScore(cardWithSkills.support_id, filters, cache, null);
+        expect(scoreWithTrainee).toBeGreaterThan(scoreWithout);
+    });
+
+    test('growth rate boost increases score for matching card type', () => {
+        // Find a guts card
+        const gutsCard = pool.find(c => c.type === 'guts');
+        if (!gutsCard) return;
+
+        const traineeWithGuts = {
+            growthRates: { speed: 0, stamina: 0, power: 0, guts: 20, wisdom: 0 },
+            aptitudes: { distance: {}, running_style: {}, ground: {} },
+        };
+        const traineeNoGuts = {
+            growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
+            aptitudes: { distance: {}, running_style: {}, ground: {} },
+        };
+
+        const scoreWithGrowth = individualCardScore(gutsCard.support_id, filters, cache, traineeWithGuts);
+        const scoreNoGrowth = individualCardScore(gutsCard.support_id, filters, cache, traineeNoGuts);
+        // Guts growth rate should boost score if card has guts stat bonus
+        const entry = cache.get(gutsCard.support_id);
+        if (entry.effects[6] > 0) {
+            expect(scoreWithGrowth).toBeGreaterThan(scoreNoGrowth);
+        }
+    });
+
+    test('presort bug fix: skillAptitudeScore scales with norm * weight', () => {
+        // Build a card cache entry with a known aptitude score
+        const traineeData = {
+            growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
+            aptitudes: {
+                distance: { short: 'A', mile: 'A', medium: 'A', long: 'A' },
+                running_style: { front_runner: 'A', stalker: 'A', stretch: 'A' },
+                ground: { turf: 'A', dirt: 'A' },
+            },
+        };
+        const cacheWithTrainee = precomputeCardEffects(pool, traineeData, true);
+
+        // Find a card with aptitude score
+        const cardWithApt = pool.find(c => {
+            const entry = cacheWithTrainee.get(c.support_id);
+            return entry && entry.skillAptitudeScore > 0;
+        });
+        if (!cardWithApt) return;
+
+        // Score with default weights (skillAptitude = 25)
+        const filtersDefault = { ...filters, scenario: '1' };
+        deckFinderState.customWeights = null;
+        const scoreDefault = individualCardScore(cardWithApt.support_id, filtersDefault, cacheWithTrainee, traineeData);
+
+        // Score with boosted skillAptitude weight (80)
+        const defaultWeights = getActiveWeights('1');
+        deckFinderState.customWeights = { ...defaultWeights, skillAptitude: 80 };
+        const scoreBoosted = individualCardScore(cardWithApt.support_id, filtersDefault, cacheWithTrainee, traineeData);
+
+        // The boosted weight should produce a higher score (the bug fix ensures
+        // aptitude contribution scales with the weight, not just hardcoded * 5)
+        expect(scoreBoosted).toBeGreaterThan(scoreDefault);
+
+        // Clean up
+        deckFinderState.customWeights = null;
+    });
+
+    test('without trainee: skillAptitude contributes 0', () => {
+        const cardId = pool[0].support_id;
+        // Without trainee, cache entries have skillAptitudeScore = 0
+        const entry = cache.get(cardId);
+        expect(entry.skillAptitudeScore).toBe(0);
+        // Score should still be positive (from other metrics)
+        const score = individualCardScore(cardId, filters, cache, null);
+        expect(score).toBeGreaterThan(0);
+    });
+});
+
 // ===== Utility functions =====
 
 describe('Utility functions', () => {
