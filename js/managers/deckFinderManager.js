@@ -1255,13 +1255,9 @@ function greedyWarmStart(groups, filters, cache, validDists, resultCount, traine
         return a.baseScore - b.baseScore;
     }
 
-    // Merge friend cache for evaluation (friend-only cards need to be found)
-    const evalCache = new Map(cache);
-    if (friendCache) {
-        friendCache.forEach((val, key) => {
-            if (!evalCache.has(key)) evalCache.set(key, val);
-        });
-    }
+    // Lightweight proxy: check owned cache first, then friend cache
+    // Avoids copying the entire cache into a new Map
+    const evalCache = createDisplayCacheProxy(cache, friendCache);
 
     // Pre-score and sort each type's cards once (deterministic order)
     const scoredByType = {};
@@ -1440,6 +1436,8 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     deckFinderState.progress = 0;
     deckFinderState.results = [];
     deckFinderState.searchStats = null;
+    // Free previous search's display cache before allocating new one
+    deckFinderState.cardEffectCache = null;
 
     // Yield to let the UI repaint (show spinner/progress bar) before heavy work
     await new Promise(r => setTimeout(r, 0));
@@ -1528,9 +1526,9 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     _logDeckFinder.time('precomputeCardEffects');
     const maxPotential = filters.maxPotential || false;
     const buildFocus = filters.buildFocus || null;
-    const cache = precomputeCardEffects(pool, traineeData, !isOwnedMode, maxPotential, buildFocus);
+    let cache = precomputeCardEffects(pool, traineeData, !isOwnedMode, maxPotential, buildFocus);
     _logDeckFinder.timeEnd('precomputeCardEffects');
-    const groups = groupCardsByType(pool);
+    let groups = groupCardsByType(pool);
     _logDeckFinder.debug('Groups by type', Object.fromEntries(Object.entries(groups).map(([t, c]) => [t, c.length])));
 
     let friendCache = null;
@@ -2891,6 +2889,11 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
             }
         }
 
+        // Release Map references — data is now in serialized cacheObj/friendCacheObj
+        cache = null;
+        friendCache = null;
+        pool = null;
+
         // Shard distributions round-robin across workers (already sorted by potential)
         const shards = Array.from({ length: numWorkers }, () => []);
         const shardCombos = new Array(numWorkers).fill(0);
@@ -3019,6 +3022,7 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                         const now = performance.now();
                         if (onLiveResults && now - lastLiveUIUpdate >= 500) {
                             lastLiveUIUpdate = now;
+                            deckFinderState.results = null; // Release previous array before allocating new one
                             const liveResults = globalTopN.toSortedArray();
                             deckFinderState.results = liveResults;
                             const totalMatches = workerMatches.reduce((s, v) => s + v, 0);
@@ -3051,6 +3055,7 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                         completedWorkers++;
 
                         // Update live results after each worker completes
+                        deckFinderState.results = null;
                         const currentResults = globalTopN.toSortedArray();
                         deckFinderState.results = currentResults;
                         if (onLiveResults) {
@@ -3070,6 +3075,8 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
                                 elapsed: globalElapsed
                             };
                             deckFinderState.workers = null;
+                            // Free the heap — final results are already extracted
+                            globalTopN.heap.length = 0;
                             // Apply post-search sort layers
                             sortFinderResults();
                             onComplete(finalResults, warningMessage);
@@ -3121,6 +3128,10 @@ async function runWorkerSearch(filters, pool, cache, groups, maxTable, validDist
         }
 
         deckFinderState.workers = workers;
+
+        // Release serialized data — workers have their own copies now
+        commonPayload.initialSeeds = null;
+        warmStartSeeds = null;
     });
 }
 

@@ -223,7 +223,7 @@ function runBranchAndBound(payload) {
     const totalDists = validDists.length;
     const startTime = performance.now();
     const PROGRESS_TIME_INTERVAL = 250; // ms between progress updates
-    const LIVE_INTERVAL = 100;
+    const LIVE_TIME_INTERVAL = 500; // ms between live result updates (time-based, not count-based)
 
     const scenarioId = filters.scenario || '1';
     const sw = scenarioWeightsMap[scenarioId]?.weights || scenarioWeightsMap['1'].weights;
@@ -612,8 +612,8 @@ function runBranchAndBound(payload) {
                     log.debug(`Progress: ${pct}% | dists=${distsCompleted}/${totalDists} evaluated=${evaluated} pruned=${pruned} matches=${matchesFound}`);
                     postMessage({ type: 'progress', progress: pct, matchCount: matchesFound });
                 }
-                if (matchesFound - lastLiveUpdate >= LIVE_INTERVAL) {
-                    lastLiveUpdate = matchesFound;
+                if (now - lastLiveUpdate >= LIVE_TIME_INTERVAL) {
+                    lastLiveUpdate = now;
                     postMessage({ type: 'liveResults', results: topN.toSortedArray(), matchCount: matchesFound });
                 }
                 return;
