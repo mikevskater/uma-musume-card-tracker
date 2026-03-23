@@ -4077,6 +4077,94 @@
       }
     }
   },
+  "1067": {
+    "name": "Satono Diamond",
+    "routes": {
+      "0": {
+        "scenario": "scenario_0",
+        "races": [
+          {
+            "turn": 12,
+            "sort_order": 1,
+            "target_type": 1,
+            "condition_id": 1067
+          },
+          {
+            "turn": 31,
+            "sort_order": 2,
+            "target_type": 1,
+            "condition_id": 163
+          },
+          {
+            "turn": 34,
+            "sort_order": 3,
+            "target_type": 1,
+            "condition_id": 166
+          },
+          {
+            "turn": 44,
+            "sort_order": 4,
+            "target_type": 1,
+            "condition_id": 168
+          },
+          {
+            "turn": 48,
+            "sort_order": 5,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 54,
+            "sort_order": 6,
+            "target_type": 1,
+            "condition_id": 3
+          },
+          {
+            "turn": 56,
+            "sort_order": 7,
+            "target_type": 1,
+            "condition_id": 4
+          },
+          {
+            "turn": 67,
+            "sort_order": 8,
+            "target_type": 1,
+            "condition_id": 87
+          },
+          {
+            "turn": 68,
+            "sort_order": 9,
+            "target_type": 1,
+            "condition_id": 76
+          },
+          {
+            "turn": 72,
+            "sort_order": 10,
+            "target_type": 1,
+            "condition_id": 81
+          },
+          {
+            "turn": 74,
+            "sort_order": 11,
+            "target_type": 3,
+            "condition_id": 10001
+          },
+          {
+            "turn": 76,
+            "sort_order": 12,
+            "target_type": 3,
+            "condition_id": 10002
+          },
+          {
+            "turn": 78,
+            "sort_order": 13,
+            "target_type": 3,
+            "condition_id": 10003
+          }
+        ]
+      }
+    }
+  },
   "1068": {
     "name": "Kitasan Black",
     "routes": {

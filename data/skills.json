@@ -2050,6 +2050,48 @@
     ]
   },
   {
+    "id": 100671,
+    "name": "Eternal Encompassing Shine",
+    "description": "If well-positioned at the start of the final straight, her strong willpower to win increases velocity. If positioned near the front, greatly increase velocity instead.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10067,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_last_straight_onetime==1&order>=2&order<=5&distance_diff_top<=5",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "is_last_straight_onetime==1&order>=2&order<=5&distance_diff_top>5",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100681,
     "name": "Victory Cheer!",
     "description": "Moderately increase velocity when positioned toward the front on the third corner in the second half of the race. Or, kick forward hard when toward the front on the backstretch late-race.",
@@ -2867,6 +2909,58 @@
         ]
       }
     ]
+  },
+  {
+    "id": 200014,
+    "name": "Right-Handed Demon",
+    "description": "Increase proficiency in right-handed tracks, increasing Speed and Power.",
+    "icon_id": 10012,
+    "rarity": 2,
+    "group_id": 20001,
+    "skill_category": 0,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 130,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "rotation==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 1,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 3,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            106701211
+          ],
+          "card_id": 106701
+        },
+        {
+          "evolved_skill_ids": [
+            111901111
+          ],
+          "card_id": 111901
+        }
+      ]
+    }
   },
   {
     "id": 200021,
@@ -17756,6 +17850,48 @@
           {
             "type": 27,
             "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900671,
+    "name": "Eternal Encompassing Shine",
+    "description": "If well-positioned at the start of the final straight, slightly increase velocity. If positioned near the front, moderately increase velocity instead.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90067,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_last_straight_onetime==1&order>=2&order<=5&distance_diff_top<=5",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "is_last_straight_onetime==1&order>=2&order<=5&distance_diff_top>5",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
             "target_type": 1,
             "target_value": 0
           }

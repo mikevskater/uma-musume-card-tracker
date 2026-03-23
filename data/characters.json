@@ -4261,6 +4261,67 @@
     "default_rarity": 2,
     "running_style": 3
   },
+  "106701": {
+    "name": "Satono Diamond",
+    "character_id": 1067,
+    "base_stats": {
+      "3": {
+        "speed": 91,
+        "stamina": 88,
+        "power": 93,
+        "guts": 83,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 101,
+        "stamina": 98,
+        "power": 103,
+        "guts": 92,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 111,
+        "stamina": 108,
+        "power": 113,
+        "guts": 101,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 15,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 15
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "106801": {
     "name": "Kitasan Black",
     "character_id": 1068,
