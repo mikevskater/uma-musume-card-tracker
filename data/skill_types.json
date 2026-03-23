@@ -1,86 +1,86 @@
 [
   {
     "id": "corner",
-    "string": "corner"
+    "string": "Corner"
   },
   {
     "id": "debuff",
-    "string": "debuff"
+    "string": "Debuff"
   },
   {
     "id": "dirt",
-    "string": "dirt"
+    "string": "Dirt"
   },
   {
     "id": "end_closer",
-    "string": "end_closer"
+    "string": "End Closer"
   },
   {
     "id": "final_corner",
-    "string": "final_corner"
+    "string": "Final Corner"
   },
   {
     "id": "final_leg",
-    "string": "final_leg"
+    "string": "Final Leg"
   },
   {
     "id": "final_straight",
-    "string": "final_straight"
+    "string": "Final Straight"
   },
   {
     "id": "front_runner",
-    "string": "front_runner"
+    "string": "Front Runner"
   },
   {
     "id": "last_spurt",
-    "string": "last_spurt"
+    "string": "Last Spurt"
   },
   {
     "id": "late_surger",
-    "string": "late_surger"
+    "string": "Late Surger"
   },
   {
     "id": "long",
-    "string": "long"
+    "string": "Long"
   },
   {
     "id": "medium",
-    "string": "medium"
+    "string": "Medium"
   },
   {
     "id": "middle_leg",
-    "string": "middle_leg"
+    "string": "Middle Leg"
   },
   {
     "id": "mile",
-    "string": "mile"
+    "string": "Mile"
   },
   {
     "id": "no_condition",
-    "string": "no_condition"
+    "string": "No Condition"
   },
   {
     "id": "opening_leg",
-    "string": "opening_leg"
+    "string": "Opening Leg"
   },
   {
     "id": "pace_chaser",
-    "string": "pace_chaser"
+    "string": "Pace Chaser"
   },
   {
     "id": "short",
-    "string": "short"
+    "string": "Sprint"
   },
   {
     "id": "straight",
-    "string": "straight"
+    "string": "Straight"
   },
   {
     "id": "turf",
-    "string": "turf"
+    "string": "Turf"
   },
   {
     "id": "uphill_or_downhill",
-    "string": "uphill_or_downhill"
+    "string": "Uphill/Downhill"
   }
 ]

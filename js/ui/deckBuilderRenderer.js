@@ -1472,9 +1472,11 @@ function openTraineePicker(currentId, onSelect) {
     const GROWTH_KEYS = ['speed', 'stamina', 'power', 'guts', 'wisdom'];
     const GROWTH_LABELS = { speed: 'Spd', stamina: 'Sta', power: 'Pow', guts: 'Gut', wisdom: 'Wis' };
     const DIST_KEYS = ['short', 'mile', 'medium', 'long'];
+    const DIST_LABELS = { short: 'Sprint', mile: 'Mile', medium: 'Medium', long: 'Long' };
     const STYLE_KEYS = ['front_runner', 'stalker', 'betweener', 'stretch'];
-    const STYLE_LABELS = { front_runner: 'Front', stalker: 'Stalker', betweener: 'Between', stretch: 'Stretch' };
+    const STYLE_LABELS = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'End Closer', stretch: 'Late Surger' };
     const GROUND_KEYS = ['turf', 'dirt'];
+    const GROUND_LABELS = { turf: 'Turf', dirt: 'Dirt' };
 
     let filters = { search: '', distanceMin: {}, styleMin: {}, groundMin: {}, sort: 'name' };
 
@@ -1491,7 +1493,7 @@ function openTraineePicker(currentId, onSelect) {
                 <div class="trainee-filter-row">
                     <span class="trainee-filter-label">Distance:</span>
                     <div class="trainee-apt-btns" id="traineeDistBtns">
-                        ${DIST_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="distance" data-key="${k}" title="${k}">${k.charAt(0).toUpperCase() + k.slice(1)}</button>`).join('')}
+                        ${DIST_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="distance" data-key="${k}" title="${DIST_LABELS[k]}">${DIST_LABELS[k]}</button>`).join('')}
                     </div>
                 </div>
                 <div class="trainee-filter-row">
@@ -1503,7 +1505,7 @@ function openTraineePicker(currentId, onSelect) {
                 <div class="trainee-filter-row">
                     <span class="trainee-filter-label">Ground:</span>
                     <div class="trainee-apt-btns" id="traineeGroundBtns">
-                        ${GROUND_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="ground" data-key="${k}" title="${k}">${k.charAt(0).toUpperCase() + k.slice(1)}</button>`).join('')}
+                        ${GROUND_KEYS.map(k => `<button class="trainee-apt-btn" data-cat="ground" data-key="${k}" title="${GROUND_LABELS[k]}">${GROUND_LABELS[k]}</button>`).join('')}
                     </div>
                 </div>
                 <div class="trainee-filter-row">
@@ -1753,9 +1755,11 @@ function renderCharacterInfoSection() {
     let aptHtml = '';
     if (apt) {
         const distKeys = ['short', 'mile', 'medium', 'long'];
+        const distLabels = { short: 'Sprint', mile: 'Mile', medium: 'Medium', long: 'Long' };
         const styleKeys = ['front_runner', 'stalker', 'betweener', 'stretch'];
-        const styleLabels = { front_runner: 'Front', stalker: 'Stalker', betweener: 'Between', stretch: 'Stretch' };
+        const styleLabels = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'End Closer', stretch: 'Late Surger' };
         const groundKeys = ['turf', 'dirt'];
+        const groundLabels = { turf: 'Turf', dirt: 'Dirt' };
 
         aptHtml = `
             <div class="deck-summary-section-label">Aptitudes <span class="tooltip-small" data-tooltip="Race aptitude grades from S (best) to G (worst). Higher grades give better performance bonuses in matching race conditions" tabindex="0">?</span></div>
@@ -1764,7 +1768,7 @@ function renderCharacterInfoSection() {
                     <div class="char-aptitude-group-label">Distance</div>
                     ${distKeys.map(k => `
                         <span class="char-aptitude-cell">
-                            <span class="char-aptitude-name">${k.charAt(0).toUpperCase() + k.slice(1)}</span>
+                            <span class="char-aptitude-name">${distLabels[k]}</span>
                             <span class="char-aptitude-grade grade-${(apt.distance?.[k] || 'G').toLowerCase()}">${apt.distance?.[k] || 'G'}</span>
                         </span>
                     `).join('')}
@@ -1782,7 +1786,7 @@ function renderCharacterInfoSection() {
                     <div class="char-aptitude-group-label">Ground</div>
                     ${groundKeys.map(k => `
                         <span class="char-aptitude-cell">
-                            <span class="char-aptitude-name">${k.charAt(0).toUpperCase() + k.slice(1)}</span>
+                            <span class="char-aptitude-name">${groundLabels[k]}</span>
                             <span class="char-aptitude-grade grade-${(apt.ground?.[k] || 'G').toLowerCase()}">${apt.ground?.[k] || 'G'}</span>
                         </span>
                     `).join('')}
