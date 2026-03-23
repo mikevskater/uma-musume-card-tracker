@@ -2897,30 +2897,67 @@ function toggleResultDetail(idx) {
             typeof e === 'object' ? e.type : e
         ));
 
+        // Also highlight types from build focus selections
+        // buildFocus = { distance: 'mile', style: 'stalker', surface: 'turf' }
+        // Values are aptitude keys — reverse-map to skill type tags via SKILL_TYPE_TO_APTITUDE
+        const focusTypeIds = new Set();
+        const buildFocus = filters.buildFocus;
+        if (buildFocus && typeof SKILL_TYPE_TO_APTITUDE === 'object') {
+            // Collect the target aptitude keys from buildFocus + BUILD_FOCUS_CAT_MAP
+            const focusTargets = {}; // aptitude category → aptitude key
+            if (typeof BUILD_FOCUS_CAT_MAP === 'object') {
+                for (const [focusKey, aptCat] of Object.entries(BUILD_FOCUS_CAT_MAP)) {
+                    if (buildFocus[focusKey]) focusTargets[aptCat] = buildFocus[focusKey];
+                }
+            }
+            // Reverse-map: find skill type tags whose aptitude matches the focus
+            for (const [tag, mapping] of Object.entries(SKILL_TYPE_TO_APTITUDE)) {
+                if (focusTargets[mapping.cat] && focusTargets[mapping.cat] === mapping.key) {
+                    focusTypeIds.add(tag);
+                }
+            }
+        }
+
+        // Also highlight types from active skillType sort layers
+        const sortTypeIds = new Set();
+        const sortLayers = deckFinderState.sortLayers || [];
+        for (const layer of sortLayers) {
+            if (layer.key === 'skillType' && layer.option) {
+                sortTypeIds.add(layer.option);
+            }
+        }
+
+        const hasHighlightTypes = reqTypeIds.size > 0 || focusTypeIds.size > 0 || sortTypeIds.size > 0;
+
         const skillList = [...hintSkillMap.values()].sort((a, b) => a.name.localeCompare(b.name));
         html += `<div class="finder-detail-section-title">Hint Skills (${skillList.length})</div>`;
         html += '<table class="finder-skills-table"><thead><tr><th>Skill</th><th>Types</th><th>Sources</th></tr></thead><tbody>';
         skillList.forEach(sk => {
             const isReqSkill = reqSkillIds.has(String(sk.id));
-            const matchedTypes = sk.typeIds.filter(t => reqTypeIds.has(t));
-            const hasReqType = matchedTypes.length > 0;
-            const rowCls = isReqSkill ? ' class="finder-skill-required"' : '';
+            const hasFocusType = sk.typeIds.some(t => focusTypeIds.has(t));
+            const hasSortType = sk.typeIds.some(t => sortTypeIds.has(t));
+            const isHighlightedRow = isReqSkill || hasFocusType || hasSortType;
+            const rowCls = isReqSkill ? ' class="finder-skill-required"'
+                : hasFocusType ? ' class="finder-skill-focus"'
+                : hasSortType ? ' class="finder-skill-sort"'
+                : '';
 
             // Build types cell with individual type highlighting
             let typesHtml;
-            if (reqTypeIds.size > 0) {
+            if (hasHighlightTypes) {
                 typesHtml = sk.typeIds.map(t => {
                     const label = skillTypesData[t] || t;
-                    return reqTypeIds.has(t)
-                        ? `<span class="finder-skill-type-match">${label}</span>`
-                        : label;
+                    if (reqTypeIds.has(t)) return `<span class="finder-skill-type-match">${label}</span>`;
+                    if (focusTypeIds.has(t)) return `<span class="finder-skill-type-focus">${label}</span>`;
+                    if (sortTypeIds.has(t)) return `<span class="finder-skill-type-sort">${label}</span>`;
+                    return label;
                 }).join(', ');
             } else {
                 typesHtml = sk.types;
             }
 
             html += `<tr${rowCls}>
-                <td class="finder-skill-name${isReqSkill ? ' finder-skill-name-match' : ''}">${sk.name}</td>
+                <td class="finder-skill-name${isReqSkill ? ' finder-skill-name-match' : isHighlightedRow ? ' finder-skill-name-highlight' : ''}">${sk.name}</td>
                 <td class="finder-skill-types">${typesHtml}</td>
                 <td class="finder-skill-sources">${sk.sources.join(', ')}</td>
             </tr>`;

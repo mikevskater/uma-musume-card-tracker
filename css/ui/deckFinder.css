@@ -1140,6 +1140,30 @@
     font-weight: var(--font-weight-bold);
 }
 
+/* Build focus skill/type highlights */
+.finder-skill-focus {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.finder-skill-name-highlight {
+    color: var(--color-primary) !important;
+}
+
+.finder-skill-type-focus {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Sort layer skill type highlights */
+.finder-skill-sort {
+    background: color-mix(in srgb, var(--color-info) 10%, transparent);
+}
+
+.finder-skill-type-sort {
+    color: var(--color-info);
+    font-weight: var(--font-weight-bold);
+}
+
 /* ===== COMPARISON ===== */
 
 .finder-comparison {
