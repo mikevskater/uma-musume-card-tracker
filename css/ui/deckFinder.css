@@ -539,6 +539,13 @@
     min-width: 0;
 }
 
+.finder-weight-hint {
+    font-size: 10px;
+    color: var(--color-primary);
+    font-style: italic;
+    margin-top: 1px;
+}
+
 .finder-weight-controls {
     display: flex;
     align-items: center;

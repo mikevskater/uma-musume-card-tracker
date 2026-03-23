@@ -98,6 +98,13 @@ const BUILD_FOCUS_CAT_MAP = {
     surface: 'ground'
 };
 
+// Auto-weight adjustment tiers for skillAptitude
+const SKILL_APTITUDE_WEIGHT_TIERS = {
+    none: null,       // No trainee → use scenario default
+    trainee: 45,      // Trainee selected, no focus → mild boost
+    focused: 75       // Trainee + build focus → significant boost
+};
+
 // Skill weight framework — placeholder for future per-skill tier weighting
 const SKILL_WEIGHTS = {};  // skillId -> multiplier, default 1.0
 function getSkillWeight(skillId) { return SKILL_WEIGHTS[skillId] || 1.0; }
@@ -202,7 +209,9 @@ let deckFinderState = {
     // Weight display order — array of weight keys; null until initialized
     weightOrder: null,
     // Search tuning parameters
-    searchSettings: { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 }
+    searchSettings: { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 },
+    // Track whether skillAptitude weight was manually edited (prevents auto-adjustment)
+    _skillAptitudeManuallyEdited: false
 };
 
 // ===== CUSTOM WEIGHT HELPERS =====

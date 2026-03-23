@@ -105,6 +105,7 @@ function resetDeckFinder() {
     deckFinderState.traineeData = null;
     deckFinderState.sortLayers = [];
     deckFinderState.customWeights = null;
+    deckFinderState._skillAptitudeManuallyEdited = false;
     resetWeightsToDefaults('1');
     deckFinderState.searchSettings = { workerCount: 'auto', warmStartCount: 1500, stabilityPercent: 30, searchPoolSize: 500 };
     _finderSkillTypeLayers = [];
@@ -202,10 +203,69 @@ function updateFinderTraineeLabel() {
         label.textContent = charactersData[charId].name;
         label.closest('.trainee-pick-btn')?.classList.add('has-selection');
         updateBuildFocusRow(charId);
+        autoAdjustSkillAptitudeWeight();
     } else {
         label.textContent = '— No trainee selected —';
         label.closest('.trainee-pick-btn')?.classList.remove('has-selection');
         hideBuildFocusRow();
+        autoAdjustSkillAptitudeWeight();
+    }
+}
+
+/**
+ * Auto-adjust the skillAptitude weight based on trainee/focus state.
+ * Only adjusts if the user hasn't manually edited the weight.
+ */
+function autoAdjustSkillAptitudeWeight() {
+    if (deckFinderState._skillAptitudeManuallyEdited) return;
+    if (!deckFinderState.customWeights) return;
+
+    const hasTrainee = !!deckFinderState.filters?.selectedTrainee;
+    const hasFocus = !!(deckFinderState.filters?.buildFocus &&
+        Object.values(deckFinderState.filters.buildFocus).some(v => v));
+
+    let newWeight;
+    if (hasFocus) {
+        newWeight = SKILL_APTITUDE_WEIGHT_TIERS.focused;
+    } else if (hasTrainee) {
+        newWeight = SKILL_APTITUDE_WEIGHT_TIERS.trainee;
+    } else {
+        // Reset to scenario default
+        const scenarioId = deckFinderState.filters?.scenario || '1';
+        const defaults = SCENARIO_WEIGHTS[scenarioId]?.weights || SCENARIO_WEIGHTS['1'].weights;
+        newWeight = defaults.skillAptitude;
+    }
+
+    if (newWeight != null && deckFinderState.customWeights.skillAptitude !== newWeight) {
+        const oldWeight = deckFinderState.customWeights.skillAptitude;
+        deckFinderState.customWeights.skillAptitude = newWeight;
+
+        // Reorder skillAptitude in the weight list to match its new relative importance
+        if (deckFinderState.weightOrder) {
+            const order = deckFinderState.weightOrder;
+            const curIdx = order.indexOf('skillAptitude');
+            if (curIdx >= 0) {
+                // Find the correct position based on weight value (insert before the first weight that's lower)
+                order.splice(curIdx, 1);
+                let insertIdx = order.length; // default: end
+                for (let i = 0; i < order.length; i++) {
+                    const w = deckFinderState.customWeights[order[i]] || 0;
+                    if (newWeight > w) {
+                        insertIdx = i;
+                        break;
+                    }
+                }
+                order.splice(insertIdx, 0, 'skillAptitude');
+            }
+        }
+
+        renderFinderWeightsList();
+
+        // Show toast notification
+        if (hasTrainee || hasFocus) {
+            const focusLabel = hasFocus ? ' for focus build' : ' for trainee';
+            showToast(`Skill Aptitude weight adjusted: ${oldWeight} → ${newWeight}${focusLabel}`, 'info');
+        }
     }
 }
 
@@ -302,6 +362,7 @@ function updateBuildFocusState() {
     });
 
     deckFinderState.filters.buildFocus = hasAnySelection ? focus : null;
+    autoAdjustSkillAptitudeWeight();
 }
 
 function hideBuildFocusRow() {
@@ -343,7 +404,7 @@ function buildFinderFiltersHTML() {
 
         <!-- Trainee -->
         <div class="finder-section">
-            <div class="finder-label">Trainee Character <span class="finder-hint">(optional — weights skills by aptitude)</span></div>
+            <div class="finder-label">Trainee Character <span class="finder-hint">(optional — weights skills by aptitude)</span> <span class="tooltip-small" data-tooltip="Selecting a trainee activates skill aptitude scoring — cards with hint skills matching your trainee's aptitude grades score higher. Use the Build Focus dropdown below to further target a specific race type." tabindex="0">?</span></div>
             <button class="trainee-pick-btn finder-trainee-pick-btn" id="finderTraineePickBtn">
                 <span id="finderTraineePickLabel">— No trainee selected —</span>
             </button>
@@ -351,7 +412,7 @@ function buildFinderFiltersHTML() {
 
         <!-- Build Focus (hidden until trainee selected) -->
         <div class="finder-section finder-build-focus-row" id="finderBuildFocusRow" style="display:none;">
-            <div class="finder-label">Build Focus <span class="finder-hint">(prioritize skills matching these aptitudes)</span></div>
+            <div class="finder-label">Build Focus <span class="finder-hint">(prioritize skills matching these aptitudes)</span> <span class="tooltip-small" data-tooltip="Choose what type of race you're building for. This prioritizes cards with skills matching your focus and reduces the score of off-focus skills. The Skill Aptitude weight in Advanced Settings is automatically increased when a focus is set." tabindex="0">?</span></div>
             <div class="finder-build-focus-selects" id="finderBuildFocusSelects"></div>
         </div>
 
@@ -754,7 +815,9 @@ function initFinderEvents() {
     renderFinderWeightsList();
     overlay.querySelector('#finderResetWeightsBtn')?.addEventListener('click', () => {
         const scenarioId = overlay.querySelector('#finderScenario')?.value || '1';
+        deckFinderState._skillAptitudeManuallyEdited = false;
         resetWeightsToDefaults(scenarioId);
+        autoAdjustSkillAptitudeWeight();
         renderFinderWeightsList();
         showToast('Weights reset to scenario defaults.', 'info');
     });
@@ -1181,7 +1244,9 @@ function reInitFilterEvents(overlay) {
     renderFinderWeightsList();
     overlay.querySelector('#finderResetWeightsBtn')?.addEventListener('click', () => {
         const scenarioId = overlay.querySelector('#finderScenario')?.value || '1';
+        deckFinderState._skillAptitudeManuallyEdited = false;
         resetWeightsToDefaults(scenarioId);
+        autoAdjustSkillAptitudeWeight();
         renderFinderWeightsList();
         showToast('Weights reset to scenario defaults.', 'info');
     });
@@ -1391,12 +1456,23 @@ function renderFinderWeightsList() {
     const order = deckFinderState.weightOrder;
     const total = order.length;
 
+    // Determine if skillAptitude was auto-adjusted and what focus label to show
+    const hasFocus = deckFinderState.filters?.buildFocus &&
+        Object.values(deckFinderState.filters.buildFocus).some(v => v);
+    const hasTrainee = !!deckFinderState.filters?.selectedTrainee;
+    const autoAdjusted = !deckFinderState._skillAptitudeManuallyEdited && (hasTrainee || hasFocus);
+
     container.innerHTML = order.map((key, index) => {
         const label = WEIGHT_LABELS[key] || key;
         const value = weights[key] || 0;
+        let hint = '';
+        if (key === 'skillAptitude' && autoAdjusted) {
+            const focusLabel = hasFocus ? 'focus build' : 'trainee';
+            hint = `<div class="finder-weight-hint">(auto-adjusted for ${focusLabel} — edit to override)</div>`;
+        }
         return `<div class="finder-weight-item" data-index="${index}">
             <span class="finder-weight-priority">${index + 1}</span>
-            <span class="finder-weight-label">${label}</span>
+            <span class="finder-weight-label">${label}${hint}</span>
             <div class="finder-weight-controls">
                 <input type="number" class="finder-weight-input" data-key="${key}" min="0" max="200" value="${value}">
                 <button class="sort-btn finder-weight-btn" data-action="move-up" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move up">&#8593;</button>
@@ -1418,6 +1494,10 @@ function wireFinderWeightEvents(container) {
             if (deckFinderState.customWeights) {
                 deckFinderState.customWeights[key] = val;
                 _logDeckFinderUI.debug('Weight changed', { key, value: val });
+                // Track manual edit of skillAptitude to prevent auto-adjustment
+                if (key === 'skillAptitude') {
+                    deckFinderState._skillAptitudeManuallyEdited = true;
+                }
             }
         };
     });
