@@ -2770,7 +2770,7 @@ function individualCardScore(cardId, filters, cache, traineeData) {
 
     // Skill-aptitude score for trainee
     if (data.skillAptitudeScore > 0) {
-        score += data.skillAptitudeScore * 5;
+        score += data.skillAptitudeScore * (METRIC_NORM_FALLBACK.skillAptitude || 5) * (sw.skillAptitude || 25);
     }
 
     return score;
