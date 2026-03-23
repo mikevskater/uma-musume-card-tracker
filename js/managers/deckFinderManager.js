@@ -3293,7 +3293,9 @@ function calculateFinderTrainingGains(trainingType, slots, aggregated, options, 
         if (statBase > 0) {
             let gain = statBase * moodMultiplier * trainingEffMultiplier * supportMultiplier * friendshipMultiplier;
             if (i < 5 && growthRates) gain *= (1 + (growthRates[growthKeys[i]] || 0) / 100);
-            result[resultKeys[i]] = Math.floor(gain);
+            // Game caps each stat gain at 100 per training session (skill_pt uncapped)
+            const floored = Math.floor(gain);
+            result[resultKeys[i]] = (i < 5) ? Math.min(floored, 100) : floored;
         }
     }
 
