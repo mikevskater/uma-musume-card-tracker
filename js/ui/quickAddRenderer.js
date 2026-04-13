@@ -13,7 +13,8 @@ function renderQuickAddSetup() {
         power: 'images/supports/utx_ico_obtain_02.png',
         guts: 'images/supports/utx_ico_obtain_03.png',
         intelligence: 'images/supports/utx_ico_obtain_04.png',
-        friend: 'images/supports/utx_ico_obtain_05.png'
+        friend: 'images/supports/utx_ico_obtain_05.png',
+        group: 'images/supports/utx_ico_obtain_06.png'
     };
 
     const typeLabels = {
@@ -22,7 +23,8 @@ function renderQuickAddSetup() {
         power: 'Power',
         guts: 'Guts',
         intelligence: 'Wit',
-        friend: 'Friend'
+        friend: 'Friend',
+        group: 'Group'
     };
 
     const rarityLabels = { 1: 'R', 2: 'SR', 3: 'SSR' };
@@ -50,7 +52,7 @@ function renderQuickAddSetup() {
                 <div class="quick-add-setup-section">
                     <label>Card Types</label>
                     <div class="quick-add-icon-grid" id="qaTypeGrid">
-                        ${['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'].map(type =>
+                        ${['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'].map(type =>
                             `<button class="quick-add-icon-btn selected" data-type="${type}" aria-label="${typeLabels[type]}" aria-pressed="true">
                                 <img class="quick-add-type-icon" src="${typeIconFiles[type]}" alt="${typeLabels[type]}"> ${typeLabels[type]}
                             </button>`

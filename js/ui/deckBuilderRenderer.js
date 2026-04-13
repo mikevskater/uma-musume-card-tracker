@@ -199,15 +199,15 @@ function renderDeckSlots() {
 
     for (let i = 0; i < 6; i++) {
         const slotData = deckBuilderState.slots[i];
-        const isFriend = i === 5;
+        const isFriendSlot = i === 5;
         const slotEl = document.createElement('div');
-        slotEl.className = `deck-slot${isFriend ? ' friend-slot' : ''}`;
+        slotEl.className = `deck-slot${isFriendSlot ? ' friend-slot' : ''}`;
         slotEl.dataset.slotIndex = i;
         slotEl.setAttribute('tabindex', '0');
         slotEl.setAttribute('role', 'button');
         slotEl.setAttribute('aria-label', slotData ? `Slot ${i + 1}: ${getSlotCardName(slotData)}` : `Add card to slot ${i + 1}`);
 
-        if (isFriend) {
+        if (isFriendSlot) {
             const friendLabel = document.createElement('div');
             friendLabel.className = 'deck-slot-friend-label';
             friendLabel.textContent = 'Friend';
@@ -216,9 +216,9 @@ function renderDeckSlots() {
         }
 
         if (slotData) {
-            slotEl.appendChild(renderFilledSlot(slotData, i, isFriend));
+            slotEl.appendChild(renderFilledSlot(slotData, i, isFriendSlot));
         } else {
-            slotEl.appendChild(renderEmptySlot(isFriend));
+            slotEl.appendChild(renderEmptySlot(isFriendSlot));
         }
 
         slotEl.addEventListener('click', (e) => {
@@ -407,8 +407,8 @@ function renderCardPicker() {
     const filter = deckBuilderState.pickerFilter;
     const isFriend = deckBuilderState.activeSlot === 5;
     const slotLabel = isFriend ? 'Friend Slot' : `Slot ${deckBuilderState.activeSlot + 1}`;
-    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
-    const isAllTypes = filter.types.length === 6;
+    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
+    const isAllTypes = filter.types.length === allTypes.length;
 
     const overlay = document.createElement('div');
     overlay.className = 'picker-modal-overlay';
@@ -422,6 +422,7 @@ function renderCardPicker() {
         <button class="picker-type-btn${!isAllTypes && filter.types.includes('guts') ? ' active' : ''}" data-type="guts">Guts</button>
         <button class="picker-type-btn${!isAllTypes && filter.types.includes('intelligence') ? ' active' : ''}" data-type="intelligence">Wit</button>
         <button class="picker-type-btn${!isAllTypes && filter.types.includes('friend') ? ' active' : ''}" data-type="friend">Friend</button>
+        <button class="picker-type-btn${!isAllTypes && filter.types.includes('group') ? ' active' : ''}" data-type="group">Group</button>
     `;
 
     const sortOptionsHtml = PICKER_SORT_OPTIONS.map(opt =>

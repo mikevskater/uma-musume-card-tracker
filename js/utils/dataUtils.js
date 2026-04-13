@@ -209,7 +209,8 @@ function getTypeDisplayName(type) {
         'guts': 'Guts',
         'wisdom': 'Wit',
         'intelligence': 'Wit',
-        'friend': 'Friend'
+        'friend': 'Friend',
+        'group': 'Group'
     };
     return typeMap[type] || type;
 }

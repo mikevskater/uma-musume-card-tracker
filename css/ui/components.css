@@ -480,9 +480,14 @@ input[type="checkbox"]:disabled {
     color: var(--color-type-wisdom); 
 }
 
-.type-friend { 
-    background-color: var(--color-type-friend-bg); 
-    color: var(--color-type-friend); 
+.type-friend {
+    background-color: var(--color-type-friend-bg);
+    color: var(--color-type-friend);
+}
+
+.type-group {
+    background-color: var(--color-type-group-bg);
+    color: var(--color-type-group);
 }
 
 /* Status Badges */

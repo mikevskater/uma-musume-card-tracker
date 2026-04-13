@@ -399,15 +399,15 @@ function getDefaultFinderFilters() {
         rarity: { ssr: true, sr: true, r: false },
         types: {
             speed: true, stamina: true, power: true,
-            guts: true, intelligence: true, friend: true
+            guts: true, intelligence: true, friend: true, group: true
         },
         typeRatio: {
             speed: 0, stamina: 0, power: 0,
-            guts: 0, intelligence: 0, friend: 0
+            guts: 0, intelligence: 0, friend: 0, group: 0
         },
         typeRatioAtLeast: {
             speed: false, stamina: false, power: false,
-            guts: false, intelligence: false, friend: false
+            guts: false, intelligence: false, friend: false, group: false
         },
         minRaceBonus: 0,
         minTrainingEff: 0,
@@ -1592,17 +1592,17 @@ async function runSearch(filters, onProgress, onComplete, onLiveResults) {
     }
     // Override type ratio constraints for "all" mode with locked cards
     const distFilters = (lockedPlayerCards.length > 0)
-        ? { ...filters, typeRatio: { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 } }
+        ? { ...filters, typeRatio: { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0, group: 0 } }
         : filters;
 
     let distributions;
     if (lockedPlayerCards.length >= 5) {
         // All player slots are locked — single empty distribution
         // If 6+: use combinations of locked cards; handled by restricting pool above
-        distributions = [{ speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 }];
+        distributions = [{ speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0, group: 0 }];
         // Set actual types from locked cards
         if (lockedPlayerCards.length === 5) {
-            const dist = { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0 };
+            const dist = { speed: 0, stamina: 0, power: 0, guts: 0, intelligence: 0, friend: 0, group: 0 };
             for (const id of lockedPlayerCards) {
                 const data = cache.get(id);
                 if (data) dist[data.type] = (dist[data.type] || 0) + 1;
@@ -3272,7 +3272,7 @@ function calculateFinderTrainingGains(trainingType, slots, aggregated, options, 
         presentSlots.forEach(slot => {
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card?.effects) return;
-            const isMatch = card.type === 'friend' || FINDER_CARD_TYPE_TRAINING[card.type] === trainingType;
+            const isMatch = card.type === 'friend' || card.type === 'group' || FINDER_CARD_TYPE_TRAINING[card.type] === trainingType;
             if (!isMatch) return;
             card.effects.forEach(eff => {
                 if (eff[0] === 1) {

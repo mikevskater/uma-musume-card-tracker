@@ -1344,6 +1344,7 @@
 .training-card-dot.guts { background: var(--color-type-guts); clip-path: polygon(50% 0%, 100% 100%, 0% 100%); border-radius: 0; } /* triangle */
 .training-card-dot.intelligence { background: var(--color-type-wisdom); box-shadow: inset 0 0 0 2.5px var(--bg-primary); } /* ring */
 .training-card-dot.friend { background: var(--color-type-friend-bg); border-radius: 2px; } /* square */
+.training-card-dot.group { background: var(--color-type-group-bg); border-radius: 2px; } /* square */
 
 .training-value-positive {
     color: var(--color-success);

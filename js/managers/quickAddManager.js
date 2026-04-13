@@ -12,7 +12,7 @@ let quickAddState = {
     changeHistory: [],
     totalModified: 0,
     modifiedCardIds: new Set(),
-    selectedTypes: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
+    selectedTypes: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'],
     selectedRarities: [1, 2, 3],
     ownershipFilter: 'all',
     sortOrder: 'alpha',
@@ -31,7 +31,7 @@ function openQuickAdd() {
     quickAddState.changeHistory = [];
     quickAddState.totalModified = 0;
     quickAddState.modifiedCardIds = new Set();
-    quickAddState.selectedTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+    quickAddState.selectedTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
     quickAddState.selectedRarities = [1, 2, 3];
     quickAddState.ownershipFilter = 'all';
     quickAddState.sortOrder = 'alpha';
@@ -128,7 +128,7 @@ function toggleQuickAddRarity(rarity) {
 }
 
 function selectAllQuickAddTypes() {
-    quickAddState.selectedTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+    quickAddState.selectedTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
     updateQuickAddSetupUI();
 }
 
@@ -202,7 +202,7 @@ function sortQuickAddCards(cards) {
                 return b.rarity - a.rarity;
             }
             case 'type': {
-                const typeOrder = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+                const typeOrder = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
                 const diff = typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type);
                 if (diff !== 0) return diff;
                 return getQuickAddCardName(a).localeCompare(getQuickAddCardName(b));

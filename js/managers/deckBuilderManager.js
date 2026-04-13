@@ -59,7 +59,7 @@ let deckBuilderState = {
     dirty: false,             // True when there are unsaved changes
     _snapshot: null,          // Snapshot to revert to on Cancel
     pickerFilter: {
-        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
+        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'],
         search: '',
         ssrOnly: false,
         sortBy: 'effect_15',
@@ -499,7 +499,7 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card || !card.effects) return;
 
-            const isMatchingType = card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
+            const isMatchingType = card.type === 'friend' || card.type === 'group' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
             if (!isMatchingType) return;
 
             card.effects.forEach(effectArray => {
@@ -603,7 +603,7 @@ function computePerTrainingEffects(slots) {
         presentSlots.forEach(slot => {
             const card = cardData.find(c => c.support_id === slot.cardId);
             if (!card || !card.effects) return;
-            const isMatchingType = card.type === 'friend' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
+            const isMatchingType = card.type === 'friend' || card.type === 'group' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
             card.effects.forEach(eff => {
                 const id = eff[0];
                 const val = calculateEffectValue(eff, slot.level);

@@ -378,9 +378,10 @@ function buildFinderFiltersHTML() {
         { key: 'power', label: 'Power' },
         { key: 'guts', label: 'Guts' },
         { key: 'intelligence', label: 'Wit' },
-        { key: 'friend', label: 'Friend' }
+        { key: 'friend', label: 'Friend' },
+        { key: 'group', label: 'Group' }
     ];
-    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5', group: '6' };
 
     // Build scenario options
     const scenarios = typeof getAvailableScenarios === 'function' ? getAvailableScenarios() : [];
@@ -1779,14 +1780,14 @@ function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disable
 
     // Filter state local to this picker
     const pickerFilter = {
-        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'],
+        types: ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'],
         search: '',
         ssrOnly: false,
         sortBy: 'name',
         sortDirection: 'asc'
     };
 
-    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend'];
+    const allTypes = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
 
     const overlay = document.createElement('div');
     overlay.className = 'picker-modal-overlay finder-card-picker-overlay';
@@ -1800,6 +1801,7 @@ function openFinderCardPicker({ title, mode, selected, filterFn, onDone, disable
         <button class="picker-type-btn" data-type="guts">Guts</button>
         <button class="picker-type-btn" data-type="intelligence">Wit</button>
         <button class="picker-type-btn" data-type="friend">Friend</button>
+        <button class="picker-type-btn" data-type="group">Group</button>
     `;
 
     const sortOptionsHtml = FINDER_PICKER_SORT_OPTIONS.map(opt =>
@@ -2082,7 +2084,7 @@ function renderFinderThumbGrid(containerId, selectedIds, onRemove) {
     }
 
     const map = getCardDataMap();
-    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5', group: '6' };
 
     container.innerHTML = '';
     selectedIds.forEach(id => {
@@ -2544,7 +2546,7 @@ function renderLiveResults(results, matchCount) {
 
     // Live preview with card thumbnails (rarity border + type icon) and key metrics
     const cardMap = getCardDataMap();
-    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5', group: '6' };
     list.innerHTML = displayResults.map((result, idx) => {
         const m = result.metrics;
         const resultFriendId = result.friendCardId || null;
@@ -2593,7 +2595,7 @@ function renderResultCard(result, idx) {
         .join(' ');
 
     // Card thumbnails with rarity borders and type icons
-    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5', group: '6' };
     const resultFriendId = result.friendCardId || null;
     const cardMap = getCardDataMap();
     const cardThumbs = result.cardIds.map(id => {
@@ -2799,7 +2801,8 @@ function toggleResultDetail(idx) {
         // Build badges for this card
         let cardBadges = '';
         if (isFriend) {
-            cardBadges += '<span class="finder-friend-badge" data-tooltip="Friend slot card — borrowed from another player at max level" tabindex="0">Friend</span>';
+            const friendBadgeLabel = card.type === 'group' ? 'Group' : 'Friend';
+            cardBadges += `<span class="finder-friend-badge" data-tooltip="Friend slot card — borrowed from another player at max level" tabindex="0">${friendBadgeLabel}</span>`;
         }
         if (keyEntry) {
             cardBadges += `<span class="finder-key-badge" data-tooltip="Key Card — top contributor to ${keyEntry.metric} in this deck" tabindex="0">${keyEntry.metric}</span>`;
@@ -3216,7 +3219,7 @@ function openFinderAssignmentModal(trainingType, resultIdx) {
     if (!assignments) return;
 
     const typeLabels = { speed: 'Speed', stamina: 'Stamina', power: 'Power', guts: 'Guts', intelligence: 'Wisdom' };
-    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5' };
+    const typeIconIdx = { speed: '0', stamina: '1', power: '2', guts: '3', intelligence: '4', friend: '5', group: '6' };
 
     // Build modal
     const overlay = document.createElement('div');
