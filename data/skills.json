@@ -1826,6 +1826,35 @@
     ]
   },
   {
+    "id": 100511,
+    "name": "Budding Blossom",
+    "description": "If the user engaged in a challenge on a mid-race corner, increase acceleration when well-positioned late-race at least halfway through the final corner.",
+    "icon_id": 20043,
+    "rarity": 5,
+    "group_id": 10051,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "phase==1&blocked_side_continuetime>=2&corner!=0",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order>=3&order_rate<=40@phase>=2&is_finalcorner==1&corner==0&order>=3&order_rate<=40",
+        "base_time": 40000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100521,
     "name": "Super-Duper Climax",
     "description": "Recover endurance with a glance at nearby runners when positioned toward the back on the final corner.",
@@ -2205,6 +2234,35 @@
     ]
   },
   {
+    "id": 100741,
+    "name": "Lovely Spring Breeze",
+    "description": "From the midpack in the second half of the race, slightly increase velocity steadily for a duration based on remaining endurance.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10074,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=50&order_rate>=40&order_rate<=80",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110011,
     "name": "Dazzl'n ♪ Diver",
     "description": "Recover endurance by relaxing after activating 2 skills when positioned midpack mid-race.",
@@ -2284,6 +2342,35 @@
           {
             "type": 27,
             "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110051,
+    "name": "Ravissant",
+    "description": "When passing another racer at the front part of the pack on the final corner or later, perform a dazzling display that greatly increases velocity for a moderate duration.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11005,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_finalcorner==1&change_order_onetime<0&order_rate<=40",
+        "base_time": 40000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
             "target_type": 1,
             "target_value": 0
           }
@@ -2509,6 +2596,55 @@
       {
         "precondition": "",
         "condition": "phase==1&order>=3&order_rate<=50&is_overtake==1",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110201,
+    "name": "Break It Down!",
+    "description": "If positioned toward the front on a straight late-race, increase velocity with high spirits. If the straight is on the backstretch, also increase acceleration very slightly.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11020,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner==0&order<=2&straight_front_type==2",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner==0&order<=2",
         "base_time": 50000,
         "effects": [
           {
@@ -12372,6 +12508,54 @@
     ]
   },
   {
+    "id": 201271,
+    "name": "Top Runner",
+    "description": "Increase ability to pass or challenge another runner early-race or mid-race. (Front Runner)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20127,
+    "skill_category": 4,
+    "tag_id": "101/301/302/401",
+    "type": [
+      "front_runner",
+      "opening_leg",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==1&phase<=1&change_order_onetime>0&accumulatetime>=5@running_style==1&phase<=1&blocked_side_continuetime>=2&accumulatetime>=5",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            102002211
+          ],
+          "card_id": 102002
+        },
+        {
+          "evolved_skill_ids": [
+            409051
+          ],
+          "scenario_id": 9
+        }
+      ]
+    }
+  },
+  {
     "id": 201272,
     "name": "Leader's Pride",
     "description": "Slightly increase ability to pass or challenge another runner early-race or mid-race. (Front Runner)",
@@ -15235,6 +15419,91 @@
     ]
   },
   {
+    "id": 201901,
+    "name": "Neck and Neck",
+    "description": "Increase acceleration when positioned toward the front late-race. (Pace Chaser)",
+    "icon_id": 20042,
+    "rarity": 2,
+    "group_id": 20190,
+    "skill_category": 3,
+    "tag_id": "102/303/403",
+    "type": [
+      "pace_chaser",
+      "final_leg",
+      "final_corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==2&phase_random==2&order_rate<=50",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            102202211,
+            102202221
+          ],
+          "card_id": 102202
+        },
+        {
+          "evolved_skill_ids": [
+            101002211
+          ],
+          "card_id": 101002
+        },
+        {
+          "evolved_skill_ids": [
+            105802111,
+            105802121
+          ],
+          "card_id": 105802
+        },
+        {
+          "evolved_skill_ids": [
+            109301211
+          ],
+          "card_id": 109301
+        },
+        {
+          "evolved_skill_ids": [
+            100303111
+          ],
+          "card_id": 100303
+        },
+        {
+          "evolved_skill_ids": [
+            110901211
+          ],
+          "card_id": 110901
+        },
+        {
+          "evolved_skill_ids": [
+            111301211
+          ],
+          "card_id": 111301
+        },
+        {
+          "evolved_skill_ids": [
+            102802211
+          ],
+          "card_id": 102802
+        }
+      ]
+    }
+  },
+  {
     "id": 201902,
     "name": "Head-On",
     "description": "Slightly increase acceleration when positioned toward the front late-race. (Pace Chaser)",
@@ -15631,6 +15900,448 @@
           {
             "type": 6,
             "value": 0,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202061,
+    "name": "Best in Japan",
+    "description": "Everyone's expectations strongly inspire the user, increasing velocity on the final corner. (Long)",
+    "icon_id": 2010010,
+    "rarity": 2,
+    "group_id": 20206,
+    "skill_category": 3,
+    "tag_id": "204/303/401",
+    "type": [
+      "long",
+      "final_leg",
+      "corner"
+    ],
+    "cost": 360,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==4&is_finalcorner_random==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            100103211
+          ],
+          "card_id": 100103
+        }
+      ]
+    }
+  },
+  {
+    "id": 202071,
+    "name": "Of Calm Mind",
+    "description": "If positioned in the midpack around when the mid-race starts, slightly decrease velocity and greatly recover endurance. (Long)",
+    "icon_id": 20022,
+    "rarity": 2,
+    "group_id": 20207,
+    "skill_category": 2,
+    "tag_id": "204/302/402",
+    "type": [
+      "long",
+      "middle_leg",
+      "straight"
+    ],
+    "cost": 170,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==4&phase_firsthalf_random==1&order_rate>=40&order_rate<=80",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 9,
+            "value": 750,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 21,
+            "value": -1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            107401211
+          ],
+          "card_id": 107401
+        }
+      ]
+    }
+  },
+  {
+    "id": 202072,
+    "name": "Free-Spirited",
+    "description": "If positioned in the midpack around when the mid-race starts, slightly decrease velocity and moderately recover endurance. (Long)",
+    "icon_id": 20021,
+    "rarity": 1,
+    "group_id": 20207,
+    "skill_category": 2,
+    "tag_id": "204/302/402",
+    "type": [
+      "long",
+      "middle_leg",
+      "straight"
+    ],
+    "cost": 170,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==4&phase_firsthalf_random==1&order_rate>=40&order_rate<=80",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 9,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 21,
+            "value": -1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202081,
+    "name": "From the Brink",
+    "description": "If positioned toward the back late-race, increase acceleration. (Medium)",
+    "icon_id": 20042,
+    "rarity": 2,
+    "group_id": 20208,
+    "skill_category": 3,
+    "tag_id": "203/303/403",
+    "type": [
+      "medium",
+      "final_leg",
+      "final_corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==2&order_rate>=50",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            105902211
+          ],
+          "card_id": 105902
+        },
+        {
+          "evolved_skill_ids": [
+            105002211
+          ],
+          "card_id": 105002
+        },
+        {
+          "evolved_skill_ids": [
+            106202211,
+            106202221
+          ],
+          "card_id": 106202
+        },
+        {
+          "evolved_skill_ids": [
+            104802111
+          ],
+          "card_id": 104802
+        },
+        {
+          "evolved_skill_ids": [
+            106703111
+          ],
+          "card_id": 106703
+        },
+        {
+          "evolved_skill_ids": [
+            108801211
+          ],
+          "card_id": 108801
+        },
+        {
+          "evolved_skill_ids": [
+            110602211
+          ],
+          "card_id": 110602
+        }
+      ]
+    }
+  },
+  {
+    "id": 202082,
+    "name": "Take the Chance",
+    "description": "If positioned toward the back late-race, slightly increase acceleration. (Medium)",
+    "icon_id": 20041,
+    "rarity": 1,
+    "group_id": 20208,
+    "skill_category": 3,
+    "tag_id": "203/303/403",
+    "type": [
+      "medium",
+      "final_leg",
+      "final_corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==2&order_rate>=50",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202091,
+    "name": "Burning Soul",
+    "description": "When engaged in a challenge midpack mid-race, moderately recover endurance and moderately increase velocity. (Medium)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20209,
+    "skill_category": 2,
+    "tag_id": "203/302/401/402",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner",
+      "straight"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase==1&order_rate<=70&order_rate>=40&blocked_side_continuetime>=2",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            106902211
+          ],
+          "card_id": 106902
+        },
+        {
+          "evolved_skill_ids": [
+            108302111
+          ],
+          "card_id": 108302
+        },
+        {
+          "evolved_skill_ids": [
+            109601111
+          ],
+          "card_id": 109601
+        }
+      ]
+    }
+  },
+  {
+    "id": 202092,
+    "name": "Fighting Spirit",
+    "description": "When engaged in a challenge midpack mid-race, very slightly recover endurance and slightly increase velocity. (Medium)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20209,
+    "skill_category": 2,
+    "tag_id": "203/302/401/402",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner",
+      "straight"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase==1&order_rate<=70&order_rate>=40&blocked_side_continuetime>=2",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 50,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202101,
+    "name": "Elated",
+    "description": "When positioned toward the back mid-race, increase velocity. (Medium)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20210,
+    "skill_category": 2,
+    "tag_id": "203/302/401",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==1&order_rate>=50",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            103601111
+          ],
+          "card_id": 103601
+        },
+        {
+          "evolved_skill_ids": [
+            100702211,
+            100702221
+          ],
+          "card_id": 100702
+        },
+        {
+          "evolved_skill_ids": [
+            105501111,
+            105501121
+          ],
+          "card_id": 105501
+        },
+        {
+          "evolved_skill_ids": [
+            103503111
+          ],
+          "card_id": 103503
+        },
+        {
+          "evolved_skill_ids": [
+            111101111
+          ],
+          "card_id": 111101
+        },
+        {
+          "evolved_skill_ids": [
+            407071
+          ],
+          "scenario_id": 7
+        },
+        {
+          "evolved_skill_ids": [
+            411051
+          ],
+          "scenario_id": 11
+        }
+      ]
+    }
+  },
+  {
+    "id": 202102,
+    "name": "Eager",
+    "description": "When positioned toward the back mid-race, slightly increase velocity. (Medium)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20210,
+    "skill_category": 2,
+    "tag_id": "203/302/401",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==1&order_rate>=50",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
             "target_type": 1,
             "target_value": 0
           }
@@ -16337,6 +17048,64 @@
             "value": 550,
             "target_type": 22,
             "target_value": 1002
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 300111,
+    "name": "Chin Up, Derby Umamusume!",
+    "description": "Feel closer to being Japan's top racer, moderately increasing performance.",
+    "icon_id": 10011,
+    "rarity": 1,
+    "group_id": 30011,
+    "skill_category": 0,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 1,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 300121,
+    "name": "For the Team",
+    "description": "The whole team feels super determined to win this special race, greatly increasing performance.",
+    "icon_id": 10022,
+    "rarity": 2,
+    "group_id": 30012,
+    "skill_category": 0,
+    "tag_id": "402",
+    "type": [
+      "straight"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 800000,
+            "target_type": 1,
+            "target_value": 0
           }
         ]
       }
@@ -17634,6 +18403,35 @@
     ]
   },
   {
+    "id": 900511,
+    "name": "Budding Blossom",
+    "description": "If the user engaged in a challenge on a mid-race corner, slightly increase acceleration when well-positioned late-race at least halfway through the final corner.",
+    "icon_id": 20041,
+    "rarity": 1,
+    "group_id": 90051,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "phase==1&blocked_side_continuetime>=2&corner!=0",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order>=3&order_rate<=40@phase>=2&is_finalcorner==1&corner==0&order>=3&order_rate<=40",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 900521,
     "name": "Super-Duper Climax",
     "description": "Slightly recover endurance with a glance at nearby runners when positioned toward the back on the final corner.",
@@ -18013,6 +18811,35 @@
     ]
   },
   {
+    "id": 900741,
+    "name": "Lovely Spring Breeze",
+    "description": "From the midpack in the second half of the race, minimally increase velocity steadily for a duration based on remaining endurance.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90074,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=50&order_rate>=40&order_rate<=80",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 910011,
     "name": "Dazzl'n ♪ Diver",
     "description": "Slightly recover endurance after activating 2 skills mid-race.",
@@ -18092,6 +18919,35 @@
           {
             "type": 27,
             "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910051,
+    "name": "Ravissant",
+    "description": "When passing another racer at the front part of the pack on the final corner or later, moderately increase velocity for a moderate duration.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91005,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_finalcorner==1&change_order_onetime<0&order_rate<=40",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
             "target_type": 1,
             "target_value": 0
           }
@@ -18317,6 +19173,55 @@
       {
         "precondition": "",
         "condition": "phase==1&order>=3&order_rate<=50&is_overtake==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910201,
+    "name": "Break It Down!",
+    "description": "If positioned toward the front on a straight late-race, slightly increase velocity. If the straight is on the backstretch, also increase acceleration very minimally.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91020,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner==0&order<=2&straight_front_type==2",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner==0&order<=2",
         "base_time": 30000,
         "effects": [
           {
@@ -18633,6 +19538,19 @@
   },
   {
     "id": 1000011,
+    "name": "Carnival Bonus",
+    "description": "Increase attributes by +{0}％ in the Racing Carnival. {1}％ chance to also raise runner's mood to Great. This skill will disappear when the event ends.",
+    "icon_id": 1010011,
+    "rarity": 1,
+    "group_id": 100001,
+    "skill_category": 101,
+    "tag_id": "0",
+    "type": [],
+    "cost": null,
+    "condition_groups": []
+  },
+  {
+    "id": 1000012,
     "name": "Carnival Bonus",
     "description": "Increase attributes by +{0}％ in the Racing Carnival. {1}％ chance to also raise runner's mood to Great. This skill will disappear when the event ends.",
     "icon_id": 1010011,

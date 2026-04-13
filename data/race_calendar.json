@@ -42543,6 +42543,93 @@
     "reward_set_id": 1
   },
   {
+    "program_id": 1102,
+    "race_instance_id": 904195,
+    "race_name": "Junior Make Debut",
+    "month": 6,
+    "half": 2,
+    "grade": 900,
+    "distance": 1200,
+    "ground": "turf",
+    "fan_requirement": 0,
+    "fan_set_id": 3,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 700
+      },
+      {
+        "order": 2,
+        "fan_count": 280
+      },
+      {
+        "order": 3,
+        "fan_count": 175
+      },
+      {
+        "order": 4,
+        "fan_count": 105
+      },
+      {
+        "order": 5,
+        "fan_count": 70
+      },
+      {
+        "order": 6,
+        "fan_count": 63
+      },
+      {
+        "order": 7,
+        "fan_count": 56
+      },
+      {
+        "order": 8,
+        "fan_count": 49
+      },
+      {
+        "order": 9,
+        "fan_count": 42
+      },
+      {
+        "order": 10,
+        "fan_count": 35
+      },
+      {
+        "order": 11,
+        "fan_count": 28
+      },
+      {
+        "order": 12,
+        "fan_count": 21
+      },
+      {
+        "order": 13,
+        "fan_count": 18
+      },
+      {
+        "order": 14,
+        "fan_count": 14
+      },
+      {
+        "order": 15,
+        "fan_count": 11
+      },
+      {
+        "order": 16,
+        "fan_count": 7
+      },
+      {
+        "order": 17,
+        "fan_count": 7
+      },
+      {
+        "order": 18,
+        "fan_count": 7
+      }
+    ],
+    "reward_set_id": 1
+  },
+  {
     "program_id": 97,
     "race_instance_id": 303501,
     "race_name": "CBC Sho",
@@ -64207,6 +64294,180 @@
   },
   {
     "program_id": 1089,
+    "race_instance_id": 102301,
+    "race_name": "Arima Kinen",
+    "month": 12,
+    "half": 2,
+    "grade": 100,
+    "distance": 2500,
+    "ground": "turf",
+    "fan_requirement": 25000,
+    "fan_set_id": 36,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 30000
+      },
+      {
+        "order": 2,
+        "fan_count": 12000
+      },
+      {
+        "order": 3,
+        "fan_count": 7500
+      },
+      {
+        "order": 4,
+        "fan_count": 4500
+      },
+      {
+        "order": 5,
+        "fan_count": 3000
+      },
+      {
+        "order": 6,
+        "fan_count": 2700
+      },
+      {
+        "order": 7,
+        "fan_count": 2400
+      },
+      {
+        "order": 8,
+        "fan_count": 2100
+      },
+      {
+        "order": 9,
+        "fan_count": 1800
+      },
+      {
+        "order": 10,
+        "fan_count": 1500
+      },
+      {
+        "order": 11,
+        "fan_count": 1200
+      },
+      {
+        "order": 12,
+        "fan_count": 900
+      },
+      {
+        "order": 13,
+        "fan_count": 750
+      },
+      {
+        "order": 14,
+        "fan_count": 600
+      },
+      {
+        "order": 15,
+        "fan_count": 450
+      },
+      {
+        "order": 16,
+        "fan_count": 300
+      },
+      {
+        "order": 17,
+        "fan_count": 300
+      },
+      {
+        "order": 18,
+        "fan_count": 300
+      }
+    ],
+    "reward_set_id": 102301
+  },
+  {
+    "program_id": 1100,
+    "race_instance_id": 102301,
+    "race_name": "Arima Kinen",
+    "month": 12,
+    "half": 2,
+    "grade": 100,
+    "distance": 2500,
+    "ground": "turf",
+    "fan_requirement": 25000,
+    "fan_set_id": 36,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 30000
+      },
+      {
+        "order": 2,
+        "fan_count": 12000
+      },
+      {
+        "order": 3,
+        "fan_count": 7500
+      },
+      {
+        "order": 4,
+        "fan_count": 4500
+      },
+      {
+        "order": 5,
+        "fan_count": 3000
+      },
+      {
+        "order": 6,
+        "fan_count": 2700
+      },
+      {
+        "order": 7,
+        "fan_count": 2400
+      },
+      {
+        "order": 8,
+        "fan_count": 2100
+      },
+      {
+        "order": 9,
+        "fan_count": 1800
+      },
+      {
+        "order": 10,
+        "fan_count": 1500
+      },
+      {
+        "order": 11,
+        "fan_count": 1200
+      },
+      {
+        "order": 12,
+        "fan_count": 900
+      },
+      {
+        "order": 13,
+        "fan_count": 750
+      },
+      {
+        "order": 14,
+        "fan_count": 600
+      },
+      {
+        "order": 15,
+        "fan_count": 450
+      },
+      {
+        "order": 16,
+        "fan_count": 300
+      },
+      {
+        "order": 17,
+        "fan_count": 300
+      },
+      {
+        "order": 18,
+        "fan_count": 300
+      }
+    ],
+    "reward_set_id": 102301
+  },
+  {
+    "program_id": 1101,
     "race_instance_id": 102301,
     "race_name": "Arima Kinen",
     "month": 12,

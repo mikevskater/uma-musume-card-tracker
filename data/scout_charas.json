@@ -3876,6 +3876,74 @@
     }
   },
   {
+    "support_card_id": 20045,
+    "chara_id": 1046,
+    "speed": 144,
+    "stamina": 135,
+    "power": 135,
+    "guts": 150,
+    "wisdom": 136,
+    "stat_limits": {
+      "speed": 710,
+      "stamina": 700,
+      "power": 710,
+      "guts": 750,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "D",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "E",
+        "dirt": "A"
+      }
+    }
+  },
+  {
+    "support_card_id": 20046,
+    "chara_id": 1044,
+    "speed": 151,
+    "stamina": 127,
+    "power": 155,
+    "guts": 122,
+    "wisdom": 145,
+    "stat_limits": {
+      "speed": 720,
+      "stamina": 700,
+      "power": 700,
+      "guts": 700,
+      "wisdom": 750
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "E",
+        "betweener": "A",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
     "support_card_id": 30001,
     "chara_id": 1001,
     "speed": 133,
@@ -6490,6 +6558,142 @@
       "ground": {
         "turf": "A",
         "dirt": "F"
+      }
+    }
+  },
+  {
+    "support_card_id": 30090,
+    "chara_id": 1017,
+    "speed": 136,
+    "stamina": 141,
+    "power": 133,
+    "guts": 146,
+    "wisdom": 144,
+    "stat_limits": {
+      "speed": 700,
+      "stamina": 750,
+      "power": 700,
+      "guts": 720,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
+    "support_card_id": 30091,
+    "chara_id": 1070,
+    "speed": 143,
+    "stamina": 143,
+    "power": 137,
+    "guts": 146,
+    "wisdom": 131,
+    "stat_limits": {
+      "speed": 720,
+      "stamina": 700,
+      "power": 700,
+      "guts": 700,
+      "wisdom": 750
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
+    "support_card_id": 30092,
+    "chara_id": 1036,
+    "speed": 152,
+    "stamina": 132,
+    "power": 152,
+    "guts": 121,
+    "wisdom": 143,
+    "stat_limits": {
+      "speed": 750,
+      "stamina": 700,
+      "power": 720,
+      "guts": 700,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "C",
+        "betweener": "A",
+        "stretch": "B"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
+    "support_card_id": 30093,
+    "chara_id": 1009,
+    "speed": 139,
+    "stamina": 131,
+    "power": 134,
+    "guts": 150,
+    "wisdom": 146,
+    "stat_limits": {
+      "speed": 700,
+      "stamina": 720,
+      "power": 750,
+      "guts": 700,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
       }
     }
   }

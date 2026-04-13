@@ -487,6 +487,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "100502": {
+    "name": "Fuji Kiseki",
+    "character_id": 1005,
+    "base_stats": {
+      "3": {
+        "speed": 98,
+        "stamina": 77,
+        "power": 102,
+        "guts": 78,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 86,
+        "power": 113,
+        "guts": 87,
+        "wisdom": 105
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 94,
+        "power": 124,
+        "guts": 96,
+        "wisdom": 116
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "B",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 0,
+      "power": 14,
+      "guts": 0,
+      "wisdom": 8
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "100601": {
     "name": "Oguri Cap",
     "character_id": 1006,
@@ -1867,6 +1928,67 @@
       "power": 0,
       "guts": 0,
       "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "102002": {
+    "name": "Seiun Sky",
+    "character_id": 1020,
+    "base_stats": {
+      "3": {
+        "speed": 101,
+        "stamina": 89,
+        "power": 84,
+        "guts": 88,
+        "wisdom": 88
+      },
+      "4": {
+        "speed": 112,
+        "stamina": 99,
+        "power": 94,
+        "guts": 98,
+        "wisdom": 97
+      },
+      "5": {
+        "speed": 123,
+        "stamina": 109,
+        "power": 103,
+        "guts": 108,
+        "wisdom": 107
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "B",
+        "betweener": "D",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 0,
+      "power": 8,
+      "guts": 14,
+      "wisdom": 0
     },
     "default_rarity": 3,
     "running_style": 1
@@ -3649,6 +3771,67 @@
     "default_rarity": 3,
     "running_style": 4
   },
+  "105101": {
+    "name": "Nishino Flower",
+    "character_id": 1051,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 81,
+        "power": 95,
+        "guts": 86,
+        "wisdom": 95
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 90,
+        "power": 105,
+        "guts": 96,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 99,
+        "power": 116,
+        "guts": 105,
+        "wisdom": 117
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "A",
+        "medium": "E",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 0,
+      "power": 15,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "105201": {
     "name": "Haru Urara",
     "character_id": 1052,
@@ -4504,5 +4687,66 @@
     },
     "default_rarity": 3,
     "running_style": 2
+  },
+  "107401": {
+    "name": "Mejiro Bright",
+    "character_id": 1074,
+    "base_stats": {
+      "3": {
+        "speed": 89,
+        "stamina": 107,
+        "power": 87,
+        "guts": 75,
+        "wisdom": 92
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 119,
+        "power": 97,
+        "guts": 83,
+        "wisdom": 102
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 130,
+        "power": 106,
+        "guts": 92,
+        "wisdom": 113
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "D",
+        "betweener": "A",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 14,
+      "power": 0,
+      "guts": 8,
+      "wisdom": 8
+    },
+    "default_rarity": 3,
+    "running_style": 3
   }
 }
