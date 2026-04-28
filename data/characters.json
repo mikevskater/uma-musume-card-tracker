@@ -2807,6 +2807,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "103101": {
+    "name": "Ines Fujin",
+    "character_id": 1031,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 96,
+        "power": 72,
+        "guts": 98,
+        "wisdom": 84
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 106,
+        "power": 80,
+        "guts": 109,
+        "wisdom": 94
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 117,
+        "power": 88,
+        "guts": 120,
+        "wisdom": 103
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "A",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "C",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 0,
+      "power": 0,
+      "guts": 15,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
   "103201": {
     "name": "Agnes Tachyon",
     "character_id": 1032,
@@ -4301,6 +4362,67 @@
     "default_rarity": 1,
     "running_style": 3
   },
+  "106002": {
+    "name": "Nice Nature",
+    "character_id": 1060,
+    "base_stats": {
+      "3": {
+        "speed": 86,
+        "stamina": 86,
+        "power": 94,
+        "guts": 86,
+        "wisdom": 98
+      },
+      "4": {
+        "speed": 95,
+        "stamina": 95,
+        "power": 105,
+        "guts": 95,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 105,
+        "stamina": 105,
+        "power": 115,
+        "guts": 105,
+        "wisdom": 120
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "106101": {
     "name": "King Halo",
     "character_id": 1061,
@@ -4374,6 +4496,67 @@
       "wisdom": 0
     },
     "default_rarity": 1,
+    "running_style": 3
+  },
+  "106102": {
+    "name": "King Halo",
+    "character_id": 1061,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 62,
+        "power": 110,
+        "guts": 89,
+        "wisdom": 89
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 69,
+        "power": 122,
+        "guts": 99,
+        "wisdom": 99
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 76,
+        "power": 134,
+        "guts": 108,
+        "wisdom": 110
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "B",
+        "medium": "B",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
     "running_style": 3
   },
   "106201": {
@@ -4684,6 +4867,67 @@
       "power": 0,
       "guts": 0,
       "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "107201": {
+    "name": "Yaeno Muteki",
+    "character_id": 1072,
+    "base_stats": {
+      "3": {
+        "speed": 92,
+        "stamina": 81,
+        "power": 97,
+        "guts": 97,
+        "wisdom": 83
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 90,
+        "power": 108,
+        "guts": 108,
+        "wisdom": 91
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 99,
+        "power": 119,
+        "guts": 119,
+        "wisdom": 100
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "B",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 10,
+      "wisdom": 0
     },
     "default_rarity": 3,
     "running_style": 2

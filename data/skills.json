@@ -1444,6 +1444,48 @@
     ]
   },
   {
+    "id": 100311,
+    "name": "All Charged! It's Go Time!",
+    "description": "Moderately increase velocity when positioned toward the front with about 300m remaining. If coming out of an uphill, greatly increase velocity instead.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10031,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "remain_distance<=305&remain_distance>=300&slope==1",
+        "condition": "remain_distance<=299&remain_distance>=295&order<=2&slope==0@remain_distance<=299&remain_distance>=295&order<=2&slope==2",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "remain_distance<=299&remain_distance>=295&order<=2",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100321,
     "name": "U=ma2",
     "description": "Recover endurance and moderately increase velocity for a moderate duration when sitting off the pace on a corner in the second half of the race.",
@@ -2234,6 +2276,35 @@
     ]
   },
   {
+    "id": 100721,
+    "name": "Peerless Dance of Flowering Flames",
+    "description": "If the user passes another runner on the final corner or later, increase velocity with fiery fighting spirit when in the front part of the pack with 300m or less remaining.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10072,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "remain_distance<=300&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100741,
     "name": "Lovely Spring Breeze",
     "description": "From the midpack in the second half of the race, slightly increase velocity steadily for a duration based on remaining endurance.",
@@ -2952,6 +3023,77 @@
           {
             "type": 27,
             "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110601,
+    "name": "Go☆Go☆Goal!",
+    "description": "If the user passes another runner on the final corner or later, increase velocity from the midpack onward on the final straight. If the user isn't one of the top favorites, muster resolve to keep steadily increasing velocity.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11060,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "is_finalcorner==1&corner==0&order_rate>=40&order_rate<=70&popularity>=4",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "is_finalcorner==1&corner==0&order_rate>=40&order_rate<=70&popularity<4",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110611,
+    "name": "Louder! Tracen Cheer!",
+    "description": "If the user stays toward the very back during the first half of the race without being rushed, unleash fighting spirit to increase acceleration on the final straight.",
+    "icon_id": 20043,
+    "rarity": 5,
+    "group_id": 11061,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=50&order_rate_out70_continue==1&temptation_count==0",
+        "condition": "is_finalcorner==1&corner==0",
+        "base_time": 40000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 4000,
             "target_type": 1,
             "target_value": 0
           }
@@ -16350,6 +16492,274 @@
     ]
   },
   {
+    "id": 202111,
+    "name": "Full of Vigor",
+    "description": "When positioned toward the back on the final corner, increase velocity. (Mile)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20211,
+    "skill_category": 3,
+    "tag_id": "202/303/401",
+    "type": [
+      "mile",
+      "final_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==2&is_finalcorner_random==1&order_rate>=50",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            105301211
+          ],
+          "card_id": 105301
+        },
+        {
+          "evolved_skill_ids": [
+            407051
+          ],
+          "scenario_id": 7
+        }
+      ]
+    }
+  },
+  {
+    "id": 202112,
+    "name": "Pumped",
+    "description": "When positioned toward the back on the final corner, slightly increase velocity. (Mile)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20211,
+    "skill_category": 3,
+    "tag_id": "202/303/401",
+    "type": [
+      "mile",
+      "final_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==2&is_finalcorner_random==1&order_rate>=50",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202121,
+    "name": "Dauntless",
+    "description": "When positioned in the midpack during the second half of the race, increase velocity and very slightly increase acceleration. (Late Surger)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20212,
+    "skill_category": 4,
+    "tag_id": "103/401/403",
+    "type": [
+      "late_surger",
+      "corner",
+      "final_corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==3&distance_rate_after_random==50&order_rate>=40&order_rate<=70",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            105902111,
+            105902121
+          ],
+          "card_id": 105902
+        },
+        {
+          "evolved_skill_ids": [
+            104802211,
+            104802221
+          ],
+          "card_id": 104802
+        },
+        {
+          "evolved_skill_ids": [
+            109101211
+          ],
+          "card_id": 109101
+        },
+        {
+          "evolved_skill_ids": [
+            109601211
+          ],
+          "card_id": 109601
+        }
+      ]
+    }
+  },
+  {
+    "id": 202122,
+    "name": "Fearless",
+    "description": "When positioned in the midpack during the second half of the race, slightly increase velocity and very minimally increase acceleration. (Late Surger)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20212,
+    "skill_category": 4,
+    "tag_id": "103/401/403",
+    "type": [
+      "late_surger",
+      "corner",
+      "final_corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==3&distance_rate_after_random==50&order_rate>=40&order_rate<=70",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202131,
+    "name": "Wild Wind",
+    "description": "When positioned toward the front mid-race, increase velocity and slightly decrease the velocity of runners behind the user. (Medium)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20213,
+    "skill_category": 2,
+    "tag_id": "203/302/401/406",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner",
+      "turf"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==1&order<=3",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 21,
+            "value": -1500,
+            "target_type": 10,
+            "target_value": 5
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            103101211
+          ],
+          "card_id": 103101
+        }
+      ]
+    }
+  },
+  {
+    "id": 202132,
+    "name": "With All My Soul",
+    "description": "When positioned toward the front mid-race, slightly increase velocity and minimally decrease the velocity of runners behind the user. (Medium)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20213,
+    "skill_category": 2,
+    "tag_id": "203/302/401/406",
+    "type": [
+      "medium",
+      "middle_leg",
+      "corner",
+      "turf"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&phase_random==1&order<=3",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 21,
+            "value": -350,
+            "target_type": 10,
+            "target_value": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 210011,
     "name": "Burning Spirit SPD",
     "description": "Burn bright with team spirit, increasing velocity in proportion to the total Speed of racing team members mid-race.",
@@ -18021,6 +18431,48 @@
     ]
   },
   {
+    "id": 900311,
+    "name": "All Charged! It's Go Time!",
+    "description": "Very slightly increase velocity when positioned toward the front with about 300m remaining. If coming out of an uphill, moderately increase velocity instead.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90031,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "remain_distance<=305&remain_distance>=300&slope==1",
+        "condition": "remain_distance<=299&remain_distance>=295&order<=2&slope==0@remain_distance<=299&remain_distance>=295&order<=2&slope==2",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "remain_distance<=299&remain_distance>=295&order<=2",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 900321,
     "name": "U=ma2",
     "description": "Slightly recover endurance and very slightly increase velocity for a moderate duration when sitting off the pace on a corner in the second half of the race.",
@@ -18811,6 +19263,35 @@
     ]
   },
   {
+    "id": 900721,
+    "name": "Peerless Dance of Flowering Flames",
+    "description": "If the user passed another runner on the final corner or later, slightly increase velocity when in the front part of the pack with 300m or less remaining.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90072,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "remain_distance<=300&order_rate<=40",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 900741,
     "name": "Lovely Spring Breeze",
     "description": "From the midpack in the second half of the race, minimally increase velocity steadily for a duration based on remaining endurance.",
@@ -19537,6 +20018,77 @@
     ]
   },
   {
+    "id": 910601,
+    "name": "Go☆Go☆Goal!",
+    "description": "If the user passed another runner on the final corner or later, slightly increase velocity from the midpack onward on the final straight. If the user isn't one of the top favorites, keep steadily increasing velocity slightly.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91060,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "is_finalcorner==1&corner==0&order_rate>=40&order_rate<=70&popularity>=4",
+        "base_time": 36000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "is_finalcorner==1&change_order_onetime<0",
+        "condition": "is_finalcorner==1&corner==0&order_rate>=40&order_rate<=70&popularity<4",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910611,
+    "name": "Louder! Tracen Cheer!",
+    "description": "If the user stayed toward the very back during the first half of the race without being rushed, slightly increase acceleration on the final straight.",
+    "icon_id": 20041,
+    "rarity": 1,
+    "group_id": 91061,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=50&order_rate_out70_continue==1&temptation_count==0",
+        "condition": "is_finalcorner==1&corner==0",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 1000011,
     "name": "Carnival Bonus",
     "description": "Increase attributes by +{0}％ in the Racing Carnival. {1}％ chance to also raise runner's mood to Great. This skill will disappear when the event ends.",
@@ -19561,5 +20113,42 @@
     "type": [],
     "cost": null,
     "condition_groups": []
+  },
+  {
+    "id": 1100011,
+    "name": "Feelin' a Bit Silly",
+    "description": "Greatly decrease the racer's proficiency in starting races. Effects include slow starts and reduced starting acceleration. Removed at the end of the Career playthrough.",
+    "icon_id": 20064,
+    "rarity": 1,
+    "group_id": 110001,
+    "skill_category": 1,
+    "tag_id": "301/403/407",
+    "type": [
+      "opening_leg",
+      "final_corner",
+      "dirt"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": 20000,
+        "effects": [
+          {
+            "type": 31,
+            "value": -180000,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 14,
+            "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
   }
 ]
