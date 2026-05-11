@@ -2313,6 +2313,96 @@
     {
       "chara_id": 1003,
       "mob_id": 0,
+      "speed": 317,
+      "stamina": 312,
+      "power": 300,
+      "guts": 278,
+      "wisdom": 300,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "E",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1100302,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1003,
+      "mob_id": 0,
+      "speed": 346,
+      "stamina": 340,
+      "power": 327,
+      "guts": 302,
+      "wisdom": 327,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "E",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1100302,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1003,
+      "mob_id": 0,
+      "speed": 317,
+      "stamina": 312,
+      "power": 300,
+      "guts": 278,
+      "wisdom": 300,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "E",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1100302,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1003,
+      "mob_id": 0,
       "speed": 263,
       "stamina": 259,
       "power": 249,
@@ -3488,6 +3578,96 @@
       "power": 350,
       "guts": 315,
       "wisdom": 319,
+      "aptitudes": {
+        "distance": {
+          "short": "B",
+          "mile": "A",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "A",
+          "stretch": "D"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "A"
+        }
+      },
+      "skill_set_id": 1100601,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1006,
+      "mob_id": 0,
+      "speed": 358,
+      "stamina": 305,
+      "power": 393,
+      "guts": 354,
+      "wisdom": 358,
+      "aptitudes": {
+        "distance": {
+          "short": "B",
+          "mile": "A",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "A",
+          "stretch": "D"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "A"
+        }
+      },
+      "skill_set_id": 1100601,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1006,
+      "mob_id": 0,
+      "speed": 346,
+      "stamina": 294,
+      "power": 379,
+      "guts": 342,
+      "wisdom": 346,
+      "aptitudes": {
+        "distance": {
+          "short": "B",
+          "mile": "A",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "A",
+          "stretch": "D"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "A"
+        }
+      },
+      "skill_set_id": 1100601,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1006,
+      "mob_id": 0,
+      "speed": 383,
+      "stamina": 326,
+      "power": 420,
+      "guts": 378,
+      "wisdom": 383,
       "aptitudes": {
         "distance": {
           "short": "B",
@@ -6297,6 +6477,186 @@
         }
       },
       "skill_set_id": 1101301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 401,
+      "stamina": 434,
+      "power": 330,
+      "guts": 319,
+      "wisdom": 412,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 401,
+      "stamina": 434,
+      "power": 330,
+      "guts": 319,
+      "wisdom": 412,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 316,
+      "stamina": 342,
+      "power": 260,
+      "guts": 251,
+      "wisdom": 325,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 389,
+      "stamina": 420,
+      "power": 320,
+      "guts": 309,
+      "wisdom": 399,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101303,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 337,
+      "stamina": 364,
+      "power": 277,
+      "guts": 268,
+      "wisdom": 346,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101303,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1013,
+      "mob_id": 0,
+      "speed": 337,
+      "stamina": 364,
+      "power": 277,
+      "guts": 268,
+      "wisdom": 346,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "F",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "B",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1101303,
       "motivation_min": 4,
       "motivation_max": 5
     },
@@ -11523,6 +11883,186 @@
     {
       "chara_id": 1027,
       "mob_id": 0,
+      "speed": 380,
+      "stamina": 374,
+      "power": 356,
+      "guts": 344,
+      "wisdom": 356,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
+      "speed": 380,
+      "stamina": 374,
+      "power": 356,
+      "guts": 344,
+      "wisdom": 356,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
+      "speed": 365,
+      "stamina": 371,
+      "power": 353,
+      "guts": 341,
+      "wisdom": 353,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
+      "speed": 326,
+      "stamina": 331,
+      "power": 315,
+      "guts": 305,
+      "wisdom": 315,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
+      "speed": 319,
+      "stamina": 324,
+      "power": 308,
+      "guts": 298,
+      "wisdom": 308,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
+      "speed": 331,
+      "stamina": 336,
+      "power": 320,
+      "guts": 309,
+      "wisdom": 320,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "C",
+          "medium": "A",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1102701,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1027,
+      "mob_id": 0,
       "speed": 221,
       "stamina": 224,
       "power": 214,
@@ -12453,6 +12993,96 @@
     {
       "chara_id": 1031,
       "mob_id": 0,
+      "speed": 377,
+      "stamina": 339,
+      "power": 389,
+      "guts": 356,
+      "wisdom": 345,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "A",
+          "medium": "A",
+          "long": "F"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1103101,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1031,
+      "mob_id": 0,
+      "speed": 384,
+      "stamina": 346,
+      "power": 397,
+      "guts": 363,
+      "wisdom": 352,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "A",
+          "medium": "A",
+          "long": "F"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1103101,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1031,
+      "mob_id": 0,
+      "speed": 397,
+      "stamina": 357,
+      "power": 410,
+      "guts": 374,
+      "wisdom": 363,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "A",
+          "medium": "A",
+          "long": "F"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1103101,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1031,
+      "mob_id": 0,
       "speed": 249,
       "stamina": 224,
       "power": 256,
@@ -13298,6 +13928,36 @@
       "power": 303,
       "guts": 237,
       "wisdom": 245,
+      "aptitudes": {
+        "distance": {
+          "short": "F",
+          "mile": "B",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "B",
+          "betweener": "C",
+          "stretch": "A"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "A"
+        }
+      },
+      "skill_set_id": 1103401,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1034,
+      "mob_id": 0,
+      "speed": 323,
+      "stamina": 350,
+      "power": 371,
+      "guts": 290,
+      "wisdom": 301,
       "aptitudes": {
         "distance": {
           "short": "F",
@@ -15393,6 +16053,36 @@
     {
       "chara_id": 1045,
       "mob_id": 0,
+      "speed": 266,
+      "stamina": 343,
+      "power": 297,
+      "guts": 357,
+      "wisdom": 364,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "G",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "D",
+          "stalker": "A",
+          "betweener": "B",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1104501,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1045,
+      "mob_id": 0,
       "speed": 238,
       "stamina": 256,
       "power": 221,
@@ -17223,6 +17913,126 @@
     {
       "chara_id": 1053,
       "mob_id": 0,
+      "speed": 343,
+      "stamina": 301,
+      "power": 363,
+      "guts": 321,
+      "wisdom": 315,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "E",
+          "betweener": "A",
+          "stretch": "C"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1105301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1053,
+      "mob_id": 0,
+      "speed": 318,
+      "stamina": 279,
+      "power": 336,
+      "guts": 298,
+      "wisdom": 291,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "E",
+          "betweener": "A",
+          "stretch": "C"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1105301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1053,
+      "mob_id": 0,
+      "speed": 318,
+      "stamina": 279,
+      "power": 336,
+      "guts": 298,
+      "wisdom": 291,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "E",
+          "betweener": "A",
+          "stretch": "C"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1105301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1053,
+      "mob_id": 0,
+      "speed": 318,
+      "stamina": 279,
+      "power": 336,
+      "guts": 298,
+      "wisdom": 291,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "G",
+          "stalker": "E",
+          "betweener": "A",
+          "stretch": "C"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1105301,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1053,
+      "mob_id": 0,
       "speed": 254,
       "stamina": 223,
       "power": 269,
@@ -18723,6 +19533,36 @@
     {
       "chara_id": 1060,
       "mob_id": 0,
+      "speed": 338,
+      "stamina": 290,
+      "power": 276,
+      "guts": 280,
+      "wisdom": 307,
+      "aptitudes": {
+        "distance": {
+          "short": "G",
+          "mile": "C",
+          "medium": "A",
+          "long": "A"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "B",
+          "betweener": "A",
+          "stretch": "D"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106001,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1060,
+      "mob_id": 0,
       "speed": 279,
       "stamina": 244,
       "power": 263,
@@ -19953,6 +20793,276 @@
     {
       "chara_id": 1065,
       "mob_id": 0,
+      "speed": 305,
+      "stamina": 251,
+      "power": 311,
+      "guts": 311,
+      "wisdom": 263,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 297,
+      "stamina": 245,
+      "power": 303,
+      "guts": 303,
+      "wisdom": 256,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 343,
+      "stamina": 282,
+      "power": 350,
+      "guts": 350,
+      "wisdom": 296,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 318,
+      "stamina": 261,
+      "power": 324,
+      "guts": 324,
+      "wisdom": 274,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 305,
+      "stamina": 251,
+      "power": 311,
+      "guts": 311,
+      "wisdom": 263,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "B",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 297,
+      "stamina": 245,
+      "power": 303,
+      "guts": 303,
+      "wisdom": 256,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 305,
+      "stamina": 251,
+      "power": 311,
+      "guts": 311,
+      "wisdom": 263,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "B",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 343,
+      "stamina": 282,
+      "power": 350,
+      "guts": 350,
+      "wisdom": 296,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "C",
+          "long": "E"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
+      "speed": 305,
+      "stamina": 251,
+      "power": 311,
+      "guts": 311,
+      "wisdom": 263,
+      "aptitudes": {
+        "distance": {
+          "short": "C",
+          "mile": "A",
+          "medium": "C",
+          "long": "B"
+        },
+        "running_style": {
+          "front_runner": "A",
+          "stalker": "B",
+          "betweener": "G",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "G"
+        }
+      },
+      "skill_set_id": 1106502,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1065,
+      "mob_id": 0,
       "speed": 262,
       "stamina": 218,
       "power": 142,
@@ -20943,6 +22053,36 @@
     {
       "chara_id": 1071,
       "mob_id": 0,
+      "speed": 315,
+      "stamina": 321,
+      "power": 308,
+      "guts": 287,
+      "wisdom": 319,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "B",
+          "medium": "A",
+          "long": "D"
+        },
+        "running_style": {
+          "front_runner": "C",
+          "stalker": "A",
+          "betweener": "C",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "F"
+        }
+      },
+      "skill_set_id": 1107101,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1071,
+      "mob_id": 0,
       "speed": 242,
       "stamina": 247,
       "power": 237,
@@ -21314,6 +22454,126 @@
           "mile": "B",
           "medium": "A",
           "long": "D"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "B",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1107201,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1072,
+      "mob_id": 0,
+      "speed": 316,
+      "stamina": 332,
+      "power": 286,
+      "guts": 329,
+      "wisdom": 304,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "B",
+          "medium": "A",
+          "long": "D"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "B",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1107201,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1072,
+      "mob_id": 0,
+      "speed": 316,
+      "stamina": 332,
+      "power": 286,
+      "guts": 329,
+      "wisdom": 304,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "B",
+          "medium": "A",
+          "long": "D"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "B",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1107201,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1072,
+      "mob_id": 0,
+      "speed": 340,
+      "stamina": 357,
+      "power": 308,
+      "guts": 354,
+      "wisdom": 328,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "B",
+          "medium": "A",
+          "long": "D"
+        },
+        "running_style": {
+          "front_runner": "F",
+          "stalker": "A",
+          "betweener": "B",
+          "stretch": "F"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "D"
+        }
+      },
+      "skill_set_id": 1107201,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1072,
+      "mob_id": 0,
+      "speed": 267,
+      "stamina": 281,
+      "power": 242,
+      "guts": 278,
+      "wisdom": 257,
+      "aptitudes": {
+        "distance": {
+          "short": "E",
+          "mile": "B",
+          "medium": "A",
+          "long": "A"
         },
         "running_style": {
           "front_runner": "F",
@@ -21973,6 +23233,66 @@
           "short": "A",
           "mile": "A",
           "medium": "A",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "D",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1107801,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1078,
+      "mob_id": 0,
+      "speed": 347,
+      "stamina": 259,
+      "power": 304,
+      "guts": 371,
+      "wisdom": 339,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
+          "long": "G"
+        },
+        "running_style": {
+          "front_runner": "D",
+          "stalker": "A",
+          "betweener": "D",
+          "stretch": "G"
+        },
+        "ground": {
+          "turf": "A",
+          "dirt": "E"
+        }
+      },
+      "skill_set_id": 1107801,
+      "motivation_min": 4,
+      "motivation_max": 5
+    },
+    {
+      "chara_id": 1078,
+      "mob_id": 0,
+      "speed": 334,
+      "stamina": 250,
+      "power": 293,
+      "guts": 358,
+      "wisdom": 326,
+      "aptitudes": {
+        "distance": {
+          "short": "A",
+          "mile": "A",
+          "medium": "B",
           "long": "G"
         },
         "running_style": {

@@ -2121,6 +2121,42 @@
     ]
   },
   {
+    "id": 100641,
+    "name": "Keep Pushing Ahead",
+    "description": "If positioned toward the front from the start of the race until the second half of the race, good vibes recover endurance and moderately increase velocity steadily.",
+    "icon_id": 20023,
+    "rarity": 5,
+    "group_id": 10064,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=50&order_rate_in20_continue==1",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 9,
+            "value": 550,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100671,
     "name": "Eternal Encompassing Shine",
     "description": "If well-positioned at the start of the final straight, her strong willpower to win increases velocity. If positioned near the front, greatly increase velocity instead.",
@@ -15184,6 +15220,57 @@
     ]
   },
   {
+    "id": 201662,
+    "name": "See Ya Later!",
+    "description": "Increase velocity when followed by another runner directly behind for a long time.",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20166,
+    "skill_category": 4,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "behind_near_lane_time>=3&accumulatetime>=10",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            106401111
+          ],
+          "card_id": 106401
+        },
+        {
+          "evolved_skill_ids": [
+            103103211
+          ],
+          "card_id": 103103
+        },
+        {
+          "evolved_skill_ids": [
+            412011
+          ],
+          "scenario_id": 12
+        }
+      ]
+    }
+  },
+  {
     "id": 201671,
     "name": "Trending in the Charts!",
     "description": "Increase velocity when engaged in a challenge mid-race. (Dirt)",
@@ -19090,6 +19177,42 @@
         "precondition": "",
         "condition": "distance_rate>=50&phase==1&order>=3&order_rate<=70",
         "base_time": 30000,
+        "effects": [
+          {
+            "type": 9,
+            "value": 150,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900641,
+    "name": "Keep Pushing Ahead",
+    "description": "If positioned toward the front from the start of the race until the second half of the race, slightly recover endurance and very slightly increase velocity steadily.",
+    "icon_id": 20021,
+    "rarity": 1,
+    "group_id": 90064,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=50&order_rate_in20_continue==1",
+        "base_time": 36000,
         "effects": [
           {
             "type": 9,
