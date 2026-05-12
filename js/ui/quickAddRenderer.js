@@ -38,18 +38,6 @@ function renderQuickAddSetup() {
         <div class="quick-add-setup" id="qaSetupScreen">
             <div class="quick-add-setup-panel">
                 <div class="quick-add-setup-section">
-                    <label>Region</label>
-                    <div class="quick-add-icon-grid" id="qaRegionGrid">
-                        <button class="quick-add-icon-btn selected" data-region="global" aria-label="Global" aria-pressed="true">
-                            Global
-                        </button>
-                        <button class="quick-add-icon-btn" data-region="jp" aria-label="JP" aria-pressed="false">
-                            JP
-                        </button>
-                    </div>
-                </div>
-
-                <div class="quick-add-setup-section">
                     <label>Card Types</label>
                     <div class="quick-add-icon-grid" id="qaTypeGrid">
                         ${['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'].map(type =>
@@ -90,12 +78,24 @@ function renderQuickAddSetup() {
 
                 <div class="quick-add-setup-section">
                     <label for="qaSortOrder">Sort</label>
-                    <select id="qaSortOrder">
-                        <option value="alpha">Alphabetical</option>
-                        <option value="type">By Type</option>
-                        <option value="rarity">By Rarity</option>
-                        <option value="release">By Release Date</option>
-                    </select>
+                    <div class="sort-dropdowns single-dropdown">
+                        <select id="qaSortOrder" class="sort-category-select">
+                            <option value="alpha">Alphabetical</option>
+                            <option value="type">By Type</option>
+                            <option value="rarity">By Rarity</option>
+                            <option value="release">By Release Date</option>
+                        </select>
+                        <button class="sort-direction-toggle asc" id="qaSortDir" title="Toggle sort direction" aria-label="Toggle sort direction">&#8593;</button>
+                    </div>
+                </div>
+
+                <div class="quick-add-setup-section">
+                    <label>Skip</label>
+                    <div class="quick-add-icon-grid" id="qaSkipGrid">
+                        <button class="quick-add-icon-btn quick-add-skip-btn" data-skip="mlb" aria-pressed="false">
+                            Skip MLB
+                        </button>
+                    </div>
                 </div>
 
                 <div class="quick-add-card-count" id="qaCardCount">
@@ -119,11 +119,6 @@ function wireQuickAddSetupEvents() {
     document.getElementById('qaCancelBtn')?.addEventListener('click', cancelQuickAdd);
     document.getElementById('qaConfirmBtn')?.addEventListener('click', closeQuickAdd);
 
-    // Region toggles
-    document.querySelectorAll('#qaRegionGrid .quick-add-icon-btn').forEach(btn => {
-        btn.addEventListener('click', () => setQuickAddRegion(btn.dataset.region));
-    });
-
     // Type toggles
     document.querySelectorAll('#qaTypeGrid .quick-add-icon-btn').forEach(btn => {
         btn.addEventListener('click', () => toggleQuickAddType(btn.dataset.type));
@@ -144,6 +139,22 @@ function wireQuickAddSetupEvents() {
     document.getElementById('qaOwnershipFilter')?.addEventListener('change', e => setQuickAddOwnershipFilter(e.target.value));
     document.getElementById('qaSortOrder')?.addEventListener('change', e => setQuickAddSortOrder(e.target.value));
 
+    // Sort direction toggle (setup)
+    document.getElementById('qaSortDir')?.addEventListener('click', () => {
+        setQuickAddSortDirection(quickAddState.sortDirection === 'asc' ? 'desc' : 'asc');
+        updateQuickAddSetupUI();
+    });
+
+    // Skip toggles (setup)
+    document.querySelectorAll('#qaSkipGrid .quick-add-icon-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.dataset.skip === 'mlb') {
+                setQuickAddSkipMLB(!quickAddState.skipMLB);
+                updateQuickAddSetupUI();
+            }
+        });
+    });
+
     // Start button
     document.getElementById('qaStartBtn')?.addEventListener('click', startQuickAddCards);
 }
@@ -151,13 +162,6 @@ function wireQuickAddSetupEvents() {
 // ===== SETUP UI UPDATE =====
 
 function updateQuickAddSetupUI() {
-    // Update region buttons
-    document.querySelectorAll('#qaRegionGrid .quick-add-icon-btn').forEach(btn => {
-        const selected = btn.dataset.region === quickAddState.region;
-        btn.classList.toggle('selected', selected);
-        btn.setAttribute('aria-pressed', selected);
-    });
-
     // Update type buttons
     document.querySelectorAll('#qaTypeGrid .quick-add-icon-btn').forEach(btn => {
         const selected = quickAddState.selectedTypes.includes(btn.dataset.type);
@@ -171,6 +175,18 @@ function updateQuickAddSetupUI() {
         btn.classList.toggle('selected', selected);
         btn.setAttribute('aria-pressed', selected);
     });
+
+    // Update skip buttons
+    document.querySelectorAll('#qaSkipGrid .quick-add-icon-btn').forEach(btn => {
+        const selected = btn.dataset.skip === 'mlb' && quickAddState.skipMLB;
+        btn.classList.toggle('selected', selected);
+        btn.setAttribute('aria-pressed', selected);
+    });
+
+    // Sync sort dropdown + direction button (setup)
+    const sortSelect = document.getElementById('qaSortOrder');
+    if (sortSelect) sortSelect.value = quickAddState.sortOrder;
+    syncQuickAddSortDirBtn(document.getElementById('qaSortDir'));
 
     // Update card count
     const count = getQuickAddCardCount();
@@ -205,44 +221,78 @@ function renderQuickAddCardView() {
                 <button class="quick-add-nav-btn quick-add-nav-next" id="qaNavNext" aria-label="Next card">&#8250;</button>
             </div>
             <div class="quick-add-control-panel">
-                <div class="quick-add-card-info">
-                    <div class="quick-add-card-name" id="qaCardName"></div>
-                    <div class="quick-add-card-badges" id="qaCardBadges"></div>
+                <div class="quick-add-section">
+                    <div class="quick-add-section-header">Settings</div>
+
+                    <div class="quick-add-setting-row">
+                        <label for="qaCvSort">Sort</label>
+                        <div class="sort-dropdowns single-dropdown">
+                            <select id="qaCvSort" class="sort-category-select">
+                                <option value="alpha">Alphabetical</option>
+                                <option value="type">By Type</option>
+                                <option value="rarity">By Rarity</option>
+                                <option value="release">By Release Date</option>
+                            </select>
+                            <button class="sort-direction-toggle asc" id="qaCvSortDir" title="Toggle sort direction" aria-label="Toggle sort direction">&#8593;</button>
+                        </div>
+                    </div>
+
+                    <div class="quick-add-setting-row">
+                        <label for="qaShowFilter">Show</label>
+                        <select id="qaShowFilter" class="quick-add-show-select">
+                            <option value="all">All Cards</option>
+                            <option value="owned">Owned Only</option>
+                            <option value="unowned">Unowned Only</option>
+                        </select>
+                    </div>
+
+                    <button class="quick-add-icon-btn quick-add-skip-btn" id="qaSkipMLBBtn" data-skip="mlb" aria-pressed="false">
+                        Skip MLB
+                    </button>
                 </div>
 
-                <div class="quick-add-control-group">
-                    <span class="quick-add-control-label">Owned</span>
-                    <div class="quick-add-ownership-btns">
-                        <button class="quick-add-own-btn" id="qaOwnYes">OWNED</button>
-                        <button class="quick-add-own-btn" id="qaOwnNo">NOT OWNED</button>
-                    </div>
-                </div>
+                <div class="quick-add-section">
+                    <div class="quick-add-section-header">Current Card</div>
 
-                <div class="quick-add-control-group">
-                    <span class="quick-add-control-label">Limit Break</span>
-                    <div class="quick-add-lb-btns" id="qaLBBtns">
-                        ${[0,1,2,3,4].map(lb =>
-                            `<button class="quick-add-lb-btn" data-lb="${lb}">
-                                <span>${lb}</span>
-                                <span class="lb-max-label" id="qaLBMax${lb}"></span>
-                            </button>`
-                        ).join('')}
+                    <div class="quick-add-card-info">
+                        <div class="quick-add-card-name" id="qaCardName"></div>
+                        <div class="quick-add-card-badges" id="qaCardBadges"></div>
                     </div>
-                </div>
 
-                <div class="quick-add-control-group">
-                    <span class="quick-add-control-label">Level</span>
-                    <div class="quick-add-level-row">
-                        <button class="quick-add-level-step-btn" data-step="-5">-5</button>
-                        <button class="quick-add-level-step-btn" data-step="-1">-1</button>
-                        <input type="range" class="quick-add-level-slider" id="qaLevelSlider" min="1" max="50" value="30">
-                        <button class="quick-add-level-step-btn" data-step="1">+1</button>
-                        <button class="quick-add-level-step-btn" data-step="5">+5</button>
-                        <input type="number" class="quick-add-level-input" id="qaLevelInput" min="1" max="50" value="30">
+                    <div class="quick-add-control-group">
+                        <span class="quick-add-control-label">Owned</span>
+                        <div class="quick-add-ownership-btns">
+                            <button class="quick-add-own-btn" id="qaOwnYes">OWNED</button>
+                            <button class="quick-add-own-btn" id="qaOwnNo">NOT OWNED</button>
+                        </div>
                     </div>
-                    <div class="quick-add-level-range-info">
-                        <span>Min: <span id="qaLevelMin">1</span></span>
-                        <span>Max: <span id="qaLevelMax">50</span></span>
+
+                    <div class="quick-add-control-group">
+                        <span class="quick-add-control-label">Limit Break</span>
+                        <div class="quick-add-lb-btns" id="qaLBBtns">
+                            ${[0,1,2,3,4].map(lb =>
+                                `<button class="quick-add-lb-btn" data-lb="${lb}">
+                                    <span>${lb}</span>
+                                    <span class="lb-max-label" id="qaLBMax${lb}"></span>
+                                </button>`
+                            ).join('')}
+                        </div>
+                    </div>
+
+                    <div class="quick-add-control-group">
+                        <span class="quick-add-control-label">Level</span>
+                        <div class="quick-add-level-row">
+                            <button class="quick-add-level-step-btn" data-step="-5">-5</button>
+                            <button class="quick-add-level-step-btn" data-step="-1">-1</button>
+                            <input type="range" class="quick-add-level-slider" id="qaLevelSlider" min="1" max="50" value="30">
+                            <button class="quick-add-level-step-btn" data-step="1">+1</button>
+                            <button class="quick-add-level-step-btn" data-step="5">+5</button>
+                            <input type="number" class="quick-add-level-input" id="qaLevelInput" min="1" max="50" value="30">
+                        </div>
+                        <div class="quick-add-level-range-info">
+                            <span>Min: <span id="qaLevelMin">1</span></span>
+                            <span>Max: <span id="qaLevelMax">50</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,9 +305,6 @@ function renderQuickAddCardView() {
                 <span class="quick-add-progress-text" id="qaProgressText"></span>
             </div>
             <button class="quick-add-undo-btn" id="qaUndoBtn" disabled>Undo</button>
-            <label class="quick-add-skip-toggle">
-                <input type="checkbox" id="qaSkipOwned"> Skip Owned
-            </label>
         </div>
     `;
 
@@ -266,6 +313,7 @@ function renderQuickAddCardView() {
     if (headerTitle) headerTitle.textContent = 'Quick Add Cards';
 
     wireQuickAddCardViewEvents();
+    syncQuickAddSkipBtns();
 }
 
 function wireQuickAddCardViewEvents() {
@@ -328,8 +376,34 @@ function wireQuickAddCardViewEvents() {
     // Undo
     document.getElementById('qaUndoBtn')?.addEventListener('click', quickAddUndo);
 
-    // Skip owned
-    document.getElementById('qaSkipOwned')?.addEventListener('change', e => setQuickAddSkipOwned(e.target.checked));
+    // Ownership filter (card view) — shares state with the setup dropdown
+    document.getElementById('qaShowFilter')?.addEventListener('change', e => {
+        setQuickAddOwnershipFilter(e.target.value);
+        ensureQuickAddVisible();
+        updateQuickAddProgress();
+    });
+
+    // Sort category + direction (card view) — re-sorts the live pool in place
+    document.getElementById('qaCvSort')?.addEventListener('change', e => {
+        setQuickAddSortOrder(e.target.value);
+        syncQuickAddSkipBtns();
+        resortQuickAddCards();
+        renderQuickAddCard(quickAddState.currentIndex);
+    });
+    document.getElementById('qaCvSortDir')?.addEventListener('click', () => {
+        setQuickAddSortDirection(quickAddState.sortDirection === 'asc' ? 'desc' : 'asc');
+        syncQuickAddSkipBtns();
+        resortQuickAddCards();
+        renderQuickAddCard(quickAddState.currentIndex);
+    });
+
+    // Skip toggles (card view)
+    document.getElementById('qaSkipMLBBtn')?.addEventListener('click', () => {
+        setQuickAddSkipMLB(!quickAddState.skipMLB);
+        syncQuickAddSkipBtns();
+        ensureQuickAddVisible();
+        updateQuickAddProgress();
+    });
 
     // Cancel / Confirm buttons (re-wire since header persists)
     document.getElementById('qaCancelBtn')?.addEventListener('click', cancelQuickAdd);
@@ -344,7 +418,7 @@ function renderQuickAddCard(index) {
 
     const cardId = card.support_id;
 
-    // Card name — use region-appropriate name
+    // Card name
     const nameEl = document.getElementById('qaCardName');
     if (nameEl) {
         nameEl.textContent = getQuickAddCardName(card) || 'Unknown';
@@ -444,6 +518,7 @@ function updateQuickAddCardControls() {
     });
 
     updateQuickAddUndoBtn();
+    updateQuickAddProgress();
 }
 
 // ===== SYNC LEVEL CONTROLS (without full refresh) =====
@@ -455,11 +530,34 @@ function syncQuickAddLevelControls(level) {
     if (input) input.value = level;
 }
 
+// ===== SYNC SKIP TOGGLES =====
+
+function syncQuickAddSortDirBtn(btn) {
+    if (!btn) return;
+    const dir = quickAddState.sortDirection === 'asc' ? 'asc' : 'desc';
+    btn.classList.toggle('asc', dir === 'asc');
+    btn.classList.toggle('desc', dir === 'desc');
+    btn.innerHTML = dir === 'asc' ? '&#8593;' : '&#8595;';
+}
+
+function syncQuickAddSkipBtns() {
+    const mlbBtn = document.getElementById('qaSkipMLBBtn');
+    if (mlbBtn) {
+        mlbBtn.classList.toggle('selected', !!quickAddState.skipMLB);
+        mlbBtn.setAttribute('aria-pressed', !!quickAddState.skipMLB);
+    }
+    const showSelect = document.getElementById('qaShowFilter');
+    if (showSelect) showSelect.value = quickAddState.ownershipFilter;
+    const sortSelect = document.getElementById('qaCvSort');
+    if (sortSelect) sortSelect.value = quickAddState.sortOrder;
+    syncQuickAddSortDirBtn(document.getElementById('qaCvSortDir'));
+}
+
 // ===== PROGRESS =====
 
 function updateQuickAddProgress() {
-    const total = quickAddState.cards.length;
-    const current = quickAddState.currentIndex + 1;
+    const total = getQuickAddVisibleCount();
+    const current = getQuickAddVisiblePosition();
     const pct = total > 0 ? (current / total) * 100 : 0;
 
     const fill = document.getElementById('qaProgressFill');

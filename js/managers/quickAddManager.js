@@ -8,7 +8,7 @@ let quickAddState = {
     screen: 'setup',
     cards: [],
     currentIndex: 0,
-    skipOwned: false,
+    skipMLB: false,
     changeHistory: [],
     totalModified: 0,
     modifiedCardIds: new Set(),
@@ -16,7 +16,14 @@ let quickAddState = {
     selectedRarities: [1, 2, 3],
     ownershipFilter: 'all',
     sortOrder: 'alpha',
-    region: 'global'
+    sortDirection: 'asc'
+};
+
+const QUICK_ADD_SORT_DEFAULT_DIRECTION = {
+    alpha: 'asc',
+    type: 'asc',
+    rarity: 'desc',
+    release: 'desc'
 };
 
 // ===== OPEN / CLOSE =====
@@ -27,7 +34,7 @@ function openQuickAdd() {
     quickAddState.screen = 'setup';
     quickAddState.cards = [];
     quickAddState.currentIndex = 0;
-    quickAddState.skipOwned = false;
+    quickAddState.skipMLB = false;
     quickAddState.changeHistory = [];
     quickAddState.totalModified = 0;
     quickAddState.modifiedCardIds = new Set();
@@ -35,7 +42,7 @@ function openQuickAdd() {
     quickAddState.selectedRarities = [1, 2, 3];
     quickAddState.ownershipFilter = 'all';
     quickAddState.sortOrder = 'alpha';
-    quickAddState.region = 'global';
+    quickAddState.sortDirection = QUICK_ADD_SORT_DEFAULT_DIRECTION.alpha;
 
     renderQuickAddSetup();
 
@@ -154,20 +161,30 @@ function setQuickAddOwnershipFilter(value) {
 
 function setQuickAddSortOrder(value) {
     quickAddState.sortOrder = value;
+    // Smart default direction when category changes
+    quickAddState.sortDirection = QUICK_ADD_SORT_DEFAULT_DIRECTION[value] || 'asc';
     updateQuickAddSetupUI();
 }
 
-function setQuickAddRegion(value) {
-    quickAddState.region = value;
-    updateQuickAddSetupUI();
+function setQuickAddSortDirection(dir) {
+    quickAddState.sortDirection = dir === 'asc' ? 'asc' : 'desc';
+}
+
+function resortQuickAddCards() {
+    const curId = quickAddState.cards[quickAddState.currentIndex]?.support_id;
+    quickAddState.cards = sortQuickAddCards(quickAddState.cards);
+    if (curId !== undefined) {
+        const newIdx = quickAddState.cards.findIndex(c => c.support_id === curId);
+        quickAddState.currentIndex = newIdx >= 0 ? newIdx : 0;
+    }
 }
 
 // ===== CARD FILTERING & SORTING =====
 
 function getQuickAddMatchingCards() {
     let cards = cardData.filter(card => {
-        // Region filter — global only shows cards with start_date
-        if (quickAddState.region === 'global' && !card.start_date) return false;
+        // Global release only — JP-only cards lack a start_date
+        if (!card.start_date) return false;
 
         // Type filter
         if (!quickAddState.selectedTypes.includes(card.type)) return false;
@@ -194,26 +211,34 @@ function getQuickAddCardName(card) {
 
 function sortQuickAddCards(cards) {
     const order = quickAddState.sortOrder;
+    const sign = quickAddState.sortDirection === 'asc' ? 1 : -1;
     return cards.slice().sort((a, b) => {
         switch (order) {
             case 'alpha': {
                 const nameDiff = getQuickAddCardName(a).localeCompare(getQuickAddCardName(b));
-                if (nameDiff !== 0) return nameDiff;
+                if (nameDiff !== 0) return nameDiff * sign;
                 return b.rarity - a.rarity;
             }
             case 'type': {
                 const typeOrder = ['speed', 'stamina', 'power', 'guts', 'intelligence', 'friend', 'group'];
                 const diff = typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type);
-                if (diff !== 0) return diff;
+                if (diff !== 0) return diff * sign;
                 return getQuickAddCardName(a).localeCompare(getQuickAddCardName(b));
             }
             case 'rarity': {
-                const diff = b.rarity - a.rarity;
-                if (diff !== 0) return diff;
+                const diff = a.rarity - b.rarity;
+                if (diff !== 0) return diff * sign;
                 return getQuickAddCardName(a).localeCompare(getQuickAddCardName(b));
             }
-            case 'release':
-                return (b.support_id || 0) - (a.support_id || 0);
+            case 'release': {
+                const dateA = a.start_date || '';
+                const dateB = b.start_date || '';
+                const dateDiff = dateA.localeCompare(dateB);
+                if (dateDiff !== 0) return dateDiff * sign;
+                const nameDiff = getQuickAddCardName(a).localeCompare(getQuickAddCardName(b));
+                if (nameDiff !== 0) return nameDiff;
+                return b.rarity - a.rarity;
+            }
             default:
                 return 0;
         }
@@ -236,6 +261,7 @@ function startQuickAddCards() {
 
     renderQuickAddCardView();
     renderQuickAddCard(0);
+    ensureQuickAddVisible();
 }
 
 // ===== NAVIGATION =====
@@ -246,18 +272,18 @@ function navigateQuickAdd(direction) {
     let newIndex = quickAddState.currentIndex;
     const total = quickAddState.cards.length;
 
-    if (quickAddState.skipOwned) {
-        // Find next non-owned card in direction
+    if (isQuickAddSkipActive()) {
+        // Find next card that doesn't match the skip filters
         let attempts = 0;
         do {
             newIndex = (newIndex + direction + total) % total;
             attempts++;
-            // Prevent infinite loop if all cards are owned
+            // Prevent infinite loop if all cards match the skip filters
             if (attempts >= total) {
                 newIndex = (quickAddState.currentIndex + direction + total) % total;
                 break;
             }
-        } while (isCardOwned(quickAddState.cards[newIndex].support_id));
+        } while (shouldSkipQuickAddCard(quickAddState.cards[newIndex]));
     } else {
         newIndex = (newIndex + direction + total) % total;
     }
@@ -266,8 +292,51 @@ function navigateQuickAdd(direction) {
     renderQuickAddCard(newIndex);
 }
 
-function setQuickAddSkipOwned(skip) {
-    quickAddState.skipOwned = skip;
+function setQuickAddSkipMLB(skip) {
+    quickAddState.skipMLB = skip;
+}
+
+function shouldSkipQuickAddCard(card) {
+    if (!card) return false;
+    const cardId = card.support_id;
+    const owned = isCardOwned(cardId);
+    if (quickAddState.skipMLB && owned && getOwnedCardLimitBreak(cardId) === 4) return true;
+    if (quickAddState.ownershipFilter === 'owned' && !owned) return true;
+    if (quickAddState.ownershipFilter === 'unowned' && owned) return true;
+    return false;
+}
+
+function isQuickAddSkipActive() {
+    return quickAddState.skipMLB || quickAddState.ownershipFilter !== 'all';
+}
+
+function getQuickAddVisibleCount() {
+    if (!isQuickAddSkipActive()) return quickAddState.cards.length;
+    let n = 0;
+    for (const card of quickAddState.cards) {
+        if (!shouldSkipQuickAddCard(card)) n++;
+    }
+    return n;
+}
+
+function ensureQuickAddVisible() {
+    if (!isQuickAddSkipActive()) return false;
+    if (quickAddState.cards.length === 0) return false;
+    const cur = quickAddState.cards[quickAddState.currentIndex];
+    if (!cur || !shouldSkipQuickAddCard(cur)) return false;
+    navigateQuickAdd(1);
+    return true;
+}
+
+function getQuickAddVisiblePosition() {
+    if (!isQuickAddSkipActive()) return quickAddState.currentIndex + 1;
+    const curCard = quickAddState.cards[quickAddState.currentIndex];
+    if (!curCard || shouldSkipQuickAddCard(curCard)) return 0;
+    let pos = 0;
+    for (let i = 0; i <= quickAddState.currentIndex; i++) {
+        if (!shouldSkipQuickAddCard(quickAddState.cards[i])) pos++;
+    }
+    return pos;
 }
 
 // ===== CARD OPERATIONS =====
@@ -449,12 +518,16 @@ window.QuickAddManager = {
     deselectAllQuickAddRarities,
     setQuickAddOwnershipFilter,
     setQuickAddSortOrder,
-    setQuickAddRegion,
+    setQuickAddSortDirection,
+    resortQuickAddCards,
     getQuickAddCardName,
     getQuickAddCardCount,
     startQuickAddCards,
     navigateQuickAdd,
-    setQuickAddSkipOwned,
+    setQuickAddSkipMLB,
+    getQuickAddVisibleCount,
+    getQuickAddVisiblePosition,
+    ensureQuickAddVisible,
     quickAddSetOwnership,
     quickAddSetLimitBreak,
     quickAddSetLevel,

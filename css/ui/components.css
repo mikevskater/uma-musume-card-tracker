@@ -360,15 +360,13 @@ input[type="checkbox"]:disabled {
         0 0 20px rgba(243, 156, 18, 0.2);
 }
 
-/* Shared animated rainbow border — animation runs on :root,
-   --angle is inherited so all elements stay in sync across re-renders */
+/* Shared rainbow border (static — animation removed for performance) */
 .rainbow-border,
 .card-image.rarity-3 {
     border: 4px solid transparent;
     background:
         linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
         conic-gradient(
-            from var(--angle, 0deg),
             #ff0000, #ff7f00, #ffff00, #00ff00,
             #0000ff, #4b0082, #9400d3, #ff0000
         ) border-box;
@@ -380,24 +378,6 @@ input[type="checkbox"]:disabled {
         inset 0 -2px 0 rgba(0,0,0,0.5),
         var(--shadow-xl),
         0 0 30px rgba(255,255,255,0.5);
-}
-
-@property --angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: true;
-}
-
-/* Single global animation on :root so all rainbow borders stay in sync
-   even when elements are added/removed from the DOM */
-:root {
-    animation: rainbow-spin 6s linear infinite;
-}
-
-@keyframes rainbow-spin {
-    to {
-        --angle: 360deg;
-    }
 }
 
 /* Dark mode: tone down bright inset highlights on card rarity borders */

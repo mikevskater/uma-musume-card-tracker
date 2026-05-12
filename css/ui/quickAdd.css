@@ -246,7 +246,6 @@
     background:
         linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
         conic-gradient(
-            from var(--angle, 0deg),
             #ff0000, #ff7f00, #ffff00, #00ff00,
             #0000ff, #4b0082, #9400d3, #ff0000
         ) border-box;
@@ -695,20 +694,56 @@
     white-space: nowrap;
 }
 
-/* Skip owned toggle */
-.quick-add-skip-toggle {
+/* Right-panel sections (Settings / Current Card) */
+.quick-add-section {
     display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    cursor: pointer;
-    white-space: nowrap;
-    user-select: none;
+    flex-direction: column;
+    gap: var(--space-md);
 }
 
-.quick-add-skip-toggle input[type="checkbox"] {
+.quick-add-section-header {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.quick-add-setting-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.quick-add-setting-row > label {
+    flex: 0 0 50px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.quick-add-setting-row .sort-dropdowns {
+    flex: 1 1 auto;
+}
+
+.quick-add-show-select {
+    flex: 1 1 auto;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
     cursor: pointer;
+}
+
+/* Skip buttons use a neutral selected color so they don't clash with type/rarity */
+.quick-add-icon-btn.quick-add-skip-btn.selected {
+    border-color: var(--color-secondary);
+    background: color-mix(in srgb, var(--color-secondary) 15%, var(--bg-primary));
+    color: var(--color-secondary);
 }
 
 /* Undo button */
