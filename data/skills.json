@@ -2765,6 +2765,55 @@
     ]
   },
   {
+    "id": 110221,
+    "name": "Best Day Ever",
+    "description": "If well-positioned late-race on the final corner or later, increase velocity. If there's a large distance left to the finish, also increase acceleration very slightly with perfect form.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11022,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance>=401&phase>=2&is_finalcorner==1&order_rate>=20&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner==1&order_rate>=20&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110231,
     "name": "Presents from X",
     "description": "Increase velocity by deriving a path to victory mid-race after staying well-positioned from the start of the race up until the second half.",
@@ -2929,6 +2978,42 @@
           {
             "type": 27,
             "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110381,
+    "name": "One True Color",
+    "description": "If positioned toward the front with 350m or less remaining and there is another Umamusume close behind, the determination to stay ahead makes it easier to break out of the pack.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11038,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance<=350&order_rate<=40&order_rate>=20&bashin_diff_behind<=1",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 3000,
             "target_type": 1,
             "target_value": 0
           }
@@ -16847,6 +16932,114 @@
     ]
   },
   {
+    "id": 202151,
+    "name": "Keep Going!",
+    "description": "Greatly consume endurance mid-race and greatly increase velocity. (Late Surger)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20215,
+    "skill_category": 2,
+    "tag_id": "103/302/401",
+    "type": [
+      "late_surger",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==3&phase_random==1",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": -400,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            107601111
+          ],
+          "card_id": 107601
+        },
+        {
+          "evolved_skill_ids": [
+            106301211
+          ],
+          "card_id": 106301
+        },
+        {
+          "evolved_skill_ids": [
+            103703211
+          ],
+          "card_id": 103703
+        },
+        {
+          "evolved_skill_ids": [
+            101103111
+          ],
+          "card_id": 101103
+        },
+        {
+          "evolved_skill_ids": [
+            104003111
+          ],
+          "card_id": 104003
+        }
+      ]
+    }
+  },
+  {
+    "id": 202152,
+    "name": "Full Throttle",
+    "description": "Greatly consume endurance mid-race and moderately increase velocity. (Late Surger)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20215,
+    "skill_category": 2,
+    "tag_id": "103/302/401",
+    "type": [
+      "late_surger",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==3&phase_random==1",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": -400,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 210011,
     "name": "Burning Spirit SPD",
     "description": "Burn bright with team spirit, increasing velocity in proportion to the total Speed of racing team members mid-race.",
@@ -19839,6 +20032,55 @@
     ]
   },
   {
+    "id": 910221,
+    "name": "Best day ever",
+    "description": "If well-positioned late-race on the final corner or later, slightly increase velocity. If there's a large distance left to the finish, also increase acceleration very minimally.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91022,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance>=401&phase>=2&is_finalcorner==1&order_rate>=20&order_rate<=40",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner==1&order_rate>=20&order_rate<=40",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 910231,
     "name": "Presents from X",
     "description": "Slightly increase velocity mid-race after staying well-positioned from the start of the race up until the second half.",
@@ -20003,6 +20245,42 @@
           {
             "type": 27,
             "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910381,
+    "name": "One True Color",
+    "description": "If positioned toward the front with 350m remaining and there is another Umamusume close behind, break out of the pack slightly more easily.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91038,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance<=350&order_rate<=40&order_rate>=20&bashin_diff_behind<=1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 1000,
             "target_type": 1,
             "target_value": 0
           }

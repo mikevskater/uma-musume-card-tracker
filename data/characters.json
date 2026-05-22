@@ -2115,6 +2115,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "102202": {
+    "name": "Fine Motion",
+    "character_id": 1022,
+    "base_stats": {
+      "3": {
+        "speed": 89,
+        "stamina": 78,
+        "power": 89,
+        "guts": 94,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 99,
+        "stamina": 87,
+        "power": 99,
+        "guts": 105,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 109,
+        "stamina": 96,
+        "power": 109,
+        "guts": 115,
+        "wisdom": 121
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "C"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "102301": {
     "name": "Biwa Hayahide",
     "character_id": 1023,
@@ -3258,6 +3319,67 @@
       "power": 20,
       "guts": 0,
       "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "103802": {
+    "name": "Curren Chan",
+    "character_id": 1038,
+    "base_stats": {
+      "3": {
+        "speed": 100,
+        "stamina": 54,
+        "power": 109,
+        "guts": 85,
+        "wisdom": 102
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 59,
+        "power": 121,
+        "guts": 95,
+        "wisdom": 114
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 65,
+        "power": 133,
+        "guts": 104,
+        "wisdom": 126
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "D",
+        "medium": "G",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 10
     },
     "default_rarity": 3,
     "running_style": 2
