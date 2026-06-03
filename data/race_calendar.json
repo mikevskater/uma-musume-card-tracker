@@ -42630,6 +42630,93 @@
     "reward_set_id": 1
   },
   {
+    "program_id": 1103,
+    "race_instance_id": 904196,
+    "race_name": "Junior Make Debut",
+    "month": 6,
+    "half": 2,
+    "grade": 900,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 0,
+    "fan_set_id": 3,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 700
+      },
+      {
+        "order": 2,
+        "fan_count": 280
+      },
+      {
+        "order": 3,
+        "fan_count": 175
+      },
+      {
+        "order": 4,
+        "fan_count": 105
+      },
+      {
+        "order": 5,
+        "fan_count": 70
+      },
+      {
+        "order": 6,
+        "fan_count": 63
+      },
+      {
+        "order": 7,
+        "fan_count": 56
+      },
+      {
+        "order": 8,
+        "fan_count": 49
+      },
+      {
+        "order": 9,
+        "fan_count": 42
+      },
+      {
+        "order": 10,
+        "fan_count": 35
+      },
+      {
+        "order": 11,
+        "fan_count": 28
+      },
+      {
+        "order": 12,
+        "fan_count": 21
+      },
+      {
+        "order": 13,
+        "fan_count": 18
+      },
+      {
+        "order": 14,
+        "fan_count": 14
+      },
+      {
+        "order": 15,
+        "fan_count": 11
+      },
+      {
+        "order": 16,
+        "fan_count": 7
+      },
+      {
+        "order": 17,
+        "fan_count": 7
+      },
+      {
+        "order": 18,
+        "fan_count": 7
+      }
+    ],
+    "reward_set_id": 1
+  },
+  {
     "program_id": 97,
     "race_instance_id": 303501,
     "race_name": "CBC Sho",
@@ -44194,6 +44281,93 @@
       }
     ],
     "reward_set_id": 3
+  },
+  {
+    "program_id": 1104,
+    "race_instance_id": 110201,
+    "race_name": "Japan Dirt Derby",
+    "month": 7,
+    "half": 1,
+    "grade": 100,
+    "distance": 2000,
+    "ground": "dirt",
+    "fan_requirement": 4000,
+    "fan_set_id": 42,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4500
+      },
+      {
+        "order": 2,
+        "fan_count": 1800
+      },
+      {
+        "order": 3,
+        "fan_count": 1125
+      },
+      {
+        "order": 4,
+        "fan_count": 675
+      },
+      {
+        "order": 5,
+        "fan_count": 450
+      },
+      {
+        "order": 6,
+        "fan_count": 405
+      },
+      {
+        "order": 7,
+        "fan_count": 360
+      },
+      {
+        "order": 8,
+        "fan_count": 315
+      },
+      {
+        "order": 9,
+        "fan_count": 270
+      },
+      {
+        "order": 10,
+        "fan_count": 225
+      },
+      {
+        "order": 11,
+        "fan_count": 180
+      },
+      {
+        "order": 12,
+        "fan_count": 135
+      },
+      {
+        "order": 13,
+        "fan_count": 113
+      },
+      {
+        "order": 14,
+        "fan_count": 90
+      },
+      {
+        "order": 15,
+        "fan_count": 68
+      },
+      {
+        "order": 16,
+        "fan_count": 45
+      },
+      {
+        "order": 17,
+        "fan_count": 45
+      },
+      {
+        "order": 18,
+        "fan_count": 45
+      }
+    ],
+    "reward_set_id": 110101
   },
   {
     "program_id": 101,

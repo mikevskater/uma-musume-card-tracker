@@ -3065,6 +3065,67 @@
     "default_rarity": 3,
     "running_style": 4
   },
+  "103401": {
+    "name": "Inari One",
+    "character_id": 1034,
+    "base_stats": {
+      "3": {
+        "speed": 88,
+        "stamina": 100,
+        "power": 109,
+        "guts": 74,
+        "wisdom": 79
+      },
+      "4": {
+        "speed": 98,
+        "stamina": 111,
+        "power": 121,
+        "guts": 82,
+        "wisdom": 88
+      },
+      "5": {
+        "speed": 108,
+        "stamina": 122,
+        "power": 133,
+        "guts": 90,
+        "wisdom": 97
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "B",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "B",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
   "103501": {
     "name": "Winning Ticket",
     "character_id": 1035,

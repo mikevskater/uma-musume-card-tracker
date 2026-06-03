@@ -1564,6 +1564,35 @@
     ]
   },
   {
+    "id": 100341,
+    "name": "Now We're Cruisin'!",
+    "description": "When competing for the lead if positioned in the midpack or further for the first half of the race, show off some Edo spirit and greatly increase velocity.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10034,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=50&order_rate_out40_continue==1",
+        "condition": "compete_fight_count>0",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100351,
     "name": "Our Ticket to Win!",
     "description": "Increase velocity with winning ambition when positioned toward the front on the final straight after engaging in a challenge on the final corner or later.",
@@ -15849,6 +15878,54 @@
     ]
   },
   {
+    "id": 202001,
+    "name": "Master of the Sands",
+    "description": "Recover endurance and increase velocity when positioned toward the back mid-race. (Dirt)",
+    "icon_id": 20022,
+    "rarity": 2,
+    "group_id": 20200,
+    "skill_category": 2,
+    "tag_id": "302/401/402/502",
+    "type": [
+      "middle_leg",
+      "corner",
+      "straight"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&phase_random==1&order_rate>=50",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 9,
+            "value": 550,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            103401211,
+            103401221
+          ],
+          "card_id": 103401
+        }
+      ]
+    }
+  },
+  {
     "id": 202002,
     "name": "Familiar Ground",
     "description": "Slightly recover endurance when positioned toward the back mid-race. (Dirt)",
@@ -18818,6 +18895,35 @@
       {
         "precondition": "",
         "condition": "is_finalcorner==1&corner==0&distance_diff_top>=5&order_rate>=80",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900341,
+    "name": "Now We're Cruisin'!",
+    "description": "When competing for the lead if positioned in the midpack or further for the first half of the race, moderately increase velocity.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90034,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=50&order_rate_out40_continue==1",
+        "condition": "compete_fight_count>0",
         "base_time": 30000,
         "effects": [
           {
