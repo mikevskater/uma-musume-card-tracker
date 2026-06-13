@@ -1774,6 +1774,35 @@
     ]
   },
   {
+    "id": 100441,
+    "name": "Victory Belongs to Me—Strelitzia! ☆",
+    "description": "If positioned toward the back and racing calmly until the start of the final corner, when there are 300m remaining, cast a magic spell to increase velocity continuously.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10044,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "order_rate_out50_continue==1&temptation_count==0&is_finalcorner==1",
+        "condition": "remain_distance<=300",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100451,
     "name": "Pure Heart",
     "description": "Greatly recover endurance when well-positioned mid-race.",
@@ -2558,6 +2587,55 @@
     ]
   },
   {
+    "id": 110101,
+    "name": "Joyful Voyage!",
+    "description": "If positioned toward the front with 200m remaining, increase velocity. Then, if also positioned near the leading Umamusume, gather strength to move slightly forward.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11010,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_diff_top<=5&order>=2&order_rate<=40&remain_distance<=201&remain_distance>=199",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 22,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "order>=2&order_rate<=40&remain_distance<=201&remain_distance>=199",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110111,
     "name": "Superior Heal",
     "description": "Greatly recover endurance with a gentle light when overtaken toward the back mid-race.",
@@ -3168,6 +3246,35 @@
       {
         "precondition": "",
         "condition": "distance_rate>=50&order_rate>=40&overtake_target_time>=2",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110591,
+    "name": "Wherever This Wonder Leads",
+    "description": "If positioned midpack on a downhill just before late-race and there's a large distance left to the finish, enjoy the race to the fullest, increasing velocity.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11059,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=60&slope==2&phase==1&order_rate>=40&order_rate<=80&remain_distance>=500",
         "base_time": 50000,
         "effects": [
           {
@@ -17009,6 +17116,43 @@
     ]
   },
   {
+    "id": 202141,
+    "name": "You're Not the Boss of Me!",
+    "description": "Increase time lost to slow starts and moderately decrease Wit.",
+    "icon_id": 20064,
+    "rarity": 1,
+    "group_id": 20214,
+    "skill_category": 0,
+    "tag_id": "301/405/407",
+    "type": [
+      "opening_leg",
+      "uphill_or_downhill",
+      "dirt"
+    ],
+    "cost": 0,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 14,
+            "value": 850,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 5,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 202151,
     "name": "Keep Going!",
     "description": "Greatly consume endurance mid-race and greatly increase velocity. (Late Surger)",
@@ -17109,6 +17253,70 @@
           {
             "type": 9,
             "value": -400,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202161,
+    "name": "Restraint",
+    "description": "Increase Wit and moderately decrease the chance of being Rushed.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 20216,
+    "skill_category": 0,
+    "tag_id": "405",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 160,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 29,
+            "value": -30000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202172,
+    "name": "Downhill Speedster",
+    "description": "Slightly increase velocity on downhills.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20217,
+    "skill_category": 4,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 170,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "down_slope_random==1",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
             "target_type": 1,
             "target_value": 0
           }
@@ -19118,6 +19326,35 @@
     ]
   },
   {
+    "id": 900441,
+    "name": "Victory Belongs to Me—Strelitzia! ☆",
+    "description": "If positioned toward the back and racing calmly until the start of the final corner, when there are 300m remaining, slightly increase velocity continuously.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90044,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "order_rate_out50_continue==1&temptation_count==0&is_finalcorner==1",
+        "condition": "remain_distance<=300",
+        "base_time": 36000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 900451,
     "name": "Pure Heart",
     "description": "Moderately recover endurance when well-positioned mid-race.",
@@ -19902,6 +20139,55 @@
     ]
   },
   {
+    "id": 910101,
+    "name": "Joyful Voyage!",
+    "description": "If positioned toward the front with 200m remaining, slightly increase velocity. Then, if also positioned near the leading Umamusume, move minimally forward.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91010,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_diff_top<=5&order>=2&order_rate<=40&remain_distance<=201&remain_distance>=199",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 22,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "order>=2&order_rate<=40&remain_distance<=201&remain_distance>=199",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 910111,
     "name": "Superior Heal",
     "description": "Moderately recover endurance when overtaken toward the back mid-race.",
@@ -20512,6 +20798,35 @@
       {
         "precondition": "",
         "condition": "distance_rate>=50&order_rate>=40&overtake_target_time>=2",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910591,
+    "name": "Wherever This Wonder Leads",
+    "description": "If positioned midpack on a downhill just before late-race and there's a large distance left to the finish, slightly increase velocity.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91059,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=60&slope==2&phase==1&order_rate>=40&order_rate<=80&remain_distance>=500",
         "base_time": 30000,
         "effects": [
           {

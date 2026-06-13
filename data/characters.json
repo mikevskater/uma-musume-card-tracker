@@ -935,6 +935,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "101002": {
+    "name": "Taiki Shuttle",
+    "character_id": 1010,
+    "base_stats": {
+      "3": {
+        "speed": 102,
+        "stamina": 71,
+        "power": 107,
+        "guts": 92,
+        "wisdom": 78
+      },
+      "4": {
+        "speed": 113,
+        "stamina": 79,
+        "power": 119,
+        "guts": 102,
+        "wisdom": 87
+      },
+      "5": {
+        "speed": 124,
+        "stamina": 87,
+        "power": 130,
+        "guts": 112,
+        "wisdom": 97
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "A",
+        "medium": "E",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 30,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "101101": {
     "name": "Grass Wonder",
     "character_id": 1011,
@@ -3703,6 +3764,67 @@
     "default_rarity": 1,
     "running_style": 2
   },
+  "104401": {
+    "name": "Sweep Tosho",
+    "character_id": 1044,
+    "base_stats": {
+      "3": {
+        "speed": 101,
+        "stamina": 85,
+        "power": 110,
+        "guts": 65,
+        "wisdom": 89
+      },
+      "4": {
+        "speed": 112,
+        "stamina": 94,
+        "power": 122,
+        "guts": 72,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 123,
+        "stamina": 104,
+        "power": 135,
+        "guts": 79,
+        "wisdom": 109
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "D"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "G",
+        "betweener": "A",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
   "104501": {
     "name": "Super Creek",
     "character_id": 1045,
@@ -4466,6 +4588,67 @@
       "power": 0,
       "guts": 0,
       "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "105902": {
+    "name": "Mejiro Dober",
+    "character_id": 1059,
+    "base_stats": {
+      "3": {
+        "speed": 94,
+        "stamina": 78,
+        "power": 92,
+        "guts": 86,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 86,
+        "power": 103,
+        "guts": 96,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 115,
+        "stamina": 95,
+        "power": 113,
+        "guts": 105,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "A",
+        "medium": "A",
+        "long": "F"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
     },
     "default_rarity": 3,
     "running_style": 3
