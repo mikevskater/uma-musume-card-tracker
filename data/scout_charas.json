@@ -2516,6 +2516,40 @@
     }
   },
   {
+    "support_card_id": 10081,
+    "chara_id": 1073,
+    "speed": 146,
+    "stamina": 140,
+    "power": 131,
+    "guts": 137,
+    "wisdom": 146,
+    "stat_limits": {
+      "speed": 710,
+      "stamina": 700,
+      "power": 710,
+      "guts": 750,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "D",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "F"
+      }
+    }
+  },
+  {
     "support_card_id": 20001,
     "chara_id": 1005,
     "speed": 146,
@@ -3570,6 +3604,40 @@
     }
   },
   {
+    "support_card_id": 20033,
+    "chara_id": 1014,
+    "speed": 140,
+    "stamina": 130,
+    "power": 135,
+    "guts": 149,
+    "wisdom": 146,
+    "stat_limits": {
+      "speed": 750,
+      "stamina": 700,
+      "power": 720,
+      "guts": 700,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "E",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "B"
+      }
+    }
+  },
+  {
     "support_card_id": 20034,
     "chara_id": 1071,
     "speed": 142,
@@ -4042,6 +4110,40 @@
       "ground": {
         "turf": "A",
         "dirt": "B"
+      }
+    }
+  },
+  {
+    "support_card_id": 20049,
+    "chara_id": 1040,
+    "speed": 139,
+    "stamina": 142,
+    "power": 144,
+    "guts": 142,
+    "wisdom": 133,
+    "stat_limits": {
+      "speed": 720,
+      "stamina": 700,
+      "power": 700,
+      "guts": 700,
+      "wisdom": 750
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "B",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "F",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
       }
     }
   },
@@ -7166,6 +7268,74 @@
         "stalker": "A",
         "betweener": "A",
         "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
+    "support_card_id": 30105,
+    "chara_id": 1001,
+    "speed": 133,
+    "stamina": 138,
+    "power": 148,
+    "guts": 140,
+    "wisdom": 141,
+    "stat_limits": {
+      "speed": 710,
+      "stamina": 700,
+      "power": 710,
+      "guts": 750,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    }
+  },
+  {
+    "support_card_id": 30106,
+    "chara_id": 1018,
+    "speed": 141,
+    "stamina": 136,
+    "power": 136,
+    "guts": 142,
+    "wisdom": 145,
+    "stat_limits": {
+      "speed": 700,
+      "stamina": 720,
+      "power": 750,
+      "guts": 700,
+      "wisdom": 700
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "B",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "D",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "G"
       },
       "ground": {
         "turf": "A",

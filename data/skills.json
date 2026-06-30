@@ -1622,6 +1622,42 @@
     ]
   },
   {
+    "id": 100361,
+    "name": "trigger:BEAT",
+    "description": "When near the inner rail midpack on the final corner or later, calculate the path to victory, increasing velocity and ability to navigate smoothly on the final straight.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10036,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&order_rate>=40&order_rate<=75&lane_type==0",
+        "condition": "is_finalcorner==1&corner==0",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 28,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100371,
     "name": "Schwarzes Schwert",
     "description": "Increase velocity in a dash for the lead after running calmly and according to plan up until the final straight.",
@@ -3351,6 +3387,48 @@
           {
             "type": 31,
             "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 120011,
+    "name": "Dreams Donned with Pride!",
+    "description": "If the user activates another skill on the final corner late-race, take the crowd's cheers to heart and moderately increase velocity. If racing at Nakayama Racecourse, greatly increase velocity instead.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 12001,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "track_id==10005",
+        "condition": "phase>=2&is_finalcorner==1&corner!=0&is_activate_any_skill==1",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner==1&corner!=0&is_activate_any_skill==1",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
             "target_type": 1,
             "target_value": 0
           }
@@ -11725,6 +11803,58 @@
     ]
   },
   {
+    "id": 201113,
+    "name": "Refraction Arc",
+    "description": "Increase velocity on corners. (Medium)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20111,
+    "skill_category": 4,
+    "tag_id": "203/401",
+    "type": [
+      "medium",
+      "corner"
+    ],
+    "cost": 150,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&all_corner_random==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            104701211
+          ],
+          "card_id": 104701
+        },
+        {
+          "evolved_skill_ids": [
+            106703211
+          ],
+          "card_id": 106703
+        },
+        {
+          "evolved_skill_ids": [
+            107301211
+          ],
+          "card_id": 107301
+        }
+      ]
+    }
+  },
+  {
     "id": 201121,
     "name": "Clairvoyance",
     "description": "Widen field of view with heightened observation early-race. (Medium)",
@@ -14252,6 +14382,52 @@
         ]
       }
     ]
+  },
+  {
+    "id": 201453,
+    "name": "Moonlit Flash",
+    "description": "Increase velocity on straights. (End Closer)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20145,
+    "skill_category": 4,
+    "tag_id": "104/401",
+    "type": [
+      "end_closer",
+      "corner"
+    ],
+    "cost": 150,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "running_style==4&straight_random==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            103601211
+          ],
+          "card_id": 103601
+        },
+        {
+          "evolved_skill_ids": [
+            108402211
+          ],
+          "card_id": 108402
+        }
+      ]
+    }
   },
   {
     "id": 201461,
@@ -17325,6 +17501,42 @@
     ]
   },
   {
+    "id": 202181,
+    "name": "99 Problems",
+    "description": "Get overwhelmed by powerful opponents, moderately decreasing Guts and Wit.",
+    "icon_id": 10044,
+    "rarity": 1,
+    "group_id": 20218,
+    "skill_category": 0,
+    "tag_id": "404/405",
+    "type": [
+      "final_straight",
+      "uphill_or_downhill"
+    ],
+    "cost": 0,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "always==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 4,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 5,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 210011,
     "name": "Burning Spirit SPD",
     "description": "Burn bright with team spirit, increasing velocity in proportion to the total Speed of racing team members mid-race.",
@@ -18079,6 +18291,64 @@
           {
             "type": 2,
             "value": 800000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 300131,
+    "name": "Ruler of Japan",
+    "description": "I'll tackle this with everything I've got!",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 30013,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance>=350&remain_distance<=400",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 300141,
+    "name": "Indomitable",
+    "description": "I'll rise up to the challenge!",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 30014,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "remain_distance>=350&remain_distance<=400",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
             "target_type": 1,
             "target_value": 0
           }
@@ -19166,6 +19436,42 @@
           {
             "type": 27,
             "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900361,
+    "name": "trigger:BEAT",
+    "description": "When near the inner rail midpack on the final corner or later, slightly increase velocity and ability to navigate smoothly on the final straight.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90036,
+    "skill_category": 5,
+    "tag_id": "401/403",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "is_finalcorner==1&order_rate>=40&order_rate<=75&lane_type==0",
+        "condition": "is_finalcorner==1&corner==0",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 28,
+            "value": 150,
             "target_type": 1,
             "target_value": 0
           }
@@ -20911,6 +21217,48 @@
     ]
   },
   {
+    "id": 920011,
+    "name": "Dreams Donned with Pride!",
+    "description": "If the user activates another skill on the final corner late-race, very slightly increase velocity. If racing at Nakayama Racecourse, moderately increase velocity instead.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 92001,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "track_id==10005",
+        "condition": "phase>=2&is_finalcorner==1&corner!=0&is_activate_any_skill==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner==1&corner!=0&is_activate_any_skill==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 1000011,
     "name": "Carnival Bonus",
     "description": "Increase attributes by +{0}％ in the Racing Carnival. {1}％ chance to also raise runner's mood to Great. This skill will disappear when the event ends.",
@@ -20966,6 +21314,99 @@
           {
             "type": 14,
             "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1200011,
+    "name": "Medium Race Enthusiast",
+    "description": "Increase performance in Medium Turf races. This skill is exclusive to the event.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 120001,
+    "skill_category": 0,
+    "tag_id": "203/405/501",
+    "type": [
+      "medium",
+      "uphill_or_downhill",
+      "no_condition"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==3&ground_type==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1200021,
+    "name": "Long Race Enthusiast",
+    "description": "Increase performance in Long Turf races. This skill is exclusive to the event.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 120002,
+    "skill_category": 0,
+    "tag_id": "204/402/501",
+    "type": [
+      "long",
+      "straight",
+      "no_condition"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==4&ground_type==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1200031,
+    "name": "Mile Race Enthusiast",
+    "description": "Increase performance in Mile Turf races. This skill is exclusive to the event.",
+    "icon_id": 10031,
+    "rarity": 1,
+    "group_id": 120003,
+    "skill_category": 0,
+    "tag_id": "202/403/501",
+    "type": [
+      "mile",
+      "final_corner",
+      "no_condition"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_type==2&ground_type==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 3,
+            "value": 600000,
             "target_type": 1,
             "target_value": 0
           }

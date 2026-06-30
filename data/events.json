@@ -2598,7 +2598,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "With Passion and Joy!"
         },
         {
           "title_jp": "泥だらけの英雄たち",
@@ -2632,7 +2633,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "Muddy Heroes"
         }
       ]
     },
@@ -7363,7 +7365,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "I Can Do It Myself"
         },
         {
           "title_jp": "たまには他力も",
@@ -7416,7 +7419,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "Relying On Others"
         }
       ]
     },
@@ -13338,7 +13342,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "Preparing to the MAX!"
       },
       {
         "title_jp": "精いっぱいお手伝いするぞー！",
@@ -13374,7 +13379,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "Helping Out to the MAX!"
       }
     ],
     "chain_events": {

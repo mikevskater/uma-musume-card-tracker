@@ -121,6 +121,67 @@
     "default_rarity": 3,
     "running_style": 3
   },
+  "100103": {
+    "name": "Special Week",
+    "character_id": 1001,
+    "base_stats": {
+      "3": {
+        "speed": 96,
+        "stamina": 82,
+        "power": 94,
+        "guts": 82,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 107,
+        "stamina": 91,
+        "power": 105,
+        "guts": 91,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 117,
+        "stamina": 100,
+        "power": 115,
+        "guts": 100,
+        "wisdom": 118
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "100201": {
     "name": "Silence Suzuka",
     "character_id": 1002,
@@ -3261,6 +3322,67 @@
     },
     "default_rarity": 1,
     "running_style": 3
+  },
+  "103601": {
+    "name": "Air Shakur",
+    "character_id": 1036,
+    "base_stats": {
+      "3": {
+        "speed": 99,
+        "stamina": 85,
+        "power": 95,
+        "guts": 69,
+        "wisdom": 102
+      },
+      "4": {
+        "speed": 110,
+        "stamina": 95,
+        "power": 106,
+        "guts": 76,
+        "wisdom": 113
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 104,
+        "power": 116,
+        "guts": 84,
+        "wisdom": 126
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "E",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "C",
+        "betweener": "A",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 30
+    },
+    "default_rarity": 3,
+    "running_style": 4
   },
   "103701": {
     "name": "Eishin Flash",
