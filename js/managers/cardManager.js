@@ -431,7 +431,7 @@ async function loadData() {
                 } else {
                     card.hints.hint_skills[i] = {
                         "id": hint,
-                        "type": "unknown",
+                        "type": [],
                         "name": "Unknown Skill",
                         "description": "No description available."
                     };
@@ -450,7 +450,7 @@ async function loadData() {
                 } else {
                     card.event_skills[i] = {
                         "id": event,
-                        "type": "unknown",
+                        "type": [],
                         "name": "Unknown Event",
                         "description": "No description available."
                     };

@@ -892,7 +892,11 @@ function createEffectItem(effectArray, level, effectInfo, card) {
 
 // Helper function to check if skill types match current filters
 function checkSkillTypeFilters(skillTypes) {
-    if (!skillTypes || skillTypes.length === 0) {
+    // Guard against non-array type values (e.g. legacy "unknown" fallback strings)
+    if (!Array.isArray(skillTypes)) {
+        skillTypes = skillTypes ? [skillTypes] : [];
+    }
+    if (skillTypes.length === 0) {
         return { hasIncludeMatch: false, hasExcludeMatch: false, matchingTypes: [] };
     }
     
@@ -920,9 +924,12 @@ function checkSkillTypeFilters(skillTypes) {
 function createSkillItem(skill, isHintSkill = true) {
     const skillInfo = skillsData[skill.id];
     const skillName = skillInfo?.name || skill.name || `Skill ${skill.id}`;
-    
+
+    // Normalize skill types to an array (guards against scalar/undefined values)
+    const skillTypes = Array.isArray(skill.type) ? skill.type : (skill.type ? [skill.type] : []);
+
     // Check filter matches for skill types
-    const filterCheck = checkSkillTypeFilters(skill.type || []);
+    const filterCheck = checkSkillTypeFilters(skillTypes);
     const skillTypeHighlight = (advancedFilters.includeSkillTypes?.length > 0 || 
                                advancedFilters.excludeSkillTypes?.length > 0) &&
                               filterCheck.hasIncludeMatch && !filterCheck.hasExcludeMatch;
@@ -936,7 +943,7 @@ function createSkillItem(skill, isHintSkill = true) {
     const shouldHighlight = skillTypeHighlight || individualSkillHighlight;
     
     // Create type spans with highlighting for matching types
-    let typeSpans = (skill.type || []).map(type => {
+    let typeSpans = skillTypes.map(type => {
         const isMatchingInclude = filterCheck.matchingIncludeTypes.includes(type);
         const isMatchingExclude = filterCheck.matchingExcludeTypes.includes(type);
         let className = 'skill-type';
