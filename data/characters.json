@@ -799,6 +799,67 @@
     "default_rarity": 2,
     "running_style": 4
   },
+  "100702": {
+    "name": "Gold Ship",
+    "character_id": 1007,
+    "base_stats": {
+      "3": {
+        "speed": 79,
+        "stamina": 93,
+        "power": 112,
+        "guts": 73,
+        "wisdom": 93
+      },
+      "4": {
+        "speed": 88,
+        "stamina": 103,
+        "power": 125,
+        "guts": 81,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 96,
+        "stamina": 113,
+        "power": 137,
+        "guts": 89,
+        "wisdom": 115
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "B",
+        "stretch": "A"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 20,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 4
+  },
   "100801": {
     "name": "Vodka",
     "character_id": 1008,
@@ -1365,6 +1426,67 @@
       "power": 10,
       "guts": 0,
       "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "101303": {
+    "name": "Mejiro McQueen",
+    "character_id": 1013,
+    "base_stats": {
+      "3": {
+        "speed": 82,
+        "stamina": 85,
+        "power": 82,
+        "guts": 113,
+        "wisdom": 88
+      },
+      "4": {
+        "speed": 91,
+        "stamina": 95,
+        "power": 91,
+        "guts": 125,
+        "wisdom": 98
+      },
+      "5": {
+        "speed": 100,
+        "stamina": 104,
+        "power": 100,
+        "guts": 138,
+        "wisdom": 108
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "F",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "D",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "E"
+      }
+    },
+    "growth_rates": {
+      "speed": 8,
+      "stamina": 8,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 14
     },
     "default_rarity": 3,
     "running_style": 2
@@ -4450,6 +4572,67 @@
       "speed": 0,
       "stamina": 0,
       "power": 20,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
+  "105301": {
+    "name": "Bamboo Memory",
+    "character_id": 1053,
+    "base_stats": {
+      "3": {
+        "speed": 98,
+        "stamina": 74,
+        "power": 104,
+        "guts": 92,
+        "wisdom": 82
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 82,
+        "power": 115,
+        "guts": 102,
+        "wisdom": 92
+      },
+      "5": {
+        "speed": 119,
+        "stamina": 90,
+        "power": 127,
+        "guts": 112,
+        "wisdom": 102
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "A",
+        "mile": "A",
+        "medium": "C",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "E",
+        "betweener": "A",
+        "stretch": "C"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "D"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
       "guts": 10,
       "wisdom": 0
     },

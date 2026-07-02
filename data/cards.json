@@ -28406,8 +28406,24 @@
       ]
     ],
     "hints": {
-      "hint_skills": [],
-      "hint_others": []
+      "hint_skills": [
+        200452,
+        200492,
+        200502,
+        201132,
+        201142,
+        201332
+      ],
+      "hint_others": [
+        {
+          "hint_type": 2,
+          "hint_value": 2
+        },
+        {
+          "hint_type": 3,
+          "hint_value": 6
+        }
+      ]
     },
     "event_skills": [
       200761,
@@ -28553,8 +28569,22 @@
       ]
     ],
     "hints": {
-      "hint_skills": [],
-      "hint_others": []
+      "hint_skills": [
+        200242,
+        200532,
+        201242,
+        201252
+      ],
+      "hint_others": [
+        {
+          "hint_type": 2,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 4,
+          "hint_value": 2
+        }
+      ]
     },
     "event_skills": [
       200551,
@@ -28687,8 +28717,28 @@
       ]
     ],
     "hints": {
-      "hint_skills": [],
-      "hint_others": []
+      "hint_skills": [
+        200282,
+        200292,
+        200532,
+        200542,
+        201272,
+        201282
+      ],
+      "hint_others": [
+        {
+          "hint_type": 1,
+          "hint_value": 1
+        },
+        {
+          "hint_type": 3,
+          "hint_value": 1
+        },
+        {
+          "hint_type": 4,
+          "hint_value": 6
+        }
+      ]
     },
     "event_skills": [
       200721,
@@ -28835,8 +28885,23 @@
       ]
     ],
     "hints": {
-      "hint_skills": [],
-      "hint_others": []
+      "hint_skills": [
+        200052,
+        200162,
+        200222,
+        200262,
+        200821
+      ],
+      "hint_others": [
+        {
+          "hint_type": 5,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 30,
+          "hint_value": 5
+        }
+      ]
     },
     "event_skills": [
       200352,
@@ -36604,6 +36669,572 @@
       "name": "Tailwind to My Goals",
       "description": "Power Bonus and Skill Point Bonus (Friendship Gauge 80+)",
       "level": 30,
+      "effects": [
+        {
+          "type": 101,
+          "value": 80
+        }
+      ]
+    }
+  },
+  {
+    "support_id": 30107,
+    "char_id": 1004,
+    "char_name": "Maruzensky",
+    "card_name": "[Sentimental Flare ♪] Maruzensky",
+    "rarity": 3,
+    "type": "speed",
+    "obtained": "gacha",
+    "start_date": "2026-07-02",
+    "effects": [
+      [
+        1,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        25,
+        -1
+      ],
+      [
+        2,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        15,
+        30
+      ],
+      [
+        3,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        -1
+      ],
+      [
+        5,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1
+      ],
+      [
+        14,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        25,
+        -1,
+        -1,
+        -1,
+        30
+      ],
+      [
+        15,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        5,
+        -1
+      ],
+      [
+        16,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        5,
+        5,
+        -1,
+        -1,
+        10,
+        -1
+      ],
+      [
+        17,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        2,
+        -1
+      ],
+      [
+        18,
+        -1,
+        -1,
+        -1,
+        5,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        30,
+        -1
+      ],
+      [
+        19,
+        -1,
+        -1,
+        -1,
+        5,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        35,
+        -1
+      ]
+    ],
+    "hints": {
+      "hint_skills": [
+        200182,
+        200432,
+        200532,
+        201242,
+        201252,
+        201272,
+        201571,
+        201601,
+        201651,
+        201661
+      ],
+      "hint_others": [
+        {
+          "hint_type": 1,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 3,
+          "hint_value": 2
+        }
+      ]
+    },
+    "event_skills": [
+      200432,
+      201271,
+      200532
+    ],
+    "unique_effect": {
+      "name": "Sentimental Flare ♪",
+      "description": "Training Effectiveness based on Training Level",
+      "level": 30,
+      "effects": [
+        {
+          "type": 111,
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "support_id": 30108,
+    "char_id": 1049,
+    "char_name": "Nakayama Festa",
+    "card_name": "[Trusting the Dice] Nakayama Festa",
+    "rarity": 3,
+    "type": "intelligence",
+    "obtained": "gacha",
+    "start_date": "2026-07-02",
+    "effects": [
+      [
+        1,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        2,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        40,
+        -1,
+        -1,
+        -1,
+        60
+      ],
+      [
+        7,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        -1
+      ],
+      [
+        8,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        -1,
+        -1,
+        15
+      ],
+      [
+        14,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        15,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        5,
+        10
+      ],
+      [
+        16,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        10,
+        15
+      ],
+      [
+        17,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        2,
+        -1,
+        -1,
+        -1,
+        3
+      ],
+      [
+        18,
+        5,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        40,
+        -1,
+        -1,
+        -1,
+        50
+      ],
+      [
+        30,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1
+      ],
+      [
+        31,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        3,
+        -1,
+        -1,
+        -1,
+        5
+      ]
+    ],
+    "hints": {
+      "hint_skills": [
+        200162,
+        200182,
+        200302,
+        200492,
+        200602,
+        200732,
+        201382,
+        201562,
+        201571,
+        201591,
+        201702,
+        202032
+      ],
+      "hint_others": [
+        {
+          "hint_type": 5,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 30,
+          "hint_value": 5
+        }
+      ]
+    },
+    "event_skills": [
+      202031,
+      202032,
+      200042,
+      200052
+    ],
+    "unique_effect": {
+      "name": "Trusting the Dice",
+      "description": "Failure rate may be reduced to 0% when training occurs",
+      "level": 30,
+      "effects": [
+        {
+          "type": 112,
+          "value": 20
+        }
+      ]
+    }
+  },
+  {
+    "support_id": 30109,
+    "char_id": 1069,
+    "char_name": "Sakura Chiyono O",
+    "card_name": "[A Good Heart Blossoms to Its Fullest] Sakura Chiyono O",
+    "rarity": 3,
+    "type": "guts",
+    "obtained": "gacha",
+    "start_date": "2026-07-02",
+    "effects": [
+      [
+        1,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        25,
+        -1
+      ],
+      [
+        3,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1
+      ],
+      [
+        6,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        1,
+        -1
+      ],
+      [
+        9,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        11,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        12,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        14,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        15,
+        30
+      ],
+      [
+        19,
+        5,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        50,
+        -1,
+        -1,
+        -1,
+        65
+      ]
+    ],
+    "hints": {
+      "hint_skills": [
+        200182,
+        201032,
+        201052,
+        201312,
+        201322,
+        201532,
+        201902
+      ],
+      "hint_others": [
+        {
+          "hint_type": 1,
+          "hint_value": 1
+        },
+        {
+          "hint_type": 3,
+          "hint_value": 1
+        },
+        {
+          "hint_type": 4,
+          "hint_value": 6
+        }
+      ]
+    },
+    "event_skills": [
+      201061,
+      201062,
+      200172
+    ],
+    "unique_effect": {
+      "name": "A Good Heart Blossoms to Its Fullest",
+      "description": "Training Effectiveness (Friendship Gauge 80+)",
+      "level": 40,
       "effects": [
         {
           "type": 101,

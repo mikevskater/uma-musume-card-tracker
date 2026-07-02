@@ -5,167 +5,167 @@
       "training": {
         "speed": {
           "1": {
-            "speed": 10,
-            "power": 5,
+            "speed": 11,
+            "power": 6,
             "energy": -21,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "speed": 11,
-            "power": 5,
+            "speed": 12,
+            "power": 6,
             "energy": -22,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "speed": 12,
-            "power": 5,
-            "energy": -23,
-            "skill_pt": 2
-          },
-          "4": {
             "speed": 13,
             "power": 6,
-            "energy": -25,
-            "skill_pt": 2
+            "energy": -23,
+            "skill_pt": 4
           },
-          "5": {
+          "4": {
             "speed": 14,
             "power": 7,
+            "energy": -25,
+            "skill_pt": 4
+          },
+          "5": {
+            "speed": 15,
+            "power": 8,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "power": {
           "1": {
-            "stamina": 5,
-            "power": 8,
+            "stamina": 6,
+            "power": 9,
             "energy": -20,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 5,
-            "power": 9,
+            "stamina": 6,
+            "power": 10,
             "energy": -21,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 5,
-            "power": 10,
-            "energy": -22,
-            "skill_pt": 2
-          },
-          "4": {
             "stamina": 6,
             "power": 11,
-            "energy": -24,
-            "skill_pt": 2
+            "energy": -22,
+            "skill_pt": 4
           },
-          "5": {
+          "4": {
             "stamina": 7,
             "power": 12,
+            "energy": -24,
+            "skill_pt": 4
+          },
+          "5": {
+            "stamina": 8,
+            "power": 13,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "guts": {
           "1": {
-            "speed": 4,
-            "power": 4,
-            "guts": 8,
-            "energy": -22,
-            "skill_pt": 2
-          },
-          "2": {
-            "speed": 4,
-            "power": 4,
-            "guts": 9,
-            "energy": -23,
-            "skill_pt": 2
-          },
-          "3": {
-            "speed": 4,
-            "power": 4,
-            "guts": 10,
-            "energy": -24,
-            "skill_pt": 2
-          },
-          "4": {
-            "speed": 5,
-            "power": 4,
-            "guts": 11,
-            "energy": -26,
-            "skill_pt": 2
-          },
-          "5": {
             "speed": 5,
             "power": 5,
+            "guts": 8,
+            "energy": -22,
+            "skill_pt": 4
+          },
+          "2": {
+            "speed": 5,
+            "power": 5,
+            "guts": 9,
+            "energy": -23,
+            "skill_pt": 4
+          },
+          "3": {
+            "speed": 5,
+            "power": 5,
+            "guts": 10,
+            "energy": -24,
+            "skill_pt": 4
+          },
+          "4": {
+            "speed": 6,
+            "power": 5,
+            "guts": 11,
+            "energy": -26,
+            "skill_pt": 4
+          },
+          "5": {
+            "speed": 6,
+            "power": 6,
             "guts": 12,
             "energy": -28,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "stamina": {
           "1": {
-            "stamina": 9,
-            "guts": 4,
+            "stamina": 10,
+            "guts": 6,
             "energy": -19,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 10,
-            "guts": 4,
+            "stamina": 11,
+            "guts": 6,
             "energy": -20,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 11,
-            "guts": 4,
+            "stamina": 12,
+            "guts": 6,
             "energy": -21,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
-            "stamina": 12,
-            "guts": 5,
+            "stamina": 13,
+            "guts": 7,
             "energy": -23,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
-            "stamina": 13,
-            "guts": 6,
+            "stamina": 14,
+            "guts": 8,
             "energy": -25,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "intelligence": {
           "1": {
             "speed": 2,
-            "wisdom": 9,
+            "wisdom": 10,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "2": {
             "speed": 2,
-            "wisdom": 10,
+            "wisdom": 11,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "3": {
             "speed": 2,
-            "wisdom": 11,
+            "wisdom": 12,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "4": {
             "speed": 3,
-            "wisdom": 12,
+            "wisdom": 13,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "5": {
             "speed": 4,
-            "wisdom": 13,
+            "wisdom": 14,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           }
         },
         "cmd_301": {
@@ -258,167 +258,167 @@
         },
         "speed_enhanced": {
           "1": {
-            "speed": 14,
-            "power": 7,
+            "speed": 15,
+            "power": 8,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "speed": 15,
-            "power": 7,
+            "speed": 16,
+            "power": 8,
             "energy": -28,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "speed": 16,
-            "power": 7,
-            "energy": -29,
-            "skill_pt": 2
-          },
-          "4": {
             "speed": 17,
             "power": 8,
-            "energy": -31,
-            "skill_pt": 2
+            "energy": -29,
+            "skill_pt": 4
           },
-          "5": {
+          "4": {
             "speed": 18,
             "power": 9,
+            "energy": -31,
+            "skill_pt": 4
+          },
+          "5": {
+            "speed": 19,
+            "power": 10,
             "energy": -33,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "stamina_enhanced": {
           "1": {
-            "stamina": 13,
-            "guts": 6,
+            "stamina": 14,
+            "guts": 8,
             "energy": -25,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 14,
-            "guts": 6,
+            "stamina": 15,
+            "guts": 8,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 15,
-            "guts": 6,
+            "stamina": 16,
+            "guts": 8,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
-            "stamina": 16,
-            "guts": 7,
+            "stamina": 17,
+            "guts": 9,
             "energy": -29,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
-            "stamina": 17,
-            "guts": 8,
+            "stamina": 18,
+            "guts": 10,
             "energy": -31,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "power_enhanced": {
           "1": {
-            "stamina": 7,
-            "power": 12,
+            "stamina": 8,
+            "power": 13,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 7,
-            "power": 13,
+            "stamina": 8,
+            "power": 14,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 7,
-            "power": 14,
-            "energy": -28,
-            "skill_pt": 2
-          },
-          "4": {
             "stamina": 8,
             "power": 15,
-            "energy": -30,
-            "skill_pt": 2
+            "energy": -28,
+            "skill_pt": 4
           },
-          "5": {
+          "4": {
             "stamina": 9,
             "power": 16,
+            "energy": -30,
+            "skill_pt": 4
+          },
+          "5": {
+            "stamina": 10,
+            "power": 17,
             "energy": -32,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "guts_enhanced": {
           "1": {
-            "speed": 5,
-            "power": 5,
-            "guts": 12,
-            "energy": -28,
-            "skill_pt": 2
-          },
-          "2": {
-            "speed": 5,
+            "speed": 6,
             "power": 5,
             "guts": 13,
-            "energy": -29,
-            "skill_pt": 2
+            "energy": -28,
+            "skill_pt": 4
           },
-          "3": {
-            "speed": 5,
+          "2": {
+            "speed": 6,
             "power": 5,
             "guts": 14,
-            "energy": -30,
-            "skill_pt": 2
+            "energy": -29,
+            "skill_pt": 4
           },
-          "4": {
+          "3": {
             "speed": 6,
             "power": 5,
             "guts": 15,
+            "energy": -30,
+            "skill_pt": 4
+          },
+          "4": {
+            "speed": 7,
+            "power": 5,
+            "guts": 16,
             "energy": -32,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
-            "speed": 6,
+            "speed": 7,
             "power": 6,
-            "guts": 16,
+            "guts": 17,
             "energy": -34,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "intelligence_enhanced": {
           "1": {
             "speed": 4,
-            "wisdom": 13,
+            "wisdom": 14,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "2": {
             "speed": 4,
-            "wisdom": 14,
+            "wisdom": 15,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "3": {
             "speed": 4,
-            "wisdom": 15,
+            "wisdom": 16,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "4": {
             "speed": 5,
-            "wisdom": 16,
+            "wisdom": 17,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           },
           "5": {
             "speed": 6,
-            "wisdom": 17,
+            "wisdom": 18,
             "energy": 5,
-            "skill_pt": 4
+            "skill_pt": 5
           }
         }
       }
@@ -431,63 +431,63 @@
             "speed": 8,
             "power": 4,
             "energy": -19,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
             "speed": 9,
             "power": 4,
             "energy": -20,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
             "speed": 10,
             "power": 4,
             "energy": -21,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
             "speed": 11,
             "power": 5,
             "energy": -23,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
             "speed": 12,
             "power": 6,
             "energy": -25,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "power": {
           "1": {
             "stamina": 4,
-            "power": 6,
-            "energy": -18,
-            "skill_pt": 2
+            "power": 9,
+            "energy": -20,
+            "skill_pt": 4
           },
           "2": {
             "stamina": 4,
-            "power": 7,
-            "energy": -19,
-            "skill_pt": 2
+            "power": 10,
+            "energy": -21,
+            "skill_pt": 4
           },
           "3": {
             "stamina": 4,
-            "power": 8,
-            "energy": -20,
-            "skill_pt": 2
+            "power": 11,
+            "energy": -22,
+            "skill_pt": 4
           },
           "4": {
             "stamina": 5,
-            "power": 9,
-            "energy": -22,
-            "skill_pt": 2
+            "power": 12,
+            "energy": -24,
+            "skill_pt": 4
           },
           "5": {
             "stamina": 6,
-            "power": 10,
-            "energy": -24,
-            "skill_pt": 2
+            "power": 13,
+            "energy": -26,
+            "skill_pt": 4
           }
         },
         "guts": {
@@ -496,67 +496,67 @@
             "power": 3,
             "guts": 6,
             "energy": -20,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
             "speed": 3,
             "power": 3,
             "guts": 7,
             "energy": -21,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
             "speed": 3,
             "power": 3,
             "guts": 8,
             "energy": -22,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
             "speed": 4,
             "power": 3,
             "guts": 9,
             "energy": -24,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
             "speed": 4,
             "power": 4,
             "guts": 10,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "stamina": {
           "1": {
-            "stamina": 7,
-            "guts": 3,
-            "energy": -17,
-            "skill_pt": 2
+            "stamina": 8,
+            "guts": 6,
+            "energy": -20,
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 8,
-            "guts": 3,
-            "energy": -18,
-            "skill_pt": 2
+            "stamina": 9,
+            "guts": 6,
+            "energy": -21,
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 9,
-            "guts": 3,
-            "energy": -19,
-            "skill_pt": 2
+            "stamina": 10,
+            "guts": 6,
+            "energy": -22,
+            "skill_pt": 4
           },
           "4": {
-            "stamina": 10,
-            "guts": 4,
-            "energy": -21,
-            "skill_pt": 2
+            "stamina": 11,
+            "guts": 7,
+            "energy": -24,
+            "skill_pt": 4
           },
           "5": {
-            "stamina": 11,
-            "guts": 5,
-            "energy": -23,
-            "skill_pt": 2
+            "stamina": 12,
+            "guts": 8,
+            "energy": -26,
+            "skill_pt": 4
           }
         },
         "intelligence": {
@@ -564,31 +564,31 @@
             "speed": 2,
             "wisdom": 6,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "2": {
             "speed": 2,
             "wisdom": 7,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "3": {
             "speed": 2,
             "wisdom": 8,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "4": {
             "speed": 3,
             "wisdom": 9,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "5": {
             "speed": 4,
             "wisdom": 10,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           }
         },
         "cmd_301": {
@@ -684,95 +684,95 @@
             "speed": 12,
             "power": 6,
             "energy": -25,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
             "speed": 13,
             "power": 6,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
             "speed": 14,
             "power": 6,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
             "speed": 15,
             "power": 7,
             "energy": -29,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
             "speed": 16,
             "power": 8,
             "energy": -31,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "stamina_enhanced": {
           "1": {
-            "stamina": 11,
-            "guts": 5,
-            "energy": -23,
-            "skill_pt": 2
+            "stamina": 12,
+            "guts": 8,
+            "energy": -26,
+            "skill_pt": 4
           },
           "2": {
-            "stamina": 12,
-            "guts": 5,
-            "energy": -24,
-            "skill_pt": 2
+            "stamina": 13,
+            "guts": 8,
+            "energy": -27,
+            "skill_pt": 4
           },
           "3": {
-            "stamina": 13,
-            "guts": 5,
-            "energy": -25,
-            "skill_pt": 2
+            "stamina": 14,
+            "guts": 8,
+            "energy": -28,
+            "skill_pt": 4
           },
           "4": {
-            "stamina": 14,
-            "guts": 6,
-            "energy": -27,
-            "skill_pt": 2
+            "stamina": 15,
+            "guts": 9,
+            "energy": -30,
+            "skill_pt": 4
           },
           "5": {
-            "stamina": 15,
-            "guts": 7,
-            "energy": -29,
-            "skill_pt": 2
+            "stamina": 16,
+            "guts": 10,
+            "energy": -32,
+            "skill_pt": 4
           }
         },
         "power_enhanced": {
           "1": {
             "stamina": 6,
-            "power": 10,
-            "energy": -24,
-            "skill_pt": 2
+            "power": 13,
+            "energy": -26,
+            "skill_pt": 4
           },
           "2": {
             "stamina": 6,
-            "power": 11,
-            "energy": -25,
-            "skill_pt": 2
+            "power": 14,
+            "energy": -27,
+            "skill_pt": 4
           },
           "3": {
             "stamina": 6,
-            "power": 12,
-            "energy": -26,
-            "skill_pt": 2
+            "power": 15,
+            "energy": -28,
+            "skill_pt": 4
           },
           "4": {
             "stamina": 7,
-            "power": 13,
-            "energy": -28,
-            "skill_pt": 2
+            "power": 16,
+            "energy": -30,
+            "skill_pt": 4
           },
           "5": {
             "stamina": 8,
-            "power": 14,
-            "energy": -30,
-            "skill_pt": 2
+            "power": 17,
+            "energy": -32,
+            "skill_pt": 4
           }
         },
         "guts_enhanced": {
@@ -781,35 +781,35 @@
             "power": 4,
             "guts": 10,
             "energy": -26,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "2": {
             "speed": 4,
             "power": 4,
             "guts": 11,
             "energy": -27,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "3": {
             "speed": 4,
             "power": 4,
             "guts": 12,
             "energy": -28,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "4": {
             "speed": 5,
             "power": 4,
             "guts": 13,
             "energy": -30,
-            "skill_pt": 2
+            "skill_pt": 4
           },
           "5": {
             "speed": 5,
             "power": 5,
             "guts": 14,
             "energy": -32,
-            "skill_pt": 2
+            "skill_pt": 4
           }
         },
         "intelligence_enhanced": {
@@ -817,31 +817,31 @@
             "speed": 4,
             "wisdom": 10,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "2": {
             "speed": 4,
             "wisdom": 11,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "3": {
             "speed": 4,
             "wisdom": 12,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "4": {
             "speed": 5,
             "wisdom": 13,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           },
           "5": {
             "speed": 6,
             "wisdom": 14,
             "energy": 5,
-            "skill_pt": 3
+            "skill_pt": 5
           }
         }
       }

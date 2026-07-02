@@ -221,6 +221,14 @@
     {
       "rank": 10,
       "total_point": 3200
+    },
+    {
+      "rank": 11,
+      "total_point": 4800
+    },
+    {
+      "rank": 12,
+      "total_point": 6400
     }
   ],
   "fan_count_tiers": {
