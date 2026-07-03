@@ -547,9 +547,9 @@ function renderCardDetails(card, level) {
     
     // Setup form event listeners
     setupModalFormEvents(card, card.support_id);
-    
-    // Setup navigation event listeners
-    setupModalNavigationEvents();
+    // Navigation is handled by delegated listeners in eventManager.initializeModalEvents()
+    // (do NOT bind here — renderCardDetails runs on every navigation, which would
+    //  stack duplicate click handlers and cause the modal to skip cards two at a time)
 }
 
 // Create modal body content

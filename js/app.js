@@ -346,12 +346,14 @@ function initializeAccessibilityFeatures() {
     const originalOpenHelpModal = window.openHelpModal;
     window.openHelpModal = function(section) {
         lastFocusedElement = document.activeElement;
-        originalOpenHelpModal(section);
+        // Return the original's promise so callers can chain .then()/.catch()
+        const result = originalOpenHelpModal(section);
         // Focus the first navigation item
         setTimeout(() => {
             const firstNavItem = document.querySelector('.help-nav-item');
             if (firstNavItem) firstNavItem.focus();
         }, 100);
+        return result;
     };
     
     // Restore focus when modals close
