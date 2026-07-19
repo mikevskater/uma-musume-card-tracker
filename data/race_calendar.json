@@ -2871,6 +2871,93 @@
     "reward_set_id": 2
   },
   {
+    "program_id": 1125,
+    "race_instance_id": 307101,
+    "race_name": "TCK Jo-o Hai",
+    "month": 1,
+    "half": 2,
+    "grade": 300,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 9,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2200
+      },
+      {
+        "order": 2,
+        "fan_count": 880
+      },
+      {
+        "order": 3,
+        "fan_count": 550
+      },
+      {
+        "order": 4,
+        "fan_count": 330
+      },
+      {
+        "order": 5,
+        "fan_count": 220
+      },
+      {
+        "order": 6,
+        "fan_count": 198
+      },
+      {
+        "order": 7,
+        "fan_count": 176
+      },
+      {
+        "order": 8,
+        "fan_count": 154
+      },
+      {
+        "order": 9,
+        "fan_count": 132
+      },
+      {
+        "order": 10,
+        "fan_count": 110
+      },
+      {
+        "order": 11,
+        "fan_count": 88
+      },
+      {
+        "order": 12,
+        "fan_count": 66
+      },
+      {
+        "order": 13,
+        "fan_count": 55
+      },
+      {
+        "order": 14,
+        "fan_count": 44
+      },
+      {
+        "order": 15,
+        "fan_count": 33
+      },
+      {
+        "order": 16,
+        "fan_count": 22
+      },
+      {
+        "order": 17,
+        "fan_count": 22
+      },
+      {
+        "order": 18,
+        "fan_count": 22
+      }
+    ],
+    "reward_set_id": 405
+  },
+  {
     "program_id": 2001,
     "race_instance_id": 910001,
     "race_name": "URA Finale Qualifier",
@@ -25839,6 +25926,93 @@
     "reward_set_id": 2
   },
   {
+    "program_id": 1106,
+    "race_instance_id": 110701,
+    "race_name": "Kawasaki Kinen",
+    "month": 2,
+    "half": 1,
+    "grade": 100,
+    "distance": 2100,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 110701
+  },
+  {
     "program_id": 1,
     "race_instance_id": 100101,
     "race_name": "February Stakes",
@@ -28884,6 +29058,93 @@
     "reward_set_id": 2
   },
   {
+    "program_id": 1121,
+    "race_instance_id": 203801,
+    "race_name": "Empress Hai",
+    "month": 3,
+    "half": 1,
+    "grade": 200,
+    "distance": 2100,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 15,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3500
+      },
+      {
+        "order": 2,
+        "fan_count": 1400
+      },
+      {
+        "order": 3,
+        "fan_count": 875
+      },
+      {
+        "order": 4,
+        "fan_count": 525
+      },
+      {
+        "order": 5,
+        "fan_count": 350
+      },
+      {
+        "order": 6,
+        "fan_count": 315
+      },
+      {
+        "order": 7,
+        "fan_count": 280
+      },
+      {
+        "order": 8,
+        "fan_count": 245
+      },
+      {
+        "order": 9,
+        "fan_count": 210
+      },
+      {
+        "order": 10,
+        "fan_count": 175
+      },
+      {
+        "order": 11,
+        "fan_count": 140
+      },
+      {
+        "order": 12,
+        "fan_count": 105
+      },
+      {
+        "order": 13,
+        "fan_count": 88
+      },
+      {
+        "order": 14,
+        "fan_count": 70
+      },
+      {
+        "order": 15,
+        "fan_count": 53
+      },
+      {
+        "order": 16,
+        "fan_count": 35
+      },
+      {
+        "order": 17,
+        "fan_count": 35
+      },
+      {
+        "order": 18,
+        "fan_count": 35
+      }
+    ],
+    "reward_set_id": 505
+  },
+  {
     "program_id": 2,
     "race_instance_id": 100201,
     "race_name": "Takamatsunomiya Kinen",
@@ -30535,6 +30796,93 @@
       }
     ],
     "reward_set_id": 502
+  },
+  {
+    "program_id": 1123,
+    "race_instance_id": 204001,
+    "race_name": "Diolite Kinen",
+    "month": 3,
+    "half": 2,
+    "grade": 200,
+    "distance": 2400,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 51,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3200
+      },
+      {
+        "order": 2,
+        "fan_count": 1280
+      },
+      {
+        "order": 3,
+        "fan_count": 800
+      },
+      {
+        "order": 4,
+        "fan_count": 480
+      },
+      {
+        "order": 5,
+        "fan_count": 320
+      },
+      {
+        "order": 6,
+        "fan_count": 288
+      },
+      {
+        "order": 7,
+        "fan_count": 256
+      },
+      {
+        "order": 8,
+        "fan_count": 224
+      },
+      {
+        "order": 9,
+        "fan_count": 192
+      },
+      {
+        "order": 10,
+        "fan_count": 160
+      },
+      {
+        "order": 11,
+        "fan_count": 128
+      },
+      {
+        "order": 12,
+        "fan_count": 96
+      },
+      {
+        "order": 13,
+        "fan_count": 80
+      },
+      {
+        "order": 14,
+        "fan_count": 64
+      },
+      {
+        "order": 15,
+        "fan_count": 48
+      },
+      {
+        "order": 16,
+        "fan_count": 32
+      },
+      {
+        "order": 17,
+        "fan_count": 32
+      },
+      {
+        "order": 18,
+        "fan_count": 32
+      }
+    ],
+    "reward_set_id": 505
   },
   {
     "program_id": 14,
@@ -32275,6 +32623,93 @@
       }
     ],
     "reward_set_id": 100501
+  },
+  {
+    "program_id": 1128,
+    "race_instance_id": 307401,
+    "race_name": "Marine Cup",
+    "month": 4,
+    "half": 1,
+    "grade": 300,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 49,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2500
+      },
+      {
+        "order": 2,
+        "fan_count": 1000
+      },
+      {
+        "order": 3,
+        "fan_count": 625
+      },
+      {
+        "order": 4,
+        "fan_count": 375
+      },
+      {
+        "order": 5,
+        "fan_count": 250
+      },
+      {
+        "order": 6,
+        "fan_count": 225
+      },
+      {
+        "order": 7,
+        "fan_count": 200
+      },
+      {
+        "order": 8,
+        "fan_count": 175
+      },
+      {
+        "order": 9,
+        "fan_count": 150
+      },
+      {
+        "order": 10,
+        "fan_count": 125
+      },
+      {
+        "order": 11,
+        "fan_count": 100
+      },
+      {
+        "order": 12,
+        "fan_count": 75
+      },
+      {
+        "order": 13,
+        "fan_count": 63
+      },
+      {
+        "order": 14,
+        "fan_count": 50
+      },
+      {
+        "order": 15,
+        "fan_count": 38
+      },
+      {
+        "order": 16,
+        "fan_count": 25
+      },
+      {
+        "order": 17,
+        "fan_count": 25
+      },
+      {
+        "order": 18,
+        "fan_count": 25
+      }
+    ],
+    "reward_set_id": 405
   },
   {
     "program_id": 4,
@@ -34191,6 +34626,93 @@
     "reward_set_id": 100601
   },
   {
+    "program_id": 1126,
+    "race_instance_id": 307201,
+    "race_name": "Tokyo Sprint",
+    "month": 4,
+    "half": 2,
+    "grade": 300,
+    "distance": 1200,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 52,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2700
+      },
+      {
+        "order": 2,
+        "fan_count": 1080
+      },
+      {
+        "order": 3,
+        "fan_count": 675
+      },
+      {
+        "order": 4,
+        "fan_count": 405
+      },
+      {
+        "order": 5,
+        "fan_count": 270
+      },
+      {
+        "order": 6,
+        "fan_count": 243
+      },
+      {
+        "order": 7,
+        "fan_count": 216
+      },
+      {
+        "order": 8,
+        "fan_count": 189
+      },
+      {
+        "order": 9,
+        "fan_count": 162
+      },
+      {
+        "order": 10,
+        "fan_count": 135
+      },
+      {
+        "order": 11,
+        "fan_count": 108
+      },
+      {
+        "order": 12,
+        "fan_count": 81
+      },
+      {
+        "order": 13,
+        "fan_count": 68
+      },
+      {
+        "order": 14,
+        "fan_count": 54
+      },
+      {
+        "order": 15,
+        "fan_count": 41
+      },
+      {
+        "order": 16,
+        "fan_count": 27
+      },
+      {
+        "order": 17,
+        "fan_count": 27
+      },
+      {
+        "order": 18,
+        "fan_count": 27
+      }
+    ],
+    "reward_set_id": 405
+  },
+  {
     "program_id": 5,
     "race_instance_id": 100801,
     "race_name": "Victoria Mile",
@@ -36016,6 +36538,93 @@
       }
     ],
     "reward_set_id": 2
+  },
+  {
+    "program_id": 1108,
+    "race_instance_id": 110901,
+    "race_name": "Kashiwa Kinen",
+    "month": 5,
+    "half": 1,
+    "grade": 100,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 43,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 8000
+      },
+      {
+        "order": 2,
+        "fan_count": 3200
+      },
+      {
+        "order": 3,
+        "fan_count": 2000
+      },
+      {
+        "order": 4,
+        "fan_count": 1200
+      },
+      {
+        "order": 5,
+        "fan_count": 800
+      },
+      {
+        "order": 6,
+        "fan_count": 720
+      },
+      {
+        "order": 7,
+        "fan_count": 640
+      },
+      {
+        "order": 8,
+        "fan_count": 560
+      },
+      {
+        "order": 9,
+        "fan_count": 480
+      },
+      {
+        "order": 10,
+        "fan_count": 400
+      },
+      {
+        "order": 11,
+        "fan_count": 320
+      },
+      {
+        "order": 12,
+        "fan_count": 240
+      },
+      {
+        "order": 13,
+        "fan_count": 200
+      },
+      {
+        "order": 14,
+        "fan_count": 160
+      },
+      {
+        "order": 15,
+        "fan_count": 120
+      },
+      {
+        "order": 16,
+        "fan_count": 80
+      },
+      {
+        "order": 17,
+        "fan_count": 80
+      },
+      {
+        "order": 18,
+        "fan_count": 80
+      }
+    ],
+    "reward_set_id": 110901
   },
   {
     "program_id": 17,
@@ -39061,6 +39670,93 @@
       }
     ],
     "reward_set_id": 3
+  },
+  {
+    "program_id": 1122,
+    "race_instance_id": 203901,
+    "race_name": "Kanto Oaks",
+    "month": 6,
+    "half": 1,
+    "grade": 200,
+    "distance": 2100,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 15,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3500
+      },
+      {
+        "order": 2,
+        "fan_count": 1400
+      },
+      {
+        "order": 3,
+        "fan_count": 875
+      },
+      {
+        "order": 4,
+        "fan_count": 525
+      },
+      {
+        "order": 5,
+        "fan_count": 350
+      },
+      {
+        "order": 6,
+        "fan_count": 315
+      },
+      {
+        "order": 7,
+        "fan_count": 280
+      },
+      {
+        "order": 8,
+        "fan_count": 245
+      },
+      {
+        "order": 9,
+        "fan_count": 210
+      },
+      {
+        "order": 10,
+        "fan_count": 175
+      },
+      {
+        "order": 11,
+        "fan_count": 140
+      },
+      {
+        "order": 12,
+        "fan_count": 105
+      },
+      {
+        "order": 13,
+        "fan_count": 88
+      },
+      {
+        "order": 14,
+        "fan_count": 70
+      },
+      {
+        "order": 15,
+        "fan_count": 53
+      },
+      {
+        "order": 16,
+        "fan_count": 35
+      },
+      {
+        "order": 17,
+        "fan_count": 35
+      },
+      {
+        "order": 18,
+        "fan_count": 35
+      }
+    ],
+    "reward_set_id": 505
   },
   {
     "program_id": 74,
@@ -42804,6 +43500,93 @@
     "reward_set_id": 1
   },
   {
+    "program_id": 1135,
+    "race_instance_id": 904198,
+    "race_name": "Junior Make Debut",
+    "month": 6,
+    "half": 2,
+    "grade": 900,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 0,
+    "fan_set_id": 3,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 700
+      },
+      {
+        "order": 2,
+        "fan_count": 280
+      },
+      {
+        "order": 3,
+        "fan_count": 175
+      },
+      {
+        "order": 4,
+        "fan_count": 105
+      },
+      {
+        "order": 5,
+        "fan_count": 70
+      },
+      {
+        "order": 6,
+        "fan_count": 63
+      },
+      {
+        "order": 7,
+        "fan_count": 56
+      },
+      {
+        "order": 8,
+        "fan_count": 49
+      },
+      {
+        "order": 9,
+        "fan_count": 42
+      },
+      {
+        "order": 10,
+        "fan_count": 35
+      },
+      {
+        "order": 11,
+        "fan_count": 28
+      },
+      {
+        "order": 12,
+        "fan_count": 21
+      },
+      {
+        "order": 13,
+        "fan_count": 18
+      },
+      {
+        "order": 14,
+        "fan_count": 14
+      },
+      {
+        "order": 15,
+        "fan_count": 11
+      },
+      {
+        "order": 16,
+        "fan_count": 7
+      },
+      {
+        "order": 17,
+        "fan_count": 7
+      },
+      {
+        "order": 18,
+        "fan_count": 7
+      }
+    ],
+    "reward_set_id": 1
+  },
+  {
     "program_id": 97,
     "race_instance_id": 303501,
     "race_name": "CBC Sho",
@@ -44457,6 +45240,93 @@
     "reward_set_id": 110101
   },
   {
+    "program_id": 1127,
+    "race_instance_id": 307301,
+    "race_name": "Sparking Lady Cup",
+    "month": 7,
+    "half": 1,
+    "grade": 300,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 49,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2500
+      },
+      {
+        "order": 2,
+        "fan_count": 1000
+      },
+      {
+        "order": 3,
+        "fan_count": 625
+      },
+      {
+        "order": 4,
+        "fan_count": 375
+      },
+      {
+        "order": 5,
+        "fan_count": 250
+      },
+      {
+        "order": 6,
+        "fan_count": 225
+      },
+      {
+        "order": 7,
+        "fan_count": 200
+      },
+      {
+        "order": 8,
+        "fan_count": 175
+      },
+      {
+        "order": 9,
+        "fan_count": 150
+      },
+      {
+        "order": 10,
+        "fan_count": 125
+      },
+      {
+        "order": 11,
+        "fan_count": 100
+      },
+      {
+        "order": 12,
+        "fan_count": 75
+      },
+      {
+        "order": 13,
+        "fan_count": 63
+      },
+      {
+        "order": 14,
+        "fan_count": 50
+      },
+      {
+        "order": 15,
+        "fan_count": 38
+      },
+      {
+        "order": 16,
+        "fan_count": 25
+      },
+      {
+        "order": 17,
+        "fan_count": 25
+      },
+      {
+        "order": 18,
+        "fan_count": 25
+      }
+    ],
+    "reward_set_id": 405
+  },
+  {
     "program_id": 101,
     "race_instance_id": 304001,
     "race_name": "Chukyo Kinen",
@@ -45586,6 +46456,93 @@
       }
     ],
     "reward_set_id": 3
+  },
+  {
+    "program_id": 1130,
+    "race_instance_id": 307601,
+    "race_name": "Mercury Cup",
+    "month": 7,
+    "half": 2,
+    "grade": 300,
+    "distance": 2000,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 10,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2300
+      },
+      {
+        "order": 2,
+        "fan_count": 920
+      },
+      {
+        "order": 3,
+        "fan_count": 575
+      },
+      {
+        "order": 4,
+        "fan_count": 345
+      },
+      {
+        "order": 5,
+        "fan_count": 230
+      },
+      {
+        "order": 6,
+        "fan_count": 207
+      },
+      {
+        "order": 7,
+        "fan_count": 184
+      },
+      {
+        "order": 8,
+        "fan_count": 161
+      },
+      {
+        "order": 9,
+        "fan_count": 138
+      },
+      {
+        "order": 10,
+        "fan_count": 115
+      },
+      {
+        "order": 11,
+        "fan_count": 92
+      },
+      {
+        "order": 12,
+        "fan_count": 69
+      },
+      {
+        "order": 13,
+        "fan_count": 58
+      },
+      {
+        "order": 14,
+        "fan_count": 46
+      },
+      {
+        "order": 15,
+        "fan_count": 35
+      },
+      {
+        "order": 16,
+        "fan_count": 23
+      },
+      {
+        "order": 17,
+        "fan_count": 23
+      },
+      {
+        "order": 18,
+        "fan_count": 23
+      }
+    ],
+    "reward_set_id": 405
   },
   {
     "program_id": 104,
@@ -49329,6 +50286,93 @@
     "reward_set_id": 2
   },
   {
+    "program_id": 1131,
+    "race_instance_id": 307701,
+    "race_name": "Cluster Cup",
+    "month": 8,
+    "half": 2,
+    "grade": 300,
+    "distance": 1200,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 10,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2300
+      },
+      {
+        "order": 2,
+        "fan_count": 920
+      },
+      {
+        "order": 3,
+        "fan_count": 575
+      },
+      {
+        "order": 4,
+        "fan_count": 345
+      },
+      {
+        "order": 5,
+        "fan_count": 230
+      },
+      {
+        "order": 6,
+        "fan_count": 207
+      },
+      {
+        "order": 7,
+        "fan_count": 184
+      },
+      {
+        "order": 8,
+        "fan_count": 161
+      },
+      {
+        "order": 9,
+        "fan_count": 138
+      },
+      {
+        "order": 10,
+        "fan_count": 115
+      },
+      {
+        "order": 11,
+        "fan_count": 92
+      },
+      {
+        "order": 12,
+        "fan_count": 69
+      },
+      {
+        "order": 13,
+        "fan_count": 58
+      },
+      {
+        "order": 14,
+        "fan_count": 46
+      },
+      {
+        "order": 15,
+        "fan_count": 35
+      },
+      {
+        "order": 16,
+        "fan_count": 23
+      },
+      {
+        "order": 17,
+        "fan_count": 23
+      },
+      {
+        "order": 18,
+        "fan_count": 23
+      }
+    ],
+    "reward_set_id": 405
+  },
+  {
     "program_id": 83,
     "race_instance_id": 202101,
     "race_name": "Centaur Stakes",
@@ -52374,6 +53418,93 @@
     "reward_set_id": 3
   },
   {
+    "program_id": 1124,
+    "race_instance_id": 204101,
+    "race_name": "Sazanka TV Hai",
+    "month": 9,
+    "half": 2,
+    "grade": 200,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 51,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3200
+      },
+      {
+        "order": 2,
+        "fan_count": 1280
+      },
+      {
+        "order": 3,
+        "fan_count": 800
+      },
+      {
+        "order": 4,
+        "fan_count": 480
+      },
+      {
+        "order": 5,
+        "fan_count": 320
+      },
+      {
+        "order": 6,
+        "fan_count": 288
+      },
+      {
+        "order": 7,
+        "fan_count": 256
+      },
+      {
+        "order": 8,
+        "fan_count": 224
+      },
+      {
+        "order": 9,
+        "fan_count": 192
+      },
+      {
+        "order": 10,
+        "fan_count": 160
+      },
+      {
+        "order": 11,
+        "fan_count": 128
+      },
+      {
+        "order": 12,
+        "fan_count": 96
+      },
+      {
+        "order": 13,
+        "fan_count": 80
+      },
+      {
+        "order": 14,
+        "fan_count": 64
+      },
+      {
+        "order": 15,
+        "fan_count": 48
+      },
+      {
+        "order": 16,
+        "fan_count": 32
+      },
+      {
+        "order": 17,
+        "fan_count": 32
+      },
+      {
+        "order": 18,
+        "fan_count": 32
+      }
+    ],
+    "reward_set_id": 505
+  },
+  {
     "program_id": 86,
     "race_instance_id": 202601,
     "race_name": "Mainichi Okan",
@@ -54112,6 +55243,267 @@
       }
     ],
     "reward_set_id": 3
+  },
+  {
+    "program_id": 1109,
+    "race_instance_id": 111001,
+    "race_name": "M.C. Nambu Hai",
+    "month": 10,
+    "half": 1,
+    "grade": 100,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 111001
+  },
+  {
+    "program_id": 1119,
+    "race_instance_id": 203601,
+    "race_name": "Ladies' Prelude",
+    "month": 10,
+    "half": 1,
+    "grade": 200,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 13,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3100
+      },
+      {
+        "order": 2,
+        "fan_count": 1240
+      },
+      {
+        "order": 3,
+        "fan_count": 775
+      },
+      {
+        "order": 4,
+        "fan_count": 465
+      },
+      {
+        "order": 5,
+        "fan_count": 310
+      },
+      {
+        "order": 6,
+        "fan_count": 279
+      },
+      {
+        "order": 7,
+        "fan_count": 248
+      },
+      {
+        "order": 8,
+        "fan_count": 217
+      },
+      {
+        "order": 9,
+        "fan_count": 186
+      },
+      {
+        "order": 10,
+        "fan_count": 155
+      },
+      {
+        "order": 11,
+        "fan_count": 124
+      },
+      {
+        "order": 12,
+        "fan_count": 93
+      },
+      {
+        "order": 13,
+        "fan_count": 78
+      },
+      {
+        "order": 14,
+        "fan_count": 62
+      },
+      {
+        "order": 15,
+        "fan_count": 47
+      },
+      {
+        "order": 16,
+        "fan_count": 31
+      },
+      {
+        "order": 17,
+        "fan_count": 31
+      },
+      {
+        "order": 18,
+        "fan_count": 31
+      }
+    ],
+    "reward_set_id": 505
+  },
+  {
+    "program_id": 1120,
+    "race_instance_id": 203701,
+    "race_name": "Tokyo Hai",
+    "month": 10,
+    "half": 1,
+    "grade": 200,
+    "distance": 1200,
+    "ground": "dirt",
+    "fan_requirement": 1800,
+    "fan_set_id": 15,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 3500
+      },
+      {
+        "order": 2,
+        "fan_count": 1400
+      },
+      {
+        "order": 3,
+        "fan_count": 875
+      },
+      {
+        "order": 4,
+        "fan_count": 525
+      },
+      {
+        "order": 5,
+        "fan_count": 350
+      },
+      {
+        "order": 6,
+        "fan_count": 315
+      },
+      {
+        "order": 7,
+        "fan_count": 280
+      },
+      {
+        "order": 8,
+        "fan_count": 245
+      },
+      {
+        "order": 9,
+        "fan_count": 210
+      },
+      {
+        "order": 10,
+        "fan_count": 175
+      },
+      {
+        "order": 11,
+        "fan_count": 140
+      },
+      {
+        "order": 12,
+        "fan_count": 105
+      },
+      {
+        "order": 13,
+        "fan_count": 88
+      },
+      {
+        "order": 14,
+        "fan_count": 70
+      },
+      {
+        "order": 15,
+        "fan_count": 53
+      },
+      {
+        "order": 16,
+        "fan_count": 35
+      },
+      {
+        "order": 17,
+        "fan_count": 35
+      },
+      {
+        "order": 18,
+        "fan_count": 35
+      }
+    ],
+    "reward_set_id": 505
   },
   {
     "program_id": 76,
@@ -58462,6 +59854,1050 @@
       }
     ],
     "reward_set_id": 6
+  },
+  {
+    "program_id": 1110,
+    "race_instance_id": 111101,
+    "race_name": "JBC Ladies’ Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 20,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4100
+      },
+      {
+        "order": 2,
+        "fan_count": 1640
+      },
+      {
+        "order": 3,
+        "fan_count": 1025
+      },
+      {
+        "order": 4,
+        "fan_count": 615
+      },
+      {
+        "order": 5,
+        "fan_count": 410
+      },
+      {
+        "order": 6,
+        "fan_count": 369
+      },
+      {
+        "order": 7,
+        "fan_count": 328
+      },
+      {
+        "order": 8,
+        "fan_count": 287
+      },
+      {
+        "order": 9,
+        "fan_count": 246
+      },
+      {
+        "order": 10,
+        "fan_count": 205
+      },
+      {
+        "order": 11,
+        "fan_count": 164
+      },
+      {
+        "order": 12,
+        "fan_count": 123
+      },
+      {
+        "order": 13,
+        "fan_count": 103
+      },
+      {
+        "order": 14,
+        "fan_count": 82
+      },
+      {
+        "order": 15,
+        "fan_count": 62
+      },
+      {
+        "order": 16,
+        "fan_count": 41
+      },
+      {
+        "order": 17,
+        "fan_count": 41
+      },
+      {
+        "order": 18,
+        "fan_count": 41
+      }
+    ],
+    "reward_set_id": 110401
+  },
+  {
+    "program_id": 1111,
+    "race_instance_id": 111201,
+    "race_name": "JBC Sprint",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1400,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 110201
+  },
+  {
+    "program_id": 1112,
+    "race_instance_id": 111301,
+    "race_name": "JBC Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 2100,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 43,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 8000
+      },
+      {
+        "order": 2,
+        "fan_count": 3200
+      },
+      {
+        "order": 3,
+        "fan_count": 2000
+      },
+      {
+        "order": 4,
+        "fan_count": 1200
+      },
+      {
+        "order": 5,
+        "fan_count": 800
+      },
+      {
+        "order": 6,
+        "fan_count": 720
+      },
+      {
+        "order": 7,
+        "fan_count": 640
+      },
+      {
+        "order": 8,
+        "fan_count": 560
+      },
+      {
+        "order": 9,
+        "fan_count": 480
+      },
+      {
+        "order": 10,
+        "fan_count": 400
+      },
+      {
+        "order": 11,
+        "fan_count": 320
+      },
+      {
+        "order": 12,
+        "fan_count": 240
+      },
+      {
+        "order": 13,
+        "fan_count": 200
+      },
+      {
+        "order": 14,
+        "fan_count": 160
+      },
+      {
+        "order": 15,
+        "fan_count": 120
+      },
+      {
+        "order": 16,
+        "fan_count": 80
+      },
+      {
+        "order": 17,
+        "fan_count": 80
+      },
+      {
+        "order": 18,
+        "fan_count": 80
+      }
+    ],
+    "reward_set_id": 110301
+  },
+  {
+    "program_id": 1113,
+    "race_instance_id": 111401,
+    "race_name": "JBC Ladies’ Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 20,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4100
+      },
+      {
+        "order": 2,
+        "fan_count": 1640
+      },
+      {
+        "order": 3,
+        "fan_count": 1025
+      },
+      {
+        "order": 4,
+        "fan_count": 615
+      },
+      {
+        "order": 5,
+        "fan_count": 410
+      },
+      {
+        "order": 6,
+        "fan_count": 369
+      },
+      {
+        "order": 7,
+        "fan_count": 328
+      },
+      {
+        "order": 8,
+        "fan_count": 287
+      },
+      {
+        "order": 9,
+        "fan_count": 246
+      },
+      {
+        "order": 10,
+        "fan_count": 205
+      },
+      {
+        "order": 11,
+        "fan_count": 164
+      },
+      {
+        "order": 12,
+        "fan_count": 123
+      },
+      {
+        "order": 13,
+        "fan_count": 103
+      },
+      {
+        "order": 14,
+        "fan_count": 82
+      },
+      {
+        "order": 15,
+        "fan_count": 62
+      },
+      {
+        "order": 16,
+        "fan_count": 41
+      },
+      {
+        "order": 17,
+        "fan_count": 41
+      },
+      {
+        "order": 18,
+        "fan_count": 41
+      }
+    ],
+    "reward_set_id": 110401
+  },
+  {
+    "program_id": 1114,
+    "race_instance_id": 111501,
+    "race_name": "JBC Sprint",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1000,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 110201
+  },
+  {
+    "program_id": 1115,
+    "race_instance_id": 111601,
+    "race_name": "JBC Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 43,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 8000
+      },
+      {
+        "order": 2,
+        "fan_count": 3200
+      },
+      {
+        "order": 3,
+        "fan_count": 2000
+      },
+      {
+        "order": 4,
+        "fan_count": 1200
+      },
+      {
+        "order": 5,
+        "fan_count": 800
+      },
+      {
+        "order": 6,
+        "fan_count": 720
+      },
+      {
+        "order": 7,
+        "fan_count": 640
+      },
+      {
+        "order": 8,
+        "fan_count": 560
+      },
+      {
+        "order": 9,
+        "fan_count": 480
+      },
+      {
+        "order": 10,
+        "fan_count": 400
+      },
+      {
+        "order": 11,
+        "fan_count": 320
+      },
+      {
+        "order": 12,
+        "fan_count": 240
+      },
+      {
+        "order": 13,
+        "fan_count": 200
+      },
+      {
+        "order": 14,
+        "fan_count": 160
+      },
+      {
+        "order": 15,
+        "fan_count": 120
+      },
+      {
+        "order": 16,
+        "fan_count": 80
+      },
+      {
+        "order": 17,
+        "fan_count": 80
+      },
+      {
+        "order": 18,
+        "fan_count": 80
+      }
+    ],
+    "reward_set_id": 110301
+  },
+  {
+    "program_id": 1116,
+    "race_instance_id": 111701,
+    "race_name": "JBC Ladies’ Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 20,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4100
+      },
+      {
+        "order": 2,
+        "fan_count": 1640
+      },
+      {
+        "order": 3,
+        "fan_count": 1025
+      },
+      {
+        "order": 4,
+        "fan_count": 615
+      },
+      {
+        "order": 5,
+        "fan_count": 410
+      },
+      {
+        "order": 6,
+        "fan_count": 369
+      },
+      {
+        "order": 7,
+        "fan_count": 328
+      },
+      {
+        "order": 8,
+        "fan_count": 287
+      },
+      {
+        "order": 9,
+        "fan_count": 246
+      },
+      {
+        "order": 10,
+        "fan_count": 205
+      },
+      {
+        "order": 11,
+        "fan_count": 164
+      },
+      {
+        "order": 12,
+        "fan_count": 123
+      },
+      {
+        "order": 13,
+        "fan_count": 103
+      },
+      {
+        "order": 14,
+        "fan_count": 82
+      },
+      {
+        "order": 15,
+        "fan_count": 62
+      },
+      {
+        "order": 16,
+        "fan_count": 41
+      },
+      {
+        "order": 17,
+        "fan_count": 41
+      },
+      {
+        "order": 18,
+        "fan_count": 41
+      }
+    ],
+    "reward_set_id": 110401
+  },
+  {
+    "program_id": 1117,
+    "race_instance_id": 111801,
+    "race_name": "JBC Sprint",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1200,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 110201
+  },
+  {
+    "program_id": 1118,
+    "race_instance_id": 111901,
+    "race_name": "JBC Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 2000,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 43,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 8000
+      },
+      {
+        "order": 2,
+        "fan_count": 3200
+      },
+      {
+        "order": 3,
+        "fan_count": 2000
+      },
+      {
+        "order": 4,
+        "fan_count": 1200
+      },
+      {
+        "order": 5,
+        "fan_count": 800
+      },
+      {
+        "order": 6,
+        "fan_count": 720
+      },
+      {
+        "order": 7,
+        "fan_count": 640
+      },
+      {
+        "order": 8,
+        "fan_count": 560
+      },
+      {
+        "order": 9,
+        "fan_count": 480
+      },
+      {
+        "order": 10,
+        "fan_count": 400
+      },
+      {
+        "order": 11,
+        "fan_count": 320
+      },
+      {
+        "order": 12,
+        "fan_count": 240
+      },
+      {
+        "order": 13,
+        "fan_count": 200
+      },
+      {
+        "order": 14,
+        "fan_count": 160
+      },
+      {
+        "order": 15,
+        "fan_count": 120
+      },
+      {
+        "order": 16,
+        "fan_count": 80
+      },
+      {
+        "order": 17,
+        "fan_count": 80
+      },
+      {
+        "order": 18,
+        "fan_count": 80
+      }
+    ],
+    "reward_set_id": 110301
+  },
+  {
+    "program_id": 1132,
+    "race_instance_id": 110501,
+    "race_name": "JBC Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 2000,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 43,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 8000
+      },
+      {
+        "order": 2,
+        "fan_count": 3200
+      },
+      {
+        "order": 3,
+        "fan_count": 2000
+      },
+      {
+        "order": 4,
+        "fan_count": 1200
+      },
+      {
+        "order": 5,
+        "fan_count": 800
+      },
+      {
+        "order": 6,
+        "fan_count": 720
+      },
+      {
+        "order": 7,
+        "fan_count": 640
+      },
+      {
+        "order": 8,
+        "fan_count": 560
+      },
+      {
+        "order": 9,
+        "fan_count": 480
+      },
+      {
+        "order": 10,
+        "fan_count": 400
+      },
+      {
+        "order": 11,
+        "fan_count": 320
+      },
+      {
+        "order": 12,
+        "fan_count": 240
+      },
+      {
+        "order": 13,
+        "fan_count": 200
+      },
+      {
+        "order": 14,
+        "fan_count": 160
+      },
+      {
+        "order": 15,
+        "fan_count": 120
+      },
+      {
+        "order": 16,
+        "fan_count": 80
+      },
+      {
+        "order": 17,
+        "fan_count": 80
+      },
+      {
+        "order": 18,
+        "fan_count": 80
+      }
+    ],
+    "reward_set_id": 110301
+  },
+  {
+    "program_id": 1133,
+    "race_instance_id": 110401,
+    "race_name": "JBC Sprint",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1200,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 41,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 6000
+      },
+      {
+        "order": 2,
+        "fan_count": 2400
+      },
+      {
+        "order": 3,
+        "fan_count": 1500
+      },
+      {
+        "order": 4,
+        "fan_count": 900
+      },
+      {
+        "order": 5,
+        "fan_count": 600
+      },
+      {
+        "order": 6,
+        "fan_count": 540
+      },
+      {
+        "order": 7,
+        "fan_count": 480
+      },
+      {
+        "order": 8,
+        "fan_count": 420
+      },
+      {
+        "order": 9,
+        "fan_count": 360
+      },
+      {
+        "order": 10,
+        "fan_count": 300
+      },
+      {
+        "order": 11,
+        "fan_count": 240
+      },
+      {
+        "order": 12,
+        "fan_count": 180
+      },
+      {
+        "order": 13,
+        "fan_count": 150
+      },
+      {
+        "order": 14,
+        "fan_count": 120
+      },
+      {
+        "order": 15,
+        "fan_count": 90
+      },
+      {
+        "order": 16,
+        "fan_count": 60
+      },
+      {
+        "order": 17,
+        "fan_count": 60
+      },
+      {
+        "order": 18,
+        "fan_count": 60
+      }
+    ],
+    "reward_set_id": 110201
+  },
+  {
+    "program_id": 1134,
+    "race_instance_id": 110301,
+    "race_name": "JBC Ladies’ Classic",
+    "month": 11,
+    "half": 1,
+    "grade": 100,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 12000,
+    "fan_set_id": 20,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4100
+      },
+      {
+        "order": 2,
+        "fan_count": 1640
+      },
+      {
+        "order": 3,
+        "fan_count": 1025
+      },
+      {
+        "order": 4,
+        "fan_count": 615
+      },
+      {
+        "order": 5,
+        "fan_count": 410
+      },
+      {
+        "order": 6,
+        "fan_count": 369
+      },
+      {
+        "order": 7,
+        "fan_count": 328
+      },
+      {
+        "order": 8,
+        "fan_count": 287
+      },
+      {
+        "order": 9,
+        "fan_count": 246
+      },
+      {
+        "order": 10,
+        "fan_count": 205
+      },
+      {
+        "order": 11,
+        "fan_count": 164
+      },
+      {
+        "order": 12,
+        "fan_count": 123
+      },
+      {
+        "order": 13,
+        "fan_count": 103
+      },
+      {
+        "order": 14,
+        "fan_count": 82
+      },
+      {
+        "order": 15,
+        "fan_count": 62
+      },
+      {
+        "order": 16,
+        "fan_count": 41
+      },
+      {
+        "order": 17,
+        "fan_count": 41
+      },
+      {
+        "order": 18,
+        "fan_count": 41
+      }
+    ],
+    "reward_set_id": 110401
   },
   {
     "program_id": 78,
@@ -63162,6 +65598,93 @@
     "reward_set_id": 6
   },
   {
+    "program_id": 1129,
+    "race_instance_id": 307501,
+    "race_name": "Queen Sho",
+    "month": 12,
+    "half": 1,
+    "grade": 300,
+    "distance": 1800,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 53,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 2100
+      },
+      {
+        "order": 2,
+        "fan_count": 840
+      },
+      {
+        "order": 3,
+        "fan_count": 525
+      },
+      {
+        "order": 4,
+        "fan_count": 315
+      },
+      {
+        "order": 5,
+        "fan_count": 210
+      },
+      {
+        "order": 6,
+        "fan_count": 189
+      },
+      {
+        "order": 7,
+        "fan_count": 168
+      },
+      {
+        "order": 8,
+        "fan_count": 147
+      },
+      {
+        "order": 9,
+        "fan_count": 126
+      },
+      {
+        "order": 10,
+        "fan_count": 105
+      },
+      {
+        "order": 11,
+        "fan_count": 84
+      },
+      {
+        "order": 12,
+        "fan_count": 63
+      },
+      {
+        "order": 13,
+        "fan_count": 53
+      },
+      {
+        "order": 14,
+        "fan_count": 42
+      },
+      {
+        "order": 15,
+        "fan_count": 32
+      },
+      {
+        "order": 16,
+        "fan_count": 21
+      },
+      {
+        "order": 17,
+        "fan_count": 21
+      },
+      {
+        "order": 18,
+        "fan_count": 21
+      }
+    ],
+    "reward_set_id": 405
+  },
+  {
     "program_id": 81,
     "race_instance_id": 102301,
     "race_name": "Arima Kinen",
@@ -64813,5 +67336,92 @@
       }
     ],
     "reward_set_id": 102301
+  },
+  {
+    "program_id": 1107,
+    "race_instance_id": 110801,
+    "race_name": "Zen-Nippon Junior Yushun",
+    "month": 12,
+    "half": 2,
+    "grade": 100,
+    "distance": 1600,
+    "ground": "dirt",
+    "fan_requirement": 1000,
+    "fan_set_id": 54,
+    "fan_counts": [
+      {
+        "order": 1,
+        "fan_count": 4200
+      },
+      {
+        "order": 2,
+        "fan_count": 1680
+      },
+      {
+        "order": 3,
+        "fan_count": 1050
+      },
+      {
+        "order": 4,
+        "fan_count": 630
+      },
+      {
+        "order": 5,
+        "fan_count": 420
+      },
+      {
+        "order": 6,
+        "fan_count": 378
+      },
+      {
+        "order": 7,
+        "fan_count": 336
+      },
+      {
+        "order": 8,
+        "fan_count": 294
+      },
+      {
+        "order": 9,
+        "fan_count": 252
+      },
+      {
+        "order": 10,
+        "fan_count": 210
+      },
+      {
+        "order": 11,
+        "fan_count": 168
+      },
+      {
+        "order": 12,
+        "fan_count": 126
+      },
+      {
+        "order": 13,
+        "fan_count": 105
+      },
+      {
+        "order": 14,
+        "fan_count": 84
+      },
+      {
+        "order": 15,
+        "fan_count": 63
+      },
+      {
+        "order": 16,
+        "fan_count": 42
+      },
+      {
+        "order": 17,
+        "fan_count": 42
+      },
+      {
+        "order": 18,
+        "fan_count": 42
+      }
+    ],
+    "reward_set_id": 110801
   }
 ]

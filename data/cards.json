@@ -19438,6 +19438,184 @@
     }
   },
   {
+    "support_id": 20050,
+    "char_id": 1020,
+    "char_name": "Seiun Sky",
+    "card_name": "[Bobbing with the Waves] Seiun Sky",
+    "rarity": 2,
+    "type": "intelligence",
+    "obtained": "gacha",
+    "start_date": "2026-07-16",
+    "effects": [
+      [
+        1,
+        10,
+        -1,
+        -1,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1,
+        -1
+      ],
+      [
+        2,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        40,
+        -1,
+        -1,
+        -1,
+        50,
+        -1
+      ],
+      [
+        8,
+        -1,
+        -1,
+        1,
+        -1,
+        5,
+        5,
+        -1,
+        -1,
+        5,
+        -1,
+        -1
+      ],
+      [
+        14,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        25,
+        -1,
+        -1,
+        -1,
+        30,
+        -1
+      ],
+      [
+        17,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        2,
+        -1,
+        -1
+      ],
+      [
+        18,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        20,
+        -1,
+        30,
+        -1,
+        -1
+      ],
+      [
+        19,
+        -1,
+        5,
+        -1,
+        -1,
+        -1,
+        35,
+        -1,
+        -1,
+        -1,
+        50,
+        -1
+      ],
+      [
+        30,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1
+      ],
+      [
+        31,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        3,
+        -1,
+        -1,
+        -1,
+        4,
+        -1
+      ]
+    ],
+    "hints": {
+      "hint_skills": [
+        200532,
+        200542,
+        200881,
+        200811,
+        201522,
+        201601
+      ],
+      "hint_others": [
+        {
+          "hint_type": 5,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 30,
+          "hint_value": 5
+        }
+      ]
+    },
+    "event_skills": [
+      200911,
+      201292,
+      201192
+    ],
+    "unique_effect": {
+      "name": "Bobbing with the Waves",
+      "description": "Training Effectiveness and Race Bonus",
+      "level": 25,
+      "effects": [
+        {
+          "type": 8,
+          "value": 5
+        },
+        {
+          "type": 15,
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
     "support_id": 30001,
     "char_id": 1001,
     "char_name": "Special Week",
@@ -35352,6 +35530,18 @@
         {
           "hint_type": 3,
           "hint_value": 6
+        },
+        {
+          "hint_type": 2,
+          "hint_value": 4
+        },
+        {
+          "hint_type": 3,
+          "hint_value": 12
+        },
+        {
+          "hint_type": 30,
+          "hint_value": 2
         }
       ]
     },
@@ -37235,6 +37425,194 @@
       "name": "A Good Heart Blossoms to Its Fullest",
       "description": "Training Effectiveness (Friendship Gauge 80+)",
       "level": 40,
+      "effects": [
+        {
+          "type": 101,
+          "value": 80
+        }
+      ]
+    }
+  },
+  {
+    "support_id": 30110,
+    "char_id": 1025,
+    "char_name": "Manhattan Cafe",
+    "card_name": "[It's on the House] Manhattan Cafe",
+    "rarity": 3,
+    "type": "stamina",
+    "obtained": "gacha",
+    "start_date": "2026-07-16",
+    "effects": [
+      [
+        1,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        25,
+        -1
+      ],
+      [
+        6,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        2
+      ],
+      [
+        8,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        5,
+        5,
+        -1,
+        -1,
+        10,
+        -1
+      ],
+      [
+        14,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        15,
+        15,
+        -1,
+        -1,
+        20,
+        -1
+      ],
+      [
+        15,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        1,
+        1,
+        -1,
+        -1,
+        5,
+        -1
+      ],
+      [
+        16,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        5,
+        5,
+        -1,
+        -1,
+        10,
+        -1
+      ],
+      [
+        17,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1
+      ],
+      [
+        18,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        20,
+        -1,
+        -1,
+        -1,
+        -1,
+        20
+      ],
+      [
+        19,
+        -1,
+        -1,
+        -1,
+        5,
+        -1,
+        20,
+        20,
+        -1,
+        -1,
+        35,
+        -1
+      ],
+      [
+        30,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        1,
+        -1,
+        -1,
+        -1
+      ]
+    ],
+    "hints": {
+      "hint_skills": [
+        200742,
+        201172,
+        201182,
+        201202,
+        201212,
+        201222,
+        201581
+      ],
+      "hint_others": [
+        {
+          "hint_type": 2,
+          "hint_value": 6
+        },
+        {
+          "hint_type": 4,
+          "hint_value": 2
+        }
+      ]
+    },
+    "event_skills": [
+      202071,
+      200142
+    ],
+    "unique_effect": {
+      "name": "It's on the House",
+      "description": "Stamina Bonus (Friendship 80+)",
+      "level": 30,
       "effects": [
         {
           "type": 101,

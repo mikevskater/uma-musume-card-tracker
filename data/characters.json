@@ -5724,5 +5724,66 @@
     },
     "default_rarity": 3,
     "running_style": 3
+  },
+  "109801": {
+    "name": "Copano Rickey",
+    "character_id": 1098,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 87,
+        "power": 93,
+        "guts": 87,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 104,
+        "stamina": 97,
+        "power": 103,
+        "guts": 96,
+        "wisdom": 100
+      },
+      "5": {
+        "speed": 114,
+        "stamina": 107,
+        "power": 113,
+        "guts": 106,
+        "wisdom": 110
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "C",
+        "mile": "A",
+        "medium": "A",
+        "long": "G"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "F",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
   }
 }

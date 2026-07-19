@@ -5975,6 +5975,590 @@
       "item_num": 1
     }
   ],
+  "110701": [
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 90,
+      "item_id": 43,
+      "item_num": 5
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 97,
+      "item_id": 115,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 175,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 13,
+      "item_num": 1
+    }
+  ],
+  "110801": [
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 90,
+      "item_id": 43,
+      "item_num": 5
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 97,
+      "item_id": 115,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 176,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 13,
+      "item_num": 1
+    }
+  ],
+  "110901": [
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 90,
+      "item_id": 43,
+      "item_num": 5
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 97,
+      "item_id": 115,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 177,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 13,
+      "item_num": 1
+    }
+  ],
+  "111001": [
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 90,
+      "item_id": 43,
+      "item_num": 5
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 5,
+      "item_category": 97,
+      "item_id": 115,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 4,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 3,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 2,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 2,
+      "bonus": 1,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 179,
+      "item_num": 1
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 91,
+      "item_id": 59,
+      "item_num": 400
+    },
+    {
+      "order_min": 1,
+      "order_max": 18,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 30,
+      "item_id": 110,
+      "item_num": 20
+    },
+    {
+      "order_min": 1,
+      "order_max": 1,
+      "reward_type": 1,
+      "bonus": 0,
+      "item_category": 11,
+      "item_id": 13,
+      "item_num": 1
+    }
+  ],
   "910001": [
     {
       "order_min": 1,

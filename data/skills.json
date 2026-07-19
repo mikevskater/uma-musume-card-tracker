@@ -18075,6 +18075,441 @@
     ]
   },
   {
+    "id": 202201,
+    "name": "Kawasaki Racecourse ◎",
+    "description": "Increase performance at Kawasaki Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20220,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 90,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10103",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202202,
+    "name": "Kawasaki Racecourse ○",
+    "description": "Moderately increase performance at Kawasaki Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20220,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 70,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10103",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202203,
+    "name": "Kawasaki Racecourse ×",
+    "description": "Moderately decrease performance at Kawasaki Racecourse.",
+    "icon_id": 10024,
+    "rarity": 1,
+    "group_id": 20220,
+    "skill_category": 0,
+    "tag_id": "402",
+    "type": [
+      "straight"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10103",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202211,
+    "name": "Funabashi Racecourse ◎",
+    "description": "Increase performance at Funabashi Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20221,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 90,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202212,
+    "name": "Funabashi Racecourse ○",
+    "description": "Moderately increase performance at Funabashi Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20221,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 70,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202213,
+    "name": "Funabashi Racecourse ×",
+    "description": "Moderately decrease performance at Funabashi Racecourse.",
+    "icon_id": 10024,
+    "rarity": 1,
+    "group_id": 20221,
+    "skill_category": 0,
+    "tag_id": "402",
+    "type": [
+      "straight"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202221,
+    "name": "Morioka Racecourse ◎",
+    "description": "Increase performance at Morioka Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20222,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 90,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10105",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202222,
+    "name": "Morioka Racecourse ○",
+    "description": "Moderately increase performance at Morioka Racecourse.",
+    "icon_id": 10021,
+    "rarity": 1,
+    "group_id": 20222,
+    "skill_category": 0,
+    "tag_id": "402/604",
+    "type": [
+      "straight"
+    ],
+    "cost": 70,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10105",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202223,
+    "name": "Morioka Racecourse ×",
+    "description": "Moderately decrease performance at Morioka Racecourse.",
+    "icon_id": 10024,
+    "rarity": 1,
+    "group_id": 20222,
+    "skill_category": 0,
+    "tag_id": "402",
+    "type": [
+      "straight"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10105",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 2,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202231,
+    "name": "Night Races ◎",
+    "description": "Increase performance at night.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 20223,
+    "skill_category": 0,
+    "tag_id": "405/605",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 90,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "time==4",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202232,
+    "name": "Night Races ○",
+    "description": "Moderately increase performance at night.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 20223,
+    "skill_category": 0,
+    "tag_id": "405/605",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 70,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "time==4",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202233,
+    "name": "Night Races ×",
+    "description": "Moderately decrease performance at night.",
+    "icon_id": 10054,
+    "rarity": 1,
+    "group_id": 20223,
+    "skill_category": 0,
+    "tag_id": "405",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "time==4",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202241,
+    "name": "Sharp Turns ◎",
+    "description": "Increase performance on tracks with sharp turns.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 20224,
+    "skill_category": 0,
+    "tag_id": "405/608",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 90,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10001@track_id==10002@track_id==10004@track_id==10010@track_id==10103@track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 600000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202242,
+    "name": "Sharp Turns ○",
+    "description": "Moderately increase performance on tracks with sharp turns.",
+    "icon_id": 10051,
+    "rarity": 1,
+    "group_id": 20224,
+    "skill_category": 0,
+    "tag_id": "405/608",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 70,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10001@track_id==10002@track_id==10004@track_id==10010@track_id==10103@track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202243,
+    "name": "Sharp Turns ×",
+    "description": "Moderately decrease performance on tracks with sharp turns.",
+    "icon_id": 10054,
+    "rarity": 1,
+    "group_id": 20224,
+    "skill_category": 0,
+    "tag_id": "405",
+    "type": [
+      "uphill_or_downhill"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "track_id==10001@track_id==10002@track_id==10004@track_id==10010@track_id==10103@track_id==10104",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 5,
+            "value": -400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 202251,
     "name": "Collaborative Graded Races ◎",
     "description": "Increase performance in collaborative graded races.",
@@ -18125,6 +18560,35 @@
           {
             "type": 1,
             "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202253,
+    "name": "Collaborative Graded Races ×",
+    "description": "Moderately decrease performance in collaborative graded races.",
+    "icon_id": 10014,
+    "rarity": 1,
+    "group_id": 20225,
+    "skill_category": 0,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 40,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_dirtgrade==1",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 1,
+            "value": -400000,
             "target_type": 1,
             "target_value": 0
           }
@@ -18190,6 +18654,76 @@
       {
         "precondition": "",
         "condition": "ground_type==2&phase_laterhalf_random==1&order_rate<=50",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202271,
+    "name": "Can't Keep Me Down",
+    "description": "Increase velocity when positioned toward the back mid-race. (Dirt)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20227,
+    "skill_category": 2,
+    "tag_id": "302/401/502",
+    "type": [
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&phase_random==1&order_rate>=50",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            101902211
+          ],
+          "card_id": 101902
+        }
+      ]
+    }
+  },
+  {
+    "id": 202272,
+    "name": "Comeback",
+    "description": "Slightly increase velocity when positioned toward the back mid-race. (Dirt)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20227,
+    "skill_category": 2,
+    "tag_id": "302/401/502",
+    "type": [
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&phase_random==1&order_rate>=50",
         "base_time": 24000,
         "effects": [
           {
@@ -18273,6 +18807,66 @@
     ]
   },
   {
+    "id": 202291,
+    "name": "Crystal Clear",
+    "description": "Increase velocity when positioned toward the back in the early part of mid-race after recovering endurance with a skill. (Dirt)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20229,
+    "skill_category": 2,
+    "tag_id": "302/401/502",
+    "type": [
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 150,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&order_rate>=50&activate_count_heal>=1&distance_rate<=42&phase==1",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202292,
+    "name": "Rational",
+    "description": "Slightly increase velocity when positioned toward the back in the early part of mid-race after recovering endurance with a skill. (Dirt)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20229,
+    "skill_category": 2,
+    "tag_id": "302/401/502",
+    "type": [
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 150,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&order_rate>=50&activate_count_heal>=1&distance_rate<=42&phase==1",
+        "base_time": 18000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 202301,
     "name": "Dancer in the Dirt",
     "description": "Increase velocity when following directly behind a runner. (Dirt)",
@@ -18333,6 +18927,35 @@
           {
             "type": 27,
             "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202303,
+    "name": "Down in the Dirt ×",
+    "description": "Moderately decrease velocity when following directly behind a runner. (Dirt)",
+    "icon_id": 20014,
+    "rarity": 1,
+    "group_id": 20230,
+    "skill_category": 4,
+    "tag_id": "401/502",
+    "type": [
+      "corner"
+    ],
+    "cost": 100,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&accumulatetime>=5&infront_near_lane_time>=3",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 21,
+            "value": -2000,
             "target_type": 1,
             "target_value": 0
           }
@@ -18665,6 +19288,35 @@
           {
             "type": 1,
             "value": 400000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202344,
+    "name": "Muddy ×",
+    "description": "Decrease performance on soft and heavy ground, moderately decreasing Speed. (Dirt)",
+    "icon_id": 10014,
+    "rarity": 1,
+    "group_id": 20234,
+    "skill_category": 0,
+    "tag_id": "401/502",
+    "type": [
+      "corner"
+    ],
+    "cost": 50,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "ground_type==2&ground_condition==3@ground_type==2&ground_condition==4",
+        "base_time": -1,
+        "effects": [
+          {
+            "type": 1,
+            "value": -400000,
             "target_type": 1,
             "target_value": 0
           }
@@ -22923,6 +23575,35 @@
           {
             "type": 27,
             "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900981,
+    "name": "Luck Runs My Way",
+    "description": "Very slightly increase velocity sometime upon approaching late-race.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90098,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase_laterhalf_random==1",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
             "target_type": 1,
             "target_value": 0
           }
