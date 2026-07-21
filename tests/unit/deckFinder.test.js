@@ -525,7 +525,7 @@ describe('individualCardScore', () => {
             growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
             aptitudes: {
                 distance: { short: 'A', mile: 'A', medium: 'A', long: 'A' },
-                running_style: { front_runner: 'A', stalker: 'A', stretch: 'A' },
+                running_style: { front_runner: 'A', stalker: 'A', betweener: 'A', stretch: 'A' },
                 ground: { turf: 'A', dirt: 'A' },
             },
         };
@@ -566,7 +566,7 @@ describe('individualCardScore', () => {
             growthRates: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
             aptitudes: {
                 distance: { short: 'A', mile: 'A', medium: 'A', long: 'A' },
-                running_style: { front_runner: 'A', stalker: 'A', stretch: 'A' },
+                running_style: { front_runner: 'A', stalker: 'A', betweener: 'A', stretch: 'A' },
                 ground: { turf: 'A', dirt: 'A' },
             },
         };

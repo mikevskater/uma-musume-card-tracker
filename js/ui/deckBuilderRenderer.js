@@ -1474,8 +1474,9 @@ function openTraineePicker(currentId, onSelect) {
     const GROWTH_LABELS = { speed: 'Spd', stamina: 'Sta', power: 'Pow', guts: 'Gut', wisdom: 'Wis' };
     const DIST_KEYS = ['short', 'mile', 'medium', 'long'];
     const DIST_LABELS = { short: 'Sprint', mile: 'Mile', medium: 'Medium', long: 'Long' };
+    // Data keys come from the DB columns: nige/senko/sashi/oikomi -> front_runner/stalker/betweener/stretch
     const STYLE_KEYS = ['front_runner', 'stalker', 'betweener', 'stretch'];
-    const STYLE_LABELS = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'End Closer', stretch: 'Late Surger' };
+    const STYLE_LABELS = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'Late Surger', stretch: 'End Closer' };
     const GROUND_KEYS = ['turf', 'dirt'];
     const GROUND_LABELS = { turf: 'Turf', dirt: 'Dirt' };
 
@@ -1758,7 +1759,7 @@ function renderCharacterInfoSection() {
         const distKeys = ['short', 'mile', 'medium', 'long'];
         const distLabels = { short: 'Sprint', mile: 'Mile', medium: 'Medium', long: 'Long' };
         const styleKeys = ['front_runner', 'stalker', 'betweener', 'stretch'];
-        const styleLabels = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'End Closer', stretch: 'Late Surger' };
+        const styleLabels = { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'Late Surger', stretch: 'End Closer' };
         const groundKeys = ['turf', 'dirt'];
         const groundLabels = { turf: 'Turf', dirt: 'Dirt' };
 

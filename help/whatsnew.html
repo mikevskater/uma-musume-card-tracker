@@ -12,6 +12,38 @@
 </div>
 
 <div class="changelog">
+    <!-- Version 1.6.2 - Running style aptitude fixes -->
+    <div class="version-entry" data-version="1.6.2">
+        <div class="version-header">
+            <h4>Version 1.6.2</h4>
+            <div class="version-date">July 19, 2026</div>
+        </div>
+
+        <div class="version-changes">
+            <div class="update-group">
+                <span class="update-type update-bugfix">Bug Fix</span>
+                <h5>Late Surger and End Closer aptitudes were swapped</h5>
+                <p>Thanks to everyone who reported this. Trainee running style aptitudes were displaying under the wrong labels &mdash; a trainee's <strong>Late Surger</strong> grade was shown as <strong>End Closer</strong> and vice versa. This affected the trainee picker, the deck summary, and the Build Focus dropdown.</p>
+                <ul>
+                    <li>All three now match the grades shown in game. For example, Special Week correctly shows <strong>Late Surger A / End Closer C</strong>.</li>
+                    <li>Your saved decks and Build Focus selections are unaffected &mdash; only the labels were wrong, not the stored data.</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-bugfix">Bug Fix</span>
+                <h5>Deck Finder scored running style skills against the wrong aptitude</h5>
+                <p>The same mix-up affected how the Deck Finder weighs a card's hint skills against your trainee's aptitudes:</p>
+                <ul>
+                    <li><strong>Late Surger</strong> skills were being scored against the trainee's End Closer aptitude.</li>
+                    <li><strong>End Closer</strong> skills were not being scored at all &mdash; they always counted as zero aptitude, no matter which trainee was selected.</li>
+                    <li><strong>S-rank aptitudes</strong> now score above A. Previously an S grade fell through to the lowest score.</li>
+                </ul>
+                <p>If you previously ran searches with a Late Surger or End Closer trainee, it's worth running them again &mdash; the recommended cards may change.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Version 1.6.1 - Mid-July 2026 data update -->
     <div class="version-entry" data-version="1.6.1">
         <div class="version-header">

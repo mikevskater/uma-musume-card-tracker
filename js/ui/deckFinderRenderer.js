@@ -276,7 +276,7 @@ const BUILD_FOCUS_ALL_GRADES = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 // Display labels for aptitude keys
 const BUILD_FOCUS_LABELS = {
     distance: { label: 'Distance', keys: { short: 'Sprint', mile: 'Mile', medium: 'Medium', long: 'Long' } },
-    running_style: { label: 'Running Style', keys: { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'End Closer', stretch: 'Late Surger' } },
+    running_style: { label: 'Running Style', keys: { front_runner: 'Front Runner', stalker: 'Pace Chaser', betweener: 'Late Surger', stretch: 'End Closer' } },
     ground: { label: 'Surface', keys: { turf: 'Turf', dirt: 'Dirt' } },
 };
 

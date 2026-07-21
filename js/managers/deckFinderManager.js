@@ -73,9 +73,13 @@ const CARD_TYPE_GROWTH_KEY = {
 };
 
 // Aptitude grade -> score mapping for skill-aptitude weighting
-const APTITUDE_GRADE_SCORE = { A: 1.0, B: 0.7, C: 0.4, D: 0.2, E: 0.1, F: 0.05, G: 0.0 };
+// S isn't present in base character data but is reachable via inheritance, so map it too
+const APTITUDE_GRADE_SCORE = { S: 1.2, A: 1.0, B: 0.7, C: 0.4, D: 0.2, E: 0.1, F: 0.05, G: 0.0 };
 
 // Skill type tag -> aptitude category/key mapping
+// NOTE: running_style aptitude keys come from the DB columns nige/senko/sashi/oikomi,
+// which map to front_runner/stalker/betweener/stretch. So sashi (betweener) is the
+// Late Surger aptitude and oikomi (stretch) is the End Closer aptitude.
 const SKILL_TYPE_TO_APTITUDE = {
     short: { cat: 'distance', key: 'short' },
     mile: { cat: 'distance', key: 'mile' },
@@ -83,7 +87,8 @@ const SKILL_TYPE_TO_APTITUDE = {
     long: { cat: 'distance', key: 'long' },
     front_runner: { cat: 'running_style', key: 'front_runner' },
     pace_chaser: { cat: 'running_style', key: 'stalker' },
-    late_surger: { cat: 'running_style', key: 'stretch' },
+    late_surger: { cat: 'running_style', key: 'betweener' },
+    end_closer: { cat: 'running_style', key: 'stretch' },
     turf: { cat: 'ground', key: 'turf' },
     dirt: { cat: 'ground', key: 'dirt' }
 };
