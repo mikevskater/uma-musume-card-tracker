@@ -12,6 +12,76 @@
 </div>
 
 <div class="changelog">
+    <!-- Version 1.7.0 - Grand Concert scenario + late-July 2026 data update -->
+    <div class="version-entry" data-version="1.7.0">
+        <div class="version-header">
+            <h4>Version 1.7.0</h4>
+            <div class="version-date">July 25, 2026</div>
+        </div>
+
+        <div class="version-changes">
+            <div class="update-group">
+                <span class="update-type update-major">Major</span>
+                <h5>🎤 Grand Concert scenario support</h5>
+                <p>The new <strong>Brighter Together: Our Grand Concert</strong> scenario (released 07/22) is now selectable in both the Deck Builder and the Deck Finder, using the training values pulled straight from the game.</p>
+                <ul>
+                    <li><strong>Accurate training values</strong> &mdash; all five facilities across levels 1&ndash;5, including Grand Concert's distinctive Wit training that <em>gains</em> energy.</li>
+                    <li><strong>Higher stat caps</strong> &mdash; the scenario raises caps by <strong>+400 Speed</strong>, <strong>+300 Guts</strong>, and <strong>+100</strong> each to Stamina, Power, and Wit.</li>
+                    <li><strong>Strategy tips</strong> for the scenario added to the Deck Builder summary panel.</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-feature">Feature</span>
+                <h5>Deck Finder scoring tuned for Grand Concert</h5>
+                <p>Grand Concert inverts the usual priorities, so it gets its own scoring profile rather than borrowing URA's:</p>
+                <ul>
+                    <li><strong>Race Bonus is heavily deprioritized.</strong> Races award no Performance Points, so optional racing is discouraged &mdash; Race Bonus drops to the lowest weight of any scenario, and its diminishing-returns point falls from 34% to 20%.</li>
+                    <li><strong>Skill Point Bonus is promoted sharply.</strong> Skipping optional races leaves runs short on skill points, so the Stat Bonus weight (which includes Skill Point Bonus) is now more than double its URA value.</li>
+                    <li><strong>Hint weights raised</strong> &mdash; hint levels reduce what a skill costs to buy, which matters far more when skill points are scarce.</li>
+                    <li><strong>Training Effectiveness and Friendship Bonus lead</strong>, with Initial Friendship weighted higher than in any other scenario to get Friendship Training online sooner.</li>
+                </ul>
+                <p>Weights were set from the community consensus in the game8 and uma.guide Grand Concert guides. As always, you can override any of them in the <strong>Scoring Weights</strong> panel &mdash; and if the meta settles somewhere else, please say so.</p>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new cards (07/22)</h5>
+                <ul>
+                    <li><strong>Global Cards (07/22):</strong></li>
+                    <ul>
+                        <li><strong>SSR</strong> - Light Hello &mdash; "From the Ground Up" (Friend, Gacha) &mdash; the Grand Concert pal card</li>
+                        <li><strong>SSR</strong> - Agnes Tachyon &mdash; "Q&ne;0" (Speed, Gacha)</li>
+                        <li><strong>SSR</strong> - Mihono Bourbon &mdash; "U &amp; Me" (Speed, Gacha)</li>
+                        <li><strong>R</strong> - Light Hello &mdash; "Event Producer" (Friend, Gacha)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new trainees and skills</h5>
+                <ul>
+                    <li><strong>Smart Falcon</strong> (new costume), with her new unique skill <strong>&alpha;-star*</strong> &mdash; a mid-race speed boost that also recovers endurance on dirt.</li>
+                    <li>Two new Grand Concert scenario skills: <strong>I Wanna Win with You</strong> and <strong>On the Way to Our Dream</strong>, which scale with your fan count.</li>
+                    <li>4 new skills added (697 total).</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <h5>What Grand Concert support does <em>not</em> cover yet</h5>
+                <div class="help-tip">
+                    <p>The training simulator models Grand Concert's <strong>base training values and stat caps</strong>, but not its scenario-specific progression loop:</p>
+                    <ul>
+                        <li><strong>Performance Points, Hype Level, and Concerts are not simulated.</strong> The stat and skill-point payouts from Concerts, and the training boosts from Lessons, Techniques, and Songs, are not included in the projected gains.</li>
+                        <li>Treat Grand Concert numbers in the Deck Builder as a <strong>floor</strong> &mdash; a real run will land higher once Concert bonuses accumulate.</li>
+                        <li>Deck <em>comparisons</em> within Grand Concert are still meaningful, since every deck is missing the same bonuses.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Version 1.6.2 - Running style aptitude fixes -->
     <div class="version-entry" data-version="1.6.2">
         <div class="version-header">

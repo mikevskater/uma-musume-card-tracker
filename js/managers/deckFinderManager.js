@@ -34,6 +34,29 @@ const SCENARIO_WEIGHTS = {
             hintFrequency: 18, hintLevels: 15, totalEffectSum: 1
         }
     },
+    // Grand Concert (Grand Live) — training-dominant scenario, released 2026-07-22.
+    // Races award no Performance Points, so optional racing is discouraged: Race Bonus
+    // is deprioritized and its diminishing-returns breakpoint drops to the ~20% you
+    // pick up from mandatory story races alone. Skipping optional races also leaves
+    // runs skill-point starved, which is why statBonus is weighted far above every
+    // other scenario — it aggregates effect 30 (Skill Point Bonus) along with the
+    // stat bonuses — and why hint weights sit above their URA/Aoharu values (hint
+    // levels cut skill cost, which matters more when SP is scarce).
+    // Sources: game8 Grand Live scenario + best-decks guides, uma.guide Grand Concert
+    // guide. Corroborated by the DB: scenario 3 raises stat caps by speed +400,
+    // guts +300, stamina/power/wit +100 each.
+    '3': {
+        name: 'Grand Concert',
+        raceBreakpoint: 20,
+        weights: {
+            trainingEff: 105, friendBonus: 100, statBonus: 85,
+            specialtyPriority: 70, initialFriendship: 65, energyCost: 60,
+            eventRecovery: 50, moodEffect: 45, hintLevels: 30,
+            initialStats: 30, hintSkillCount: 28, hintFrequency: 25,
+            raceBonus: 25, skillAptitude: 25, failureProtection: 20,
+            totalEffectSum: 1
+        }
+    },
     '4': {
         name: 'Trackblazer',
         raceBreakpoint: 50,

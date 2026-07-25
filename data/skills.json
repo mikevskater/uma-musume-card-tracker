@@ -3493,6 +3493,55 @@
     ]
   },
   {
+    "id": 110461,
+    "name": "α-star*",
+    "description": "Moderately increase velocity steadily when positioned toward the lead around halfway through the race. Also moderately recover endurance if it's a dirt race.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11046,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&distance_diff_rate<=10&ground_type==2",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&distance_diff_rate<=10",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110521,
     "name": "114th Time's the Charm",
     "description": "Give max effort when far from the lead on the final corner, moderately increasing velocity steadily for a duration proportional to distance from the lead.",
@@ -20903,6 +20952,78 @@
     ]
   },
   {
+    "id": 210071,
+    "name": "I Wanna Win with You",
+    "description": "Increase velocity and slightly increase acceleration when positioned toward the front in the second half of the race. Increase this skill's effectiveness based on the user's number of fans.",
+    "icon_id": 20152,
+    "rarity": 2,
+    "group_id": 21007,
+    "skill_category": 4,
+    "tag_id": "401/403/803",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate_after_random==50&order_rate<=65",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 210072,
+    "name": "On the Way to Our Dream",
+    "description": "Slightly increase velocity and minimally increase acceleration when positioned toward the front in the second half of the race. Increase this skill's effectiveness based on the user's number of fans.",
+    "icon_id": 20151,
+    "rarity": 1,
+    "group_id": 21007,
+    "skill_category": 4,
+    "tag_id": "401/403/803",
+    "type": [
+      "corner",
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate_after_random==50&order_rate<=65",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 700,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 210081,
     "name": "Past My Limits",
     "description": "Increase velocity in the last spurt. Increase this skill's effectiveness based on the value of the user's highest attribute.",
@@ -24420,6 +24541,55 @@
           {
             "type": 31,
             "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910461,
+    "name": "α-star*",
+    "description": "Very slightly increase velocity steadily when positioned toward the lead around halfway through the race. Also very slightly recover endurance if it's a dirt race.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91046,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&distance_diff_rate<=10&ground_type==2",
+        "base_time": 36000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 50,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&distance_diff_rate<=10",
+        "base_time": 36000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
             "target_type": 1,
             "target_value": 0
           }

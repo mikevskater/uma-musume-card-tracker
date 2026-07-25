@@ -4259,6 +4259,67 @@
     "default_rarity": 3,
     "running_style": 1
   },
+  "104602": {
+    "name": "Smart Falcon",
+    "character_id": 1046,
+    "base_stats": {
+      "3": {
+        "speed": 99,
+        "stamina": 82,
+        "power": 82,
+        "guts": 104,
+        "wisdom": 83
+      },
+      "4": {
+        "speed": 110,
+        "stamina": 91,
+        "power": 91,
+        "guts": 116,
+        "wisdom": 92
+      },
+      "5": {
+        "speed": 121,
+        "stamina": 100,
+        "power": 100,
+        "guts": 128,
+        "wisdom": 101
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "B",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "D",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "E",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
   "104801": {
     "name": "Tosen Jordan",
     "character_id": 1048,

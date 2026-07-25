@@ -2015,6 +2015,14 @@ function getScenarioTips(scenarioId) {
                 '<strong>Training Effectiveness matters more</strong> -- with lower bases, multiplicative bonuses have outsized impact.',
                 '<strong>Friendship Training</strong> -- fill your friendship gauge early for maximum stat gains.'
             ];
+        case '3':
+            return [
+                '<strong>Skip optional races</strong> -- races award no Performance Points, so Race Bonus is the least valuable effect in this scenario. Only run story races and any needed for your trainee\'s secret event.',
+                '<strong>Skill Point Bonus is critical</strong> -- skipping optional races leaves runs short on skill points, so Skill Point Bonus (and hint levels, which cut skill cost) carry more weight than usual.',
+                '<strong>Training Effectiveness and Friendship Bonus</strong> -- training is the whole progression loop here; high Initial Friendship gets Friendship Training online sooner.',
+                '<strong>Higher stat caps</strong> -- Grand Concert raises caps by +400 Speed, +300 Guts, and +100 Stamina/Power/Wit, so stat gains keep paying off later than in other scenarios.',
+                '<strong>Common deck shape</strong> -- 3 Speed + 2 Wit plus the scenario Pal card SSR Light Hello; swap a Speed for Stamina on Medium/Long trainees.'
+            ];
         case '4':
             return [
                 '<strong>Enhanced Training</strong> -- Trackblazer unlocks boosted training commands (higher stats but more energy cost).',

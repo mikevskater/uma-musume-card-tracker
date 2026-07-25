@@ -175,6 +175,138 @@
         "failure_rate": 0,
         "max_chara": 1
       }
+    },
+    "1003": {
+      "1": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1006": {
+      "1": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1011": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1012": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1014": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1020": {
+      "3": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1021": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1023": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1024": {
+      "3": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1032": {
+      "1": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1034": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1038": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1039": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1040": {
+      "1": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1041": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1042": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1043": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1044": {
+      "1": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1045": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1046": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1047": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
+    },
+    "1057": {
+      "2": {
+        "failure_rate": 0,
+        "max_chara": 5
+      }
     }
   },
   "bond_ranks": [
@@ -1975,7 +2107,8 @@
     "standard": {
       "scenario_ids": [
         "1",
-        "2"
+        "2",
+        "3"
       ],
       "races": [
         {
