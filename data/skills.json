@@ -3356,6 +3356,41 @@
     ]
   },
   {
+    "id": 110351,
+    "name": "Ticket to Your Dreams!",
+    "description": "Moderately increase velocity steadily when in midpack or further back on the final straight in the last spurt. Effect increases when activating a skill (up to 3 times).",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11035,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_lastspurt==1&is_finalcorner==1&corner==0&order_rate>=40",
+        "base_time": 60000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110371,
     "name": "Guten Appetit ♪",
     "description": "Draw extra strength from pride, increasing velocity continuously on the final straight if the skill user passed another runner at least 2 times on the final corner or later.",
@@ -3534,6 +3569,35 @@
           {
             "type": 27,
             "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110501,
+    "name": "Hephaestus",
+    "description": "Aim higher, increasing velocity from midpack upon approaching the final straight late-race.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11050,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order_rate<=75&order_rate>=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
             "target_type": 1,
             "target_value": 0
           }
@@ -19674,6 +19738,96 @@
     ]
   },
   {
+    "id": 202391,
+    "name": "Givin' It 1000%",
+    "description": "Greatly expend endurance and greatly increase velocity in the early part of mid-race. (Front Runner)",
+    "icon_id": 20012,
+    "rarity": 2,
+    "group_id": 20239,
+    "skill_category": 2,
+    "tag_id": "101/302/401",
+    "type": [
+      "front_runner",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase_firsthalf_random==1&running_style==1",
+        "base_time": 27000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": -400,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            106601111
+          ],
+          "card_id": 106601
+        },
+        {
+          "evolved_skill_ids": [
+            110702211
+          ],
+          "card_id": 110702
+        }
+      ]
+    }
+  },
+  {
+    "id": 202392,
+    "name": "Mad Dash",
+    "description": "Greatly expend endurance and moderately increase velocity in the early part of mid-race. (Front Runner)",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 20239,
+    "skill_category": 2,
+    "tag_id": "101/302/401",
+    "type": [
+      "front_runner",
+      "middle_leg",
+      "corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase_firsthalf_random==1&running_style==1",
+        "base_time": 27000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": -400,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 202401,
     "name": "Flash Forward",
     "description": "Increase acceleration when trying to pass another runner from the back late-race. (Sprint/Mile)",
@@ -24412,6 +24566,41 @@
     ]
   },
   {
+    "id": 910351,
+    "name": "Ticket to Your Dreams!",
+    "description": "Very slightly increase velocity steadily when in midpack or further back on the final straight in the last spurt. Effect increases when activating a skill (up to 3 times).",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91035,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "is_lastspurt==1&is_finalcorner==1&corner==0&order_rate>=40",
+        "base_time": 36000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 27,
+            "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 910371,
     "name": "Guten Appetit ♪",
     "description": "Slightly increase velocity continuously on the final straight if the skill user passed another runner at least 2 times on the final corner or later.",
@@ -24590,6 +24779,35 @@
           {
             "type": 27,
             "value": 500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910501,
+    "name": "Hephaestus",
+    "description": "Slightly increase velocity from midpack upon approaching the final straight late-race.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91050,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order_rate<=75&order_rate>=40",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
             "target_type": 1,
             "target_value": 0
           }
