@@ -19,6 +19,71 @@
 </div>
 
 <div class="changelog">
+    <!-- Version 1.8.2 - Sep 23/28 data refresh: 6 cards, new trainee Wonder Acute, 3 costumes, 12 skills -->
+    <div class="version-entry" data-version="1.8.2">
+        <div class="version-header">
+            <h4>Version 1.8.2</h4>
+            <div class="version-date">October 2, 2026</div>
+        </div>
+
+        <div class="version-changes">
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new cards (09/23)</h5>
+                <ul>
+                    <li><strong>Global Cards (09/23):</strong></li>
+                    <ul>
+                        <li><strong>SSR</strong> - Eishin Flash &mdash; "Danke Sch&ouml;n" (Speed, Gacha)</li>
+                        <li><strong>SR</strong> - Narita Top Road &mdash; "Stop, Prez!" (Power, Gacha)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new cards (09/28)</h5>
+                <ul>
+                    <li><strong>Global Cards (09/28):</strong></li>
+                    <ul>
+                        <li><strong>SSR</strong> - Narita Brian &mdash; "Glad Tidings" (Power, Gacha)</li>
+                        <li><strong>SSR</strong> - Air Groove &mdash; "Are You Merry?" (Intelligence, Gacha)</li>
+                        <li><strong>SSR</strong> - Sakura Laurel &mdash; "Don&rsquo;t Stop Anymore!" (Stamina, Gacha)</li>
+                        <li><strong>R</strong> - Sakura Laurel &mdash; "Tracen Academy" (Stamina, Gacha)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-new">New</span>
+                <h5>New trainee cards</h5>
+                <ul>
+                    <li><strong>Wonder Acute</strong> &mdash; all-new character (Guts/Wisdom growth, dirt A, medium-distance A, stalker)</li>
+                    <li>New costumes: <strong>Vodka</strong>, <strong>Daiwa Scarlet</strong>, <strong>Nakayama Festa</strong></li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Skills and data</h5>
+                <ul>
+                    <li>2 new learnable skills: <strong>Sharp Streak</strong> (Late Surger) and <strong>Risk-Taker</strong></li>
+                    <li>4 new unique skills pre-registered for upcoming cards &mdash; Maruzensky "Laugh at the Odds", Taiki Shuttle "Never Say Never", Wonder Acute "Into High Gear!" and "Queen&rsquo;s Lumination" &mdash; plus their inherited versions</li>
+                    <li>2 new event-exclusive skills (Sprint / Dirt Race Enthusiast)</li>
+                    <li>Race calendar rotated to the new month (one new race program) and 10 new NPC entrants were added</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Unique effects on the new cards</h5>
+                <p>Narita Brian&rsquo;s <strong>"Glad Tidings"</strong> (+8% training effectiveness at facility level 5) uses the same effect type as Maruzensky&rsquo;s, so the simulator <strong>calculates</strong> it with no changes &mdash; a regression test now covers the new card.</p>
+                <div class="help-tip">
+                    <p><strong>Not modeled:</strong> Eishin Flash, Air Groove, and Sakura Laurel (&ldquo;Don&rsquo;t Stop Anymore!&rdquo;) carry friendship-gauge stat bonuses (Power / Speed / Stamina plus skill points at 80+ gauge). The gauge is per-run state a static projection can&rsquo;t evaluate, so these stay <strong>display only</strong> &mdash; treat projections for decks using them as a floor, as with the other gauge-bonus cards.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Version 1.8.1 - Deck finder: include-card filters actually enforced -->
     <div class="version-entry" data-version="1.8.1">
         <div class="version-header">

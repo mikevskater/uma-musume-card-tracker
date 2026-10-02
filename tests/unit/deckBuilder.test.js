@@ -176,6 +176,7 @@ describe('calculateTrainingGains', () => {
 //   30088 Satono Diamond  (intelligence) 103: 4+ distinct types -> +10% TE
 //   30090 Symboli Rudolf  (stamina)      105: +10 initial stats per 2 types
 //   30107 Maruzensky      (speed)        111: level 5+ training -> +8% TE
+//   30123 Narita Brian    (power)        111: level 5+ training -> +8% TE (v1.8.2)
 //   30052 Light Hello     (friend)       113: friendship training -> -28% energy
 
 describe('conditional unique effects (Tier A)', () => {
@@ -284,6 +285,26 @@ describe('conditional unique effects (Tier A)', () => {
 
         deckBuilderState.trainingLevel = 5;
         const effL5 = computePerTrainingEffects(deckBuilderState.slots).speed.trainingEff;
+
+        expect(effL5 - effL4).toBe(8);
+    });
+
+    // 30123 (added in the v1.8.2 data refresh) carries the same 111 shape as
+    // Maruzensky — +8% TE from facility level 5. Guards against a future
+    // extractor change swapping value/value_1 on new cards.
+    test('111 Narita Brian: +8% TE at training level 5, none at level 4', () => {
+        const slots = buildSlots([30123, 30004, 30005, 30001, 30010]);
+        expect(getConditionalTrainingEff(slots, 5)).toBe(8);
+        expect(getConditionalTrainingEff(slots, 4)).toBe(0);
+    });
+
+    test('111 Narita Brian: bonus flows into per-training TE at level 5', () => {
+        setupSlotsWithAssignments(buildSlots([30123, 30004, 30005, 30001, 30010]));
+        deckBuilderState.trainingLevel = 4;
+        const effL4 = computePerTrainingEffects(deckBuilderState.slots).power.trainingEff;
+
+        deckBuilderState.trainingLevel = 5;
+        const effL5 = computePerTrainingEffects(deckBuilderState.slots).power.trainingEff;
 
         expect(effL5 - effL4).toBe(8);
     });

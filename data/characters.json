@@ -928,6 +928,67 @@
     "default_rarity": 2,
     "running_style": 3
   },
+  "100802": {
+    "name": "Vodka",
+    "character_id": 1008,
+    "base_stats": {
+      "3": {
+        "speed": 98,
+        "stamina": 82,
+        "power": 99,
+        "guts": 81,
+        "wisdom": 90
+      },
+      "4": {
+        "speed": 109,
+        "stamina": 91,
+        "power": 111,
+        "guts": 91,
+        "wisdom": 98
+      },
+      "5": {
+        "speed": 120,
+        "stamina": 100,
+        "power": 122,
+        "guts": 100,
+        "wisdom": 108
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "F"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "100901": {
     "name": "Daiwa Scarlet",
     "character_id": 1009,
@@ -995,6 +1056,67 @@
     },
     "default_rarity": 2,
     "running_style": 2
+  },
+  "100902": {
+    "name": "Daiwa Scarlet",
+    "character_id": 1009,
+    "base_stats": {
+      "3": {
+        "speed": 88,
+        "stamina": 82,
+        "power": 100,
+        "guts": 98,
+        "wisdom": 82
+      },
+      "4": {
+        "speed": 98,
+        "stamina": 91,
+        "power": 111,
+        "guts": 109,
+        "wisdom": 91
+      },
+      "5": {
+        "speed": 108,
+        "stamina": 100,
+        "power": 122,
+        "guts": 120,
+        "wisdom": 100
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "B",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "A",
+        "betweener": "E",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 20,
+      "stamina": 0,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
+    },
+    "default_rarity": 3,
+    "running_style": 1
   },
   "101001": {
     "name": "Taiki Shuttle",
@@ -4747,6 +4869,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "104901": {
+    "name": "Nakayama Festa",
+    "character_id": 1049,
+    "base_stats": {
+      "3": {
+        "speed": 97,
+        "stamina": 92,
+        "power": 99,
+        "guts": 75,
+        "wisdom": 87
+      },
+      "4": {
+        "speed": 108,
+        "stamina": 102,
+        "power": 110,
+        "guts": 84,
+        "wisdom": 96
+      },
+      "5": {
+        "speed": 119,
+        "stamina": 113,
+        "power": 121,
+        "guts": 92,
+        "wisdom": 105
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "B"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "105001": {
     "name": "Narita Taishin",
     "character_id": 1050,
@@ -6453,6 +6636,67 @@
       "power": 10,
       "guts": 0,
       "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "110001": {
+    "name": "Wonder Acute",
+    "character_id": 1100,
+    "base_stats": {
+      "3": {
+        "speed": 84,
+        "stamina": 82,
+        "power": 84,
+        "guts": 101,
+        "wisdom": 99
+      },
+      "4": {
+        "speed": 93,
+        "stamina": 91,
+        "power": 94,
+        "guts": 112,
+        "wisdom": 110
+      },
+      "5": {
+        "speed": 102,
+        "stamina": 100,
+        "power": 103,
+        "guts": 123,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "D",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "C",
+        "stalker": "A",
+        "betweener": "C",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "G",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 0,
+      "power": 0,
+      "guts": 15,
+      "wisdom": 15
     },
     "default_rarity": 3,
     "running_style": 2

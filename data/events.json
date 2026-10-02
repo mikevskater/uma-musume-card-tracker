@@ -13714,7 +13714,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "Stay Positive at All Times!"
       },
       {
         "title_jp": "なんだって前向きに！",
@@ -13750,7 +13751,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "Stay Positive in All Situations!"
       }
     ],
     "chain_events": {
@@ -13960,7 +13962,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "Don't Go Overboard!"
         },
         {
           "title_jp": "それでも、委員長！",
@@ -13989,7 +13992,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "Going Overboard for You!"
         }
       ]
     },
