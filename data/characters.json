@@ -4808,6 +4808,67 @@
     "default_rarity": 3,
     "running_style": 1
   },
+  "104701": {
+    "name": "Zenno Rob Roy",
+    "character_id": 1047,
+    "base_stats": {
+      "3": {
+        "speed": 88,
+        "stamina": 97,
+        "power": 91,
+        "guts": 74,
+        "wisdom": 100
+      },
+      "4": {
+        "speed": 98,
+        "stamina": 108,
+        "power": 101,
+        "guts": 82,
+        "wisdom": 111
+      },
+      "5": {
+        "speed": 108,
+        "stamina": 118,
+        "power": 111,
+        "guts": 91,
+        "wisdom": 122
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "E",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "E"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 0,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "104801": {
     "name": "Tosen Jordan",
     "character_id": 1048,

@@ -2027,6 +2027,48 @@
     ]
   },
   {
+    "id": 100471,
+    "name": "Raise My Soul's Blade!",
+    "description": "Increase velocity when positioned toward the front late-race with 400m remaining. Increase velocity greatly instead if it's a G1 or similarly major race and the skill user is favored.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 10047,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&remain_distance<=401&remain_distance>=399&order_rate<=40&grade==100&popularity<=3",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 4500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&remain_distance<=401&remain_distance>=399&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 100481,
     "name": "Pop & Polish",
     "description": "Get pumped and increase velocity when pressured or trying to pass another runner toward the front on the final straight.",
@@ -23848,6 +23890,48 @@
           {
             "type": 31,
             "value": 1000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 900471,
+    "name": "Raise My Soul's Blade!",
+    "description": "Slightly increase velocity when positioned toward the front late-race with 400m remaining. If it's a G1 or similarly major race and the skill user is favored, increase velocity moderately instead.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 90047,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&remain_distance<=401&remain_distance>=399&order_rate<=40&grade==100&popularity<=3",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 2500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&remain_distance<=401&remain_distance>=399&order_rate<=40",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
             "target_type": 1,
             "target_value": 0
           }
