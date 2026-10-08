@@ -112,3 +112,218 @@ describe('getEffectiveLimitBreak', () => {
         expect(getEffectiveLimitBreak(99999, false)).toBe(2);
     });
 });
+
+// ===== Import format detection =====
+
+describe('detectImportFormat', () => {
+    test('recognizes the app export format', () => {
+        const appExport = {
+            version: '2.0',
+            exportDate: '2025-01-01T00:00:00.000Z',
+            ownedCards: { '10001': { owned: true, level: 40, limitBreak: 4 } }
+        };
+        expect(detectImportFormat(appExport)).toBe('app');
+    });
+
+    test('recognizes the game support_card_data.json array format', () => {
+        const game = [{ support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25 } }];
+        expect(detectImportFormat(game)).toBe('game');
+    });
+
+    test('treats an empty array as the game format', () => {
+        expect(detectImportFormat([])).toBe('game');
+    });
+
+    test('rejects objects without ownedCards and non-object input', () => {
+        expect(detectImportFormat({ foo: 1 })).toBe('unsupported');
+        expect(detectImportFormat({ ownedCards: null })).toBe('unsupported');
+        expect(detectImportFormat(null)).toBe('unsupported');
+        expect(detectImportFormat(undefined)).toBe('unsupported');
+        expect(detectImportFormat(42)).toBe('unsupported');
+        expect(detectImportFormat('x')).toBe('unsupported');
+    });
+});
+
+// ===== create_time parsing =====
+
+describe('parseSupportCardCreateTime', () => {
+    test('parses the space-separated date form to a timestamp', () => {
+        expect(parseSupportCardCreateTime('2025-08-14 14:43:03')).toBe(Date.parse('2025-08-14 14:43:03'));
+    });
+
+    test('falls back to a finite timestamp for unparseable input', () => {
+        const forNull = parseSupportCardCreateTime(null);
+        const forMissing = parseSupportCardCreateTime(undefined);
+        const forBad = parseSupportCardCreateTime('not a date');
+        for (const value of [forNull, forMissing, forBad]) {
+            expect(typeof value).toBe('number');
+            expect(Number.isNaN(value)).toBe(false);
+        }
+    });
+});
+
+// ===== Support card data normalization =====
+
+describe('normalizeSupportCardData', () => {
+    test('extracts support_card_id, limit_break_count, and level for real cards', () => {
+        const items = [
+            { support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25, max_level: 40 }, create_time: '2025-08-14 14:43:03' }, // R, current level 25 (max potential 40)
+            { support_card_id: 20001, limit_break_count: 4, extra_data: { level: 45 }, create_time: '2025-08-31 03:39:26' }, // SR
+            { support_card_id: 30041, limit_break_count: 4, extra_data: { level: 50 }, create_time: '2025-08-29 19:36:51' }, // SSR
+            { support_card_id: 30020, limit_break_count: 0, extra_data: { level: 30 }, create_time: '2025-08-31 03:38:53' }   // SSR LB0
+        ];
+
+        const result = normalizeSupportCardData(items);
+
+        expect(result['10001']).toEqual({ owned: true, level: 25, limitBreak: 4, dateObtained: Date.parse('2025-08-14 14:43:03') });
+        expect(result['20001']).toEqual({ owned: true, level: 45, limitBreak: 4, dateObtained: Date.parse('2025-08-31 03:39:26') });
+        expect(result['30041']).toEqual({ owned: true, level: 50, limitBreak: 4, dateObtained: Date.parse('2025-08-29 19:36:51') });
+        expect(result['30020']).toEqual({ owned: true, level: 30, limitBreak: 0, dateObtained: Date.parse('2025-08-31 03:38:53') });
+    });
+
+    test('imports an unknown card by level without requiring it in cardData', () => {
+        const result = normalizeSupportCardData([
+            { support_card_id: 99999, limit_break_count: 2, extra_data: { level: 33 } }
+        ]);
+        expect(result['99999']).toMatchObject({ owned: true, level: 33 });
+    });
+
+    test('derives level from the rarity table when level is missing', () => {
+        const result = normalizeSupportCardData([
+            { support_card_id: 10001, limit_break_count: 2, extra_data: {} } // R, LB2 -> 30
+        ]);
+        expect(result['10001'].level).toBe(limitBreaks[1][2]);
+    });
+
+    test('falls back to level 1 for a card missing level', () => {
+        const result = normalizeSupportCardData([
+            { support_card_id: 99999, limit_break_count: 2, extra_data: {} }
+        ]);
+        expect(result['99999'].level).toBe(1);
+    });
+
+    test('skips records without a support_card_id', () => {
+        const result = normalizeSupportCardData([
+            { support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25 } },
+            { support_card_id: null, limit_break_count: 4, extra_data: { level: 25 } },
+            { extra_data: { level: 25 } }
+        ]);
+        expect(result['10001']).toBeDefined();
+        expect(result['null']).toBeUndefined();
+        expect(Object.keys(result)).toHaveLength(1);
+    });
+
+    test('treats a non-finite limit_break_count as 0', () => {
+        const result = normalizeSupportCardData([
+            { support_card_id: 10001, limit_break_count: NaN, extra_data: { level: 25 } }
+        ]);
+        expect(result['10001'].limitBreak).toBe(0);
+    });
+
+    test('marks every imported card as owned', () => {
+        const items = [
+            { support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25 } },
+            { support_card_id: 20001, limit_break_count: 4, extra_data: { level: 45 } }
+        ];
+        const result = normalizeSupportCardData(items);
+        for (const key of Object.keys(result)) {
+            expect(result[key].owned).toBe(true);
+        }
+    });
+
+    test('throws when not given an array', () => {
+        expect(() => normalizeSupportCardData({})).toThrow(/array/);
+    });
+});
+
+// ===== App export normalization (backward compatibility) =====
+
+describe('normalizeAppImportData', () => {
+    test('keeps owned/level/limitBreak, converts date string, strips extra fields', () => {
+        const appExport = {
+            version: '2.0',
+            ownedCards: {
+                '10001': {
+                    owned: true,
+                    level: 40,
+                    limitBreak: 4,
+                    dateObtained: '2025-08-14',
+                    charName: 'Special Week',
+                    rarity: 'R',
+                    type: 'guts'
+                }
+            }
+        };
+
+        const result = normalizeAppImportData(appExport);
+        expect(result['10001']).toEqual({
+            owned: true,
+            level: 40,
+            limitBreak: 4,
+            dateObtained: new Date('2025-08-14').getTime()
+        });
+        expect(result['10001'].charName).toBeUndefined();
+        expect(result['10001'].rarity).toBeUndefined();
+        expect(result['10001'].type).toBeUndefined();
+    });
+});
+
+// ===== applyImportData integration (no FileReader) =====
+
+describe('applyImportData', () => {
+    // The real debouncedFilterAndSort schedules a timer that calls into
+    // filterSort.js, which isn't fully wired in the jest env. Stub it for these
+    // tests so the store/toast behavior can be verified in isolation.
+    let realDebouncedFilterAndSort;
+    beforeEach(() => {
+        realDebouncedFilterAndSort = global.debouncedFilterAndSort;
+        global.debouncedFilterAndSort = () => {};
+    });
+    afterEach(() => {
+        global.debouncedFilterAndSort = realDebouncedFilterAndSort;
+    });
+
+    test('imports the app export format into the store', () => {
+        const appExport = {
+            version: '2.0',
+            ownedCards: { '10001': { owned: true, level: 40, limitBreak: 4, dateObtained: '2025-08-14' } }
+        };
+        expect(() => applyImportData(appExport)).not.toThrow();
+        expect(ownedCards['10001']).toMatchObject({ owned: true, level: 40, limitBreak: 4 });
+    });
+
+    test('imports the game format into the store', () => {
+        const game = [{ support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25 } }];
+        expect(() => applyImportData(game)).not.toThrow();
+        expect(ownedCards['10001']).toMatchObject({ owned: true, level: 25, limitBreak: 4 });
+    });
+
+    test('persists the imported collection to localStorage', () => {
+        applyImportData([{ support_card_id: 10001, limit_break_count: 4, extra_data: { level: 25 } }]);
+        const parsed = JSON.parse(localStorage.getItem('uma_owned_cards'));
+        expect(parsed['10001']).toMatchObject({ owned: true, level: 25 });
+    });
+
+    test('rejects an unsupported format', () => {
+        expect(() => applyImportData({ foo: 1 })).toThrow(/Unsupported file format/);
+    });
+
+    test('accepts an empty game array without importing anything', () => {
+        expect(() => applyImportData([])).not.toThrow();
+        expect(Object.keys(ownedCards).length).toBe(0);
+    });
+});
+
+// ===== validateImportData (unchanged behavior) =====
+
+describe('validateImportData', () => {
+    test('accepts a well-formed app export', () => {
+        const appExport = { ownedCards: { '10001': { owned: true, level: 40 } } };
+        expect(() => validateImportData(appExport)).not.toThrow();
+    });
+
+    test('rejects a missing ownedCards map and a non-number level', () => {
+        expect(() => validateImportData({})).toThrow(/ownedCards/);
+        expect(() => validateImportData({ ownedCards: { '10001': { owned: true } } })).toThrow(/Invalid data/);
+    });
+});

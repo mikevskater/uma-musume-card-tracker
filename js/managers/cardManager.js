@@ -309,40 +309,19 @@ function exportOwnedCards() {
     showToast('Collection exported successfully!', 'success');
 }
 
-// Import owned cards data
+// Import owned cards data.
+// Auto-detects and supports two file formats:
+//   1. The app's own export (exportOwnedCards) — an object with an "ownedCards" map.
+//   2. The game's support_card_data.json — a flat array of support card records,
+//      from which we extract support_card_id, limit_break_count, and
+//      extra_data[level] for each card. This format is derived from the
+//      game's data via UmaDump (https://github.com/Werseter/umadump).
 function importOwnedCards(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const importData = JSON.parse(e.target.result);
-
-            // Validate import data structure
-            validateImportData(importData);
-
-            // Normalize imported data (strip extra fields, convert date strings to timestamps)
-            const normalizedCards = {};
-            for (const [cardId, cardData] of Object.entries(importData.ownedCards)) {
-                normalizedCards[cardId] = {
-                    owned: cardData.owned,
-                    level: cardData.level,
-                    limitBreak: cardData.limitBreak,
-                    dateObtained: typeof cardData.dateObtained === 'string'
-                        ? new Date(cardData.dateObtained).getTime()
-                        : cardData.dateObtained
-                };
-            }
-
-            ownedCards = normalizedCards;
-            saveOwnedCards();
-            
-            // Refresh the display
-            if (typeof debouncedFilterAndSort === 'function') {
-                debouncedFilterAndSort();
-            }
-            
-            const count = Object.values(ownedCards).filter(card => card.owned).length;
-            showToast(`Successfully imported ${count} owned cards!`, 'success');
-            
+            applyImportData(importData);
         } catch (error) {
             console.error('Error importing owned cards:', error);
             showToast(`Import failed: ${error.message}`, 'error');
@@ -351,14 +330,130 @@ function importOwnedCards(file) {
     reader.readAsText(file);
 }
 
-// Validate import data structure
+// Apply parsed import data to the ownedCards store.
+// Detects the file format, normalizes it, persists it, and refreshes the UI.
+// Kept separate from importOwnedCards so both import paths can be exercised
+// without a FileReader.
+function applyImportData(importData) {
+    const format = detectImportFormat(importData);
+
+    let normalizedCards;
+    let sourceLabel;
+    if (format === 'app') {
+        validateImportData(importData);
+        normalizedCards = normalizeAppImportData(importData);
+        sourceLabel = 'app export';
+    } else if (format === 'game') {
+        normalizedCards = normalizeSupportCardData(importData);
+        sourceLabel = 'support card data';
+    } else {
+        throw new Error('Unsupported file format: expected an app collection export or support_card_data.json');
+    }
+
+    ownedCards = normalizedCards;
+    saveOwnedCards();
+
+    // Refresh the display
+    if (typeof debouncedFilterAndSort === 'function') {
+        debouncedFilterAndSort();
+    }
+
+    const count = Object.values(ownedCards).filter(card => card.owned).length;
+    showToast(`Successfully imported ${count} cards from ${sourceLabel}!`, 'success');
+}
+
+// Detect which import format a parsed file uses.
+//   'app'         — the app's export format ({ ownedCards: {…} }).
+//   'game'        — the game's support_card_data.json (a flat array).
+//   'unsupported' — neither.
+function detectImportFormat(importData) {
+    if (importData && importData.ownedCards != null && typeof importData.ownedCards === 'object') {
+        return 'app';
+    }
+    if (Array.isArray(importData)) {
+        return 'game';
+    }
+    return 'unsupported';
+}
+
+// Normalize the app's own export format into the ownedCards structure.
+// Strips extra fields and converts date strings to timestamps.
+function normalizeAppImportData(importData) {
+    const normalizedCards = {};
+    for (const [cardId, entry] of Object.entries(importData.ownedCards)) {
+        normalizedCards[cardId] = {
+            owned: entry.owned,
+            level: entry.level,
+            limitBreak: entry.limitBreak,
+            dateObtained: typeof entry.dateObtained === 'string'
+                ? new Date(entry.dateObtained).getTime()
+                : entry.dateObtained
+        };
+    }
+    return normalizedCards;
+}
+
+// Normalize the game's support_card_data.json array into the ownedCards
+// structure, extracting support_card_id, limit_break_count, and
+// extra_data[level] from each record.
+function normalizeSupportCardData(items) {
+    if (!Array.isArray(items)) {
+        throw new Error('Invalid support card data: expected an array of records');
+    }
+
+    const normalizedCards = {};
+    for (const item of items) {
+        if (!item || item.support_card_id == null) {
+            console.warn('Skipping support card record without a support_card_id');
+            continue;
+        }
+
+        const cardId = String(item.support_card_id);
+        const limitBreak = Number.isFinite(item.limit_break_count) ? item.limit_break_count : 0;
+
+        // Use the card's current level. If missing, derive the max level at
+        // this limit break instead.
+        let level;
+        if (item.extra_data && Number.isFinite(item.extra_data.level)) {
+            level = item.extra_data.level;
+        } else {
+            const card = cardData.find(c => c.support_id == cardId);
+            const rarity = card && card.rarity;
+            level = (rarity && limitBreaks[rarity] && Number.isFinite(limitBreaks[rarity][limitBreak]))
+                ? limitBreaks[rarity][limitBreak]
+                : 1;
+        }
+
+        normalizedCards[cardId] = {
+            owned: true,
+            level: level,
+            limitBreak: limitBreak,
+            dateObtained: parseSupportCardCreateTime(item.create_time)
+        };
+    }
+    return normalizedCards;
+}
+
+// Convert a support_card_data.json create_time ("YYYY-MM-DD HH:MM:SS") to a
+// timestamp, falling back to the current time if it can't be parsed.
+function parseSupportCardCreateTime(createTime) {
+    if (typeof createTime === 'string') {
+        const time = Date.parse(createTime);
+        if (!Number.isNaN(time)) {
+            return time;
+        }
+    }
+    return Date.now();
+}
+
+// Validate import data structure (app export format)
 function validateImportData(importData) {
     if (!importData.ownedCards || typeof importData.ownedCards !== 'object') {
         throw new Error('Invalid file format: missing or invalid ownedCards data');
     }
-    
-    for (const [cardId, cardData] of Object.entries(importData.ownedCards)) {
-        if (!cardData.owned || typeof cardData.level !== 'number') {
+
+    for (const [cardId, entry] of Object.entries(importData.ownedCards)) {
+        if (!entry.owned || typeof entry.level !== 'number') {
             throw new Error(`Invalid data for card ${cardId}`);
         }
     }
@@ -534,6 +629,12 @@ window.CardManager = {
     setShowMaxPotentialLevels,
     exportOwnedCards,
     importOwnedCards,
+    applyImportData,
+    detectImportFormat,
+    normalizeAppImportData,
+    normalizeSupportCardData,
+    parseSupportCardCreateTime,
+    validateImportData,
     clearOwnedCards,
     loadData,
     getCharName,
