@@ -19,6 +19,76 @@
 </div>
 
 <div class="changelog">
+    <!-- Version 1.8.4 - Oct 14/20 data refresh: 6 cards, new trainee Hokko Tarumae, 3 costumes, 9 skills; conditional UE fixes -->
+    <div class="version-entry" data-version="1.8.4">
+        <div class="version-header">
+            <h4>Version 1.8.4</h4>
+            <div class="version-date">October 23, 2026</div>
+        </div>
+
+        <div class="version-changes">
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new cards (10/14)</h5>
+                <ul>
+                    <li><strong>Global Cards (10/14):</strong></li>
+                    <ul>
+                        <li><strong>SSR</strong> - Yamanin Zephyr &mdash; "To Winds Untraveled" (Guts, Gacha)</li>
+                        <li><strong>SR</strong> - T.M. Opera O &mdash; "Mighty Fotografia" (Stamina, Gacha)</li>
+                        <li><strong>R</strong> - Yamanin Zephyr &mdash; "Tracen Academy" (Guts, Gacha)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Added new cards (10/20)</h5>
+                <ul>
+                    <li><strong>Global Cards (10/20):</strong></li>
+                    <ul>
+                        <li><strong>SSR</strong> - Special Week &mdash; "Outrunning Misfortune" (Stamina, Gacha)</li>
+                        <li><strong>SSR</strong> - Sweep Tosho &mdash; "Capricious Excellence" (Wit, Gacha)</li>
+                        <li><strong>SSR</strong> - Grass Wonder &mdash; "From Icy Blues to Verdant Hues" (Power, Gacha)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-new">New</span>
+                <h5>New trainee cards</h5>
+                <ul>
+                    <li><strong>Hokko Tarumae</strong> &mdash; all-new character (Speed/Stamina/Wisdom growth, dirt A, mile- and medium-distance A, stalker A)</li>
+                    <li>New costumes: <strong>Narita Brian</strong>, <strong>Satono Diamond</strong>, <strong>Kitasan Black</strong></li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Skills and data</h5>
+                <ul>
+                    <li>New unique skills: Narita Brian "Free from the Ashes", Satono Diamond "Rain Cloud Bolt", Kitasan Black "Bring on the Banquet!", Hokko Tarumae "Shine On, Tomakomai! &#x2606;" &mdash; plus the inherited versions</li>
+                    <li>New event skill pair <strong>Razor-Sharp Steps</strong> / <strong>Sharp Steps</strong> (Late Surger, final-corner acceleration) &mdash; the evolved version appears on the new Hishi Amazon and Sweep Tosho costumes</li>
+                    <li>9 new NPC entrants were added to the race data</li>
+                </ul>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-feature">Feature</span>
+                <h5>Conditional unique effects: mood bonus modeled, energy reduction corrected</h5>
+                <p>The "while friendship training occurs" unique-effect family exists in two flavors, and the simulator previously only understood one of them. Light Hello&rsquo;s <strong>"From the Ground Up"</strong> energy cost reduction is now <strong>-30%</strong> (was -28%: the game stores the effect category and its magnitude in separate columns, and the old code read the category as the magnitude).</p>
+                <p>Special Week&rsquo;s <strong>"Outrunning Misfortune"</strong> &mdash; <strong>+60% mood effect while friendship training occurs</strong> &mdash; is now calculated. It only changes projections when the mood setting is above or below Normal (at Normal, mood multiplies to 1 and the bonus has no effect). Like the energy reduction, this is a provisional approximation: the builder has no per-run friendship-gauge state, so the bonus is applied to Stamina training whenever Special Week is assigned there and the friendship training toggle is on.</p>
+            </div>
+
+            <div class="update-group">
+                <span class="update-type update-improvement">Improvement</span>
+                <h5>Unique effects on the new cards</h5>
+                <div class="help-tip">
+                    <p><strong>Not modeled:</strong> the three new Guts/Wit/Power SSRs carry conditional bonuses that require <strong>friendship gauge 80+</strong> &mdash; Yamanin Zephyr (&ldquo;To Winds Untraveled&rdquo;): skill point bonus; Sweep Tosho (&ldquo;Capricious Excellence&rdquo;): specialty priority; Grass Wonder (&ldquo;From Icy Blues to Verdant Hues&rdquo;): training effectiveness. The gauge is per-run state a static projection can&rsquo;t evaluate, so these stay <strong>display only</strong> &mdash; treat projections for decks using them as a floor, as with the other gauge-bonus cards.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Version 1.8.3 - New trainee Zenno Rob Roy with her unique skill -->
     <div class="version-entry" data-version="1.8.3">
         <div class="version-header">

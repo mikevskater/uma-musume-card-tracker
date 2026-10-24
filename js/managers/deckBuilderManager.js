@@ -366,19 +366,30 @@ function selectCardForSlot(slotIndex, cardId) {
 //
 // The DB (support_card_unique_effect) stores conditional parameters in extra
 // columns (value_0_1..4) that used to be dropped by the extractor; they now
-// surface as ue.value_1..value_4. Parameter semantics, verified against a
-// master.mdb dump (2026-09-13) + the EN description text (text_data cat 155):
+// surface as ue.value_1..value_4. Each type has its own parameter layout;
+// semantics verified against master.mdb (2026-10-23) + the EN description
+// text (text_data cat 155). Two layouts exist:
 //
+//   (value = condition/threshold, value_1 = magnitude):
 //   103  value = distinct deck card types required, value_1 = TE% bonus
 //        (Digital: 5 types -> +15% TE; Diamond: 4 types -> +10% TE)
 //   105  value = initial stat points per value_1 distinct deck types,
 //        applied to ALL initial stats (Rudolf / Helios: +10 per 2 types)
 //   111  value = TE% bonus, value_1 = required training level (Maruzensky:
 //        +8% TE at level 5+; facility levels are 1-5)
-//   113  value = energy cost reduction %, value_1 = likely friendship-gauge
-//        threshold (Light Hello: -28% energy on friendship training).
-//        The builder has no gauge state, so the reduction is applied
-//        whenever friendship training is on — PROVISIONAL approximation.
+//
+//   (value = effect category — a flat effect ID — value_1 = magnitude):
+//   113  effect applies while friendship training is occurring. The DB holds
+//        two variants: Light Hello (30052) cat 28 = Energy Cost Reduction,
+//        magnitude 30 -> -30% energy; Special Week (30127) cat 2 = Mood
+//        Effect, magnitude 60 -> +60% mood effect. (The type-101 family uses
+//        the same category coding — value = gauge threshold, value_1/value_2
+//        = category/magnitude, value_3/value_4 = optional second pair —
+//        verified against all 31 type-101 cards, e.g. [80,3,2] = +2% Speed at
+//        gauge 80+, [80,3,1,30,1] = +1% Speed AND +1% skill points.)
+//        PROVISIONAL approximation: the builder has no per-run gauge state,
+//        so 113 effects are applied whenever friendship training is on.
+//        113 categories other than 28/2 are not modeled (display-only).
 //
 // The remaining 11 types (101, 102, 104, 106-110, 112, 114, 115) need
 // per-run state (gauge/energy/fans/failure) and are display-only for now.
@@ -449,15 +460,35 @@ function getConditionalInitialStatBonus(slots) {
     return bonus;
 }
 
-// Energy cost reduction (%) from UE type 113, only while friendship
-// training is happening (gauge threshold in value_1 is not modeled).
+// Energy cost reduction (%) from the Energy variant (category 28) of UE
+// type 113, only while friendship training is happening. Type 113 stores
+// the effect category in `value` and its magnitude in `value_1` (Light
+// Hello: 30) — other categories are handled elsewhere, not here.
 function getConditionalEnergyReduction(slots, friendshipTraining) {
     if (!friendshipTraining) return 0;
     let reduction = 0;
     collectConditionalUes(slots).forEach(ue => {
-        if (ue.type === 113) reduction += ue.value;
+        if (ue.type === 113 && ue.value === 28) reduction += ue.value_1;
     });
     return reduction;
+}
+
+// Mood effect bonus (%) from the Mood variant (category 2) of UE type 113
+// (Special Week 30127: +60%). Only applies when the card itself is in a
+// friendship training: present at this training AND the training matches
+// its type (same rule as the friendship multiplier). `presentSlots` is the
+// list of slots assigned to `trainingType`.
+function getConditionalMoodEffect(presentSlots, trainingType, friendshipTraining) {
+    if (!friendshipTraining) return 0;
+    let bonus = 0;
+    collectConditionalUes(presentSlots).forEach(ue => {
+        if (ue.type !== 113 || ue.value !== 2) return;
+        const card = cardData.find(c => c.support_id === ue.cardId);
+        if (!card) return;
+        const isMatchingType = card.type === 'friend' || card.type === 'group' || CARD_TYPE_TRAINING_MAP[card.type] === trainingType;
+        if (isMatchingType) bonus += ue.value_1;
+    });
+    return bonus;
 }
 
 // ===== EFFECT AGGREGATION =====
@@ -588,6 +619,11 @@ function calculateTrainingGains(trainingType, slots, aggregated, options) {
     // Conditional unique effects that add TE based on deck state (types 103, 111)
     const conditionalTe = getConditionalTrainingEff(slots, trainingLevel);
     if (conditionalTe > 0) trainingEff += conditionalTe;
+
+    // UE type 113 mood variant (category 2): mood effect up during the
+    // card's own friendship training (Special Week 30127: +60%)
+    const conditionalMood = getConditionalMoodEffect(presentSlots, trainingType, friendshipTraining);
+    if (conditionalMood > 0) moodEffect += conditionalMood;
 
     const moodBase = MOOD_VALUES[mood] || 0;
     const moodMultiplier = 1 + moodBase * (1 + moodEffect / 100);
@@ -749,6 +785,10 @@ function computePerTrainingEffects(slots) {
         // Conditional unique effects that add TE based on deck state (103, 111)
         const conditionalTe = getConditionalTrainingEff(slots, deckBuilderState.trainingLevel);
         if (conditionalTe > 0) trainingEff += conditionalTe;
+
+        // UE type 113 mood variant (category 2), during the card's own friendship training
+        const conditionalMood = getConditionalMoodEffect(presentSlots, trainingType, deckBuilderState.friendshipTraining);
+        if (conditionalMood > 0) moodEffect += conditionalMood;
 
         perTraining[trainingType] = {
             supportCount: presentSlots.length,
@@ -1475,6 +1515,7 @@ window.DeckBuilderManager = {
     getConditionalTrainingEff,
     getConditionalInitialStatBonus,
     getConditionalEnergyReduction,
+    getConditionalMoodEffect,
     CONDITIONAL_UE_CALCULATED
 };
 

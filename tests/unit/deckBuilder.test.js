@@ -177,7 +177,8 @@ describe('calculateTrainingGains', () => {
 //   30090 Symboli Rudolf  (stamina)      105: +10 initial stats per 2 types
 //   30107 Maruzensky      (speed)        111: level 5+ training -> +8% TE
 //   30123 Narita Brian    (power)        111: level 5+ training -> +8% TE (v1.8.2)
-//   30052 Light Hello     (friend)       113: friendship training -> -28% energy
+//   30052 Light Hello     (friend)       113: friendship training -> -30% energy (cat 28)
+//   30127 Special Week    (stamina)      113: friendship training -> +60% mood effect (cat 2)
 
 describe('conditional unique effects (Tier A)', () => {
     function buildSlots(cardIds, level = 50) {
@@ -309,12 +310,15 @@ describe('conditional unique effects (Tier A)', () => {
         expect(effL5 - effL4).toBe(8);
     });
 
-    // ---- Type 113: energy cost reduction during friendship training ----
+    // ---- Type 113: conditional bonus during friendship training ----
+    // 113 stores the effect category (a flat effect ID) in `value` and the
+    // magnitude in `value_1`. Two variants exist in the data: Light Hello
+    // (cat 28, -30% energy) and Special Week (cat 2, +60% mood effect).
 
-    test('113 Light Hello: -28% energy only while friendship training is on', () => {
+    test('113 Light Hello: -30% energy only while friendship training is on', () => {
         // Friend card sits in slot 5
         const slots = buildSlots([30002, 30004, 30005, 30001, 30010, 30052]);
-        expect(getConditionalEnergyReduction(slots, true)).toBe(28);
+        expect(getConditionalEnergyReduction(slots, true)).toBe(30);
         expect(getConditionalEnergyReduction(slots, false)).toBe(0);
     });
 
@@ -323,7 +327,7 @@ describe('conditional unique effects (Tier A)', () => {
         setupSlotsWithAssignments(slots);
         const aggregated = aggregateDeckEffects(slots);
         // Light Hello also carries a FLAT energy-reduction effect (id 28):
-        // -10% at level 50, always active. The 113 UE adds -28% on top,
+        // -10% at level 50, always active. The 113 UE adds -30% on top,
         // only while friendship training is on.
         expect(aggregated[28]).toBe(10);
         const flatReduction = aggregated[28];
@@ -336,7 +340,65 @@ describe('conditional unique effects (Tier A)', () => {
         });
 
         expect(resultNoFT.energyReduced).toBe(Math.floor(resultNoFT.energy * (1 - flatReduction / 100)));
-        expect(resultFT.energyReduced).toBe(Math.floor(resultFT.energy * (1 - (flatReduction + 28) / 100)));
+        expect(resultFT.energyReduced).toBe(Math.floor(resultFT.energy * (1 - (flatReduction + 30) / 100)));
+    });
+
+    // Special Week (stamina) is slot 0; the other five cards are non-stamina.
+    const SW_DECK = [30127, 30002, 30004, 30005, 30001, 30010];
+
+    test('113 Special Week: +60% mood effect only in her own friendship training', () => {
+        const slots = buildSlots(SW_DECK);
+        const present = slots.filter(Boolean);
+        expect(getConditionalMoodEffect(present, 'stamina', true)).toBe(60);
+        expect(getConditionalMoodEffect(present, 'stamina', false)).toBe(0);
+        // Present but off-type: not a friendship training for her
+        expect(getConditionalMoodEffect(present, 'speed', true)).toBe(0);
+        // On-type but not present at the training
+        expect(getConditionalMoodEffect(present.slice(1), 'stamina', true)).toBe(0);
+    });
+
+    test('113 Special Week: mood variant does not leak into energy reduction', () => {
+        const slots = buildSlots(SW_DECK);
+        expect(getConditionalEnergyReduction(slots, true)).toBe(0);
+    });
+
+    test('113 Special Week: per-training mood bonus only on stamina, only when she is present', () => {
+        const slots = buildSlots(SW_DECK);
+        setupSlotsWithAssignments(slots);
+        deckBuilderState.friendshipTraining = true;
+        const on = computePerTrainingEffects(deckBuilderState.slots);
+        deckBuilderState.friendshipTraining = false;
+        const off = computePerTrainingEffects(deckBuilderState.slots);
+        expect(on.stamina.moodEffect - off.stamina.moodEffect).toBe(60);
+        ['speed', 'power', 'guts', 'intelligence'].forEach(t => {
+            expect(on[t].moodEffect - off[t].moodEffect).toBe(0);
+        });
+
+        // Unassign her from stamina: the bonus disappears there too
+        deckBuilderState.trainingAssignments.stamina[0] = false;
+        deckBuilderState.friendshipTraining = true;
+        const absent = computePerTrainingEffects(deckBuilderState.slots);
+        deckBuilderState.friendshipTraining = false;
+        const absentOff = computePerTrainingEffects(deckBuilderState.slots);
+        expect(absent.stamina.moodEffect - absentOff.stamina.moodEffect).toBe(0);
+    });
+
+    test('113 Special Week: mood bonus raises stamina gains beyond the friendship multiplier', () => {
+        // Only Special Week at stamina, so the gain stays well under the cap.
+        const slots = buildSlots([30127]);
+        setupSlotsWithAssignments(slots);
+        const aggregated = aggregateDeckEffects(slots);
+        const gain = (mood, friendshipTraining) => calculateTrainingGains('stamina', slots, aggregated, {
+            trainingLevel: 1, mood, friendshipTraining, scenario: '1',
+        }).stamina;
+
+        // Toggling friendship changes the friendship multiplier at every mood;
+        // at normal mood that is the only change (mood multiplies to 1). At
+        // very_good the +60% mood bonus adds on top, so the FT/no-FT ratio is
+        // strictly larger.
+        const ratioNormal = gain('normal', true) / gain('normal', false);
+        const ratioVeryGood = gain('very_good', true) / gain('very_good', false);
+        expect(ratioVeryGood).toBeGreaterThan(ratioNormal * 1.05);
     });
 
     // ---- Flat aggregation hygiene ----

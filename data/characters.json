@@ -1925,6 +1925,67 @@
     "default_rarity": 3,
     "running_style": 2
   },
+  "101602": {
+    "name": "Narita Brian",
+    "character_id": 1016,
+    "base_stats": {
+      "3": {
+        "speed": 93,
+        "stamina": 98,
+        "power": 82,
+        "guts": 97,
+        "wisdom": 80
+      },
+      "4": {
+        "speed": 103,
+        "stamina": 109,
+        "power": 92,
+        "guts": 108,
+        "wisdom": 88
+      },
+      "5": {
+        "speed": 113,
+        "stamina": 120,
+        "power": 101,
+        "guts": 118,
+        "wisdom": 98
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "B",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "A",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 0,
+      "guts": 10,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
   "101701": {
     "name": "Symboli Rudolf",
     "character_id": 1017,
@@ -6213,6 +6274,67 @@
     "default_rarity": 3,
     "running_style": 3
   },
+  "106702": {
+    "name": "Satono Diamond",
+    "character_id": 1067,
+    "base_stats": {
+      "3": {
+        "speed": 88,
+        "stamina": 95,
+        "power": 82,
+        "guts": 92,
+        "wisdom": 93
+      },
+      "4": {
+        "speed": 98,
+        "stamina": 106,
+        "power": 91,
+        "guts": 102,
+        "wisdom": 103
+      },
+      "5": {
+        "speed": 102,
+        "stamina": 118,
+        "power": 102,
+        "guts": 113,
+        "wisdom": 115
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "G",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "G",
+        "stalker": "B",
+        "betweener": "A",
+        "stretch": "D"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 15,
+      "stamina": 15,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 3
+  },
   "106801": {
     "name": "Kitasan Black",
     "character_id": 1068,
@@ -6270,6 +6392,67 @@
       "power": 0,
       "guts": 0,
       "wisdom": 0
+    },
+    "default_rarity": 3,
+    "running_style": 1
+  },
+  "106802": {
+    "name": "Kitasan Black",
+    "character_id": 1068,
+    "base_stats": {
+      "3": {
+        "speed": 99,
+        "stamina": 85,
+        "power": 88,
+        "guts": 82,
+        "wisdom": 96
+      },
+      "4": {
+        "speed": 111,
+        "stamina": 94,
+        "power": 98,
+        "guts": 91,
+        "wisdom": 106
+      },
+      "5": {
+        "speed": 122,
+        "stamina": 104,
+        "power": 108,
+        "guts": 100,
+        "wisdom": 116
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "E",
+        "mile": "C",
+        "medium": "A",
+        "long": "A"
+      },
+      "running_style": {
+        "front_runner": "A",
+        "stalker": "B",
+        "betweener": "C",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "A",
+        "dirt": "G"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 0,
+      "power": 10,
+      "guts": 0,
+      "wisdom": 10
     },
     "default_rarity": 3,
     "running_style": 1
@@ -6697,6 +6880,67 @@
       "power": 10,
       "guts": 0,
       "wisdom": 20
+    },
+    "default_rarity": 3,
+    "running_style": 2
+  },
+  "109901": {
+    "name": "Hokko Tarumae",
+    "character_id": 1099,
+    "base_stats": {
+      "3": {
+        "speed": 95,
+        "stamina": 95,
+        "power": 78,
+        "guts": 85,
+        "wisdom": 97
+      },
+      "4": {
+        "speed": 105,
+        "stamina": 106,
+        "power": 87,
+        "guts": 94,
+        "wisdom": 108
+      },
+      "5": {
+        "speed": 111,
+        "stamina": 118,
+        "power": 97,
+        "guts": 105,
+        "wisdom": 119
+      }
+    },
+    "stat_caps": {
+      "speed": 1200,
+      "stamina": 1200,
+      "power": 1200,
+      "guts": 1200,
+      "wisdom": 1200
+    },
+    "aptitudes": {
+      "distance": {
+        "short": "F",
+        "mile": "A",
+        "medium": "A",
+        "long": "E"
+      },
+      "running_style": {
+        "front_runner": "B",
+        "stalker": "A",
+        "betweener": "G",
+        "stretch": "G"
+      },
+      "ground": {
+        "turf": "G",
+        "dirt": "A"
+      }
+    },
+    "growth_rates": {
+      "speed": 10,
+      "stamina": 10,
+      "power": 0,
+      "guts": 0,
+      "wisdom": 10
     },
     "default_rarity": 3,
     "running_style": 2

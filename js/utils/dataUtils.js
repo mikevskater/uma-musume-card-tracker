@@ -226,7 +226,7 @@ function getEffectName(effectId) {
 // cat 155) cross-checked 2026-09-13; see the comment block in
 // deckBuilderManager.js for parameter semantics.
 const CONDITIONAL_UE_LABELS = {
-    101: 'Conditional Stat Bonus (Friendship Gauge)',
+    101: 'Conditional Bonus (Friendship Gauge)',
     102: 'Conditional Training Eff. (Non-Preferred Training)',
     103: 'Conditional Training Eff. (Distinct Card Types)',
     104: 'Conditional Training Eff. (Fans Gained)',
@@ -238,7 +238,7 @@ const CONDITIONAL_UE_LABELS = {
     110: 'Conditional Training Eff. (Cards Trained With)',
     111: 'Conditional Training Eff. (Training Level)',
     112: 'Failure Rate Reduction (When Training Occurs)',
-    113: 'Energy Cost Reduction (Friendship Training)',
+    113: 'Conditional Bonus (Friendship Training)',
     114: 'Conditional Training Eff. (High Energy)',
     115: 'Initial Friendship Gauge (Selected Cards)'
 };

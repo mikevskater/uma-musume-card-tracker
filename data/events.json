@@ -2781,7 +2781,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "The Ever-Prepared T.M. Opera O"
         },
         {
           "title_jp": "みんなのテイエムオペラオー",
@@ -2821,7 +2822,8 @@
                 ]
               ]
             }
-          ]
+          ],
+          "title_en": "Everyone's T.M. Opera O"
         }
       ]
     },
@@ -14056,7 +14058,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "Free and Unconstrained"
       },
       {
         "title_jp": "風は、果てなく",
@@ -14100,7 +14103,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "title_en": "A Gale that Blows Endlessly"
       }
     ],
     "event_skills": {

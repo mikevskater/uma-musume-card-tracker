@@ -3380,6 +3380,48 @@
     ]
   },
   {
+    "id": 110161,
+    "name": "Free from the Ashes",
+    "description": "Increase velocity when in the front part of the pack on the latter half of the final corner late-race. If the race is long and the user engaged in a challenge mid-race, massively increase instead.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11016,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "phase==1&blocked_side_continuetime>=2",
+        "condition": "distance_type==4&phase>=2&is_finalcorner_laterhalf==1&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 5500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      },
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order_rate<=40",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 110171,
     "name": "Arrows Whistle, Shadows Disperse",
     "description": "Burning spirit increases velocity continuously on the last corner and later when pressured while in the front of the pack late-race.",
@@ -4222,6 +4264,77 @@
           {
             "type": 31,
             "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110671,
+    "name": "Rain Cloud Bolt",
+    "description": "Shine brilliantly, increasing velocity and moderately recovering endurance when positioned midpack around halfway through the race.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11067,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&order_rate>=40&order_rate<=80",
+        "base_time": 50000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 350,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 110681,
+    "name": "Bring on the Banquet!",
+    "description": "Surge ahead for a moderate duration and very slightly increase acceleration when positioned toward the front on a late-race corner far from the finish.",
+    "icon_id": 20013,
+    "rarity": 5,
+    "group_id": 11068,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": null,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner!=0&remain_distance>=600&order<=3",
+        "base_time": 40000,
+        "effects": [
+          {
+            "type": 22,
+            "value": 3500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 1000,
             "target_type": 1,
             "target_value": 0
           }
@@ -21172,6 +21285,86 @@
     ]
   },
   {
+    "id": 202491,
+    "name": "Razor-Sharp Steps",
+    "description": "Increase acceleration in the early part of late-race if the skill user stayed toward the back without rushing until the start of late-race. (End Closer)",
+    "icon_id": 20042,
+    "rarity": 2,
+    "group_id": 20249,
+    "skill_category": 3,
+    "tag_id": "104/303/403",
+    "type": [
+      "end_closer",
+      "final_leg",
+      "final_corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=66&order_rate_out50_continue==1&temptation_count==0",
+        "condition": "running_style==4&phase_firsthalf_random==2",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 4000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ],
+    "evolution": {
+      "evolutions": [
+        {
+          "evolved_skill_ids": [
+            101202211,
+            101202221
+          ],
+          "card_id": 101202
+        },
+        {
+          "evolved_skill_ids": [
+            104402111,
+            104402121
+          ],
+          "card_id": 104402
+        }
+      ]
+    }
+  },
+  {
+    "id": 202492,
+    "name": "Sharp Steps",
+    "description": "Slightly increase acceleration in the early part of late-race if the skill user stayed toward the back without rushing until the start of late-race. (End Closer)",
+    "icon_id": 20041,
+    "rarity": 1,
+    "group_id": 20249,
+    "skill_category": 3,
+    "tag_id": "104/303/403",
+    "type": [
+      "end_closer",
+      "final_leg",
+      "final_corner"
+    ],
+    "cost": 180,
+    "condition_groups": [
+      {
+        "precondition": "distance_rate>=66&order_rate_out50_continue==1&temptation_count==0",
+        "condition": "running_style==4&phase_firsthalf_random==2",
+        "base_time": 12000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 202501,
     "name": "Reckless Charge",
     "description": "Increase velocity when positioned toward the front upon approaching late-race. (Mile)",
@@ -24684,6 +24877,35 @@
     ]
   },
   {
+    "id": 900991,
+    "name": "Shine On, Tomakomai! ☆",
+    "description": "Minimally increase acceleration when well-positioned in the last spurt after engaging in a challenge on a mid-race corner in a dirt race.",
+    "icon_id": 20041,
+    "rarity": 1,
+    "group_id": 90099,
+    "skill_category": 5,
+    "tag_id": "403/502",
+    "type": [
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "phase==1&blocked_side_continuetime>=2&corner!=0",
+        "condition": "is_lastspurt==1&order_rate<=40&order_rate>=30&ground_type==2",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 31,
+            "value": 700,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 901001,
     "name": "Never Say Never",
     "description": "Very slightly increase velocity when positioned toward the front with 300m remaining. If it's a dirt race and the skill user is close to the lead, also very slightly surge ahead.",
@@ -25183,6 +25405,35 @@
       {
         "precondition": "",
         "condition": "remain_distance<=401&remain_distance>=399&order_rate<=40&activate_count_all<=6",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910161,
+    "name": "Free from the Ashes",
+    "description": "Slightly increase velocity when positioned in the front part of the pack on the latter half of the final corner late-race.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91016,
+    "skill_category": 5,
+    "tag_id": "401",
+    "type": [
+      "corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&is_finalcorner_laterhalf==1&order_rate<=40",
         "base_time": 30000,
         "effects": [
           {
@@ -26038,6 +26289,77 @@
           {
             "type": 31,
             "value": 2000,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910671,
+    "name": "Rain Cloud Bolt",
+    "description": "Slightly increase velocity and very slightly recover endurance when positioned midpack around halfway through the race.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91067,
+    "skill_category": 5,
+    "tag_id": "401/402",
+    "type": [
+      "corner",
+      "straight"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "distance_rate>=40&distance_rate<=50&order_rate>=40&order_rate<=80",
+        "base_time": 30000,
+        "effects": [
+          {
+            "type": 27,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 9,
+            "value": 50,
+            "target_type": 1,
+            "target_value": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 910681,
+    "name": "Bring on the Banquet!",
+    "description": "Slightly surge ahead for a moderate duration and very minimally increase acceleration when positioned toward the front on a late-race corner far from the finish.",
+    "icon_id": 20011,
+    "rarity": 1,
+    "group_id": 91068,
+    "skill_category": 5,
+    "tag_id": "403",
+    "type": [
+      "final_corner"
+    ],
+    "cost": 200,
+    "condition_groups": [
+      {
+        "precondition": "",
+        "condition": "phase>=2&corner!=0&remain_distance>=600&order<=3",
+        "base_time": 24000,
+        "effects": [
+          {
+            "type": 22,
+            "value": 1500,
+            "target_type": 1,
+            "target_value": 0
+          },
+          {
+            "type": 31,
+            "value": 500,
             "target_type": 1,
             "target_value": 0
           }
